@@ -7,6 +7,7 @@ package Frame;
 import conexion.*;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
+import javax.swing.ImageIcon;
 import javax.swing.table.DefaultTableModel;
 
 
@@ -22,6 +23,8 @@ public class Principal2 extends javax.swing.JFrame {
      */
     public Principal2() {
         initComponents();
+        ImageIcon icon = new ImageIcon("src/Imagenes/logo.png_32x32.png");
+        this.setIconImage(icon.getImage());
     }
 
     /**
@@ -41,9 +44,12 @@ public class Principal2 extends javax.swing.JFrame {
         jMenu2 = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Mi Primer Casa");
 
         panelPrincipal.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         panelPrincipal.setLayout(new java.awt.CardLayout());
+
+        clientes1.setFont(new java.awt.Font("Roboto Black", 0, 11)); // NOI18N
         panelPrincipal.add(clientes1, "card2");
         panelPrincipal.add(detallePago1, "card3");
 

@@ -5,19 +5,44 @@
  */
 package Panels;
 
+import conexion.Conexion;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author Marcelo
  */
 public class DetallePago extends javax.swing.JPanel {
 
-    /**
-     * Creates new form DetallePago
-     */
+    private String idControl;
+    private Object [] detalles;
+    
     public DetallePago() {
         initComponents();
     }
 
+    DetallePago(String idControl) {
+        this.idControl = idControl;
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    public void cargarDetalle(){
+       Conexion conexion = new Conexion();
+        try {
+            conexion.rs = conexion.st.executeQuery("select * from detalle control where" );
+            while(conexion.rs.next()){
+                String dni = conexion.rs.getString(1);
+                String nombres = conexion.rs.getString(2);
+                String apellido = conexion.rs.getString(3);
+                String barrio = conexion.rs.getString(4);                
+                String calle = conexion.rs.getString(5);;
+                detalles = new Object[] {apellido, nombres, dni};
+                DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+                model.addRow(detalles);
+            }
+        } catch (Exception e) {
+        }
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always

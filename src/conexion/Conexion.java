@@ -32,7 +32,7 @@ public class Conexion {
     try{
         Class.forName("com.mysql.jdbc.Driver");
         con = DriverManager.getConnection("jdbc:mysql://localhost:3306/miprimercasa?zeroDateTimeBehavior=convertToNull","root","");
-          JOptionPane.showMessageDialog(null, "Conectado");
+         // JOptionPane.showMessageDialog(null, "Conectado");
         st =(Statement) con.createStatement();
     }catch (Exception e){
         JOptionPane.showMessageDialog(null, "Error de conexion");
