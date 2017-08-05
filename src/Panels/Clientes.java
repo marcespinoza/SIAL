@@ -15,6 +15,8 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javax.swing.JOptionPane;
 import javax.swing.RowFilter;
+import javax.swing.table.DefaultTableColumnModel;
+import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableRowSorter;
 
 /**
@@ -33,6 +35,7 @@ public class Clientes extends javax.swing.JPanel {
         initComponents();
         conexion = new Conexion();
         llenarTablaCliente();
+        ocultarColumnas();
     }
 
     /**
@@ -47,9 +50,9 @@ public class Clientes extends javax.swing.JPanel {
         jScrollPane1 = new javax.swing.JScrollPane();
         cliente = new javax.swing.JTable();
         jPanel2 = new javax.swing.JPanel();
+        barrio = new javax.swing.JTextField();
         calle = new javax.swing.JTextField();
         numero = new javax.swing.JTextField();
-        barrio = new javax.swing.JTextField();
         trabajo = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
@@ -66,19 +69,12 @@ public class Clientes extends javax.swing.JPanel {
 
             },
             new String [] {
-                "Apellido", "Nombres", "Documento", "Telefono"
+                "Apellido", "Nombres", "Documento", "Telefono", "Barrio", "Calle", "Numero", "Trabajo"
             }
         ) {
-            Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
-            };
             boolean[] canEdit = new boolean [] {
-                false, false, false, false
+                false, false, false, false, false, false, false, false
             };
-
-            public Class getColumnClass(int columnIndex) {
-                return types [columnIndex];
-            }
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit [columnIndex];
@@ -91,6 +87,13 @@ public class Clientes extends javax.swing.JPanel {
         });
         jScrollPane1.setViewportView(cliente);
 
+        barrio.setEditable(false);
+        barrio.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                barrioActionPerformed(evt);
+            }
+        });
+
         calle.setEditable(false);
         calle.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -102,13 +105,6 @@ public class Clientes extends javax.swing.JPanel {
         numero.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 numeroActionPerformed(evt);
-            }
-        });
-
-        barrio.setEditable(false);
-        barrio.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                barrioActionPerformed(evt);
             }
         });
 
@@ -149,7 +145,7 @@ public class Clientes extends javax.swing.JPanel {
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addComponent(jLabel2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 79, Short.MAX_VALUE)
-                        .addComponent(calle, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(barrio, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel1)
@@ -160,8 +156,8 @@ public class Clientes extends javax.swing.JPanel {
                             .addComponent(jButton1)
                             .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                 .addComponent(trabajo, javax.swing.GroupLayout.DEFAULT_SIZE, 165, Short.MAX_VALUE)
-                                .addComponent(numero)
-                                .addComponent(barrio)))))
+                                .addComponent(calle)
+                                .addComponent(numero)))))
                 .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
@@ -170,14 +166,14 @@ public class Clientes extends javax.swing.JPanel {
                 .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
-                    .addComponent(calle, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(barrio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(numero, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(calle, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel1))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(barrio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(numero, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel3))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -207,7 +203,7 @@ public class Clientes extends javax.swing.JPanel {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(buscar)
+                .addComponent(buscar, javax.swing.GroupLayout.DEFAULT_SIZE, 395, Short.MAX_VALUE)
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -223,9 +219,17 @@ public class Clientes extends javax.swing.JPanel {
 
             },
             new String [] {
-                "Barrio", "Manzana", "Parcela"
+                "idControl", "Barrio", "Manzana", "Parcela"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         jScrollPane2.setViewportView(lotes);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
@@ -234,39 +238,43 @@ public class Clientes extends javax.swing.JPanel {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(22, 22, 22)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 427, Short.MAX_VALUE))
-                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 321, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 463, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 292, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(0, 435, Short.MAX_VALUE))
+                .addGap(0, 428, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGap(21, 21, 21)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(49, 49, 49)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 199, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
-                .addContainerGap(88, Short.MAX_VALUE))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 372, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(131, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
     private void clienteMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_clienteMouseClicked
-        int row = cliente.getSelectedRow();
-        calle.setText(clientes[4].toString());
-        numero.setText(clientes[5].toString());
-        barrio.setText(clientes[6].toString());
-        trabajo.setText(clientes[7].toString());
+        int row = cliente.getSelectedRow();       
+        barrio.setText(cliente.getModel().getValueAt(row, 4).toString());
+        calle.setText(cliente.getModel().getValueAt(row, 5).toString());
+         numero.setText(cliente.getModel().getValueAt(row, 6).toString());
+        trabajo.setText(cliente.getModel().getValueAt(row, 7).toString());
         llenarTablaLotes();
     }//GEN-LAST:event_clienteMouseClicked
+
+    private void barrioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_barrioActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_barrioActionPerformed
 
     private void calleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_calleActionPerformed
         // TODO add your handling code here:
@@ -276,27 +284,26 @@ public class Clientes extends javax.swing.JPanel {
         // TODO add your handling code here:
     }//GEN-LAST:event_numeroActionPerformed
 
-    private void barrioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_barrioActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_barrioActionPerformed
-
     private void trabajoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_trabajoActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_trabajoActionPerformed
 
     private void jButton1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton1MouseClicked
+        DetallePago detallePago = null;  
+        if(lotes.getRowCount()==1){
+        System.out.print(lotes.getModel().getValueAt(0, 0).toString());
+        detallePago = new DetallePago(lotes.getModel().getValueAt(0, 0).toString());
+        }else{    
         int row = cliente.getSelectedRow();
         if(row == -1)
         {
-        JOptionPane.showMessageDialog(null, "Seleccione un cliente", "Atención",JOptionPane.WARNING_MESSAGE);
-        }
-            else
-        {
-        DetallePago detallePago = new DetallePago(clientes[4].toString());
+        JOptionPane.showMessageDialog(null, "Seleccione un lote", "Atención",JOptionPane.WARNING_MESSAGE);
+        } else {
+        detallePago = new DetallePago(lotes.getModel().getValueAt(row, 0).toString());}}
         panelPrincipal.removeAll();
         panelPrincipal.add(detallePago);
         panelPrincipal.revalidate();
-        panelPrincipal.repaint();}                
+        panelPrincipal.repaint();                
     }//GEN-LAST:event_jButton1MouseClicked
 
     private void buscarKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_buscarKeyReleased
@@ -353,9 +360,22 @@ public class Clientes extends javax.swing.JPanel {
                 String celular = conexion.rs.getString(7);
                 String trabajo = conexion.rs.getString(9);
                 clientes = new Object[] {apellido, nombres, dni, celular, barrio, calle, numero, trabajo};
-                DefaultTableModel model = (DefaultTableModel) cliente.getModel();
-                model.addRow(clientes);
+                DefaultTableModel model = (DefaultTableModel) cliente.getModel();               
+                model.addRow(clientes);                
             }
+            //Oculto las columnas que no quiero mostrar
+                cliente.getColumnModel().getColumn(4).setMinWidth(0);
+                cliente.getColumnModel().getColumn(4).setMaxWidth(0);
+                cliente.getColumnModel().getColumn(4).setWidth(0);
+                cliente.getColumnModel().getColumn(5).setMinWidth(0);
+                cliente.getColumnModel().getColumn(5).setMaxWidth(0);
+                cliente.getColumnModel().getColumn(5).setWidth(0);
+                cliente.getColumnModel().getColumn(6).setMinWidth(0);
+                cliente.getColumnModel().getColumn(6).setMaxWidth(0);
+                cliente.getColumnModel().getColumn(6).setWidth(0);
+                cliente.getColumnModel().getColumn(7).setMinWidth(0);
+                cliente.getColumnModel().getColumn(7).setMaxWidth(0);
+                cliente.getColumnModel().getColumn(7).setWidth(0);
         } catch (Exception e) {
         }
     }
@@ -371,17 +391,26 @@ public class Clientes extends javax.swing.JPanel {
         //Cargo la segunda tabla con los lotes que pertencen a un cliente seleccionado
         try {
             int row = cliente.getSelectedRow();
-            conexion.rs = conexion.st.executeQuery("select * from ficha_control where dni ='" + clientes[row]+"'");
+            conexion.rs = conexion.st.executeQuery("select * from ficha_control where dni = '"+cliente.getModel().getValueAt(row, 2)+"'");
             while(conexion.rs.next()){
+                String idControl = conexion.rs.getString(1);
                 String barrio = conexion.rs.getString(4);
                 String manzana = conexion.rs.getString(5);
                 String parcela = conexion.rs.getString(6);
-                lote = new Object[] {barrio, manzana, parcela};
+                lote = new Object[] {idControl, barrio, manzana, parcela};
                 DefaultTableModel model = (DefaultTableModel) lotes.getModel();
                 model.addRow(lote);
             }
+            ocultarColumnas();
+
         } catch (Exception e) {
-        }
+        }        
+    }
+    
+    private void ocultarColumnas(){
+        lotes.getColumnModel().getColumn(0).setMinWidth(0);
+        lotes.getColumnModel().getColumn(0).setMaxWidth(0);
+        lotes.getColumnModel().getColumn(0).setWidth(0);
     }
 
 }

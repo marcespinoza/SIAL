@@ -21,26 +21,30 @@ public class DetallePago extends javax.swing.JPanel {
         initComponents();
     }
 
-    DetallePago(String idControl) {
+    public DetallePago(String idControl) {
         this.idControl = idControl;
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        initComponents();
+        cargarDetalle();
+        //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    public void cargarDetalle(){
+    private void cargarDetalle(){
        Conexion conexion = new Conexion();
         try {
-            conexion.rs = conexion.st.executeQuery("select * from detalle control where" );
+        conexion.rs = conexion.st.executeQuery("select * from detalle_control where idControl ='" + idControl +"'" );                    
+      
             while(conexion.rs.next()){
-                String dni = conexion.rs.getString(1);
-                String nombres = conexion.rs.getString(2);
-                String apellido = conexion.rs.getString(3);
-                String barrio = conexion.rs.getString(4);                
-                String calle = conexion.rs.getString(5);;
-                detalles = new Object[] {apellido, nombres, dni};
-                DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+        
+                String fecha = conexion.rs.getString(2);
+                String detalle = conexion.rs.getString(3);
+                String cuota = conexion.rs.getString(4);
+                String gastos = conexion.rs.getString(5);  
+                detalles = new Object[] {fecha, detalle, cuota, gastos};
+                DefaultTableModel model = (DefaultTableModel) detallePago.getModel();
                 model.addRow(detalles);
             }
         } catch (Exception e) {
+            System.out.println(e.getMessage());
         }
     }
     /**
@@ -53,21 +57,26 @@ public class DetallePago extends javax.swing.JPanel {
     private void initComponents() {
 
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        detallePago = new javax.swing.JTable();
         jButton1 = new javax.swing.JButton();
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        detallePago.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+                "Fecha", "Detalle ", "Cuota pura", "Gastos adminstrativos"
             }
-        ));
-        jScrollPane1.setViewportView(jTable1);
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jScrollPane1.setViewportView(detallePago);
 
         jButton1.setText("Volver");
 
@@ -82,8 +91,8 @@ public class DetallePago extends javax.swing.JPanel {
                         .addComponent(jButton1))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(50, 50, 50)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 469, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(79, Short.MAX_VALUE))
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 567, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(63, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -98,8 +107,8 @@ public class DetallePago extends javax.swing.JPanel {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JTable detallePago;
     private javax.swing.JButton jButton1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
     // End of variables declaration//GEN-END:variables
 }
