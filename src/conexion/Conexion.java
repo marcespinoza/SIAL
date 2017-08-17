@@ -26,8 +26,7 @@ public class Conexion {
         getConexion();
     }
     
-     public void getConexion(){
-        
+     public Connection getConexion(){      
    
     try{
         Class.forName("com.mysql.jdbc.Driver");
@@ -37,6 +36,7 @@ public class Conexion {
     }catch (Exception e){
         JOptionPane.showMessageDialog(null, "Error de conexion");
     }
+    return con; 
 }
     
 }

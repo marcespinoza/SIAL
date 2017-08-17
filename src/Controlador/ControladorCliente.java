@@ -5,6 +5,7 @@
  */
 package Controlador;
 
+import Modelo.ClienteDAO;
 import Vista.Panels.AltaCliente;
 import Vista.Panels.Clientes;
 import java.awt.Frame;
@@ -30,8 +31,10 @@ public class ControladorCliente implements ActionListener{
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        if(e.getSource() == vistaClientes.agregarBtn){
+        if(e.getSource() == vistaClientes.agregarBtn){  
+            ClienteDAO cd = new ClienteDAO();
             AltaCliente ac = new AltaCliente((Frame) SwingUtilities.getWindowAncestor(vistaClientes), true);
+            ControladorAltaCliente cac = new ControladorAltaCliente((Frame) SwingUtilities.getWindowAncestor(vistaClientes), ac, cd);
             ac.setVisible(true);
     }}
     
