@@ -3,16 +3,19 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Panels;
+package Vista.Panels;
 
+import Controlador.ControladorAltaCliente;
+import Controlador.ControladorCliente;
+import Vista.Frame.Ventana;
 import conexion.Conexion;
 import java.awt.CardLayout;
-import java.awt.peer.PanelPeer;
 import javax.swing.table.DefaultTableModel;
-import Panels.DetallePago;
-import static Frame.Principal2.panelPrincipal;
+import static Vista.Frame.Ventana.panelPrincipal;
+import java.awt.Frame;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.RowFilter;
 import javax.swing.table.DefaultTableColumnModel;
@@ -27,7 +30,8 @@ public class Clientes extends javax.swing.JPanel {
 
         private Object [] clientes;
         private Object [] lote;
-        private Conexion conexion; 
+        private Conexion conexion;
+      //  ControladorCliente cac = new ControladorCliente(this);
     /**
      * Creates new form Clientes
      */
@@ -63,6 +67,12 @@ public class Clientes extends javax.swing.JPanel {
         buscar = new javax.swing.JTextField();
         jScrollPane2 = new javax.swing.JScrollPane();
         lotes = new javax.swing.JTable();
+        jPanel3 = new javax.swing.JPanel();
+        modificarBtn = new javax.swing.JButton();
+        jLabel5 = new javax.swing.JLabel();
+        jComboBox1 = new javax.swing.JComboBox<>();
+        eliminarBtn = new javax.swing.JButton();
+        agregarBtn = new javax.swing.JButton();
 
         cliente.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -203,7 +213,7 @@ public class Clientes extends javax.swing.JPanel {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(buscar, javax.swing.GroupLayout.DEFAULT_SIZE, 395, Short.MAX_VALUE)
+                .addComponent(buscar)
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -211,7 +221,7 @@ public class Clientes extends javax.swing.JPanel {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(buscar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(20, Short.MAX_VALUE))
         );
 
         lotes.setModel(new javax.swing.table.DefaultTableModel(
@@ -232,6 +242,47 @@ public class Clientes extends javax.swing.JPanel {
         });
         jScrollPane2.setViewportView(lotes);
 
+        modificarBtn.setText("Modificar");
+        modificarBtn.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                modificarBtnMouseClicked(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
+        jPanel3.setLayout(jPanel3Layout);
+        jPanel3Layout.setHorizontalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addComponent(modificarBtn)
+                .addGap(0, 0, Short.MAX_VALUE))
+        );
+        jPanel3Layout.setVerticalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(modificarBtn)
+                .addContainerGap(40, Short.MAX_VALUE))
+        );
+
+        jLabel5.setText("Mostrar");
+
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Todos", "2.200", "2.750", "3.080" }));
+
+        eliminarBtn.setText("Eliminar");
+        eliminarBtn.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                eliminarBtnMouseClicked(evt);
+            }
+        });
+
+        agregarBtn.setText("Agregar");
+        agregarBtn.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                agregarBtnMouseClicked(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -239,27 +290,50 @@ public class Clientes extends javax.swing.JPanel {
             .addGroup(layout.createSequentialGroup()
                 .addGap(22, 22, 22)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 463, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 703, Short.MAX_VALUE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel5)
+                        .addGap(18, 18, 18)
+                        .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 292, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(0, 428, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(agregarBtn)
+                        .addGap(18, 18, 18)
+                        .addComponent(eliminarBtn))
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 292, Short.MAX_VALUE)
+                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(77, 77, 77))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(21, 21, 21)
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(17, 17, 17)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(eliminarBtn)
+                            .addComponent(agregarBtn))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel5)
+                            .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 372, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(131, Short.MAX_VALUE))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 342, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -289,21 +363,24 @@ public class Clientes extends javax.swing.JPanel {
     }//GEN-LAST:event_trabajoActionPerformed
 
     private void jButton1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton1MouseClicked
-        DetallePago detallePago = null;  
+        DetallePago detallePago = null; 
+        int rowClientes = cliente.getSelectedRow();
+        if(rowClientes == -1){
+         JOptionPane.showMessageDialog(null, "Seleccione un cliente de la lista", "Atención",JOptionPane.WARNING_MESSAGE);
+        }else{
         if(lotes.getRowCount()==1){
-        System.out.print(lotes.getModel().getValueAt(0, 0).toString());
-        detallePago = new DetallePago(lotes.getModel().getValueAt(0, 0).toString());
+        detallePago = new DetallePago(lotes.getModel().getValueAt(0, 0).toString(),cliente.getModel().getValueAt(rowClientes, 0).toString(), cliente.getModel().getValueAt(rowClientes, 1).toString());
         }else{    
-        int row = cliente.getSelectedRow();
+        int row = lotes.getSelectedRow();
         if(row == -1)
         {
-        JOptionPane.showMessageDialog(null, "Seleccione un lote", "Atención",JOptionPane.WARNING_MESSAGE);
+         JOptionPane.showMessageDialog(null, "Seleccione un lote", "Atención",JOptionPane.WARNING_MESSAGE);
         } else {
-        detallePago = new DetallePago(lotes.getModel().getValueAt(row, 0).toString());}}
+        detallePago = new DetallePago(lotes.getModel().getValueAt(row, 0).toString(),cliente.getModel().getValueAt(rowClientes, 0).toString(),cliente.getModel().getValueAt(rowClientes, 1).toString());}}
         panelPrincipal.removeAll();
         panelPrincipal.add(detallePago);
         panelPrincipal.revalidate();
-        panelPrincipal.repaint();                
+        panelPrincipal.repaint();}                
     }//GEN-LAST:event_jButton1MouseClicked
 
     private void buscarKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_buscarKeyReleased
@@ -326,22 +403,47 @@ public class Clientes extends javax.swing.JPanel {
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton1ActionPerformed
 
+    private void agregarBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_agregarBtnMouseClicked
+      // AltaCliente ac = new AltaCliente((JFrame)this.getRootPane().getParent(), true);
+       //ac.setVisible(true);
+    }//GEN-LAST:event_agregarBtnMouseClicked
+
+    private void eliminarBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_eliminarBtnMouseClicked
+         int row = cliente.getSelectedRowCount();
+        if(row==0){
+            JOptionPane.showMessageDialog(null, "Seleccione un cliente de la lista", "Atención",JOptionPane.WARNING_MESSAGE); 
+        }
+    }//GEN-LAST:event_eliminarBtnMouseClicked
+
+    private void modificarBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_modificarBtnMouseClicked
+         int row = cliente.getSelectedRowCount();
+        if(row==0){
+            JOptionPane.showMessageDialog(null, "Seleccione un cliente de la lista", "Atención",JOptionPane.WARNING_MESSAGE); 
+        }
+    }//GEN-LAST:event_modificarBtnMouseClicked
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    public javax.swing.JButton agregarBtn;
     private javax.swing.JTextField barrio;
     public javax.swing.JTextField buscar;
     private javax.swing.JTextField calle;
     private javax.swing.JTable cliente;
+    public javax.swing.JButton eliminarBtn;
     private javax.swing.JButton jButton1;
+    private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTable lotes;
+    public javax.swing.JButton modificarBtn;
     private javax.swing.JTextField numero;
     private javax.swing.JTextField trabajo;
     // End of variables declaration//GEN-END:variables
