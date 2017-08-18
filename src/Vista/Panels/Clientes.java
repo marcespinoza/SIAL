@@ -428,7 +428,7 @@ public class Clientes extends javax.swing.JPanel {
     private javax.swing.JTextField barrio;
     public javax.swing.JTextField buscar;
     private javax.swing.JTextField calle;
-    private javax.swing.JTable cliente;
+    public javax.swing.JTable cliente;
     public javax.swing.JButton eliminarBtn;
     private javax.swing.JButton jButton1;
     private javax.swing.JComboBox<String> jComboBox1;
