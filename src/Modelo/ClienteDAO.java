@@ -8,6 +8,7 @@ package Modelo;
 import conexion.Conexion;
 import java.sql.Connection;
 import java.sql.*;
+import javax.swing.table.DefaultTableModel;
 
 
 
@@ -18,13 +19,24 @@ import java.sql.*;
 public class ClienteDAO {
     
     Conexion conexion;
+    private Object [] clientes;
     
     public ClienteDAO(){
        conexion = new Conexion();
     }
     
  public void obtenerClientes(){}
- public void clientesPorLotes(){}
+ public ResultSet clientesPorLotes(){
+     ResultSet rs = null;
+     try {
+          Connection con = conexion.getConexion();
+          String listar = "SELECT c.Dni, c.Apellidos, c.Nombres,c.barrio, c.calle, c.numero, c.Telefono1, c.trabajo, f.Barrio, f.Manzana, f.Parcela FROM cliente c LEFT JOIN ficha_control f ON c.Dni = f.Dni"; 
+          Statement st = con.createStatement();
+          rs = st.executeQuery(listar);
+        } catch (Exception e) {
+        }
+     return rs;
+ }
  public int altaCliente(int dni, String apellidos, String nombres, Date fech_nacimiento, String barrio, String calle, int numero, String telefono1, String telefono2, String trabajo){
     int filasAfectadas=0;
      try {
@@ -42,6 +54,7 @@ public class ClienteDAO {
          Connection con = conexion.getConexion();
          String eliminar = "delete from cliente where dni = '"+dni+"'";
          PreparedStatement ps = con.prepareStatement(eliminar);
+         System.out.println("delete from cliente where dni = '"+dni+"'");
          ps.executeUpdate();
      } catch (Exception e) {
      }

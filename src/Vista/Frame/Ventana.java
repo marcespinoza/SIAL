@@ -27,6 +27,7 @@ public class Ventana extends javax.swing.JFrame {
         initComponents();
         inicializarBotones();
         ControladorCliente cc = new ControladorCliente(clientes);
+        cc.llenarTabla(clientes.tablaCliente);
         ImageIcon icon = new ImageIcon("src/Imagenes/logo.png_32x32.png");
         this.setIconImage(icon.getImage());
     }
@@ -44,7 +45,7 @@ public class Ventana extends javax.swing.JFrame {
         clientes = new Vista.Panels.Clientes();
         detallePago = new Vista.Panels.DetallePago();
         resumen = new Vista.Panels.Resumen();
-        panel_botones = new Vista.Panels.botones();
+        panel_botones = new Vista.Panels.Botones();
         btnLotes = new javax.swing.JButton();
         btnClientes = new javax.swing.JButton();
         btnResumen = new javax.swing.JButton();
@@ -156,7 +157,7 @@ public class Ventana extends javax.swing.JFrame {
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
     public static javax.swing.JPanel panelPrincipal;
-    private Vista.Panels.botones panel_botones;
+    private Vista.Panels.Botones panel_botones;
     private Vista.Panels.Resumen resumen;
     // End of variables declaration//GEN-END:variables
 

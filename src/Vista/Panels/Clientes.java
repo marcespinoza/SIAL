@@ -31,15 +31,12 @@ public class Clientes extends javax.swing.JPanel {
         private Object [] clientes;
         private Object [] lote;
         private Conexion conexion;
-      //  ControladorCliente cac = new ControladorCliente(this);
     /**
      * Creates new form Clientes
      */
     public Clientes() {
         initComponents();
         conexion = new Conexion();
-        llenarTablaCliente();
-        ocultarColumnas();
     }
 
     /**
@@ -52,7 +49,7 @@ public class Clientes extends javax.swing.JPanel {
     private void initComponents() {
 
         jScrollPane1 = new javax.swing.JScrollPane();
-        cliente = new javax.swing.JTable();
+        tablaCliente = new javax.swing.JTable();
         jPanel2 = new javax.swing.JPanel();
         barrio = new javax.swing.JTextField();
         calle = new javax.swing.JTextField();
@@ -64,38 +61,58 @@ public class Clientes extends javax.swing.JPanel {
         jLabel4 = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
-        buscar = new javax.swing.JTextField();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        lotes = new javax.swing.JTable();
-        jPanel3 = new javax.swing.JPanel();
-        modificarBtn = new javax.swing.JButton();
+        buscarTodos = new javax.swing.JTextField();
+        buscarParcela = new javax.swing.JTextField();
+        buscarManzana = new javax.swing.JTextField();
+        jLabel6 = new javax.swing.JLabel();
+        jLabel7 = new javax.swing.JLabel();
+        jLabel8 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         jComboBox1 = new javax.swing.JComboBox<>();
         eliminarBtn = new javax.swing.JButton();
         agregarBtn = new javax.swing.JButton();
+        editarBtn = new javax.swing.JButton();
 
-        cliente.setModel(new javax.swing.table.DefaultTableModel(
+        tablaCliente.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
             new String [] {
-                "Apellido", "Nombres", "Documento", "Telefono", "Barrio", "Calle", "Numero", "Trabajo"
+                "Apellido", "Nombres", "Documento", "Telefono", "Barrio", "Manzana", "Numero", "Trabajo", "Barrio", "Manzana", "Parcela"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false, false, false
+                false, false, false, false, false, false, false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit [columnIndex];
             }
         });
-        cliente.addMouseListener(new java.awt.event.MouseAdapter() {
+        tablaCliente.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                clienteMouseClicked(evt);
+                tablaClienteMouseClicked(evt);
             }
         });
-        jScrollPane1.setViewportView(cliente);
+        jScrollPane1.setViewportView(tablaCliente);
+        if (tablaCliente.getColumnModel().getColumnCount() > 0) {
+            tablaCliente.getColumnModel().getColumn(0).setResizable(false);
+            tablaCliente.getColumnModel().getColumn(1).setResizable(false);
+            tablaCliente.getColumnModel().getColumn(2).setMinWidth(75);
+            tablaCliente.getColumnModel().getColumn(2).setMaxWidth(75);
+            tablaCliente.getColumnModel().getColumn(3).setMinWidth(90);
+            tablaCliente.getColumnModel().getColumn(3).setMaxWidth(90);
+            tablaCliente.getColumnModel().getColumn(4).setResizable(false);
+            tablaCliente.getColumnModel().getColumn(5).setResizable(false);
+            tablaCliente.getColumnModel().getColumn(6).setResizable(false);
+            tablaCliente.getColumnModel().getColumn(7).setResizable(false);
+            tablaCliente.getColumnModel().getColumn(8).setMinWidth(140);
+            tablaCliente.getColumnModel().getColumn(8).setMaxWidth(140);
+            tablaCliente.getColumnModel().getColumn(9).setMinWidth(60);
+            tablaCliente.getColumnModel().getColumn(9).setMaxWidth(60);
+            tablaCliente.getColumnModel().getColumn(10).setMinWidth(60);
+            tablaCliente.getColumnModel().getColumn(10).setMaxWidth(60);
+        }
 
         barrio.setEditable(false);
         barrio.addActionListener(new java.awt.event.ActionListener() {
@@ -196,73 +213,61 @@ public class Clientes extends javax.swing.JPanel {
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Buscar", javax.swing.border.TitledBorder.LEFT, javax.swing.border.TitledBorder.TOP));
 
-        buscar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                buscarActionPerformed(evt);
-            }
-        });
-        buscar.addKeyListener(new java.awt.event.KeyAdapter() {
+        buscarTodos.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
-                buscarKeyReleased(evt);
+                buscarTodosKeyReleased(evt);
             }
         });
+
+        buscarParcela.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                buscarParcelaKeyReleased(evt);
+            }
+        });
+
+        buscarManzana.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                buscarManzanaKeyReleased(evt);
+            }
+        });
+
+        jLabel6.setText("Parcela");
+
+        jLabel7.setText("Manzana");
+
+        jLabel8.setText("Todos");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+            .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(buscar)
+                .addComponent(jLabel8)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(buscarTodos)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel7)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(buscarManzana, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jLabel6)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(buscarParcela, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(buscar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(buscarTodos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(buscarParcela, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(buscarManzana, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel6)
+                    .addComponent(jLabel7)
+                    .addComponent(jLabel8))
                 .addContainerGap(20, Short.MAX_VALUE))
-        );
-
-        lotes.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-
-            },
-            new String [] {
-                "idControl", "Barrio", "Manzana", "Parcela"
-            }
-        ) {
-            boolean[] canEdit = new boolean [] {
-                false, false, false, false
-            };
-
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
-            }
-        });
-        jScrollPane2.setViewportView(lotes);
-
-        modificarBtn.setText("Modificar");
-        modificarBtn.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                modificarBtnMouseClicked(evt);
-            }
-        });
-
-        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
-        jPanel3.setLayout(jPanel3Layout);
-        jPanel3Layout.setHorizontalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
-                .addComponent(modificarBtn)
-                .addGap(0, 0, Short.MAX_VALUE))
-        );
-        jPanel3Layout.setVerticalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(modificarBtn)
-                .addContainerGap(40, Short.MAX_VALUE))
         );
 
         jLabel5.setText("Mostrar");
@@ -283,6 +288,13 @@ public class Clientes extends javax.swing.JPanel {
             }
         });
 
+        editarBtn.setText("Editar");
+        editarBtn.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                editarBtnMouseClicked(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -290,61 +302,56 @@ public class Clientes extends javax.swing.JPanel {
             .addGroup(layout.createSequentialGroup()
                 .addGap(22, 22, 22)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 703, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel5)
                         .addGap(18, 18, 18)
                         .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE)))
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(agregarBtn)
-                        .addGap(18, 18, 18)
-                        .addComponent(eliminarBtn))
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 292, Short.MAX_VALUE)
-                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(77, 77, 77))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 988, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jPanel2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(agregarBtn)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(editarBtn))
+                            .addComponent(eliminarBtn))))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGap(19, 19, 19)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(17, 17, 17)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(eliminarBtn)
-                            .addComponent(agregarBtn))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel5)
-                            .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addComponent(agregarBtn)
+                            .addComponent(editarBtn))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(eliminarBtn))
+                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel5)
+                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(15, 15, 15)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 342, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 342, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
-    private void clienteMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_clienteMouseClicked
-        int row = cliente.getSelectedRow();       
-        barrio.setText(cliente.getModel().getValueAt(row, 4).toString());
-        calle.setText(cliente.getModel().getValueAt(row, 5).toString());
-         numero.setText(cliente.getModel().getValueAt(row, 6).toString());
-        trabajo.setText(cliente.getModel().getValueAt(row, 7).toString());
-        llenarTablaLotes();
-    }//GEN-LAST:event_clienteMouseClicked
+    private void tablaClienteMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tablaClienteMouseClicked
+        int row = tablaCliente.getSelectedRow();       
+        barrio.setText(tablaCliente.getModel().getValueAt(row, 4).toString());
+        calle.setText(tablaCliente.getModel().getValueAt(row, 5).toString());
+         numero.setText(tablaCliente.getModel().getValueAt(row, 6).toString());
+        trabajo.setText(tablaCliente.getModel().getValueAt(row, 7).toString());
+    }//GEN-LAST:event_tablaClienteMouseClicked
 
     private void barrioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_barrioActionPerformed
         // TODO add your handling code here:
@@ -364,41 +371,24 @@ public class Clientes extends javax.swing.JPanel {
 
     private void jButton1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton1MouseClicked
         DetallePago detallePago = null; 
-        int rowClientes = cliente.getSelectedRow();
-        if(rowClientes == -1){
-         JOptionPane.showMessageDialog(null, "Seleccione un cliente de la lista", "Atención",JOptionPane.WARNING_MESSAGE);
-        }else{
-        if(lotes.getRowCount()==1){
-        detallePago = new DetallePago(lotes.getModel().getValueAt(0, 0).toString(),cliente.getModel().getValueAt(rowClientes, 0).toString(), cliente.getModel().getValueAt(rowClientes, 1).toString());
-        }else{    
-        int row = lotes.getSelectedRow();
-        if(row == -1)
-        {
-         JOptionPane.showMessageDialog(null, "Seleccione un lote", "Atención",JOptionPane.WARNING_MESSAGE);
-        } else {
-        detallePago = new DetallePago(lotes.getModel().getValueAt(row, 0).toString(),cliente.getModel().getValueAt(rowClientes, 0).toString(),cliente.getModel().getValueAt(rowClientes, 1).toString());}}
         panelPrincipal.removeAll();
         panelPrincipal.add(detallePago);
         panelPrincipal.revalidate();
-        panelPrincipal.repaint();}                
+        panelPrincipal.repaint();               
     }//GEN-LAST:event_jButton1MouseClicked
 
-    private void buscarKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_buscarKeyReleased
-        String query=buscar.getText().toLowerCase();
+    private void buscarTodosKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_buscarTodosKeyReleased
+        String query=buscarTodos.getText().toLowerCase();
         filter(query);
-    }//GEN-LAST:event_buscarKeyReleased
+    }//GEN-LAST:event_buscarTodosKeyReleased
 
     private void filter(String query){
-         DefaultTableModel table = (DefaultTableModel) cliente.getModel();
+         DefaultTableModel table = (DefaultTableModel) tablaCliente.getModel();
         TableRowSorter<DefaultTableModel> tr = new TableRowSorter<> (table);
-         cliente.setRowSorter(tr);
+         tablaCliente.setRowSorter(tr);
          tr.setRowFilter(RowFilter.regexFilter("(?i)" + query));
     }
     
-    private void buscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buscarActionPerformed
-       
-    }//GEN-LAST:event_buscarActionPerformed
-
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton1ActionPerformed
@@ -409,26 +399,49 @@ public class Clientes extends javax.swing.JPanel {
     }//GEN-LAST:event_agregarBtnMouseClicked
 
     private void eliminarBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_eliminarBtnMouseClicked
-         int row = cliente.getSelectedRowCount();
+         int row = tablaCliente.getSelectedRowCount();
         if(row==0){
             JOptionPane.showMessageDialog(null, "Seleccione un cliente de la lista", "Atención",JOptionPane.WARNING_MESSAGE); 
         }
     }//GEN-LAST:event_eliminarBtnMouseClicked
 
-    private void modificarBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_modificarBtnMouseClicked
-         int row = cliente.getSelectedRowCount();
+    private void editarBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_editarBtnMouseClicked
+        int row = tablaCliente.getSelectedRowCount();
         if(row==0){
-            JOptionPane.showMessageDialog(null, "Seleccione un cliente de la lista", "Atención",JOptionPane.WARNING_MESSAGE); 
+            JOptionPane.showMessageDialog(null, "Seleccione un cliente de la lista", "Atención",JOptionPane.WARNING_MESSAGE);
         }
-    }//GEN-LAST:event_modificarBtnMouseClicked
+    }//GEN-LAST:event_editarBtnMouseClicked
 
+    private void buscarParcelaKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_buscarParcelaKeyReleased
+         String query=buscarParcela.getText().toLowerCase();
+        filtroParcela(query);
+    }//GEN-LAST:event_buscarParcelaKeyReleased
+  
+    private void buscarManzanaKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_buscarManzanaKeyReleased
+         String query=buscarManzana.getText().toLowerCase();
+        filtroManzana(query);
+    }//GEN-LAST:event_buscarManzanaKeyReleased
+    private void filtroParcela(String query){
+         DefaultTableModel table = (DefaultTableModel) tablaCliente.getModel();
+        TableRowSorter<DefaultTableModel> tr = new TableRowSorter<> (table);
+         tablaCliente.setRowSorter(tr);
+         tr.setRowFilter(RowFilter.regexFilter("(?i)" + query,10));
+    }
+    private void filtroManzana(String query){
+         DefaultTableModel table = (DefaultTableModel) tablaCliente.getModel();
+        TableRowSorter<DefaultTableModel> tr = new TableRowSorter<> (table);
+         tablaCliente.setRowSorter(tr);
+         tr.setRowFilter(RowFilter.regexFilter("(?i)" + query,9));
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     public javax.swing.JButton agregarBtn;
     private javax.swing.JTextField barrio;
-    public javax.swing.JTextField buscar;
+    public javax.swing.JTextField buscarManzana;
+    public javax.swing.JTextField buscarParcela;
+    public javax.swing.JTextField buscarTodos;
     private javax.swing.JTextField calle;
-    public javax.swing.JTable cliente;
+    public javax.swing.JButton editarBtn;
     public javax.swing.JButton eliminarBtn;
     private javax.swing.JButton jButton1;
     private javax.swing.JComboBox<String> jComboBox1;
@@ -437,82 +450,14 @@ public class Clientes extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
-    private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTable lotes;
-    public javax.swing.JButton modificarBtn;
     private javax.swing.JTextField numero;
+    public javax.swing.JTable tablaCliente;
     private javax.swing.JTextField trabajo;
     // End of variables declaration//GEN-END:variables
-
-     private void llenarTablaCliente() {
-      
-        try {
-            conexion.rs = conexion.st.executeQuery("select * from cliente");
-            while(conexion.rs.next()){
-                String dni = conexion.rs.getString(1);
-                String nombres = conexion.rs.getString(2);
-                String apellido = conexion.rs.getString(3);
-                String barrio = conexion.rs.getString(4);                
-                String calle = conexion.rs.getString(5);
-                String numero = conexion.rs.getString(6);                
-                String celular = conexion.rs.getString(7);
-                String trabajo = conexion.rs.getString(9);
-                clientes = new Object[] {apellido, nombres, dni, celular, barrio, calle, numero, trabajo};
-                DefaultTableModel model = (DefaultTableModel) cliente.getModel();               
-                model.addRow(clientes);                
-            }
-            //Oculto las columnas que no quiero mostrar
-                cliente.getColumnModel().getColumn(4).setMinWidth(0);
-                cliente.getColumnModel().getColumn(4).setMaxWidth(0);
-                cliente.getColumnModel().getColumn(4).setWidth(0);
-                cliente.getColumnModel().getColumn(5).setMinWidth(0);
-                cliente.getColumnModel().getColumn(5).setMaxWidth(0);
-                cliente.getColumnModel().getColumn(5).setWidth(0);
-                cliente.getColumnModel().getColumn(6).setMinWidth(0);
-                cliente.getColumnModel().getColumn(6).setMaxWidth(0);
-                cliente.getColumnModel().getColumn(6).setWidth(0);
-                cliente.getColumnModel().getColumn(7).setMinWidth(0);
-                cliente.getColumnModel().getColumn(7).setMaxWidth(0);
-                cliente.getColumnModel().getColumn(7).setWidth(0);
-        } catch (Exception e) {
-        }
-    }
-
-    private void llenarTablaLotes() {    
-        //Limpio los datos de la tabla
-        DefaultTableModel limpiar = (DefaultTableModel)lotes.getModel();
-        while (limpiar.getRowCount() > 0){
-        for (int i = 0; i < limpiar.getRowCount(); ++i){
-            limpiar.removeRow(i);
-        }
-    }
-        //Cargo la segunda tabla con los lotes que pertencen a un cliente seleccionado
-        try {
-            int row = cliente.getSelectedRow();
-            conexion.rs = conexion.st.executeQuery("select * from ficha_control where dni = '"+cliente.getModel().getValueAt(row, 2)+"'");
-            while(conexion.rs.next()){
-                String idControl = conexion.rs.getString(1);
-                String barrio = conexion.rs.getString(4);
-                String manzana = conexion.rs.getString(5);
-                String parcela = conexion.rs.getString(6);
-                lote = new Object[] {idControl, barrio, manzana, parcela};
-                DefaultTableModel model = (DefaultTableModel) lotes.getModel();
-                model.addRow(lote);
-            }
-            ocultarColumnas();
-
-        } catch (Exception e) {
-        }        
-    }
-    
-    private void ocultarColumnas(){
-        lotes.getColumnModel().getColumn(0).setMinWidth(0);
-        lotes.getColumnModel().getColumn(0).setMaxWidth(0);
-        lotes.getColumnModel().getColumn(0).setWidth(0);
-    }
-
 }

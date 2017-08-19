@@ -83,11 +83,6 @@ public class AltaCliente extends javax.swing.JDialog {
         jLabel8.setText("Lugar de trabajo");
 
         aceptar.setText("Aceptar");
-        aceptar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                aceptarActionPerformed(evt);
-            }
-        });
 
         cancelar.setText("Cancelar");
 
@@ -298,10 +293,6 @@ public class AltaCliente extends javax.swing.JDialog {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void aceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_aceptarActionPerformed
-        
-    }//GEN-LAST:event_aceptarActionPerformed
 
     private void documentoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_documentoActionPerformed
         // TODO add your handling code here:

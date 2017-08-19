@@ -101,7 +101,7 @@
         </Component>
       </SubComponents>
     </Container>
-    <Container class="Vista.Panels.botones" name="panel_botones">
+    <Container class="Vista.Panels.Botones" name="panel_botones">
       <Properties>
         <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
           <Color blue="ff" green="66" red="0" type="rgb"/>
