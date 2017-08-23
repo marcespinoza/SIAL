@@ -5,6 +5,7 @@
  */
 package Vista.Frame;
 import Controlador.ControladorCliente;
+import Controlador.ControladorDetallePago;
 import Vista.Panels.Clientes;
 import conexion.*;
 import java.awt.BorderLayout;
@@ -27,6 +28,7 @@ public class Ventana extends javax.swing.JFrame {
         initComponents();
         inicializarBotones();
         ControladorCliente cc = new ControladorCliente(clientes);
+        ControladorDetallePago cd = new ControladorDetallePago(detallePago);
         cc.llenarTabla(clientes.tablaCliente);
         ImageIcon icon = new ImageIcon("src/Imagenes/logo.png_32x32.png");
         this.setIconImage(icon.getImage());

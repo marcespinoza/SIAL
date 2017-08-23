@@ -30,7 +30,7 @@ public class ClienteDAO {
      ResultSet rs = null;
      try {
           Connection con = conexion.getConexion();
-          String listar = "SELECT c.Dni, c.Apellidos, c.Nombres,c.barrio, c.calle, c.numero, c.Telefono1, c.trabajo, f.Barrio, f.Manzana, f.Parcela FROM cliente c LEFT JOIN ficha_control f ON c.Dni = f.Dni"; 
+          String listar = "SELECT c.Dni, c.Apellidos, c.Nombres,c.barrio, c.calle, c.numero, c.Telefono1, c.trabajo,f.IdControl, f.Barrio, f.Manzana, f.Parcela FROM cliente c LEFT JOIN ficha_control f ON c.Dni = f.Dni"; 
           Statement st = con.createStatement();
           rs = st.executeQuery(listar);
         } catch (Exception e) {

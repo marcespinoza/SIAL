@@ -50,12 +50,12 @@ public class ControladorAltaCliente implements ActionListener{
             if(validarCampos()){
             int numReistros = cd.altaCliente(Integer.parseInt(ac.documento.getText()), ac.apellidos.getText(), ac.nombres.getText(), new java.sql.Date(ac.fech_nacimiento.getDate().getTime()), ac.barrio.getText(), ac.calle.getText(), Integer.parseInt(ac.numero.getText()), ac.telefono1.getText(), ac.telefono2.getText(), ac.trabajo.getText());
             rd.altaReferencia(ac.telefonoRef.getText(), ac.apellidosRef.getText(), ac.nombresRef.getText(), ac.parentescoRef.getText(), Integer.parseInt(ac.documento.getText()));
-            
-            cc.llenarTabla(tablaCliente);
             ac.setVisible(false);
+            cc.llenarTabla(tablaCliente);
             }
         }
           if(e.getSource() == ac.cancelar){
+              ac.setVisible(false);
         }
     }
     
