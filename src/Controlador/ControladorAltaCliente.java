@@ -7,19 +7,14 @@ package Controlador;
 
 import Modelo.ClienteDAO;
 import Modelo.ReferenciaDAO;
-import Vista.Panels.AltaCliente;
+import Vista.Dialogs.AltaCliente;
 import java.awt.Color;
 import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.BorderFactory;
 import javax.swing.JTable;
-import javax.swing.border.Border;
-import javax.swing.border.CompoundBorder;
-import javax.swing.border.EmptyBorder;
 import javax.swing.border.EtchedBorder;
-import javax.swing.border.LineBorder;
-import javax.swing.plaf.BorderUIResource;
 
 /**
  *
@@ -28,20 +23,21 @@ import javax.swing.plaf.BorderUIResource;
 public class ControladorAltaCliente implements ActionListener{
     
     private Frame parent;
-    AltaCliente ac = new AltaCliente(parent, true);
+    AltaCliente ac;
     ClienteDAO cd = new ClienteDAO();
     ReferenciaDAO rd = new ReferenciaDAO();
     ControladorCliente cc = new ControladorCliente();
     JTable tablaCliente;
     
     
-    public ControladorAltaCliente(Frame parent, AltaCliente ac, ClienteDAO cd, JTable tablaCliente){
+    public ControladorAltaCliente(Frame parent, ClienteDAO cd, JTable tablaCliente){
         this.parent=parent;
-        this.ac=ac;
+        ac = new AltaCliente(parent, true);
         this.cd=cd;
         this.tablaCliente=tablaCliente;
         this.ac.aceptar.addActionListener(this);
         this.ac.cancelar.addActionListener(this);
+        ac.setVisible(true);
     }
 
     @Override
@@ -50,8 +46,8 @@ public class ControladorAltaCliente implements ActionListener{
             if(validarCampos()){
             int numReistros = cd.altaCliente(Integer.parseInt(ac.documento.getText()), ac.apellidos.getText(), ac.nombres.getText(), new java.sql.Date(ac.fech_nacimiento.getDate().getTime()), ac.barrio.getText(), ac.calle.getText(), Integer.parseInt(ac.numero.getText()), ac.telefono1.getText(), ac.telefono2.getText(), ac.trabajo.getText());
             rd.altaReferencia(ac.telefonoRef.getText(), ac.apellidosRef.getText(), ac.nombresRef.getText(), ac.parentescoRef.getText(), Integer.parseInt(ac.documento.getText()));
-            ac.setVisible(false);
-            cc.llenarTabla(tablaCliente);
+            cc.llenarTabla();
+            ac.dispose();
             }
         }
           if(e.getSource() == ac.cancelar){

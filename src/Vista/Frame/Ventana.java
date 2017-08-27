@@ -28,8 +28,7 @@ public class Ventana extends javax.swing.JFrame {
         initComponents();
         inicializarBotones();
         ControladorCliente cc = new ControladorCliente(clientes);
-        ControladorDetallePago cd = new ControladorDetallePago(detallePago);
-        cc.llenarTabla(clientes.tablaCliente);
+        cc.llenarTabla();
         ImageIcon icon = new ImageIcon("src/Imagenes/logo.png_32x32.png");
         this.setIconImage(icon.getImage());
     }
@@ -64,7 +63,7 @@ public class Ventana extends javax.swing.JFrame {
         panelPrincipal.add(detallePago, "card3");
         panelPrincipal.add(resumen, "card4");
 
-        panel_botones.setBackground(new java.awt.Color(0, 102, 255));
+        panel_botones.setBackground(new java.awt.Color(36, 47, 65));
         panel_botones.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
         btnLotes.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/iconos/home.png"))); // NOI18N

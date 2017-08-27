@@ -6,29 +6,26 @@
 package Controlador;
 
 import Modelo.ClienteDAO;
-import Vista.Frame.Ventana;
-import Vista.Panels.AltaCliente;
+import Vista.Dialogs.AsignarPropiedad;
 import Vista.Panels.Clientes;
 import Vista.Panels.DetallePago;
-import java.awt.CardLayout;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Frame;
-import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
-import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.SwingUtilities;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellRenderer;
 
 /**
  *
@@ -39,6 +36,8 @@ public class ControladorCliente implements ActionListener, MouseListener{
     Clientes vistaClientes = new Clientes();
     ClienteDAO cd = new ClienteDAO();
     private Object [] clientes;
+    public static final DefaultTableCellRenderer DEFAULT_RENDERER = new DefaultTableCellRenderer();
+
     
     public ControladorCliente(Clientes vistaClientes){
         this.vistaClientes=vistaClientes;
@@ -46,6 +45,7 @@ public class ControladorCliente implements ActionListener, MouseListener{
         this.vistaClientes.eliminarBtn.addActionListener(this);
         this.vistaClientes.agregarBtn.addActionListener(this);
         this.vistaClientes.detalleBtn.addActionListener(this);
+        this.vistaClientes.asignarBtn.addActionListener(this);
         this.vistaClientes.tablaCliente.addMouseListener(this);
         vistaClientes.datosCliente.setBorder(BorderFactory.createTitledBorder(
 				BorderFactory.createLineBorder(Color.BLACK), "Datos cliente"));
@@ -57,13 +57,12 @@ public class ControladorCliente implements ActionListener, MouseListener{
     }
     
     
-
     @Override
     public void actionPerformed(ActionEvent e) {
         if(e.getSource() == vistaClientes.agregarBtn){  
-            AltaCliente ac = new AltaCliente((Frame) SwingUtilities.getWindowAncestor(vistaClientes), true);
-            ControladorAltaCliente cac = new ControladorAltaCliente((Frame) SwingUtilities.getWindowAncestor(vistaClientes), ac, cd, vistaClientes.tablaCliente);
-            ac.setVisible(true);
+            //AltaCliente ac = new AltaCliente((Frame) SwingUtilities.getWindowAncestor(vistaClientes), true);
+            ControladorAltaCliente cac = new ControladorAltaCliente((Frame) SwingUtilities.getWindowAncestor(vistaClientes), cd, vistaClientes.tablaCliente);
+            //ac.setVisible(true);
          }
         if(e.getSource() == vistaClientes.eliminarBtn){
              int row = vistaClientes.tablaCliente.getSelectedRow(); 
@@ -74,7 +73,7 @@ public class ControladorCliente implements ActionListener, MouseListener{
               if (reply == JOptionPane.YES_OPTION) {
               int dni = Integer.parseInt(vistaClientes.tablaCliente.getModel().getValueAt(row, 2).toString());
               cd.eliminarCliente(dni);
-                  llenarTabla(vistaClientes.tablaCliente);
+              llenarTabla();
                  } 
                   }
                  else{
@@ -82,19 +81,36 @@ public class ControladorCliente implements ActionListener, MouseListener{
   
              }
         }
-        if(e.getSource() == vistaClientes.detalleBtn){
-            
-    DetallePago vistaDetallePago = new DetallePago();
-    ControladorDetallePago cdp = new ControladorDetallePago(vistaDetallePago);
+        if(e.getSource() == vistaClientes.detalleBtn){  
            int row = vistaClientes.tablaCliente.getSelectedRow();
-           cdp.llenarTabla(vistaDetallePago.detallePagoTabla, vistaClientes.tablaCliente.getModel().getValueAt(row, 8).toString());
-           
-         }
+           if(row != -1){
+           DetallePago vistaDetallePago = new DetallePago();
+           ControladorDetallePago cdp = new ControladorDetallePago(vistaDetallePago, vistaClientes.tablaCliente.getModel().getValueAt(row, 0).toString(),vistaClientes.tablaCliente.getModel().getValueAt(row, 1).toString());
+           cdp.llenarTabla(vistaDetallePago.tablaDetallePago, vistaClientes.tablaCliente.getModel().getValueAt(row, 8).toString());           
+           }else{
+               JOptionPane.showMessageDialog(null, "Seleccione un cliente de la lista", "Atención", JOptionPane.INFORMATION_MESSAGE, null);
+           }           
+           }
+        
+        if (e.getSource() == vistaClientes.asignarBtn) {
+           int row = vistaClientes.tablaCliente.getSelectedRow();
+           if(row != -1){
+               if(vistaClientes.tablaCliente.getModel().getValueAt(row, 8)== null){
+                   AsignarPropiedad ap = new AsignarPropiedad((Frame) SwingUtilities.getWindowAncestor(vistaClientes), true);
+                   ControladorAsignacionPropiedad cap = new ControladorAsignacionPropiedad((Frame) SwingUtilities.getWindowAncestor(vistaClientes), ap, Integer.parseInt(vistaClientes.tablaCliente.getModel().getValueAt(row, 2).toString()));
+                   ap.setVisible(true);
+                }else{
+                   JOptionPane.showMessageDialog(null, "Cliente con propiedad ya asignada", "Atención", JOptionPane.INFORMATION_MESSAGE, null);
+               }
+           }else{
+               JOptionPane.showMessageDialog(null, "Seleccione un cliente de la lista", "Atención", JOptionPane.INFORMATION_MESSAGE, null);
+           }  
+        }
     }
     
-    public void llenarTabla(JTable jTable){
+    public void llenarTabla(){
         ResultSet rs = cd.clientesPorLotes();
-        DefaultTableModel model = (DefaultTableModel) jTable.getModel();
+        DefaultTableModel model = (DefaultTableModel) vistaClientes.tablaCliente.getModel();
         model.setRowCount(0);
         try {
             while(rs.next()){
@@ -109,13 +125,11 @@ public class ControladorCliente implements ActionListener, MouseListener{
                 String idControl = rs.getString(9);
                 String barrio_prop = rs.getString(10);
                 String manzana_prop = rs.getString(11);
-                String parcela_prop = rs.getString(12);
-                
+                String parcela_prop = rs.getString(12);                
                 clientes = new Object[] {apellidos, nombres, dni, telefono, barrio, calle, numero, trabajo, idControl, barrio_prop, manzana_prop, parcela_prop};
-                            
                 model.addRow(clientes);   
             }
-                
+                pintarFila();
                 vistaClientes.tablaCliente.getColumnModel().getColumn(4).setMinWidth(0);
                 vistaClientes.tablaCliente.getColumnModel().getColumn(4).setMaxWidth(0);
                 vistaClientes.tablaCliente.getColumnModel().getColumn(4).setWidth(0);
@@ -163,5 +177,21 @@ public class ControladorCliente implements ActionListener, MouseListener{
     public void mouseExited(MouseEvent e) {
         //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
+    
+    public void pintarFila(){
+         vistaClientes.tablaCliente.setDefaultRenderer(Object.class, new TableCellRenderer() {
+             @Override
+             public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+                 Component component = (JLabel) DEFAULT_RENDERER.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+                 Color c = Color.PINK;
+                 Object texto = table.getValueAt(row, 8);
+                 if(texto == null){
+                     component.setBackground(c);
+                 }
+                 return component;
+             }
+         });
+    }
+
     
 }

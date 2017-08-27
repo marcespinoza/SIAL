@@ -40,7 +40,11 @@
                           <Component id="eliminarBtn" min="-2" max="-2" attributes="0"/>
                           <Component id="datosCliente" max="32767" attributes="0"/>
                           <Component id="datosReferencia" alignment="0" max="32767" attributes="0"/>
-                          <Component id="detalleBtn" min="-2" max="-2" attributes="0"/>
+                          <Group type="102" attributes="0">
+                              <Component id="detalleBtn" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="asignarBtn" min="-2" max="-2" attributes="0"/>
+                          </Group>
                       </Group>
                   </Group>
               </Group>
@@ -71,7 +75,10 @@
               <EmptySpace min="-2" pref="15" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" attributes="0">
-                      <Component id="detalleBtn" min="-2" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="detalleBtn" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="asignarBtn" alignment="3" min="-2" max="-2" attributes="0"/>
+                      </Group>
                       <EmptySpace min="-2" pref="32" max="-2" attributes="0"/>
                       <Component id="datosCliente" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="32767" attributes="0"/>
@@ -574,6 +581,14 @@
     <Component class="javax.swing.JButton" name="detalleBtn">
       <Properties>
         <Property name="text" type="java.lang.String" value="Detalle pago"/>
+      </Properties>
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="1"/>
+      </AuxValues>
+    </Component>
+    <Component class="javax.swing.JButton" name="asignarBtn">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Asignar propiedad"/>
       </Properties>
       <AuxValues>
         <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="1"/>

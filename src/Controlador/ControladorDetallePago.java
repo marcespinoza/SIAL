@@ -7,12 +7,15 @@ package Controlador;
 
 import Modelo.DetallePagoDAO;
 import Vista.Frame.Ventana;
+import Vista.Dialogs.AltaPago;
 import Vista.Panels.DetallePago;
 import java.awt.CardLayout;
+import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.ResultSet;
 import javax.swing.JTable;
+import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -25,17 +28,23 @@ public class ControladorDetallePago implements ActionListener{
     DetallePagoDAO dp = new DetallePagoDAO();
     private int idControl;
     Object [] detallePago;
+    String apellido;
+    String nombre;
     
-    public ControladorDetallePago(DetallePago visDetallePago) {
-        this.vistaDetallePago = visDetallePago;
+    public ControladorDetallePago(DetallePago vistaDetallePago, String apellido, String nombre) {
+        this.vistaDetallePago = vistaDetallePago;
         this.dp = dp;
-        visDetallePago.volverBtn.addActionListener(this);
-        visDetallePago.agregarPagoBtn.addActionListener(this);
+        this.apellido=apellido;
+        this.nombre=nombre;
+        vistaDetallePago.volverBtn.addActionListener(this);
+        vistaDetallePago.agregarPagoBtn.addActionListener(this);
+        vistaDetallePago.nombreLabel.setText(this.nombre);
+        vistaDetallePago.apellidoLabel.setText(this.apellido);
     }
     
    public void llenarTabla(JTable jTable, String idControl){
         ResultSet rs = dp.listaDetallePago(idControl);
-        DefaultTableModel model = (DefaultTableModel) vistaDetallePago.detallePagoTabla.getModel();
+        DefaultTableModel model = (DefaultTableModel) vistaDetallePago.tablaDetallePago.getModel();
         model.setRowCount(0);
         try {
             while(rs.next()){
@@ -69,7 +78,9 @@ public class ControladorDetallePago implements ActionListener{
             cl.previous(Ventana.panelPrincipal);
         }
         if(e.getSource() == vistaDetallePago.agregarPagoBtn){
-            llenarTabla(vistaDetallePago.detallePagoTabla, "1");
+            AltaPago ac = new AltaPago((Frame) SwingUtilities.getWindowAncestor(vistaDetallePago), true);
+            ControladorAltaPago cac = new ControladorAltaPago();
+            ac.setVisible(true);
         }
     }
     

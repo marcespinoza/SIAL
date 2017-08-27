@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Vista.Panels;
+package Vista.Dialogs;
 
 /**
  *
@@ -343,7 +343,7 @@ public class AltaCliente extends javax.swing.JDialog {
                         System.exit(0);
                     }
                 });
-                dialog.setVisible(true);
+                //dialog.setVisible(true);
             }
         });
     }

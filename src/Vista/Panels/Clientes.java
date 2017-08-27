@@ -80,6 +80,7 @@ public class Clientes extends javax.swing.JPanel {
         jLabel12 = new javax.swing.JLabel();
         barrio1 = new javax.swing.JTextField();
         detalleBtn = new javax.swing.JButton();
+        asignarBtn = new javax.swing.JButton();
 
         tablaCliente.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -341,6 +342,8 @@ public class Clientes extends javax.swing.JPanel {
 
         detalleBtn.setText("Detalle pago");
 
+        asignarBtn.setText("Asignar propiedad");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -366,7 +369,10 @@ public class Clientes extends javax.swing.JPanel {
                             .addComponent(eliminarBtn)
                             .addComponent(datosCliente, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(datosReferencia, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(detalleBtn))))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(detalleBtn)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(asignarBtn)))))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -388,7 +394,9 @@ public class Clientes extends javax.swing.JPanel {
                 .addGap(15, 15, 15)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(detalleBtn)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(detalleBtn)
+                            .addComponent(asignarBtn))
                         .addGap(32, 32, 32)
                         .addComponent(datosCliente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -467,6 +475,7 @@ public class Clientes extends javax.swing.JPanel {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     public javax.swing.JButton agregarBtn;
+    public javax.swing.JButton asignarBtn;
     public javax.swing.JTextField barrio;
     public javax.swing.JTextField barrio1;
     public javax.swing.JTextField buscarManzana;

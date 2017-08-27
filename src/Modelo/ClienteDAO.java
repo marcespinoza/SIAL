@@ -41,7 +41,7 @@ public class ClienteDAO {
     int filasAfectadas=0;
      try {
          Connection con = conexion.getConexion();
-         String insertar = "Insert into cliente(dni, nombres, apellidos, fecha_nacimiento, barrio, calle, numero, telefono1, telefono2, trabajo) values ('"+dni+"','"+nombres+"','"+apellidos+"','"+fech_nacimiento+"','"+barrio+"','"+calle+"','"+numero+"','"+telefono1+"','"+telefono2+"','"+trabajo+"') ";
+         String insertar = "Insert into cliente(dni, apellidos, nombres, fecha_nacimiento, barrio, calle, numero, telefono1, telefono2, trabajo) values ('"+dni+"','"+apellidos+"','"+nombres+"','"+fech_nacimiento+"','"+barrio+"','"+calle+"','"+numero+"','"+telefono1+"','"+telefono2+"','"+trabajo+"') ";
          PreparedStatement ps = con.prepareStatement(insertar);
          filasAfectadas = ps.executeUpdate();
          
