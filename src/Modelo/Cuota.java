@@ -9,6 +9,6 @@ package Modelo;
  *
  * @author Marcelo
  */
-public class DetallePago {
+public class Cuota {
     
 }

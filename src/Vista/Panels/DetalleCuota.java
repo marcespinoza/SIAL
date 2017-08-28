@@ -36,18 +36,18 @@ import javax.swing.table.DefaultTableModel;
  *
  * @author Marcelo
  */
-public class DetallePago extends javax.swing.JPanel {
+public class DetalleCuota extends javax.swing.JPanel {
 
     private String idControl;
     private Object [] detalles;
     private String nombre, apellido;
     public static final String IMG = "src/Imagenes/logo_reporte.png";
     
-    public DetallePago() {
+    public DetalleCuota() {
         initComponents();
     }
 
-    public DetallePago(String idControl,String apellido, String nombre) {
+    public DetalleCuota(String idControl,String apellido, String nombre) {
         this.idControl = idControl;   
         initComponents();
         apellidoLabel.setText(apellido);
@@ -241,11 +241,11 @@ public class DetallePago extends javax.swing.JPanel {
             document.add(checkbox);
             document.close();
             }catch (DocumentException ex) {
-            Logger.getLogger(DetallePago.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(DetalleCuota.class.getName()).log(Level.SEVERE, null, ex);
         } catch (FileNotFoundException ex) {
-            Logger.getLogger(DetallePago.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(DetalleCuota.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
-            Logger.getLogger(DetallePago.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(DetalleCuota.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_jButton2MouseClicked
 

@@ -87,20 +87,15 @@ public class Clientes extends javax.swing.JPanel {
 
             },
             new String [] {
-                "Apellido", "Nombres", "Documento", "Telefono", "Barrio", "Manzana", "Numero", "Trabajo", "IdControl", "Barrio", "Manzana", "Parcela"
+                "Apellido", "Nombres", "Documento", "Telefono", "Barrio", "Manzana", "Numero", "Trabajo", "IdControl", "Precio", "Gastos", "Bolsa_cemento", "Barrio", "Manzana", "Parcela"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false, false, false, false, false, false, false
+                false, false, false, false, false, false, false, false, false, false, false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit [columnIndex];
-            }
-        });
-        tablaCliente.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                tablaClienteMouseClicked(evt);
             }
         });
         jScrollPane1.setViewportView(tablaCliente);
@@ -407,10 +402,6 @@ public class Clientes extends javax.swing.JPanel {
 
         datosCliente.getAccessibleContext().setAccessibleName("");
     }// </editor-fold>//GEN-END:initComponents
-
-    private void tablaClienteMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tablaClienteMouseClicked
-        
-    }//GEN-LAST:event_tablaClienteMouseClicked
 
     private void barrioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_barrioActionPerformed
         // TODO add your handling code here:

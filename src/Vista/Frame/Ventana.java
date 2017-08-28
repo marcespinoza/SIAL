@@ -5,7 +5,7 @@
  */
 package Vista.Frame;
 import Controlador.ControladorCliente;
-import Controlador.ControladorDetallePago;
+import Controlador.ControladorDetalleCuota;
 import Vista.Panels.Clientes;
 import conexion.*;
 import java.awt.BorderLayout;
@@ -44,7 +44,7 @@ public class Ventana extends javax.swing.JFrame {
 
         panelPrincipal = new javax.swing.JPanel();
         clientes = new Vista.Panels.Clientes();
-        detallePago = new Vista.Panels.DetallePago();
+        detallePago = new Vista.Panels.DetalleCuota();
         resumen = new Vista.Panels.Resumen();
         panel_botones = new Vista.Panels.Botones();
         btnLotes = new javax.swing.JButton();
@@ -153,7 +153,7 @@ public class Ventana extends javax.swing.JFrame {
     private javax.swing.JButton btnLotes;
     private javax.swing.JButton btnResumen;
     private Vista.Panels.Clientes clientes;
-    private Vista.Panels.DetallePago detallePago;
+    private Vista.Panels.DetalleCuota detallePago;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;

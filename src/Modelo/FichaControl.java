@@ -9,7 +9,7 @@ package Modelo;
  *
  * @author Marcelo
  */
-public class Ficha_control {
+public class FichaControl {
     
     int id_control;
     String tipo_compra;
@@ -19,7 +19,7 @@ public class Ficha_control {
     int parcela;
     int dni;
 
-    public Ficha_control() {
+    public FichaControl() {
     }
 
     public int getId_control() {

@@ -8,7 +8,7 @@ package Controlador;
 import Modelo.ClienteDAO;
 import Vista.Dialogs.AsignarPropiedad;
 import Vista.Panels.Clientes;
-import Vista.Panels.DetallePago;
+import Vista.Panels.DetalleCuota;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Frame;
@@ -84,10 +84,13 @@ public class ControladorCliente implements ActionListener, MouseListener{
         if(e.getSource() == vistaClientes.detalleBtn){  
            int row = vistaClientes.tablaCliente.getSelectedRow();
            if(row != -1){
-           DetallePago vistaDetallePago = new DetallePago();
-           ControladorDetallePago cdp = new ControladorDetallePago(vistaDetallePago, vistaClientes.tablaCliente.getModel().getValueAt(row, 0).toString(),vistaClientes.tablaCliente.getModel().getValueAt(row, 1).toString());
+               if(vistaClientes.tablaCliente.getValueAt(row, 8) != null){
+           DetalleCuota vistaDetallePago = new DetalleCuota();
+           ControladorDetalleCuota cdp = new ControladorDetalleCuota(vistaDetallePago, vistaClientes.tablaCliente.getModel().getValueAt(row, 0).toString(),vistaClientes.tablaCliente.getModel().getValueAt(row, 1).toString(), Integer.parseInt(vistaClientes.tablaCliente.getModel().getValueAt(row, 8).toString()));
            cdp.llenarTabla(vistaDetallePago.tablaDetallePago, vistaClientes.tablaCliente.getModel().getValueAt(row, 8).toString());           
-           }else{
+               }else{
+                  JOptionPane.showMessageDialog(null, "Debe asignar una propiedad para ver los detalles", "Atención", JOptionPane.INFORMATION_MESSAGE, null); 
+               }}else{
                JOptionPane.showMessageDialog(null, "Seleccione un cliente de la lista", "Atención", JOptionPane.INFORMATION_MESSAGE, null);
            }           
            }
@@ -123,10 +126,13 @@ public class ControladorCliente implements ActionListener, MouseListener{
                 String telefono = rs.getString(7);
                 String trabajo = rs.getString(8);
                 String idControl = rs.getString(9);
-                String barrio_prop = rs.getString(10);
-                String manzana_prop = rs.getString(11);
-                String parcela_prop = rs.getString(12);                
-                clientes = new Object[] {apellidos, nombres, dni, telefono, barrio, calle, numero, trabajo, idControl, barrio_prop, manzana_prop, parcela_prop};
+                String precio = rs.getString(10);
+                String gastos = rs.getString(11);
+                String bolsa_cemento = rs.getString(12);
+                String barrio_prop = rs.getString(13);
+                String manzana_prop = rs.getString(14);
+                String parcela_prop = rs.getString(15);                
+                clientes = new Object[] {apellidos, nombres, dni, telefono, barrio, calle, numero, trabajo, idControl, precio, gastos, bolsa_cemento, barrio_prop, manzana_prop, parcela_prop};
                 model.addRow(clientes);   
             }
                 pintarFila();
@@ -145,6 +151,15 @@ public class ControladorCliente implements ActionListener, MouseListener{
                 vistaClientes.tablaCliente.getColumnModel().getColumn(8).setMinWidth(0);
                 vistaClientes.tablaCliente.getColumnModel().getColumn(8).setMaxWidth(0);
                 vistaClientes.tablaCliente.getColumnModel().getColumn(8).setWidth(0);
+                vistaClientes.tablaCliente.getColumnModel().getColumn(9).setMinWidth(0);
+                vistaClientes.tablaCliente.getColumnModel().getColumn(9).setMaxWidth(0);
+                vistaClientes.tablaCliente.getColumnModel().getColumn(9).setWidth(0);
+                vistaClientes.tablaCliente.getColumnModel().getColumn(10).setMinWidth(0);
+                vistaClientes.tablaCliente.getColumnModel().getColumn(10).setMaxWidth(0);
+                vistaClientes.tablaCliente.getColumnModel().getColumn(10).setWidth(0);
+                vistaClientes.tablaCliente.getColumnModel().getColumn(11).setMinWidth(0);
+                vistaClientes.tablaCliente.getColumnModel().getColumn(11).setMaxWidth(0);
+                vistaClientes.tablaCliente.getColumnModel().getColumn(11).setWidth(0);
         } catch (Exception e) {
         }
     }
