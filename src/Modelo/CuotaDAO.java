@@ -24,7 +24,7 @@ public class CuotaDAO {
         conexion = new Conexion();
     }
     
-    public ResultSet listaDetalleCuota(String idControl){
+    public ResultSet listaDetalleCuota(int idControl){
          ResultSet rs = null;
      try {
           Connection con = conexion.getConexion();
@@ -40,11 +40,12 @@ public class CuotaDAO {
     int filasAfectadas=0;
      try {
          Connection con = conexion.getConexion();
-         String insertar = "Insert linea_control (fecha, detalle, cuota_pura, gastos_administrativos, debe, haber, saldo, cemento_debe, cemento_haber, cemento_saldo, observaciones, tipo_pago, idControl, dni, barrio, manzana, parcela) values ('"+fecha_pago+"','"+detalle+"','"+cuota_pura+"','"+gastos+"','"+debe+"','"+haber+"','"+saldo+"','"+cemento_debe+"','"+cemento_haber+"','"+cemento_saldo+"','"+observaciones+"','"+tipo_pago+"','"+id_control+"') ";
+         String insertar = "Insert into linea_control (fecha, detalle, cuota_pura, gastos_administrativos, debe, haber, saldo, cemento_debe, cemento_haber, cemento_saldo, observaciones, tipo_pago, idControl, dni, barrio, manzana, parcela) values ('"+fecha_pago+"','"+detalle+"','"+cuota_pura+"','"+gastos+"','"+debe+"','"+haber+"','"+saldo+"','"+cemento_debe+"','"+cemento_haber+"','"+cemento_saldo+"','"+observaciones+"','"+tipo_pago+"','"+id_control+"',0,0,0,0) ";
          PreparedStatement ps = con.prepareStatement(insertar);
          filasAfectadas = ps.executeUpdate();
          
-     } catch (Exception e) {         
+     } catch (Exception e) {  
+           System.out.println(e.getMessage());
      }
      return filasAfectadas;
  }

@@ -43,7 +43,7 @@ public class ControladorDetalleCuota implements ActionListener{
         vistaDetallePago.apellidoLabel.setText(this.apellido);
     }
     
-   public void llenarTabla(JTable jTable, String idControl){
+   public void llenarTabla(int idControl){
         ResultSet rs = dp.listaDetalleCuota(idControl);
         DefaultTableModel model = (DefaultTableModel) vistaDetallePago.tablaDetallePago.getModel();
         model.setRowCount(0);
@@ -64,7 +64,6 @@ public class ControladorDetalleCuota implements ActionListener{
                 System.out.println(rs.getString(8));
                 detallePago= new Object[] {fecha, detalle, cuota_pura, gastos_admin, debe, haber, saldo, cemento_debe, cemento_haber,cemento_saldo, observaciones, tipo_pago};                    
                 model.addRow(detallePago);   
-                model.fireTableDataChanged();
             }
            Ventana.panelPrincipal.removeAll();
            Ventana.panelPrincipal.add(vistaDetallePago);
@@ -79,8 +78,8 @@ public class ControladorDetalleCuota implements ActionListener{
             cl.previous(Ventana.panelPrincipal);
         }
         if(e.getSource() == vistaDetallePago.agregarPagoBtn){
-           ControladorAltaPago cac = new ControladorAltaPago((Frame) SwingUtilities.getWindowAncestor(vistaDetallePago), id_control);
-
+           ControladorAltaPago cac = new ControladorAltaPago((Frame) SwingUtilities.getWindowAncestor(vistaDetallePago), id_control, vistaDetallePago.tablaDetallePago.getRowCount());
+            llenarTabla(id_control);
         }
     }
     

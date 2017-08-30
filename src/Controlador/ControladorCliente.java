@@ -87,7 +87,7 @@ public class ControladorCliente implements ActionListener, MouseListener{
                if(vistaClientes.tablaCliente.getValueAt(row, 8) != null){
            DetalleCuota vistaDetallePago = new DetalleCuota();
            ControladorDetalleCuota cdp = new ControladorDetalleCuota(vistaDetallePago, vistaClientes.tablaCliente.getModel().getValueAt(row, 0).toString(),vistaClientes.tablaCliente.getModel().getValueAt(row, 1).toString(), Integer.parseInt(vistaClientes.tablaCliente.getModel().getValueAt(row, 8).toString()));
-           cdp.llenarTabla(vistaDetallePago.tablaDetallePago, vistaClientes.tablaCliente.getModel().getValueAt(row, 8).toString());           
+           cdp.llenarTabla( Integer.parseInt(vistaClientes.tablaCliente.getModel().getValueAt(row, 8).toString()));           
                }else{
                   JOptionPane.showMessageDialog(null, "Debe asignar una propiedad para ver los detalles", "Atención", JOptionPane.INFORMATION_MESSAGE, null); 
                }}else{

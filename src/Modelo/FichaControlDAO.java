@@ -24,17 +24,20 @@ public class FichaControlDAO {
         conexion = new Conexion();
     }
     
-    public int altaFichaControl(String tipo_compra, String dimension, double precio, double gastos, double bolsa_cemento, int dni, String barrio, int manzana, int parcela){
-         int filasAfectadas = 0;
+    public int altaFichaControl(String tipo_compra, String dimension, double precio, double cuota_pura, double gastos, double bolsa_cemento, int dni, String barrio, int manzana, int parcela){
+         int id_control = 0;
      try {
           Connection con = conexion.getConexion();
-          String insertar = "Insert into ficha_control(tipo_compra, dimension, precio, gastos, bolsa_cemento, dni, barrio, manzana, parcela) values ('"+tipo_compra+"','"+dimension+"','"+precio+"','"+gastos+"','"+bolsa_cemento+"','"+dni+"','"+barrio+"','"+manzana+"','"+parcela+"') ";
-           PreparedStatement ps = con.prepareStatement(insertar);
-          filasAfectadas = ps.executeUpdate();
-          System.out.println(filasAfectadas);
+          String insertar = "Insert into ficha_control(tipo_compra, dimension, precio_total, cuota_pura, gastos, bolsa_cemento, dni, barrio, manzana, parcela) values ('"+tipo_compra+"','"+dimension+"','"+precio+"','"+cuota_pura+"','"+gastos+"','"+bolsa_cemento+"','"+dni+"','"+barrio+"','"+manzana+"','"+parcela+"')";
+          PreparedStatement ps = con.prepareStatement(insertar, Statement.RETURN_GENERATED_KEYS);
+          ps.executeUpdate();  
+          ResultSet rs = ps.getGeneratedKeys();  
+          id_control = rs.next() ? rs.getInt(1) : 0;
         } catch (Exception e) {
+            System.out.println(e.getMessage().toString());
         }
-     return filasAfectadas;
+     //********Retorno id_control generado por la inserción********
+     return id_control;
     }
     
     public ResultSet obtenerFichaControl(){
@@ -53,12 +56,22 @@ public class FichaControlDAO {
      ResultSet rs = null;
      try {
           Connection con = conexion.getConexion();
-          String listar = "SELECT precio, gastos, bolsa_cemento FROM ficha_control where id_control = '"+id_control+"'"; 
+          String listar = "SELECT precio_total, gastos, bolsa_cemento FROM ficha_control where id_control = '"+id_control+"'"; 
           Statement st = con.createStatement();
           rs = st.executeQuery(listar);
         } catch (Exception e) {
         }
      return rs;
+ }
+    
+    public int obtenerIdControl(){
+     ResultSet rs = null;
+     int id_control = 0;
+     try {
+          //numero = stmt.executeUpdate(query, Statement.RETURN_GENERATED_KEYS);
+        } catch (Exception e) {
+        }
+     return id_control;
  }
     
 }

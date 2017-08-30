@@ -21,7 +21,6 @@ public class AltaCuota extends javax.swing.JDialog {
     public AltaCuota(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
-        cargarCampos();
         this.setLocationRelativeTo(this);
     }
 
@@ -195,10 +194,7 @@ public class AltaCuota extends javax.swing.JDialog {
         });
     }
 
-    public void cargarCampos(){
-     DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-     Date date = new Date();
-    }
+    
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     public javax.swing.JButton aceptarBtn;
