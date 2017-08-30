@@ -86,7 +86,7 @@ public class ControladorAsignacionPropiedad implements ActionListener{
 
         @Override
         protected Void doInBackground() throws Exception {
-            id_control = fichaControlDAO.altaFichaControl(vistaAsignarPropiedad.tipo_propiedad.getSelectedItem().toString(), vistaAsignarPropiedad.dimension.getText(), Double.parseDouble(vistaAsignarPropiedad.cantidad_cuotas.getText()),  Double.parseDouble(vistaAsignarPropiedad.bolsa_cemento.getText()), Double.parseDouble(vistaAsignarPropiedad.gastos_admin.getText()), Double.parseDouble(vistaAsignarPropiedad.cuota_pura.getText()), dni, vistaAsignarPropiedad.barrio.getText(),Integer.parseInt(vistaAsignarPropiedad.manzana.getText()), Integer.parseInt(vistaAsignarPropiedad.parcela.getText()));
+            id_control = fichaControlDAO.altaFichaControl(vistaAsignarPropiedad.tipo_propiedad.getSelectedItem().toString(), vistaAsignarPropiedad.dimension.getText(), Integer.parseInt(vistaAsignarPropiedad.cantidad_cuotas.getText()),  Double.parseDouble(vistaAsignarPropiedad.cuota_pura.getText()), Double.parseDouble(vistaAsignarPropiedad.gastos_admin.getText()), Double.parseDouble(vistaAsignarPropiedad.bolsa_cemento.getText()), dni, vistaAsignarPropiedad.barrio.getText(),Integer.parseInt(vistaAsignarPropiedad.manzana.getText()), Integer.parseInt(vistaAsignarPropiedad.parcela.getText()));
             return null;
         }
 

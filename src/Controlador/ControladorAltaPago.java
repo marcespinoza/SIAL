@@ -48,9 +48,9 @@ public class ControladorAltaPago implements ActionListener{
                    rs.next();
                    rs_cuota.last();
                    double ultimo_saldo = Double.parseDouble(rs_cuota.getString(7));
-                   double cuota_pura = Double.parseDouble(rs.getString(2));
-                   double gastos = Double.parseDouble(rs.getString(3));
-                   double bolsa_cemento = Double.parseDouble(rs.getString(4));
+                   double cuota_pura = Double.parseDouble(rs.getString(1));
+                   double gastos = Double.parseDouble(rs.getString(2));
+                   double bolsa_cemento = Double.parseDouble(rs.getString(3));
                    double ultimo_saldo_bolsa_cemento = Double.parseDouble(rs_cuota.getString(10));
                    calcularValores(ultimo_saldo, cuota_pura, gastos,bolsa_cemento, ultimo_saldo_bolsa_cemento);                  
                  
@@ -69,8 +69,8 @@ public class ControladorAltaPago implements ActionListener{
                String tipoPago = ac.tipoPago.getSelectedItem().toString();
                double haber = cuota_pura + gastos;
                double saldo_actual = ultimo_saldo - haber;
-               double cemento_haber = saldo_bolsa_cemento;
-               double cemento_saldo = bolsa_cemento - saldo_bolsa_cemento;
+               double cemento_haber = bolsa_cemento;
+               double cemento_saldo = saldo_bolsa_cemento - bolsa_cemento;
                cd.altaCuota(new java.sql.Date(fecha_pago), detalle, cuota_pura, gastos, 0, haber, saldo_actual, 0, cemento_haber, cemento_saldo, observaciones, tipoPago, id_control);
                ac.dispose();
     }
