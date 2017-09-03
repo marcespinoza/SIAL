@@ -62,7 +62,7 @@ public class ControladorCliente implements ActionListener, MouseListener{
         if(e.getSource() == vistaClientes.agregarBtn){  
             //AltaCliente ac = new AltaCliente((Frame) SwingUtilities.getWindowAncestor(vistaClientes), true);
             ControladorAltaCliente cac = new ControladorAltaCliente((Frame) SwingUtilities.getWindowAncestor(vistaClientes), cd, vistaClientes.tablaCliente);
-            //ac.setVisible(true);
+            llenarTabla();
          }
         if(e.getSource() == vistaClientes.eliminarBtn){
              int row = vistaClientes.tablaCliente.getSelectedRow(); 
@@ -85,9 +85,9 @@ public class ControladorCliente implements ActionListener, MouseListener{
            int row = vistaClientes.tablaCliente.getSelectedRow();
            if(row != -1){
                if(vistaClientes.tablaCliente.getValueAt(row, 8) != null){
-           DetalleCuota vistaDetallePago = new DetalleCuota();
-           ControladorDetalleCuota cdp = new ControladorDetalleCuota(vistaDetallePago, vistaClientes.tablaCliente.getModel().getValueAt(row, 0).toString(),vistaClientes.tablaCliente.getModel().getValueAt(row, 1).toString(), Integer.parseInt(vistaClientes.tablaCliente.getModel().getValueAt(row, 8).toString()));
-           cdp.llenarTabla( Integer.parseInt(vistaClientes.tablaCliente.getModel().getValueAt(row, 8).toString()));           
+                   DetalleCuota vistaDetallePago = new DetalleCuota();
+                   ControladorDetalleCuota cdp = new ControladorDetalleCuota(vistaDetallePago, vistaClientes.tablaCliente.getModel().getValueAt(row, 0).toString(),vistaClientes.tablaCliente.getModel().getValueAt(row, 1).toString(), Integer.parseInt(vistaClientes.tablaCliente.getModel().getValueAt(row, 8).toString()));
+                   //cdp.llenarTabla( Integer.parseInt(vistaClientes.tablaCliente.getModel().getValueAt(row, 8).toString()));           
                }else{
                   JOptionPane.showMessageDialog(null, "Debe asignar una propiedad para ver los detalles", "Atención", JOptionPane.INFORMATION_MESSAGE, null); 
                }}else{
@@ -131,7 +131,7 @@ public class ControladorCliente implements ActionListener, MouseListener{
                 String bolsa_cemento = rs.getString(12);
                 String barrio_prop = rs.getString(13);
                 String manzana_prop = rs.getString(14);
-                String parcela_prop = rs.getString(15);                
+                String parcela_prop = rs.getString(15);  
                 clientes = new Object[] {apellidos, nombres, dni, telefono, barrio, calle, numero, trabajo, idControl, precio, gastos, bolsa_cemento, barrio_prop, manzana_prop, parcela_prop};
                 model.addRow(clientes);   
             }
@@ -161,6 +161,7 @@ public class ControladorCliente implements ActionListener, MouseListener{
                 vistaClientes.tablaCliente.getColumnModel().getColumn(11).setMaxWidth(0);
                 vistaClientes.tablaCliente.getColumnModel().getColumn(11).setWidth(0);
         } catch (Exception e) {
+            System.out.println(e.getMessage());
         }
     }
 

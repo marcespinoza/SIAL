@@ -47,13 +47,7 @@ public class DetalleCuota extends javax.swing.JPanel {
         initComponents();
     }
 
-    public DetalleCuota(String idControl,String apellido, String nombre) {
-        this.idControl = idControl;   
-        initComponents();
-        apellidoLabel.setText(apellido);
-        nombreLabel.setText(nombre);
-        //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+  
 
    
     /**
@@ -68,7 +62,7 @@ public class DetalleCuota extends javax.swing.JPanel {
         jScrollPane1 = new javax.swing.JScrollPane();
         tablaDetallePago = new javax.swing.JTable();
         volverBtn = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
+        generarReciboBtn = new javax.swing.JButton();
         agregarPagoBtn = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
         nombreLabel = new javax.swing.JLabel();
@@ -96,10 +90,10 @@ public class DetalleCuota extends javax.swing.JPanel {
 
         volverBtn.setText("Volver");
 
-        jButton2.setText("Generar recibo");
-        jButton2.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jButton2MouseClicked(evt);
+        generarReciboBtn.setText("Generar recibo");
+        generarReciboBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                generarReciboBtnActionPerformed(evt);
             }
         });
 
@@ -146,7 +140,7 @@ public class DetalleCuota extends javax.swing.JPanel {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(agregarPagoBtn, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jButton2, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(generarReciboBtn, javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(volverBtn, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -163,7 +157,7 @@ public class DetalleCuota extends javax.swing.JPanel {
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(agregarPagoBtn)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton2)
+                        .addComponent(generarReciboBtn)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(volverBtn))
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 347, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -171,83 +165,9 @@ public class DetalleCuota extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton2MouseClicked
-            Document document= new Document(PageSize.A4);
-        try {
-            PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream("report.pdf"));
-               document.open();
-            Image image = Image.getInstance(IMG); 
-            PdfPTable table = new PdfPTable(2); // 3 columns.
-            table.setHorizontalAlignment(Element.ALIGN_RIGHT); 
-            PdfPCell cell1 = new PdfPCell();
-            PdfPCell cell3 = new PdfPCell(new Paragraph("Recibo por orden y cuenta de terceros"));
-            cell1.setBorder(Rectangle.RIGHT);
-            cell3.setVerticalAlignment(Element.ALIGN_MIDDLE);
-            table.addCell(cell1);
-            table.addCell(cell3);
-            table.setSpacingAfter(20);
-            document.add(table);    
-            Paragraph para = new Paragraph("Numero: ...........");
-            Paragraph cuit = new Paragraph("CUIT: 23-07431900-9");
-             Paragraph ingBrutos = new Paragraph("Ing Brutos: 01-23-07431900-9");
-            Paragraph inicAct = new Paragraph("Inic. Act.: 01-08-2015");       
-            para.setAlignment(Paragraph.ALIGN_RIGHT);
-            cuit.setAlignment(Paragraph.ALIGN_RIGHT);
-            ingBrutos.setAlignment(Paragraph.ALIGN_RIGHT);
-            inicAct.setAlignment(Paragraph.ALIGN_RIGHT);
-            document.add(new Chunk(image, 0, -60f));
-            document.add(para);
-            document.add(cuit);
-            document.add(ingBrutos);
-            document.add(inicAct);
-            document.add( Chunk.NEWLINE );
-            PdfPTable table2 = new PdfPTable(1);
-            table2.setWidthPercentage(100);
-            PdfPCell cell4 = new PdfPCell(new Paragraph("Propietario:......."));
-            PdfPCell cell5 = new PdfPCell(new Paragraph("Nombre comprador:....."));
-            cell4.disableBorderSide(2);
-            cell5.disableBorderSide(1);
-            table2.addCell(cell4);
-             table2.addCell(cell5);
-             document.add(table2);
-            PdfPTable checkbox = new PdfPTable(8);
-            checkbox.setTotalWidth(new float[]{ 3,1,3,1,3,1,3,1});
-            checkbox.setWidthPercentage(100);
-            Font f=new Font(FontFamily.TIMES_ROMAN,10.0f,0,null);
-            PdfPCell check1 = new PdfPCell(new Paragraph("Iva Resp. Inscripto",f));
-            PdfPCell check2 = new PdfPCell(new Paragraph(""));
-            check1.disableBorderSide(4);
-            check1.disableBorderSide(3);
-            checkbox.addCell(check1);
-            checkbox.addCell(check2);
-            PdfPCell check3 = new PdfPCell(new Paragraph("Resp. No Inscripto",f));
-            PdfPCell check4 = new PdfPCell(new Paragraph(""));
-            check3.disableBorderSide(4);
-            check3.disableBorderSide(3);
-            checkbox.addCell(check3);
-            checkbox.addCell(check4);
-            PdfPCell check5 = new PdfPCell(new Paragraph("Monotributo",f));
-            PdfPCell check6 = new PdfPCell(new Paragraph(""));
-            check5.disableBorderSide(4);
-            check5.disableBorderSide(3);
-            checkbox.addCell(check5);
-            checkbox.addCell(check6);
-            PdfPCell check7 = new PdfPCell(new Paragraph("Exento",f));
-            PdfPCell check8 = new PdfPCell(new Paragraph(""));
-            check7.disableBorderSide(4);
-            check7.disableBorderSide(3);
-            checkbox.addCell(check7);
-            checkbox.addCell(check8);
-            document.add(checkbox);
-            document.close();
-            }catch (DocumentException ex) {
-            Logger.getLogger(DetalleCuota.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (FileNotFoundException ex) {
-            Logger.getLogger(DetalleCuota.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex) {
-            Logger.getLogger(DetalleCuota.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }//GEN-LAST:event_jButton2MouseClicked
+    private void generarReciboBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_generarReciboBtnActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_generarReciboBtnActionPerformed
 
     class ParagraphBorder extends PdfPageEventHelper {
     public boolean active = false;
@@ -277,7 +197,7 @@ public class DetalleCuota extends javax.swing.JPanel {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     public javax.swing.JButton agregarPagoBtn;
     public javax.swing.JLabel apellidoLabel;
-    public javax.swing.JButton jButton2;
+    public javax.swing.JButton generarReciboBtn;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     public javax.swing.JLabel nombreLabel;

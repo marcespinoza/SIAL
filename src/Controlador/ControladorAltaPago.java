@@ -71,7 +71,7 @@ public class ControladorAltaPago implements ActionListener{
                double saldo_actual = ultimo_saldo - haber;
                double cemento_haber = bolsa_cemento;
                double cemento_saldo = saldo_bolsa_cemento - bolsa_cemento;
-               cd.altaCuota(new java.sql.Date(fecha_pago), detalle, cuota_pura, gastos, 0, haber, saldo_actual, 0, cemento_haber, cemento_saldo, observaciones, tipoPago, id_control);
+               cd.altaCuota(new java.sql.Date(fecha_pago),0, detalle, cuota_pura, gastos, 0, haber, saldo_actual, 0, cemento_haber, cemento_saldo, observaciones, tipoPago, id_control);
                ac.dispose();
     }
         

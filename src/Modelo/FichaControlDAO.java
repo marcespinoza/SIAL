@@ -28,7 +28,7 @@ public class FichaControlDAO {
          int id_control = 0;
      try {
           Connection con = conexion.getConexion();
-          String insertar = "Insert into ficha_control(tipo_compra, dimension, cantidad_cuotas, cuota_pura, gastos, bolsa_cemento, dni, barrio, manzana, parcela) values ('"+tipo_compra+"','"+dimension+"','"+cantidad_cuotas+"','"+cuota_pura+"','"+gastos+"','"+bolsa_cemento+"','"+dni+"','"+barrio+"','"+manzana+"','"+parcela+"')";
+          String insertar = "Insert into ficha_control(tipo_compra, dimension, cantidad_cuotas, cuota_pura, gastos, bolsa_cemento, cliente_dni, lote_barrio, lote_manzana, lote_parcela) values ('"+tipo_compra+"','"+dimension+"','"+cantidad_cuotas+"','"+cuota_pura+"','"+gastos+"','"+bolsa_cemento+"','"+dni+"','"+barrio+"','"+manzana+"','"+parcela+"')";
           PreparedStatement ps = con.prepareStatement(insertar, Statement.RETURN_GENERATED_KEYS);
           ps.executeUpdate();  
           ResultSet rs = ps.getGeneratedKeys();  
@@ -56,10 +56,11 @@ public class FichaControlDAO {
      ResultSet rs = null;
      try {
           Connection con = conexion.getConexion();
-          String listar = "SELECT cuota_pura, gastos, bolsa_cemento FROM ficha_control where id_control = '"+id_control+"'"; 
+          String listar = "SELECT cuota_pura, gastos, bolsa_cemento, lote_barrio, lote_manzana, lote_parcela,dimension , gastos, cuota_pura FROM ficha_control where id_control = '"+id_control+"'"; 
           Statement st = con.createStatement();
           rs = st.executeQuery(listar);
         } catch (Exception e) {
+            System.out.println(e.getMessage());
         }
      return rs;
  }

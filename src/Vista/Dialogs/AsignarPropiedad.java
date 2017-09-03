@@ -32,11 +32,8 @@ public class AsignarPropiedad extends javax.swing.JDialog {
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
-        barrio = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
-        manzana = new javax.swing.JTextField();
-        parcela = new javax.swing.JTextField();
         dimension = new javax.swing.JTextField();
         cuota_pura = new javax.swing.JTextField();
         jLabel7 = new javax.swing.JLabel();
@@ -52,6 +49,9 @@ public class AsignarPropiedad extends javax.swing.JDialog {
         bolsa_cemento = new javax.swing.JTextField();
         jLabel12 = new javax.swing.JLabel();
         jLabel13 = new javax.swing.JLabel();
+        barrio = new javax.swing.JComboBox<>();
+        manzana = new javax.swing.JComboBox<>();
+        parcela = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Asignar propiedad");
@@ -117,10 +117,10 @@ public class AsignarPropiedad extends javax.swing.JDialog {
                             .addComponent(cuota_pura)
                             .addComponent(cantidad_cuotas)
                             .addComponent(dimension)
-                            .addComponent(parcela)
-                            .addComponent(manzana)
-                            .addComponent(barrio)
-                            .addComponent(tipo_propiedad, 0, 249, Short.MAX_VALUE))
+                            .addComponent(tipo_propiedad, 0, 249, Short.MAX_VALUE)
+                            .addComponent(parcela, 0, 249, Short.MAX_VALUE)
+                            .addComponent(manzana, 0, 249, Short.MAX_VALUE)
+                            .addComponent(barrio, 0, 249, Short.MAX_VALUE))
                         .addGap(42, 42, 42))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(152, 152, 152)
@@ -142,13 +142,13 @@ public class AsignarPropiedad extends javax.swing.JDialog {
                     .addComponent(barrio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(manzana, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel2))
+                    .addComponent(jLabel2)
+                    .addComponent(manzana, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(parcela, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel3))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 8, Short.MAX_VALUE)
+                    .addComponent(jLabel3)
+                    .addComponent(parcela, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(dimension, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel8))
@@ -225,7 +225,7 @@ public class AsignarPropiedad extends javax.swing.JDialog {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     public javax.swing.JButton aceptarBtn;
-    public javax.swing.JTextField barrio;
+    public javax.swing.JComboBox<String> barrio;
     public javax.swing.JTextField bolsa_cemento;
     public javax.swing.JButton cancelarBtn;
     public javax.swing.JTextField cantidad_cuotas;
@@ -244,8 +244,8 @@ public class AsignarPropiedad extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
-    public javax.swing.JTextField manzana;
-    public javax.swing.JTextField parcela;
+    public javax.swing.JComboBox<String> manzana;
+    public javax.swing.JComboBox<String> parcela;
     public javax.swing.JComboBox<String> tipo_propiedad;
     // End of variables declaration//GEN-END:variables
 }

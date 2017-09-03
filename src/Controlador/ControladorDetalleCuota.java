@@ -39,8 +39,10 @@ public class ControladorDetalleCuota implements ActionListener{
         this.id_control=id_control;
         vistaDetallePago.volverBtn.addActionListener(this);
         vistaDetallePago.agregarPagoBtn.addActionListener(this);
+        vistaDetallePago.generarReciboBtn.addActionListener(this);
         vistaDetallePago.nombreLabel.setText(this.nombre);
         vistaDetallePago.apellidoLabel.setText(this.apellido);
+        llenarTabla(id_control);
     }
     
    public void llenarTabla(int idControl){
@@ -69,7 +71,8 @@ public class ControladorDetalleCuota implements ActionListener{
            Ventana.panelPrincipal.add(vistaDetallePago);
            Ventana.panelPrincipal.revalidate();
            Ventana.panelPrincipal.repaint();
-        }catch(Exception e){}  }
+        }catch(Exception e){
+        System.out.println(e.getMessage().toString());}  }
 
     @Override
     public void actionPerformed(ActionEvent e) {
@@ -80,6 +83,10 @@ public class ControladorDetalleCuota implements ActionListener{
         if(e.getSource() == vistaDetallePago.agregarPagoBtn){
            ControladorAltaPago cac = new ControladorAltaPago((Frame) SwingUtilities.getWindowAncestor(vistaDetallePago), id_control, vistaDetallePago.tablaDetallePago.getRowCount());
             llenarTabla(id_control);
+        }
+        if(e.getSource() == vistaDetallePago.generarReciboBtn){
+           new ControladorRecibo((Frame) SwingUtilities.getWindowAncestor(vistaDetallePago), id_control);
+          
         }
     }
     

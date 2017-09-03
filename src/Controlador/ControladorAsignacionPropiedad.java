@@ -7,12 +7,16 @@ package Controlador;
 
 import Modelo.CuotaDAO;
 import Modelo.FichaControlDAO;
+import Modelo.LoteDAO;
 import Vista.Dialogs.AsignarPropiedad;
 import java.awt.Color;
 import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.sql.Date;
+import java.sql.ResultSet;
 import javax.swing.BorderFactory;
 import javax.swing.border.EtchedBorder;
 
@@ -24,6 +28,7 @@ public class ControladorAsignacionPropiedad implements ActionListener{
     
     private Frame parent;    
     AsignarPropiedad vistaAsignarPropiedad ;
+    LoteDAO ld = new LoteDAO();
     FichaControlDAO fichaControlDAO = new FichaControlDAO();
     CuotaDAO cuotaDao = new CuotaDAO();
     ControladorCliente cc = new ControladorCliente();
@@ -35,6 +40,22 @@ public class ControladorAsignacionPropiedad implements ActionListener{
         this.dni=dni;
         this.vistaAsignarPropiedad.aceptarBtn.addActionListener(this);
         this.vistaAsignarPropiedad.cancelarBtn.addActionListener(this);
+        this.vistaAsignarPropiedad.barrio.addItemListener(new ItemListener() {
+            @Override
+            public void itemStateChanged(ItemEvent e) {
+                System.out.println(vistaAsignarPropiedad.barrio.getSelectedItem().toString());
+                cargarManzanas(vistaAsignarPropiedad.barrio.getSelectedItem().toString());
+            }
+        });
+        this.vistaAsignarPropiedad.manzana.addItemListener(new ItemListener() {
+            @Override
+            public void itemStateChanged(ItemEvent e) {
+                if(vistaAsignarPropiedad.manzana.getSelectedItem() != null){
+                cargarParcelas(vistaAsignarPropiedad.barrio.getSelectedItem().toString(), Integer.parseInt(vistaAsignarPropiedad.manzana.getSelectedItem().toString()));
+                }
+                }
+        });
+        cargarBarrios();
     }
 
     @Override
@@ -48,6 +69,36 @@ public class ControladorAsignacionPropiedad implements ActionListener{
           if(e.getSource() == vistaAsignarPropiedad.cancelarBtn){
              vistaAsignarPropiedad.dispose();
           }
+    }
+    
+    public void cargarBarrios(){
+     ResultSet rs = ld.obtenerBarrios();
+        try {
+            while(rs.next()){
+                vistaAsignarPropiedad.barrio.addItem(rs.getString(1));
+            }
+        } catch (Exception e) {
+        }
+    }
+    public void cargarManzanas(String barrio){
+        ResultSet rs = ld.manzanasPorBarrio(barrio);        
+        vistaAsignarPropiedad.manzana.removeAllItems();
+        try {
+            while(rs.next()){
+                vistaAsignarPropiedad.manzana.addItem(rs.getString(1));
+            }
+        } catch (Exception e) {
+        }
+    }
+    public void cargarParcelas(String barrio, int manzana){
+         ResultSet rs = ld.parcelasPorManzana(barrio, manzana);
+        vistaAsignarPropiedad.parcela.removeAllItems();
+        try {
+            while(rs.next()){
+                vistaAsignarPropiedad.parcela.addItem(rs.getString(1));
+            }
+        } catch (Exception e) {
+        }
     }
      
      public boolean validarCampos(){
@@ -86,13 +137,13 @@ public class ControladorAsignacionPropiedad implements ActionListener{
 
         @Override
         protected Void doInBackground() throws Exception {
-            id_control = fichaControlDAO.altaFichaControl(vistaAsignarPropiedad.tipo_propiedad.getSelectedItem().toString(), vistaAsignarPropiedad.dimension.getText(), Integer.parseInt(vistaAsignarPropiedad.cantidad_cuotas.getText()),  Double.parseDouble(vistaAsignarPropiedad.cuota_pura.getText()), Double.parseDouble(vistaAsignarPropiedad.gastos_admin.getText()), Double.parseDouble(vistaAsignarPropiedad.bolsa_cemento.getText()), dni, vistaAsignarPropiedad.barrio.getText(),Integer.parseInt(vistaAsignarPropiedad.manzana.getText()), Integer.parseInt(vistaAsignarPropiedad.parcela.getText()));
+            id_control = fichaControlDAO.altaFichaControl(vistaAsignarPropiedad.tipo_propiedad.getSelectedItem().toString(), vistaAsignarPropiedad.dimension.getText(), Integer.parseInt(vistaAsignarPropiedad.cantidad_cuotas.getText()),  Double.parseDouble(vistaAsignarPropiedad.cuota_pura.getText()), Double.parseDouble(vistaAsignarPropiedad.gastos_admin.getText()), Double.parseDouble(vistaAsignarPropiedad.bolsa_cemento.getText()), dni, vistaAsignarPropiedad.barrio.getSelectedObjects().toString(),Integer.parseInt(vistaAsignarPropiedad.manzana.getSelectedObjects().toString()), Integer.parseInt(vistaAsignarPropiedad.parcela.getSelectedObjects().toString()));
             return null;
         }
 
        @Override
        public void done() { 
-           cuotaDao.altaCuota(new Date(System.currentTimeMillis()), "Saldo Inicio", 0, 0, Double.parseDouble(vistaAsignarPropiedad.cantidad_cuotas.getText())*(Double.parseDouble(vistaAsignarPropiedad.cuota_pura.getText())+Double.parseDouble(vistaAsignarPropiedad.gastos_admin.getText())), 0, Double.parseDouble(vistaAsignarPropiedad.cantidad_cuotas.getText())*(Double.parseDouble(vistaAsignarPropiedad.cuota_pura.getText())+Double.parseDouble(vistaAsignarPropiedad.gastos_admin.getText())), Double.parseDouble(vistaAsignarPropiedad.bolsa_cemento.getText())*Double.parseDouble(vistaAsignarPropiedad.cantidad_cuotas.getText()), 0, Double.parseDouble(vistaAsignarPropiedad.bolsa_cemento.getText())*Double.parseDouble(vistaAsignarPropiedad.cantidad_cuotas.getText()), "", "", id_control);         
+           cuotaDao.altaCuota(new Date(System.currentTimeMillis()), 0,"Saldo Inicio", 0, 0, Double.parseDouble(vistaAsignarPropiedad.cantidad_cuotas.getText())*(Double.parseDouble(vistaAsignarPropiedad.cuota_pura.getText())+Double.parseDouble(vistaAsignarPropiedad.gastos_admin.getText())), 0, Double.parseDouble(vistaAsignarPropiedad.cantidad_cuotas.getText())*(Double.parseDouble(vistaAsignarPropiedad.cuota_pura.getText())+Double.parseDouble(vistaAsignarPropiedad.gastos_admin.getText())), Double.parseDouble(vistaAsignarPropiedad.bolsa_cemento.getText())*Double.parseDouble(vistaAsignarPropiedad.cantidad_cuotas.getText()), 0, Double.parseDouble(vistaAsignarPropiedad.bolsa_cemento.getText())*Double.parseDouble(vistaAsignarPropiedad.cantidad_cuotas.getText()), "", "", id_control);         
        }
     
 }
