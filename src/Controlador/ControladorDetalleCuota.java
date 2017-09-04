@@ -6,6 +6,7 @@
 package Controlador;
 
 import Modelo.CuotaDAO;
+import Modelo.RendererTablaCuota;
 import Vista.Frame.Ventana;
 import Vista.Dialogs.AltaCuota;
 import Vista.Panels.DetalleCuota;
@@ -24,6 +25,7 @@ import javax.swing.table.DefaultTableModel;
  */
 public class ControladorDetalleCuota implements ActionListener{
     
+    RendererTablaCuota r = new RendererTablaCuota();
     DetalleCuota vistaDetallePago = new DetalleCuota();
     CuotaDAO dp = new CuotaDAO();
     Object [] detallePago;
@@ -31,9 +33,8 @@ public class ControladorDetalleCuota implements ActionListener{
     String nombre;
     int id_control;
     
-    public ControladorDetalleCuota(DetalleCuota vistaDetallePago, String apellido, String nombre, int id_control) {
+    public ControladorDetalleCuota(DetalleCuota vistaDetallePago, String apellido, String nombre, String telefono, String barrio,String calle,int numero,int id_control) {
         this.vistaDetallePago = vistaDetallePago;
-        this.dp = dp;
         this.apellido=apellido;
         this.nombre=nombre;
         this.id_control=id_control;
@@ -42,10 +43,12 @@ public class ControladorDetalleCuota implements ActionListener{
         vistaDetallePago.generarReciboBtn.addActionListener(this);
         vistaDetallePago.nombreLabel.setText(this.nombre);
         vistaDetallePago.apellidoLabel.setText(this.apellido);
+        this.vistaDetallePago.tablaDetallePago.setDefaultRenderer(Object.class, r);
         llenarTabla(id_control);
     }
     
    public void llenarTabla(int idControl){
+       int num_cuota=0;
         ResultSet rs = dp.listaDetalleCuota(idControl);
         DefaultTableModel model = (DefaultTableModel) vistaDetallePago.tablaDetallePago.getModel();
         model.setRowCount(0);
@@ -64,8 +67,9 @@ public class ControladorDetalleCuota implements ActionListener{
                 String observaciones = rs.getString(11);
                 String tipo_pago = rs.getString(12);
                 System.out.println(rs.getString(8));
-                detallePago= new Object[] {fecha, detalle, cuota_pura, gastos_admin, debe, haber, saldo, cemento_debe, cemento_haber,cemento_saldo, observaciones, tipo_pago};                    
-                model.addRow(detallePago);   
+                detallePago= new Object[] {num_cuota, fecha, detalle, cuota_pura, gastos_admin, debe, haber, saldo, cemento_debe, cemento_haber,cemento_saldo, observaciones, tipo_pago};                    
+                model.addRow(detallePago); 
+                num_cuota ++;
             }
            Ventana.panelPrincipal.removeAll();
            Ventana.panelPrincipal.add(vistaDetallePago);

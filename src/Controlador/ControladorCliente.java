@@ -6,7 +6,7 @@
 package Controlador;
 
 import Modelo.ClienteDAO;
-import Modelo.Renderer;
+import Modelo.RendererTablaCliente;
 import Vista.Dialogs.AsignarPropiedad;
 import Vista.Panels.Clientes;
 import Vista.Panels.DetalleCuota;
@@ -34,7 +34,7 @@ import javax.swing.table.TableCellRenderer;
  */
 public class ControladorCliente implements ActionListener, MouseListener{
     
-    Renderer r = new Renderer();
+    RendererTablaCliente r = new RendererTablaCliente();
     Clientes vistaClientes = new Clientes();
     ClienteDAO cd = new ClienteDAO();
     private Object [] clientes;
@@ -94,8 +94,7 @@ public class ControladorCliente implements ActionListener, MouseListener{
            if(row != -1){
                if(vistaClientes.tablaCliente.getValueAt(row, 8) != null){
                    DetalleCuota vistaDetallePago = new DetalleCuota();
-                   ControladorDetalleCuota cdp = new ControladorDetalleCuota(vistaDetallePago, vistaClientes.tablaCliente.getModel().getValueAt(row, 0).toString(),vistaClientes.tablaCliente.getModel().getValueAt(row, 1).toString(), Integer.parseInt(vistaClientes.tablaCliente.getModel().getValueAt(row, 8).toString()));
-                   //cdp.llenarTabla( Integer.parseInt(vistaClientes.tablaCliente.getModel().getValueAt(row, 8).toString()));           
+                   ControladorDetalleCuota cdp = new ControladorDetalleCuota(vistaDetallePago, vistaClientes.tablaCliente.getModel().getValueAt(row, 0).toString(),vistaClientes.tablaCliente.getModel().getValueAt(row, 1).toString(), vistaClientes.tablaCliente.getModel().getValueAt(row, 3).toString(), vistaClientes.tablaCliente.getModel().getValueAt(row, 4).toString(), vistaClientes.tablaCliente.getModel().getValueAt(row, 5).toString(), Integer.parseInt(vistaClientes.tablaCliente.getModel().getValueAt(row, 6).toString()),  Integer.parseInt(vistaClientes.tablaCliente.getModel().getValueAt(row, 8).toString()));
                }else{
                   JOptionPane.showMessageDialog(null, "Debe asignar una propiedad para ver los detalles", "Atención", JOptionPane.INFORMATION_MESSAGE, null); 
                }}else{

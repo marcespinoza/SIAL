@@ -15,17 +15,16 @@ import javax.swing.table.DefaultTableCellRenderer;
  *
  * @author Marcelo Espinoza
  */
-public class Renderer extends DefaultTableCellRenderer{
+public class RendererTablaCliente extends DefaultTableCellRenderer{
 private JLabel component;
     @Override
     public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
                component = (JLabel) super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column); //To change body of generated methods, choose Tools | Templates.
           
         if(table.getValueAt(row, 9) == null && !isSelected){
-
-                   component.setBackground(Color.cyan);
-                 }else{component.setBackground(null);}
-      return component;
+           component.setBackground(Color.cyan);
+        }else{component.setBackground(null);}
+         return component;
     }
     
     
