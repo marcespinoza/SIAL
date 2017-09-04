@@ -9,12 +9,12 @@ package Vista.Panels;
  *
  * @author Marcelo
  */
-public class botones extends javax.swing.JPanel {
+public class Botones extends javax.swing.JPanel {
 
     /**
      * Creates new form botones
      */
-    public botones() {
+    public Botones() {
         initComponents();
     }
 

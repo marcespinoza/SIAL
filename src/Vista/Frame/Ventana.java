@@ -5,14 +5,8 @@
  */
 package Vista.Frame;
 import Controlador.ControladorCliente;
-import Controlador.ControladorDetalleCuota;
-import Vista.Panels.Clientes;
-import conexion.*;
-import java.awt.BorderLayout;
-import java.awt.CardLayout;
 import javax.swing.ImageIcon;
 import javax.swing.SwingConstants;
-import javax.swing.table.DefaultTableModel;
 
 
 /**
@@ -21,9 +15,6 @@ import javax.swing.table.DefaultTableModel;
  */
 public class Ventana extends javax.swing.JFrame {
 
-    /**
-     * Creates new form Principal2
-     */
     public Ventana() {
         initComponents();
         inicializarBotones();
