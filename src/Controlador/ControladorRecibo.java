@@ -96,7 +96,7 @@ public class ControladorRecibo implements ActionListener{
             rs.next();
             apellido_comprador = rs.getString(1);
             nombre_comprador = rs.getString(2);
-            domicilio_comprador = rs.getString(3) +" "+ rs.getString(4) +" "+rs.getString(5);
+            domicilio_comprador = rs.getString(3) +" - "+ rs.getString(4) +" "+rs.getString(5);
             ar.apellido_comprador.setText(apellido_comprador);
             ar.nombre_comprador.setText(nombre_comprador);
             ar.domicilio_comprador.setText(domicilio_comprador);
@@ -117,7 +117,7 @@ public class ControladorRecibo implements ActionListener{
             importe = Double.parseDouble(rs.getString(3))+ Double.parseDouble(rs.getString(4));
             ar.importe.setText(String.valueOf(importe));
             ar.total_pagado.setText(String.valueOf(importe));
-            ar.detalle.setText("Paga cuota "+nro_cuota+"/"+cant_cuotas+" Dimension "+dimension +" "+ barrio +" "+ manzana +" "+ parcela);
+            ar.detalle.setText("Paga cuota "+nro_cuota+"/"+cant_cuotas+"\r\nDimension "+dimension +"\r\n"+ barrio +" "+ " Mz. "+manzana +" Pc. "+ parcela);
         } catch (Exception e) {
         }
     }
@@ -156,7 +156,7 @@ public class ControladorRecibo implements ActionListener{
             table2.setWidthPercentage(100);
             PdfPCell cell4 = new PdfPCell(new Paragraph("Propietario: " + apellido_propietario + " " + nombre_propietario));
             PdfPCell cell5 = new PdfPCell(new Paragraph("Nombre comprador: " + apellido_comprador +" "+ nombre_comprador));
-            PdfPCell cell6 = new PdfPCell(new Paragraph("Domicilio comprador:" + domicilio_comprador));
+            PdfPCell cell6 = new PdfPCell(new Paragraph("Domicilio: " + domicilio_comprador));
             cell4.disableBorderSide(2);
             cell5.disableBorderSide(1);
             cell5.disableBorderSide(2);
@@ -166,68 +166,62 @@ public class ControladorRecibo implements ActionListener{
             table2.addCell(cell5);
             table2.addCell(cell6);
             document.add(table2);
-            PdfPTable checkbox = new PdfPTable(4);
-            checkbox.setTotalWidth(new float[]{ 1,1,1,1});
+            PdfPTable checkbox = new PdfPTable(5);
+            checkbox.setTotalWidth(new float[]{ 1,1,1,1,1});
             checkbox.setWidthPercentage(100);
             Font f=new Font(Font.FontFamily.TIMES_ROMAN,10.0f,0,null);
             PdfPCell check1 = new PdfPCell(new Paragraph("Iva Resp. Inscripto: ",f));
             check1.setPaddingTop(10);
-            check1.setPaddingBottom(10);
-            check1.disableBorderSide(2);
-            check1.disableBorderSide(3);
+            check1.setBorder(Rectangle.LEFT);
             checkbox.addCell(check1);
             PdfPCell check3 = new PdfPCell(new Paragraph("Resp. No Inscripto: ",f));
             check3.setPaddingTop(10);
-            check3.setPaddingBottom(10);
-             check3.disableBorderSide(1);
-            check3.disableBorderSide(2);
-            check3.disableBorderSide(4);
+            check3.setBorder(Rectangle.NO_BORDER);
             checkbox.addCell(check3);
             PdfPCell check5 = new PdfPCell(new Paragraph("Monotributo: ",f));
             check5.setPaddingTop(10);
             check5.setPaddingBottom(10);
-            check5.disableBorderSide(4);
-            check5.disableBorderSide(3);
+            check5.setBorder(Rectangle.NO_BORDER);
             checkbox.addCell(check5);
             PdfPCell check7 = new PdfPCell(new Paragraph("Exento: ",f));
             check7.setPaddingTop(10);
             check7.setPaddingBottom(10);
-            check7.disableBorderSide(4);
-            check7.disableBorderSide(3);
+            check7.setBorder(Rectangle.NO_BORDER);
             checkbox.addCell(check7);
+            PdfPCell check9 = new PdfPCell(new Paragraph("Cons. final: ",f));
+            check9.setPaddingTop(10);
+            check9.setPaddingBottom(10);
+            check9.setBorder(Rectangle.RIGHT);
+            checkbox.addCell(check9);
             document.add(checkbox);
             PdfPTable table3 = new PdfPTable(2);
             table3.setTotalWidth(new float[]{ 3,1});
             table3.setWidthPercentage(100);
-            PdfPCell detalle = new PdfPCell(new Paragraph("Detalle"));
-            PdfPCell importe = new PdfPCell(new Paragraph("Importe"));
+            PdfPCell detalle = new PdfPCell(new Paragraph("Detalle "));
+            PdfPCell importe = new PdfPCell(new Paragraph("Importe "));
             table3.addCell(detalle);
             table3.addCell(importe);
             document.add(table3);
              PdfPTable table4 = new PdfPTable(2);
             table4.setTotalWidth(new float[]{ 3,1});
             table4.setWidthPercentage(100);
-            PdfPCell detalle2 = new PdfPCell(new Paragraph(dimension + barrio ));
-            PdfPCell importe2 = new PdfPCell(new Paragraph());
+            PdfPCell detalle2 = new PdfPCell(new Paragraph(ar.detalle.getText()));
+            PdfPCell importe2 = new PdfPCell(new Paragraph(ar.importe.getText()));
             table4.addCell(detalle2);
             table4.addCell(importe2);
             document.add(table4);
-            PdfPTable table5 = new PdfPTable(3);
-            table5.setTotalWidth(new float[]{ 1,1,1});
+            PdfPTable table5 = new PdfPTable(2);
+            table5.setTotalWidth(new float[]{ 3,1});
             table5.setWidthPercentage(100);
-            PdfPCell vacio = new PdfPCell(new Paragraph());
-            PdfPCell total_pagado = new PdfPCell(new Paragraph("Total pagado a la fecha"));
-            PdfPCell total_variable = new PdfPCell(new Paragraph());
-            table5.addCell(vacio);
+            //PdfPCell vacio = new PdfPCell(new Paragraph());
+            PdfPCell total_pagado = new PdfPCell(new Paragraph("Total pagado a la fecha: "));
+            PdfPCell total_variable = new PdfPCell(new Paragraph(ar.total_pagado.getText()));
+            //table5.addCell(vacio);
             table5.addCell(total_pagado);
             table5.addCell(total_variable);
             document.add(table5);                        
             document.add( Chunk.NEWLINE );
-            PdfPTable table6 = new PdfPTable(1);
-            table5.setWidthPercentage(100);
-            PdfPCell son_pesos = new PdfPCell(new Paragraph("Son pesos:"));
-            table6.addCell(son_pesos);
-            document.add(new Paragraph("Son pesos:"));  
+            document.add(new Paragraph("Son pesos: "+ar.son_pesos.getText()));  
             document.close();
             }catch (DocumentException ex) {
             Logger.getLogger(DetalleCuota.class.getName()).log(Level.SEVERE, null, ex);
@@ -242,6 +236,7 @@ public class ControladorRecibo implements ActionListener{
     public void actionPerformed(ActionEvent e) {
         if(e.getSource() == ar.aceptar){
             if(validarCampos()){
+                generarRecibo();
                 ar.dispose();
             }else{
               JOptionPane.showMessageDialog(null, "Rellene todos los campos", "Atención", JOptionPane.INFORMATION_MESSAGE, null);
