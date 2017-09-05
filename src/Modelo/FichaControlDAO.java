@@ -56,7 +56,7 @@ public class FichaControlDAO {
      ResultSet rs = null;
      try {
           Connection con = conexion.getConexion();
-          String listar = "SELECT cuota_pura, gastos, bolsa_cemento, lote_barrio, lote_manzana, lote_parcela,dimension , gastos, cuota_pura FROM ficha_control where id_control = '"+id_control+"'"; 
+          String listar = "SELECT dimension, cantidad_cuotas, cuota_pura, gastos, bolsa_cemento, lote_barrio, lote_manzana, lote_parcela,dimension , gastos, cuota_pura FROM ficha_control where id_control = '"+id_control+"'"; 
           Statement st = con.createStatement();
           rs = st.executeQuery(listar);
         } catch (Exception e) {

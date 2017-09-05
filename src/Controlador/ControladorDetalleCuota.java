@@ -43,6 +43,8 @@ public class ControladorDetalleCuota implements ActionListener{
         vistaDetallePago.generarReciboBtn.addActionListener(this);
         vistaDetallePago.nombreLabel.setText(this.nombre);
         vistaDetallePago.apellidoLabel.setText(this.apellido);
+        vistaDetallePago.direccionLabel.setText(barrio + calle + numero);
+        vistaDetallePago.telefonoLabel.setText(telefono);
         this.vistaDetallePago.tablaDetallePago.setDefaultRenderer(Object.class, r);
         llenarTabla(id_control);
     }
@@ -66,7 +68,6 @@ public class ControladorDetalleCuota implements ActionListener{
                 String cemento_saldo = rs.getString(10);
                 String observaciones = rs.getString(11);
                 String tipo_pago = rs.getString(12);
-                System.out.println(rs.getString(8));
                 detallePago= new Object[] {num_cuota, fecha, detalle, cuota_pura, gastos_admin, debe, haber, saldo, cemento_debe, cemento_haber,cemento_saldo, observaciones, tipo_pago};                    
                 model.addRow(detallePago); 
                 num_cuota ++;
@@ -89,7 +90,8 @@ public class ControladorDetalleCuota implements ActionListener{
             llenarTabla(id_control);
         }
         if(e.getSource() == vistaDetallePago.generarReciboBtn){
-           new ControladorRecibo((Frame) SwingUtilities.getWindowAncestor(vistaDetallePago), id_control);
+            int nro_cuota = Integer.parseInt((vistaDetallePago.tablaDetallePago.getValueAt(vistaDetallePago.tablaDetallePago.getModel().getRowCount()-1, 0)).toString());
+           new ControladorRecibo((Frame) SwingUtilities.getWindowAncestor(vistaDetallePago), id_control, nro_cuota);
           
         }
     }

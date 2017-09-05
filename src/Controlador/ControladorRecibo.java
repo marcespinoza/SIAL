@@ -50,12 +50,12 @@ public class ControladorRecibo implements ActionListener{
     String apellido_propietario, nombre_propietario, cuit_propietario;
     String nombre_comprador, apellido_comprador, domicilio_comprador;
     String dimension, barrio;
-    int manzana, parcela;
+    int cant_cuotas, manzana, parcela;
     double importe;
-    int id_control;    
+    int id_control, nro_cuota;    
     public static final String IMG = "src/Imagenes/logo_reporte.png";
 
-    public ControladorRecibo(Frame parent, int id_control) {
+    public ControladorRecibo(Frame parent, int id_control, int nro_cuota) {
         ar = new AltaRecibo(parent, true);
         ar.aceptar.addActionListener(this);
         ar.cancelar.addActionListener(this);
@@ -70,6 +70,7 @@ public class ControladorRecibo implements ActionListener{
                 }
             }
         });
+        this.nro_cuota=nro_cuota;
         this.id_control=id_control;
         new SwingWorker().execute();
     }
@@ -95,7 +96,7 @@ public class ControladorRecibo implements ActionListener{
             rs.next();
             apellido_comprador = rs.getString(1);
             nombre_comprador = rs.getString(2);
-            domicilio_comprador = rs.getString(3) +" "+ rs.getString(3) +" "+rs.getString(3);
+            domicilio_comprador = rs.getString(3) +" "+ rs.getString(4) +" "+rs.getString(5);
             ar.apellido_comprador.setText(apellido_comprador);
             ar.nombre_comprador.setText(nombre_comprador);
             ar.domicilio_comprador.setText(domicilio_comprador);
@@ -105,16 +106,18 @@ public class ControladorRecibo implements ActionListener{
     
     private void datosPropiedad(){
         ResultSet rs = fcd.obtenerFichaControl(id_control);
+  
         try {
-            rs.next();
-            barrio= rs.getString(4);
-            manzana = rs.getInt(5);
-            parcela = rs.getInt(6);
-            dimension = rs.getString(7);
-            importe = Double.parseDouble(rs.getString(7))+ Double.parseDouble(rs.getString(8));
+            rs.next();            
+            dimension = rs.getString(1);
+            cant_cuotas = rs.getInt(2);
+            barrio= rs.getString(6);
+            manzana = rs.getInt(7);
+            parcela = rs.getInt(8);
+            importe = Double.parseDouble(rs.getString(3))+ Double.parseDouble(rs.getString(4));
             ar.importe.setText(String.valueOf(importe));
             ar.total_pagado.setText(String.valueOf(importe));
-            ar.detalle.setText(dimension +" "+ barrio +" "+ manzana +" "+ parcela);
+            ar.detalle.setText("Paga cuota "+nro_cuota+"/"+cant_cuotas+" Dimension "+dimension +" "+ barrio +" "+ manzana +" "+ parcela);
         } catch (Exception e) {
         }
     }
