@@ -154,7 +154,7 @@ public class ControladorRecibo implements ActionListener{
             document.add( Chunk.NEWLINE );
             PdfPTable table2 = new PdfPTable(1);
             table2.setWidthPercentage(100);
-            PdfPCell cell4 = new PdfPCell(new Paragraph("Propietario: " + apellido_propietario + " " + nombre_propietario));
+            PdfPCell cell4 = new PdfPCell(new Paragraph("Propietario: " + ar.apellido_propietario.getText() + " " + ar.nombre_propietario.getText()));
             PdfPCell cell5 = new PdfPCell(new Paragraph("Nombre comprador: " + apellido_comprador +" "+ nombre_comprador));
             PdfPCell cell6 = new PdfPCell(new Paragraph("Domicilio: " + domicilio_comprador));
             cell4.disableBorderSide(2);

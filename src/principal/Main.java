@@ -5,25 +5,21 @@
  */
 package principal;
 
-import Controlador.ControladorCliente;
+import Controlador.ControladorLogin;
+import Vista.Dialogs.Login;
 import Vista.Frame.Ventana;
-import Vista.Panels.Clientes;
 
-/**
- *
- * @author Marcelo
- */
+
+        
 public class Main {
 
-    /**
-     * @param args the command line arguments
-     */
+ private static ControladorLogin cl; 
+    
     public static void main(String[] args) {
-        Ventana ventana = new Ventana();
-        //Clientes vistaClientes = new Clientes();
-        //ControladorCliente cc = new ControladorCliente(vistaClientes);
+       Ventana ventana = new Ventana();
        ventana.setLocationRelativeTo(null);
        ventana.setVisible(true);
+       cl = new ControladorLogin(ventana);
     }
     
 }

@@ -5,23 +5,10 @@
  */
 package Vista.Panels;
 
-import Controlador.ControladorAltaCliente;
-import Controlador.ControladorCliente;
-import Vista.Frame.Ventana;
 import conexion.Conexion;
-import java.awt.CardLayout;
 import javax.swing.table.DefaultTableModel;
-import static Vista.Frame.Ventana.panelPrincipal;
-import java.awt.Color;
-import java.awt.Frame;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
-import javax.swing.BorderFactory;
-import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.RowFilter;
-import javax.swing.table.DefaultTableColumnModel;
-import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableRowSorter;
 
 /**

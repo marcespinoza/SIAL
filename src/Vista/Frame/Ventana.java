@@ -5,6 +5,7 @@
  */
 package Vista.Frame;
 import Controlador.ControladorCliente;
+import Controlador.ControladorLogin;
 import javax.swing.ImageIcon;
 import javax.swing.SwingConstants;
 
@@ -41,6 +42,7 @@ public class Ventana extends javax.swing.JFrame {
         btnLotes = new javax.swing.JButton();
         btnClientes = new javax.swing.JButton();
         btnResumen = new javax.swing.JButton();
+        btnMinuta = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenu2 = new javax.swing.JMenu();
@@ -74,6 +76,15 @@ public class Ventana extends javax.swing.JFrame {
             }
         });
 
+        btnMinuta.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/iconos/minuta.png"))); // NOI18N
+        btnMinuta.setText("Minuta");
+        btnMinuta.setMargin(new java.awt.Insets(2, 2, 2, 2));
+        btnMinuta.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnMinutaActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout panel_botonesLayout = new javax.swing.GroupLayout(panel_botones);
         panel_botones.setLayout(panel_botonesLayout);
         panel_botonesLayout.setHorizontalGroup(
@@ -85,6 +96,8 @@ public class Ventana extends javax.swing.JFrame {
                 .addComponent(btnLotes, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnResumen, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnMinuta, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         panel_botonesLayout.setVerticalGroup(
@@ -94,7 +107,8 @@ public class Ventana extends javax.swing.JFrame {
                 .addGroup(panel_botonesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnLotes, javax.swing.GroupLayout.DEFAULT_SIZE, 66, Short.MAX_VALUE)
                     .addComponent(btnResumen, javax.swing.GroupLayout.DEFAULT_SIZE, 66, Short.MAX_VALUE)
-                    .addComponent(btnClientes, javax.swing.GroupLayout.DEFAULT_SIZE, 66, Short.MAX_VALUE))
+                    .addComponent(btnClientes, javax.swing.GroupLayout.DEFAULT_SIZE, 66, Short.MAX_VALUE)
+                    .addComponent(btnMinuta, javax.swing.GroupLayout.DEFAULT_SIZE, 66, Short.MAX_VALUE))
                 .addContainerGap())
         );
 
@@ -134,6 +148,10 @@ public class Ventana extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_btnResumenActionPerformed
 
+    private void btnMinutaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMinutaActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnMinutaActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -142,6 +160,7 @@ public class Ventana extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnClientes;
     private javax.swing.JButton btnLotes;
+    public javax.swing.JButton btnMinuta;
     private javax.swing.JButton btnResumen;
     private Vista.Panels.Clientes clientes;
     private Vista.Panels.DetalleCuota detallePago;
@@ -159,7 +178,9 @@ public void inicializarBotones(){
     btnLotes.setVerticalTextPosition(SwingConstants.BOTTOM);
     btnLotes.setHorizontalTextPosition(SwingConstants.CENTER);
     btnResumen.setVerticalTextPosition(SwingConstants.BOTTOM);
-    btnResumen.setHorizontalTextPosition(SwingConstants.CENTER);
+    btnResumen.setHorizontalTextPosition(SwingConstants.CENTER);    
+    btnMinuta.setVerticalTextPosition(SwingConstants.BOTTOM);
+    btnMinuta.setHorizontalTextPosition(SwingConstants.CENTER);
 }
  
 

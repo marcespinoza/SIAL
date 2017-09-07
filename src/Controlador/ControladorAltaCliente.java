@@ -51,7 +51,7 @@ public class ControladorAltaCliente implements ActionListener{
             }
         }
           if(e.getSource() == ac.cancelar){
-              ac.setVisible(false);
+              ac.dispose();
         }
     }
     

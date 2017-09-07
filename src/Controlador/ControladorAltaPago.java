@@ -48,9 +48,9 @@ public class ControladorAltaPago implements ActionListener{
                    rs.next();
                    rs_cuota.last();
                    double ultimo_saldo = Double.parseDouble(rs_cuota.getString(7));
-                   double cuota_pura = Double.parseDouble(rs.getString(1));
-                   double gastos = Double.parseDouble(rs.getString(2));
-                   double bolsa_cemento = Double.parseDouble(rs.getString(3));
+                   double cuota_pura = Double.parseDouble(rs.getString(2));
+                   double gastos = Double.parseDouble(rs.getString(3));
+                   double bolsa_cemento = Double.parseDouble(rs.getString(4));
                    double ultimo_saldo_bolsa_cemento = Double.parseDouble(rs_cuota.getString(10));
                    calcularValores(ultimo_saldo, cuota_pura, gastos,bolsa_cemento, ultimo_saldo_bolsa_cemento);                  
                  
