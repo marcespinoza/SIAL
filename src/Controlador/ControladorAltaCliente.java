@@ -12,6 +12,7 @@ import java.awt.Color;
 import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.Date;
 import javax.swing.BorderFactory;
 import javax.swing.JTable;
 import javax.swing.border.EtchedBorder;
@@ -44,10 +45,11 @@ public class ControladorAltaCliente implements ActionListener{
     public void actionPerformed(ActionEvent e) {
         if(e.getSource() == ac.aceptar){
             if(validarCampos()){            
-            int numReistros = cd.altaCliente(Integer.parseInt(ac.documento.getText()), ac.apellidos.getText(), ac.nombres.getText(), new java.sql.Date(ac.fech_nacimiento.getDate().getTime()), ac.barrio.getText(), ac.calle.getText(), Integer.parseInt(ac.numero.getText()), ac.telefono1.getText(), ac.telefono2.getText(), ac.trabajo.getText());
-            rd.altaReferencia(ac.telefonoRef.getText(), ac.apellidosRef.getText(), ac.nombresRef.getText(), ac.parentescoRef.getText(), Integer.parseInt(ac.documento.getText()));
-            cc.llenarTabla();
-            ac.dispose();
+            //int numRegistros = cd.altaCliente(Integer.parseInt(ac.documento.getText()), ac.apellidos.getText(), ac.nombres.getText(), new java.sql.Date(ac.fech_nacimiento.getDate().getTime()), ac.barrio.getText(), ac.calle.getText(), Integer.parseInt(ac.numero.getText()), ac.telefono1.getText(), ac.telefono2.getText(), ac.trabajo.getText());
+            //rd.altaReferencia(ac.telefonoRef.getText(), ac.apellidosRef.getText(), ac.nombresRef.getText(), ac.parentescoRef.getText(), Integer.parseInt(ac.documento.getText()));
+            //cc.llenarTabla();
+            //ac.dispose();
+            new AltaClienteSwing().execute();
             }
         }
           if(e.getSource() == ac.cancelar){
@@ -132,5 +134,25 @@ public class ControladorAltaCliente implements ActionListener{
         }
         return bandera;
     }
+    
+    public class AltaClienteSwing extends javax.swing.SwingWorker<Void, Void>{
+         
+         int id_control;
+
+        @Override
+        protected Void doInBackground() throws Exception {            
+             int numRegistros = cd.altaCliente(Integer.parseInt(ac.documento.getText()), ac.apellidos.getText(), ac.nombres.getText(), new java.sql.Date(ac.fech_nacimiento.getDate().getTime()), ac.barrio.getText(), ac.calle.getText(), Integer.parseInt(ac.numero.getText()), ac.telefono1.getText(), ac.telefono2.getText(), ac.trabajo.getText());
+              
+            return null;
+        }
+
+       @Override
+       public void done() { 
+             rd.altaReferencia(ac.telefonoRef.getText(), ac.apellidosRef.getText(), ac.nombresRef.getText(), ac.parentescoRef.getText(), Integer.parseInt(ac.documento.getText()));
+             cc.llenarTabla();
+            ac.dispose();   
+       }
+    
+}
     
 }

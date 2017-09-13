@@ -9,6 +9,8 @@ import conexion.Conexion;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.Statement;
 
 /**
  *
@@ -27,13 +29,26 @@ public class ReferenciaDAO {
      String rptaRegistro = null;
      try {
          Connection con = conexion.getConexion();
-         String insertar = "Insert into referencia(telefono, apellidos, nombres, parentesco, dni) values ('"+telefono+"','"+nombres+"','"+apellidos+"','"+parentesco+"','"+dni+"') ";
+         String insertar = "Insert into referencia(telefono, apellidos, nombres, parentesco, cliente_dni) values ('"+telefono+"','"+nombres+"','"+apellidos+"','"+parentesco+"','"+dni+"') ";
          PreparedStatement ps = con.prepareStatement(insertar);
          ps.execute();
      } catch (Exception e) {
+         System.out.println(e.getMessage());
      }
  }
  public void editarReferencia(){}
- public void buscarReferencia(){}  
+ public ResultSet obtenerReferencia(int dni){
+     ResultSet rs = null;
+     try {
+          Connection con = conexion.getConexion();
+          String listar = "SELECT apellidos, nombres, telefono, parentesco from referencia where cliente_dni = '"+dni+"' "; 
+          Statement st = con.createStatement();
+          rs = st.executeQuery(listar);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+     return rs;
+
+ }  
     
 }

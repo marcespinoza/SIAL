@@ -8,6 +8,8 @@ package Controlador;
 import Modelo.ClienteDAO;
 import Modelo.FichaControlDAO;
 import Modelo.LoteDAO;
+import Modelo.MinutaDAO;
+import Modelo.ReciboDAO;
 import Vista.Dialogs.AltaRecibo;
 import Vista.Panels.DetalleCuota;
 import com.itextpdf.text.Chunk;
@@ -29,8 +31,10 @@ import java.awt.event.ActionListener;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.sql.Date;
 import java.sql.ResultSet;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.BorderFactory;
@@ -44,18 +48,20 @@ import javax.swing.border.EtchedBorder;
 public class ControladorRecibo implements ActionListener{
     
     AltaRecibo ar;
+    MinutaDAO md = new MinutaDAO();
     LoteDAO ld = new LoteDAO();
     ClienteDAO cd = new ClienteDAO();
     FichaControlDAO fcd = new FichaControlDAO();
     String apellido_propietario, nombre_propietario, cuit_propietario;
     String nombre_comprador, apellido_comprador, domicilio_comprador;
-    String dimension, barrio;
+    String dimension, barrio, tipo_pago;
     int cant_cuotas, manzana, parcela;
-    double importe;
-    int id_control, nro_cuota;    
+    double importe, monto_cuota, gastos_administrativos;
+    int id_control, nro_cuota, nro_random;    
     public static final String IMG = "src/Imagenes/logo_reporte.png";
+    Random random = new Random();
 
-    public ControladorRecibo(Frame parent, int id_control, int nro_cuota) {
+    public ControladorRecibo(Frame parent, int id_control, int nro_cuota, String tipo_pago) {
         ar = new AltaRecibo(parent, true);
         ar.aceptar.addActionListener(this);
         ar.cancelar.addActionListener(this);
@@ -70,23 +76,25 @@ public class ControladorRecibo implements ActionListener{
                 }
             }
         });
+        nro_random = random.nextInt(100);
         this.nro_cuota=nro_cuota;
         this.id_control=id_control;
+        this.tipo_pago=tipo_pago;
         new SwingWorker().execute();
     }
     
     private void datosPropietario(){
-        ResultSet rs = ld.obtenerPropietarioxLote("La mercedes", 25, 25);
+        ResultSet rs = ld.obtenerPropietarioxLote(id_control);
         try {
             rs.next();
             apellido_propietario = rs.getString(1);
             nombre_propietario = rs.getString(2);
-            cuit_propietario = rs.getString(3);
+            //cuit_propietario = rs.getString(3);
             ar.apellido_propietario.setText(apellido_propietario);
             ar.nombre_propietario.setText(nombre_propietario);    
             
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            System.out.println(e.getMessage()+"aca");
         }
     }
     
@@ -114,7 +122,9 @@ public class ControladorRecibo implements ActionListener{
             barrio= rs.getString(6);
             manzana = rs.getInt(7);
             parcela = rs.getInt(8);
-            importe = Double.parseDouble(rs.getString(3))+ Double.parseDouble(rs.getString(4));
+            monto_cuota = Double.parseDouble(rs.getString(3));
+            gastos_administrativos = Double.parseDouble(rs.getString(4));
+            importe = monto_cuota + gastos_administrativos;
             ar.importe.setText(String.valueOf(importe));
             ar.total_pagado.setText(String.valueOf(importe));
             ar.detalle.setText("Paga cuota "+nro_cuota+"/"+cant_cuotas+"\r\nDimension "+dimension +"\r\n"+ barrio +" "+ " Mz. "+manzana +" Pc. "+ parcela);
@@ -138,7 +148,7 @@ public class ControladorRecibo implements ActionListener{
             table.addCell(cell3);
             table.setSpacingAfter(20);
             document.add(table);    
-            Paragraph para = new Paragraph("Numero: ...........");
+            Paragraph para = new Paragraph("Numero: "+nro_random);
             Paragraph cuit = new Paragraph("CUIT: 23-07431900-9");
              Paragraph ingBrutos = new Paragraph("Ing Brutos: 01-23-07431900-9");
             Paragraph inicAct = new Paragraph("Inic. Act.: 01-08-2015");       
@@ -236,8 +246,9 @@ public class ControladorRecibo implements ActionListener{
     public void actionPerformed(ActionEvent e) {
         if(e.getSource() == ar.aceptar){
             if(validarCampos()){
+                ar.dispose();                
                 generarRecibo();
-                ar.dispose();
+                new GenerarMinuta().execute();
             }else{
               JOptionPane.showMessageDialog(null, "Rellene todos los campos", "Atención", JOptionPane.INFORMATION_MESSAGE, null);
             }
@@ -260,7 +271,27 @@ public class ControladorRecibo implements ActionListener{
        @Override
        public void done() { 
            ar.setVisible(true);
-       }    
+         }    
+      }
+      
+       public class GenerarMinuta extends javax.swing.SwingWorker<Void, Void>{
+         
+         int id_control;
+
+        @Override
+        protected Void doInBackground() throws Exception {   
+            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+            Date parsed =  parsed = sdf.parse("02/01/2014");    
+            double rendido = monto_cuota - gastos_administrativos;
+            md.altaMinuta(new java.sql.Date(parsed.getTime()), apellido_comprador, nombre_comprador, manzana, parcela, importe, rendido, nro_cuota, tipo_pago, nro_random);
+            return null;
+        }
+
+       @Override
+       public void done() { 
+           //cc.llenarTabla();
+       }
+    
 }
       
       public Boolean validarCampos(){

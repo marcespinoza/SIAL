@@ -9,6 +9,7 @@ import Modelo.CuotaDAO;
 import Modelo.RendererTablaCuota;
 import Vista.Frame.Ventana;
 import Vista.Dialogs.AltaCuota;
+import Vista.Panels.Clientes;
 import Vista.Panels.DetalleCuota;
 import java.awt.CardLayout;
 import java.awt.Frame;
@@ -43,7 +44,7 @@ public class ControladorDetalleCuota implements ActionListener{
         vistaDetallePago.generarReciboBtn.addActionListener(this);
         vistaDetallePago.nombreLabel.setText(this.nombre);
         vistaDetallePago.apellidoLabel.setText(this.apellido);
-        vistaDetallePago.direccionLabel.setText(barrio + calle + numero);
+        vistaDetallePago.direccionLabel.setText(barrio +", "+ calle +" "+ numero);
         vistaDetallePago.telefonoLabel.setText(telefono);
         this.vistaDetallePago.tablaDetallePago.setDefaultRenderer(Object.class, r);
         llenarTabla(id_control);
@@ -72,10 +73,10 @@ public class ControladorDetalleCuota implements ActionListener{
                 model.addRow(detallePago); 
                 num_cuota ++;
             }
-           Ventana.panelPrincipal.removeAll();
-           Ventana.panelPrincipal.add(vistaDetallePago);
-           Ventana.panelPrincipal.revalidate();
-           Ventana.panelPrincipal.repaint();
+             CardLayout cl = (CardLayout)(Ventana.panelPrincipal.getLayout());
+             //cl.previous(Ventana.panelPrincipal);
+             Ventana.panelPrincipal.add(vistaDetallePago, "Detalle_pago");
+             cl.show(Ventana.panelPrincipal, "Detalle_pago");
         }catch(Exception e){
         System.out.println(e.getMessage().toString());}  }
 
@@ -83,15 +84,16 @@ public class ControladorDetalleCuota implements ActionListener{
     public void actionPerformed(ActionEvent e) {
         if(e.getSource() == vistaDetallePago.volverBtn){
             CardLayout cl = (CardLayout)(Ventana.panelPrincipal.getLayout());
-            cl.previous(Ventana.panelPrincipal);
+            cl.next(Ventana.panelPrincipal);
         }
         if(e.getSource() == vistaDetallePago.agregarPagoBtn){
            ControladorAltaPago cac = new ControladorAltaPago((Frame) SwingUtilities.getWindowAncestor(vistaDetallePago), id_control, vistaDetallePago.tablaDetallePago.getRowCount());
             llenarTabla(id_control);
         }
         if(e.getSource() == vistaDetallePago.generarReciboBtn){
+            int row = vistaDetallePago.tablaDetallePago.getSelectedRow();
             int nro_cuota = Integer.parseInt((vistaDetallePago.tablaDetallePago.getValueAt(vistaDetallePago.tablaDetallePago.getModel().getRowCount()-1, 0)).toString());
-           new ControladorRecibo((Frame) SwingUtilities.getWindowAncestor(vistaDetallePago), id_control, nro_cuota);
+           new ControladorRecibo((Frame) SwingUtilities.getWindowAncestor(vistaDetallePago), id_control, nro_cuota, vistaDetallePago.tablaDetallePago.getModel().getValueAt(row, 12).toString());
           
         }
     }

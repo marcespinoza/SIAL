@@ -34,8 +34,8 @@ public class ControladorAsignacionPropiedad implements ActionListener{
     ControladorCliente cc = new ControladorCliente();
     int dni;
 
-    public ControladorAsignacionPropiedad(Frame parent, AsignarPropiedad vistaAsignarPropiedad, int dni) {
-        this.vistaAsignarPropiedad=vistaAsignarPropiedad;
+    public ControladorAsignacionPropiedad(Frame parent, int dni) {
+        vistaAsignarPropiedad = new AsignarPropiedad(parent, true);
         this.parent=parent;
         this.dni=dni;
         this.vistaAsignarPropiedad.aceptarBtn.addActionListener(this);
@@ -54,17 +54,17 @@ public class ControladorAsignacionPropiedad implements ActionListener{
                 }
                 }
         });
-        cargarBarrios();
+        cargarBarrios();        
+        vistaAsignarPropiedad.setVisible(true);
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
           if(e.getSource() == vistaAsignarPropiedad.aceptarBtn){
               if(validarCampos() == true){
-                  new SwingWorker().execute();;
-                  vistaAsignarPropiedad.dispose();
                   
-              }
+                  new SwingWorker().execute();                
+                  }
           }
           if(e.getSource() == vistaAsignarPropiedad.cancelarBtn){
              vistaAsignarPropiedad.dispose();
@@ -144,7 +144,7 @@ public class ControladorAsignacionPropiedad implements ActionListener{
 
        @Override
        public void done() { 
-           //cc.llenarTabla();
+           vistaAsignarPropiedad.dispose();
        }
     
 }

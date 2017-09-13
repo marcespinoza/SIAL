@@ -37,8 +37,6 @@ public class Clientes extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jScrollPane1 = new javax.swing.JScrollPane();
-        tablaCliente = new javax.swing.JTable();
         datosCliente = new javax.swing.JPanel();
         barrio = new javax.swing.JTextField();
         calle = new javax.swing.JTextField();
@@ -65,45 +63,14 @@ public class Clientes extends javax.swing.JPanel {
         jLabel10 = new javax.swing.JLabel();
         jLabel11 = new javax.swing.JLabel();
         jLabel12 = new javax.swing.JLabel();
-        barrio1 = new javax.swing.JTextField();
+        apellido_referencia = new javax.swing.JTextField();
+        nombre_referencia = new javax.swing.JTextField();
+        parentesco = new javax.swing.JTextField();
+        telefono_referencia = new javax.swing.JTextField();
         detalleBtn = new javax.swing.JButton();
         asignarBtn = new javax.swing.JButton();
-
-        tablaCliente.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-
-            },
-            new String [] {
-                "Apellido", "Nombres", "Documento", "Telefono", "Barrio", "Manzana", "Numero", "Trabajo", "IdControl", "Precio", "Gastos", "Bolsa_cemento", "Barrio", "Manzana", "Parcela"
-            }
-        ) {
-            boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false, false, false, false, false, false, false, false, false, false
-            };
-
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
-            }
-        });
-        jScrollPane1.setViewportView(tablaCliente);
-        if (tablaCliente.getColumnModel().getColumnCount() > 0) {
-            tablaCliente.getColumnModel().getColumn(0).setResizable(false);
-            tablaCliente.getColumnModel().getColumn(1).setResizable(false);
-            tablaCliente.getColumnModel().getColumn(2).setMinWidth(75);
-            tablaCliente.getColumnModel().getColumn(2).setMaxWidth(75);
-            tablaCliente.getColumnModel().getColumn(3).setMinWidth(90);
-            tablaCliente.getColumnModel().getColumn(3).setMaxWidth(90);
-            tablaCliente.getColumnModel().getColumn(4).setResizable(false);
-            tablaCliente.getColumnModel().getColumn(5).setResizable(false);
-            tablaCliente.getColumnModel().getColumn(6).setResizable(false);
-            tablaCliente.getColumnModel().getColumn(7).setResizable(false);
-            tablaCliente.getColumnModel().getColumn(8).setMinWidth(140);
-            tablaCliente.getColumnModel().getColumn(8).setMaxWidth(140);
-            tablaCliente.getColumnModel().getColumn(9).setMinWidth(60);
-            tablaCliente.getColumnModel().getColumn(9).setMaxWidth(60);
-            tablaCliente.getColumnModel().getColumn(10).setMinWidth(60);
-            tablaCliente.getColumnModel().getColumn(10).setMaxWidth(60);
-        }
+        jScrollPane2 = new javax.swing.JScrollPane();
+        tablaCliente = new javax.swing.JTable();
 
         datosCliente.setBorder(javax.swing.BorderFactory.createTitledBorder("Datos cliente"));
 
@@ -139,7 +106,7 @@ public class Clientes extends javax.swing.JPanel {
         jLabel1.setText("Calle");
 
         jLabel3.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
-        jLabel3.setText("Numero");
+        jLabel3.setText("Número");
 
         jLabel2.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
         jLabel2.setText("Barrio");
@@ -275,17 +242,18 @@ public class Clientes extends javax.swing.JPanel {
         jLabel10.setText("Nombre/s");
 
         jLabel11.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
-        jLabel11.setText("Telefono");
+        jLabel11.setText("Teléfono");
 
         jLabel12.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
         jLabel12.setText("Parentesco");
 
-        barrio1.setEditable(false);
-        barrio1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                barrio1ActionPerformed(evt);
-            }
-        });
+        apellido_referencia.setEditable(false);
+
+        nombre_referencia.setEditable(false);
+
+        parentesco.setEditable(false);
+
+        telefono_referencia.setEditable(false);
 
         javax.swing.GroupLayout datosReferenciaLayout = new javax.swing.GroupLayout(datosReferencia);
         datosReferencia.setLayout(datosReferenciaLayout);
@@ -296,14 +264,20 @@ public class Clientes extends javax.swing.JPanel {
                 .addGroup(datosReferenciaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(datosReferenciaLayout.createSequentialGroup()
                         .addComponent(jLabel9)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(barrio1, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(56, 56, 56)
+                        .addComponent(apellido_referencia))
                     .addGroup(datosReferenciaLayout.createSequentialGroup()
-                        .addGroup(datosReferenciaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel12)
-                            .addComponent(jLabel11)
-                            .addComponent(jLabel10))
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                        .addComponent(jLabel10)
+                        .addGap(58, 58, 58)
+                        .addComponent(nombre_referencia))
+                    .addGroup(datosReferenciaLayout.createSequentialGroup()
+                        .addComponent(jLabel12)
+                        .addGap(48, 48, 48)
+                        .addComponent(parentesco))
+                    .addGroup(datosReferenciaLayout.createSequentialGroup()
+                        .addComponent(jLabel11)
+                        .addGap(65, 65, 65)
+                        .addComponent(telefono_referencia)))
                 .addContainerGap())
         );
         datosReferenciaLayout.setVerticalGroup(
@@ -312,19 +286,43 @@ public class Clientes extends javax.swing.JPanel {
                 .addContainerGap()
                 .addGroup(datosReferenciaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel9)
-                    .addComponent(barrio1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(apellido_referencia, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel10)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel11)
+                .addGroup(datosReferenciaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel10)
+                    .addComponent(nombre_referencia, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 10, Short.MAX_VALUE)
+                .addGroup(datosReferenciaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel11)
+                    .addComponent(telefono_referencia, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel12)
+                .addGroup(datosReferenciaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel12)
+                    .addComponent(parentesco, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
 
         detalleBtn.setText("Detalle pago");
 
         asignarBtn.setText("Asignar propiedad");
+
+        tablaCliente.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Apellido/s", "Nombre/s", "Documento", "Telefono", "Title 5", "Title 6", "Title 7", "Title 8", "Title 9", "Title 10", "Title 11", "Title 12", "Barrio", "Mz.", "Pc."
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false, false, false, false, false, false, false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jScrollPane2.setViewportView(tablaCliente);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -339,9 +337,9 @@ public class Clientes extends javax.swing.JPanel {
                         .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 979, Short.MAX_VALUE))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 979, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addGroup(layout.createSequentialGroup()
@@ -373,18 +371,18 @@ public class Clientes extends javax.swing.JPanel {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel5)
                     .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(15, 15, 15)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(detalleBtn)
                             .addComponent(asignarBtn))
-                        .addGap(32, 32, 32)
+                        .addGap(41, 41, 41)
                         .addComponent(datosCliente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(datosReferencia, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 342, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
         datosCliente.getAccessibleContext().setAccessibleName("");
@@ -442,20 +440,20 @@ public class Clientes extends javax.swing.JPanel {
          DefaultTableModel table = (DefaultTableModel) tablaCliente.getModel();
         TableRowSorter<DefaultTableModel> tr = new TableRowSorter<> (table);
          tablaCliente.setRowSorter(tr);
-         tr.setRowFilter(RowFilter.regexFilter("(?i)" + query,10));
+         tr.setRowFilter(RowFilter.regexFilter("(?i)" + query,14));
     }
     private void filtroManzana(String query){
          DefaultTableModel table = (DefaultTableModel) tablaCliente.getModel();
         TableRowSorter<DefaultTableModel> tr = new TableRowSorter<> (table);
          tablaCliente.setRowSorter(tr);
-         tr.setRowFilter(RowFilter.regexFilter("(?i)" + query,9));
+         tr.setRowFilter(RowFilter.regexFilter("(?i)" + query,13));
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     public javax.swing.JButton agregarBtn;
+    public javax.swing.JTextField apellido_referencia;
     public javax.swing.JButton asignarBtn;
     public javax.swing.JTextField barrio;
-    public javax.swing.JTextField barrio1;
     public javax.swing.JTextField buscarManzana;
     public javax.swing.JTextField buscarParcela;
     public javax.swing.JTextField buscarTodos;
@@ -479,9 +477,12 @@ public class Clientes extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
+    public javax.swing.JTextField nombre_referencia;
     public javax.swing.JTextField numero;
+    public javax.swing.JTextField parentesco;
     public javax.swing.JTable tablaCliente;
+    public javax.swing.JTextField telefono_referencia;
     public javax.swing.JTextField trabajo;
     // End of variables declaration//GEN-END:variables
 }

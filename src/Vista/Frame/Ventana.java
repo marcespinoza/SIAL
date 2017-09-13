@@ -5,7 +5,9 @@
  */
 package Vista.Frame;
 import Controlador.ControladorCliente;
+import Controlador.ControladorBotones;
 import Controlador.ControladorLogin;
+import Controlador.ControladorMinuta;
 import javax.swing.ImageIcon;
 import javax.swing.SwingConstants;
 
@@ -15,11 +17,21 @@ import javax.swing.SwingConstants;
  * @author Marcelo
  */
 public class Ventana extends javax.swing.JFrame {
+    
+    ControladorLogin cl;
 
     public Ventana() {
         initComponents();
-        inicializarBotones();
-        ControladorCliente cc = new ControladorCliente(clientes);
+        cl = new ControladorLogin(this);
+        inicializarPaneles();
+    }
+    
+    public void inicializarPaneles(){
+       inicializarBotones();
+        
+        ControladorCliente cc = new ControladorCliente(this, clientes);
+        //-------Controlador para manejar botones superiores - Clientes,Minutas---------//
+        ControladorBotones cb = new ControladorBotones(this);
         cc.llenarTabla();
         ImageIcon icon = new ImageIcon("src/Imagenes/logo.png_32x32.png");
         this.setIconImage(icon.getImage());
@@ -38,13 +50,18 @@ public class Ventana extends javax.swing.JFrame {
         clientes = new Vista.Panels.Clientes();
         detallePago = new Vista.Panels.DetalleCuota();
         resumen = new Vista.Panels.Resumen();
+        minuta = new Vista.Panels.Minuta();
         panel_botones = new Vista.Panels.Botones();
         btnLotes = new javax.swing.JButton();
         btnClientes = new javax.swing.JButton();
         btnResumen = new javax.swing.JButton();
         btnMinuta = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
+        labelUsuario = new javax.swing.JLabel();
+        labelTipoUsuario = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
-        jMenu1 = new javax.swing.JMenu();
+        MenuInicio = new javax.swing.JMenu();
+        cerrarSesion = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -55,6 +72,19 @@ public class Ventana extends javax.swing.JFrame {
         panelPrincipal.add(clientes, "card2");
         panelPrincipal.add(detallePago, "card3");
         panelPrincipal.add(resumen, "card4");
+
+        javax.swing.GroupLayout minutaLayout = new javax.swing.GroupLayout(minuta);
+        minuta.setLayout(minutaLayout);
+        minutaLayout.setHorizontalGroup(
+            minutaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 1160, Short.MAX_VALUE)
+        );
+        minutaLayout.setVerticalGroup(
+            minutaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 528, Short.MAX_VALUE)
+        );
+
+        panelPrincipal.add(minuta, "card5");
 
         panel_botones.setBackground(new java.awt.Color(36, 47, 65));
         panel_botones.setBorder(javax.swing.BorderFactory.createEtchedBorder());
@@ -85,6 +115,16 @@ public class Ventana extends javax.swing.JFrame {
             }
         });
 
+        jLabel1.setFont(new java.awt.Font("Century Gothic", 1, 18)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(255, 255, 153));
+        jLabel1.setText("Usuario:");
+
+        labelUsuario.setFont(new java.awt.Font("Century Gothic", 0, 18)); // NOI18N
+        labelUsuario.setForeground(new java.awt.Color(255, 255, 255));
+
+        labelTipoUsuario.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
+        labelTipoUsuario.setForeground(new java.awt.Color(255, 255, 255));
+
         javax.swing.GroupLayout panel_botonesLayout = new javax.swing.GroupLayout(panel_botones);
         panel_botones.setLayout(panel_botonesLayout);
         panel_botonesLayout.setHorizontalGroup(
@@ -98,22 +138,45 @@ public class Ventana extends javax.swing.JFrame {
                 .addComponent(btnResumen, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnMinuta, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(panel_botonesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(labelTipoUsuario, javax.swing.GroupLayout.DEFAULT_SIZE, 166, Short.MAX_VALUE)
+                    .addComponent(labelUsuario, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
         panel_botonesLayout.setVerticalGroup(
             panel_botonesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panel_botonesLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(panel_botonesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnLotes, javax.swing.GroupLayout.DEFAULT_SIZE, 66, Short.MAX_VALUE)
-                    .addComponent(btnResumen, javax.swing.GroupLayout.DEFAULT_SIZE, 66, Short.MAX_VALUE)
-                    .addComponent(btnClientes, javax.swing.GroupLayout.DEFAULT_SIZE, 66, Short.MAX_VALUE)
-                    .addComponent(btnMinuta, javax.swing.GroupLayout.DEFAULT_SIZE, 66, Short.MAX_VALUE))
+                .addGroup(panel_botonesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(panel_botonesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(btnLotes, javax.swing.GroupLayout.DEFAULT_SIZE, 66, Short.MAX_VALUE)
+                        .addComponent(btnResumen, javax.swing.GroupLayout.DEFAULT_SIZE, 66, Short.MAX_VALUE)
+                        .addComponent(btnClientes, javax.swing.GroupLayout.DEFAULT_SIZE, 66, Short.MAX_VALUE)
+                        .addComponent(btnMinuta, javax.swing.GroupLayout.DEFAULT_SIZE, 66, Short.MAX_VALUE))
+                    .addGroup(panel_botonesLayout.createSequentialGroup()
+                        .addGroup(panel_botonesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(labelUsuario, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(labelTipoUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
 
-        jMenu1.setText("File");
-        jMenuBar1.add(jMenu1);
+        MenuInicio.setText("Inicio");
+
+        cerrarSesion.setText("Cerrar sesión");
+        cerrarSesion.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cerrarSesionActionPerformed(evt);
+            }
+        });
+        MenuInicio.add(cerrarSesion);
+
+        jMenuBar1.add(MenuInicio);
 
         jMenu2.setText("Acerca de ..");
         jMenuBar1.add(jMenu2);
@@ -137,7 +200,7 @@ public class Ventana extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(panel_botones, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(7, 7, 7)
-                .addComponent(panelPrincipal, javax.swing.GroupLayout.DEFAULT_SIZE, 532, Short.MAX_VALUE)
+                .addComponent(panelPrincipal, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -152,23 +215,30 @@ public class Ventana extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_btnMinutaActionPerformed
 
-    /**
-     * @param args the command line arguments
-     */
+    private void cerrarSesionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cerrarSesionActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cerrarSesionActionPerformed
+
+    
     
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnClientes;
-    private javax.swing.JButton btnLotes;
-    public javax.swing.JButton btnMinuta;
-    private javax.swing.JButton btnResumen;
+    public static javax.swing.JMenu MenuInicio;
+    public static javax.swing.JButton btnClientes;
+    public static javax.swing.JButton btnLotes;
+    public static javax.swing.JButton btnMinuta;
+    public static javax.swing.JButton btnResumen;
+    public static javax.swing.JMenuItem cerrarSesion;
     private Vista.Panels.Clientes clientes;
     private Vista.Panels.DetalleCuota detallePago;
-    private javax.swing.JMenu jMenu1;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
+    public static javax.swing.JLabel labelTipoUsuario;
+    public static javax.swing.JLabel labelUsuario;
+    private Vista.Panels.Minuta minuta;
     public static javax.swing.JPanel panelPrincipal;
-    private Vista.Panels.Botones panel_botones;
+    public static Vista.Panels.Botones panel_botones;
     private Vista.Panels.Resumen resumen;
     // End of variables declaration//GEN-END:variables
 

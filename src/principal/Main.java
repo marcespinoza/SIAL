@@ -16,10 +16,9 @@ public class Main {
  private static ControladorLogin cl; 
     
     public static void main(String[] args) {
-       Ventana ventana = new Ventana();
+        Ventana ventana = new Ventana();      
        ventana.setLocationRelativeTo(null);
        ventana.setVisible(true);
-       cl = new ControladorLogin(ventana);
     }
     
 }

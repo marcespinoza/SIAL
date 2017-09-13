@@ -30,7 +30,7 @@ public class ClienteDAO {
      ResultSet rs = null;
      try {
           Connection con = conexion.getConexion();
-          String listar = "SELECT c.Dni, c.Apellidos, c.Nombres,c.barrio, c.calle, c.numero, c.Telefono1, c.trabajo, f.Id_control, f.cantidad_cuotas, f.gastos, f.bolsa_cemento, f.lote_Barrio, f.lote_Manzana, f.lote_Parcela FROM cliente c LEFT JOIN ficha_control f ON c.Dni = f.cliente_Dni"; 
+          String listar = "SELECT c.Dni, c.Apellidos, c.Nombres, c.barrio, c.calle, c.numero, c.Telefono1, c.trabajo, f.Id_control, f.cantidad_cuotas, f.gastos, f.bolsa_cemento, f.lote_Barrio, f.lote_Manzana, f.lote_Parcela FROM cliente c LEFT JOIN ficha_control f ON c.Dni = f.cliente_Dni"; 
           Statement st = con.createStatement();
           rs = st.executeQuery(listar);
         } catch (Exception e) {
