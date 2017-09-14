@@ -32,6 +32,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.sql.ResultSet;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Random;
@@ -231,7 +232,30 @@ public class ControladorRecibo implements ActionListener{
             table5.addCell(total_variable);
             document.add(table5);                        
             document.add( Chunk.NEWLINE );
-            document.add(new Paragraph("Son pesos: "+ar.son_pesos.getText()));  
+            document.add(new Paragraph("Son pesos: "+ar.son_pesos.getText())); 
+            document.add( Chunk.NEWLINE );
+            PdfPTable table6 = new PdfPTable(4);
+            table6.setTotalWidth(new float[]{ 1,1,1,1});
+            table6.setWidthPercentage(100);
+            PdfPCell cell7 = new PdfPCell(new Paragraph("Confeccionó: "));
+            cell7.setPaddingTop(10);
+            cell7.setBorder(Rectangle.NO_BORDER);
+            table6.addCell(cell7);
+            PdfPCell cell8 = new PdfPCell(new Paragraph("Cobró: "));
+            cell8.setPaddingTop(10);
+            cell8.setBorder(Rectangle.NO_BORDER);
+            table6.addCell(cell8);
+            PdfPCell cell9 = new PdfPCell(new Paragraph("Registró: "));
+            cell9.setPaddingTop(10);
+            cell9.setPaddingBottom(10);
+            cell9.setBorder(Rectangle.NO_BORDER);
+            table6.addCell(cell9);
+            PdfPCell cell10 = new PdfPCell(new Paragraph("Controló: "));
+            cell10.setPaddingTop(10);
+            cell10.setPaddingBottom(10);
+            cell10.setBorder(Rectangle.NO_BORDER);
+            table6.addCell(cell10);
+            document.add(table6);
             document.close();
             }catch (DocumentException ex) {
             Logger.getLogger(DetalleCuota.class.getName()).log(Level.SEVERE, null, ex);
@@ -279,11 +303,11 @@ public class ControladorRecibo implements ActionListener{
          int id_control;
 
         @Override
-        protected Void doInBackground() throws Exception {   
-            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-            Date parsed =  parsed = sdf.parse("02/01/2014");    
-            double rendido = monto_cuota - gastos_administrativos;
-            md.altaMinuta(new java.sql.Date(parsed.getTime()), apellido_comprador, nombre_comprador, manzana, parcela, importe, rendido, nro_cuota, tipo_pago, nro_random);
+        protected Void doInBackground() throws Exception {      
+            DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
+            Date date = new Date();
+            double rendido = importe - gastos_administrativos;
+            md.altaMinuta(new java.sql.Date(date.getTime()), apellido_comprador, nombre_comprador, manzana, parcela, importe, rendido, nro_cuota, tipo_pago, nro_random);
             return null;
         }
 

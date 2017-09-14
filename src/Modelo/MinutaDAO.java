@@ -54,7 +54,7 @@ public class MinutaDAO {
      ResultSet rs = null;
      try {
           Connection con = conexion.getConexion();
-          String listar = "SELECT fecha_minuta FROM Minuta";
+          String listar = "SELECT DISTINCT fecha_minuta FROM Minuta";
           Statement st = con.createStatement();
           rs = st.executeQuery(listar);
         } catch (Exception e) {
@@ -68,7 +68,6 @@ public class MinutaDAO {
      try {
           Connection con = conexion.getConexion();
           String listar = "SELECT * FROM Minuta where fecha_minuta = '"+fecha+"'";
-          System.out.println("SELECT * FROM Minuta where fecha_minuta = '"+fecha+"'");
           Statement st = con.createStatement();
           rs = st.executeQuery(listar);
         } catch (Exception e) {

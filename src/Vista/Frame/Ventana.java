@@ -8,6 +8,7 @@ import Controlador.ControladorCliente;
 import Controlador.ControladorBotones;
 import Controlador.ControladorLogin;
 import Controlador.ControladorMinuta;
+import Vista.Panels.Minuta;
 import javax.swing.ImageIcon;
 import javax.swing.SwingConstants;
 
@@ -19,10 +20,14 @@ import javax.swing.SwingConstants;
 public class Ventana extends javax.swing.JFrame {
     
     ControladorLogin cl;
+    Minuta vistaMinuta = new Minuta();
+    ControladorMinuta cm;
 
     public Ventana() {
         initComponents();
         cl = new ControladorLogin(this);
+        cm = new ControladorMinuta(vistaMinuta);
+        panelPrincipal.add(vistaMinuta, "Minuta");
         inicializarPaneles();
     }
     

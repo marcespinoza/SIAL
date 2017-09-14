@@ -19,8 +19,8 @@ import javax.swing.JButton;
  */
 public class ControladorBotones implements ActionListener{
     
-    Minuta vistaMinuta = new Minuta();  
-    ControladorMinuta cm = new ControladorMinuta(vistaMinuta);
+   // Minuta vistaMinuta = new Minuta();  
+    //ControladorMinuta cm = new ControladorMinuta(vistaMinuta);
     Ventana ventana;
  
     public ControladorBotones(Ventana ventana) {
@@ -36,8 +36,8 @@ public class ControladorBotones implements ActionListener{
     public void actionPerformed(ActionEvent e) {
         if(e.getSource()==Ventana.btnMinuta){
          CardLayout cl = (CardLayout)(Ventana.panelPrincipal.getLayout());
-         Ventana.panelPrincipal.add(vistaMinuta, "Minutas");
-         cl.show(Ventana.panelPrincipal, "Minutas");
+         //Ventana.panelPrincipal.add(vistaMinuta, "Minutas");
+         cl.show(Ventana.panelPrincipal, "Minuta");
         }
         
         if(e.getSource()==Ventana.btnClientes){

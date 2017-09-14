@@ -16,6 +16,7 @@ import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.ResultSet;
+import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
@@ -91,10 +92,20 @@ public class ControladorDetalleCuota implements ActionListener{
             llenarTabla(id_control);
         }
         if(e.getSource() == vistaDetallePago.generarReciboBtn){
+            
             int row = vistaDetallePago.tablaDetallePago.getSelectedRow();
-            int nro_cuota = Integer.parseInt((vistaDetallePago.tablaDetallePago.getValueAt(vistaDetallePago.tablaDetallePago.getModel().getRowCount()-1, 0)).toString());
-           new ControladorRecibo((Frame) SwingUtilities.getWindowAncestor(vistaDetallePago), id_control, nro_cuota, vistaDetallePago.tablaDetallePago.getModel().getValueAt(row, 12).toString());
-          
+            switch(row){
+                case -1:
+                JOptionPane.showMessageDialog(null, "Seleccione un pago", "Atención", JOptionPane.INFORMATION_MESSAGE, null);
+                break;
+                case 0:
+                JOptionPane.showMessageDialog(null, "Fila no válida", "Atención", JOptionPane.INFORMATION_MESSAGE, null);
+                break;
+                default:
+                int nro_cuota = Integer.parseInt((vistaDetallePago.tablaDetallePago.getValueAt(vistaDetallePago.tablaDetallePago.getModel().getRowCount()-1, 0)).toString());
+                 new ControladorRecibo((Frame) SwingUtilities.getWindowAncestor(vistaDetallePago), id_control, nro_cuota, vistaDetallePago.tablaDetallePago.getModel().getValueAt(row, 12).toString());           
+            }
+           
         }
     }
     

@@ -34,7 +34,7 @@ public class ControladorAltaCliente implements ActionListener{
     public ControladorAltaCliente(Frame parent, ClienteDAO cd, JTable tablaCliente){
         this.parent=parent;
         ac = new AltaCliente(parent, true);
-        this.cd=cd;
+      
         this.tablaCliente=tablaCliente;
         this.ac.aceptar.addActionListener(this);
         this.ac.cancelar.addActionListener(this);
@@ -53,7 +53,7 @@ public class ControladorAltaCliente implements ActionListener{
             }
         }
           if(e.getSource() == ac.cancelar){
-              ac.dispose();
+              ac.setVisible(false);
         }
     }
     

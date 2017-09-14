@@ -70,7 +70,7 @@ public class ControladorCliente implements ActionListener, MouseListener{
     @Override
     public void actionPerformed(ActionEvent e) {
         if(e.getSource() == vistaClientes.agregarBtn){  
-            new ControladorAltaCliente(ventana, cd, vistaClientes.tablaCliente);
+            new ControladorAltaCliente((Frame) SwingUtilities.getWindowAncestor(vistaClientes), cd, vistaClientes.tablaCliente);
             llenarTabla();
          }
         if(e.getSource() == vistaClientes.eliminarBtn){
