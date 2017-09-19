@@ -23,7 +23,7 @@ import javax.swing.border.EtchedBorder;
  */
 public class ControladorAltaCliente implements ActionListener{
     
-    private Frame parent;
+    Frame parent;
     AltaCliente ac;
     ClienteDAO cd = new ClienteDAO();
     ReferenciaDAO rd = new ReferenciaDAO();
@@ -33,8 +33,7 @@ public class ControladorAltaCliente implements ActionListener{
     
     public ControladorAltaCliente(Frame parent, ClienteDAO cd, JTable tablaCliente){
         this.parent=parent;
-        ac = new AltaCliente(parent, true);
-      
+        ac = new AltaCliente(parent, true);      
         this.tablaCliente=tablaCliente;
         this.ac.aceptar.addActionListener(this);
         this.ac.cancelar.addActionListener(this);

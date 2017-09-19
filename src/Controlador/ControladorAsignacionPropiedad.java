@@ -110,18 +110,12 @@ public class ControladorAsignacionPropiedad implements ActionListener{
         }else{
          vistaAsignarPropiedad.cantidad_cuotas.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
         }
-        if(vistaAsignarPropiedad.cuota_pura.getText().isEmpty()){
-         vistaAsignarPropiedad.cuota_pura.setBorder(BorderFactory.createLineBorder(Color.RED, 1));
+        if(vistaAsignarPropiedad.cuota_total.getText().isEmpty()){
+         vistaAsignarPropiedad.cuota_total.setBorder(BorderFactory.createLineBorder(Color.RED, 1));
          bandera=false;
         }else{
-         vistaAsignarPropiedad.cuota_pura.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
-        }
-         if(vistaAsignarPropiedad.gastos_admin.getText().isEmpty()){
-         vistaAsignarPropiedad.gastos_admin.setBorder(BorderFactory.createLineBorder(Color.RED, 1));
-         bandera=false;
-        }else{
-         vistaAsignarPropiedad.gastos_admin.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
-        }
+         vistaAsignarPropiedad.cuota_total.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
+        }        
         if(vistaAsignarPropiedad.dimension.getText().isEmpty()){
          vistaAsignarPropiedad.dimension.setBorder(BorderFactory.createLineBorder(Color.RED, 1));
          bandera=false;
@@ -137,9 +131,10 @@ public class ControladorAsignacionPropiedad implements ActionListener{
 
         @Override
         protected Void doInBackground() throws Exception {            
-            id_control = fichaControlDAO.altaFichaControl(vistaAsignarPropiedad.tipo_propiedad.getSelectedItem().toString(), vistaAsignarPropiedad.dimension.getText(), Integer.parseInt(vistaAsignarPropiedad.cantidad_cuotas.getText()),  Double.parseDouble(vistaAsignarPropiedad.cuota_pura.getText()), Double.parseDouble(vistaAsignarPropiedad.gastos_admin.getText()), Double.parseDouble(vistaAsignarPropiedad.bolsa_cemento.getText()), dni, String.valueOf(vistaAsignarPropiedad.barrio.getSelectedItem()),Integer.parseInt((String)vistaAsignarPropiedad.manzana.getSelectedItem()), Integer.parseInt((String)vistaAsignarPropiedad.parcela.getSelectedItem()));
-            cuotaDao.altaCuota(new Date(System.currentTimeMillis()), 0,"Saldo Inicio", 0, 0, Double.parseDouble(vistaAsignarPropiedad.cantidad_cuotas.getText())*(Double.parseDouble(vistaAsignarPropiedad.cuota_pura.getText())+Double.parseDouble(vistaAsignarPropiedad.gastos_admin.getText())), 0, Double.parseDouble(vistaAsignarPropiedad.cantidad_cuotas.getText())*(Double.parseDouble(vistaAsignarPropiedad.cuota_pura.getText())+Double.parseDouble(vistaAsignarPropiedad.gastos_admin.getText())), Double.parseDouble(vistaAsignarPropiedad.bolsa_cemento.getText())*Double.parseDouble(vistaAsignarPropiedad.cantidad_cuotas.getText()), 0, Double.parseDouble(vistaAsignarPropiedad.bolsa_cemento.getText())*Double.parseDouble(vistaAsignarPropiedad.cantidad_cuotas.getText()), "", "", id_control);         
-             return null;
+           double gastos =Double.parseDouble(vistaAsignarPropiedad.cuota_total.getText())-(Double.parseDouble(vistaAsignarPropiedad.cuota_total.getText())/1.1);
+            id_control = fichaControlDAO.altaFichaControl(vistaAsignarPropiedad.tipo_propiedad.getSelectedItem().toString(), vistaAsignarPropiedad.dimension.getText(), Integer.parseInt(vistaAsignarPropiedad.cantidad_cuotas.getText()),  Double.parseDouble(vistaAsignarPropiedad.cuota_total.getText()), gastos, Double.parseDouble(vistaAsignarPropiedad.bolsa_cemento.getText()), dni, String.valueOf(vistaAsignarPropiedad.barrio.getSelectedItem()),Integer.parseInt((String)vistaAsignarPropiedad.manzana.getSelectedItem()), Integer.parseInt((String)vistaAsignarPropiedad.parcela.getSelectedItem()));
+            cuotaDao.altaCuota(new Date(System.currentTimeMillis()), 0,"Saldo Inicio", 0, 0, Double.parseDouble(vistaAsignarPropiedad.cantidad_cuotas.getText())*(Double.parseDouble(vistaAsignarPropiedad.cuota_total.getText())), 0, Double.parseDouble(vistaAsignarPropiedad.cantidad_cuotas.getText())*(Double.parseDouble(vistaAsignarPropiedad.cuota_total.getText())), Double.parseDouble(vistaAsignarPropiedad.bolsa_cemento.getText())*Double.parseDouble(vistaAsignarPropiedad.cantidad_cuotas.getText()), 0, Double.parseDouble(vistaAsignarPropiedad.bolsa_cemento.getText())*Double.parseDouble(vistaAsignarPropiedad.cantidad_cuotas.getText()), "", "", id_control);         
+            return null;
         }
 
        @Override

@@ -11,7 +11,6 @@ import java.sql.*;
 import javax.swing.table.DefaultTableModel;
 
 
-
 /**
  *
  * @author Marcelo
@@ -71,6 +70,7 @@ public class ClienteDAO {
          PreparedStatement ps = con.prepareStatement(eliminar);
          ps.executeUpdate();
      } catch (Exception e) {
+         System.out.println(e.getMessage());
      }
  }
  public void editarCliente(){}

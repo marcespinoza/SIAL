@@ -35,7 +35,7 @@ public class AsignarPropiedad extends javax.swing.JDialog {
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         dimension = new javax.swing.JTextField();
-        cuota_pura = new javax.swing.JTextField();
+        cuota_total = new javax.swing.JTextField();
         jLabel7 = new javax.swing.JLabel();
         aceptarBtn = new javax.swing.JButton();
         cancelarBtn = new javax.swing.JButton();
@@ -43,11 +43,8 @@ public class AsignarPropiedad extends javax.swing.JDialog {
         jLabel9 = new javax.swing.JLabel();
         tipo_propiedad = new javax.swing.JComboBox<>();
         cantidad_cuotas = new javax.swing.JTextField();
-        gastos_admin = new javax.swing.JTextField();
         jLabel10 = new javax.swing.JLabel();
-        jLabel11 = new javax.swing.JLabel();
         bolsa_cemento = new javax.swing.JTextField();
-        jLabel12 = new javax.swing.JLabel();
         jLabel13 = new javax.swing.JLabel();
         barrio = new javax.swing.JComboBox<>();
         manzana = new javax.swing.JComboBox<>();
@@ -78,11 +75,7 @@ public class AsignarPropiedad extends javax.swing.JDialog {
 
         tipo_propiedad.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Casa", "Terreno", "Departamento", "Campo" }));
 
-        jLabel10.setText("Cuota pura");
-
-        jLabel11.setText("$");
-
-        jLabel12.setText("Gastos admin.");
+        jLabel10.setText("Cuota total");
 
         jLabel13.setText("$");
 
@@ -91,43 +84,37 @@ public class AsignarPropiedad extends javax.swing.JDialog {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
+                .addGap(13, 13, 13)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel4)
+                    .addComponent(jLabel3)
+                    .addComponent(jLabel2)
+                    .addComponent(jLabel1)
+                    .addComponent(jLabel9)
+                    .addComponent(jLabel8)
+                    .addComponent(jLabel10)
+                    .addComponent(jLabel5))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(13, 13, 13)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel12)
-                            .addComponent(jLabel4)
-                            .addComponent(jLabel3)
-                            .addComponent(jLabel2)
-                            .addComponent(jLabel1)
-                            .addComponent(jLabel9)
-                            .addComponent(jLabel8)
-                            .addComponent(jLabel10)
-                            .addComponent(jLabel5))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel11)
-                            .addComponent(jLabel7)
-                            .addComponent(jLabel13))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(gastos_admin)
-                            .addComponent(bolsa_cemento)
-                            .addComponent(cuota_pura)
-                            .addComponent(cantidad_cuotas)
-                            .addComponent(dimension)
-                            .addComponent(tipo_propiedad, 0, 249, Short.MAX_VALUE)
-                            .addComponent(parcela, 0, 249, Short.MAX_VALUE)
-                            .addComponent(manzana, 0, 249, Short.MAX_VALUE)
-                            .addComponent(barrio, 0, 249, Short.MAX_VALUE))
-                        .addGap(42, 42, 42))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(152, 152, 152)
-                        .addComponent(aceptarBtn)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(cancelarBtn)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                    .addComponent(jLabel7)
+                    .addComponent(jLabel13))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(bolsa_cemento)
+                    .addComponent(cuota_total)
+                    .addComponent(cantidad_cuotas)
+                    .addComponent(dimension)
+                    .addComponent(tipo_propiedad, 0, 249, Short.MAX_VALUE)
+                    .addComponent(parcela, 0, 249, Short.MAX_VALUE)
+                    .addComponent(manzana, 0, 249, Short.MAX_VALUE)
+                    .addComponent(barrio, 0, 249, Short.MAX_VALUE))
+                .addGap(42, 42, 42))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(aceptarBtn)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(cancelarBtn)
+                .addGap(107, 107, 107))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -158,24 +145,19 @@ public class AsignarPropiedad extends javax.swing.JDialog {
                     .addComponent(jLabel4))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(cuota_pura, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(cuota_total, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel7)
                     .addComponent(jLabel10))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(gastos_admin, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel11)
-                    .addComponent(jLabel12))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(bolsa_cemento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel13)
                     .addComponent(jLabel5))
-                .addGap(22, 22, 22)
+                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(aceptarBtn)
-                    .addComponent(cancelarBtn))
-                .addContainerGap())
+                    .addComponent(cancelarBtn)
+                    .addComponent(aceptarBtn))
+                .addGap(44, 44, 44))
         );
 
         pack();
@@ -229,13 +211,10 @@ public class AsignarPropiedad extends javax.swing.JDialog {
     public javax.swing.JTextField bolsa_cemento;
     public javax.swing.JButton cancelarBtn;
     public javax.swing.JTextField cantidad_cuotas;
-    public javax.swing.JTextField cuota_pura;
+    public javax.swing.JTextField cuota_total;
     public javax.swing.JTextField dimension;
-    public javax.swing.JTextField gastos_admin;
     private javax.swing.JLabel jLabel1;
     public javax.swing.JLabel jLabel10;
-    private javax.swing.JLabel jLabel11;
-    public javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

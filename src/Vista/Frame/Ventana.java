@@ -8,32 +8,42 @@ import Controlador.ControladorCliente;
 import Controlador.ControladorBotones;
 import Controlador.ControladorLogin;
 import Controlador.ControladorMinuta;
+import Controlador.ControladorUsuario;
 import Vista.Panels.Minuta;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseListener;
 import javax.swing.ImageIcon;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
+import javax.swing.event.MenuListener;
 
 
 /**
  *
  * @author Marcelo
  */
-public class Ventana extends javax.swing.JFrame {
+public class Ventana extends javax.swing.JFrame implements ActionListener{
     
     ControladorLogin cl;
     Minuta vistaMinuta = new Minuta();
     ControladorMinuta cm;
+   // public static JLabel nombreUsuario;
+   // public static JLabel apellidoUsuario;
 
     public Ventana() {
         initComponents();
         cl = new ControladorLogin(this);
         cm = new ControladorMinuta(vistaMinuta);
         panelPrincipal.add(vistaMinuta, "Minuta");
+        menuUsuarios.addActionListener(this);
         inicializarPaneles();
     }
     
     public void inicializarPaneles(){
-       inicializarBotones();
-        
+        inicializarBotones();        
         ControladorCliente cc = new ControladorCliente(this, clientes);
         //-------Controlador para manejar botones superiores - Clientes,Minutas---------//
         ControladorBotones cb = new ControladorBotones(this);
@@ -51,6 +61,12 @@ public class Ventana extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jMenuBar2 = new javax.swing.JMenuBar();
+        jMenu1 = new javax.swing.JMenu();
+        jMenu3 = new javax.swing.JMenu();
+        jMenuBar3 = new javax.swing.JMenuBar();
+        jMenu4 = new javax.swing.JMenu();
+        jMenu5 = new javax.swing.JMenu();
         panelPrincipal = new javax.swing.JPanel();
         clientes = new Vista.Panels.Clientes();
         detallePago = new Vista.Panels.DetalleCuota();
@@ -64,10 +80,28 @@ public class Ventana extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         labelUsuario = new javax.swing.JLabel();
         labelTipoUsuario = new javax.swing.JLabel();
+        nombreUsuario = new javax.swing.JLabel();
+        apellidoUsuario = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
         MenuInicio = new javax.swing.JMenu();
         cerrarSesion = new javax.swing.JMenuItem();
+        Opciones = new javax.swing.JMenu();
+        propietarios = new javax.swing.JMenuItem();
+        lotes = new javax.swing.JMenuItem();
+        menuUsuarios = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
+
+        jMenu1.setText("File");
+        jMenuBar2.add(jMenu1);
+
+        jMenu3.setText("Edit");
+        jMenuBar2.add(jMenu3);
+
+        jMenu4.setText("File");
+        jMenuBar3.add(jMenu4);
+
+        jMenu5.setText("Edit");
+        jMenuBar3.add(jMenu5);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Mi Primer Casa");
@@ -130,6 +164,10 @@ public class Ventana extends javax.swing.JFrame {
         labelTipoUsuario.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
         labelTipoUsuario.setForeground(new java.awt.Color(255, 255, 255));
 
+        nombreUsuario.setText("jLabel2");
+
+        apellidoUsuario.setText("jLabel3");
+
         javax.swing.GroupLayout panel_botonesLayout = new javax.swing.GroupLayout(panel_botones);
         panel_botones.setLayout(panel_botonesLayout);
         panel_botonesLayout.setHorizontalGroup(
@@ -144,6 +182,10 @@ public class Ventana extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnMinuta, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(nombreUsuario)
+                .addGap(18, 18, 18)
+                .addComponent(apellidoUsuario)
+                .addGap(13, 13, 13)
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(panel_botonesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
@@ -163,7 +205,10 @@ public class Ventana extends javax.swing.JFrame {
                         .addComponent(btnMinuta, javax.swing.GroupLayout.DEFAULT_SIZE, 66, Short.MAX_VALUE))
                     .addGroup(panel_botonesLayout.createSequentialGroup()
                         .addGroup(panel_botonesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGroup(panel_botonesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(nombreUsuario)
+                                .addComponent(apellidoUsuario))
                             .addComponent(labelUsuario, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(labelTipoUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -182,6 +227,24 @@ public class Ventana extends javax.swing.JFrame {
         MenuInicio.add(cerrarSesion);
 
         jMenuBar1.add(MenuInicio);
+
+        Opciones.setText("Opciones");
+
+        propietarios.setText("Propietarios");
+        Opciones.add(propietarios);
+
+        lotes.setText("Lotes");
+        lotes.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                lotesActionPerformed(evt);
+            }
+        });
+        Opciones.add(lotes);
+
+        menuUsuarios.setText("Usuarios");
+        Opciones.add(menuUsuarios);
+
+        jMenuBar1.add(Opciones);
 
         jMenu2.setText("Acerca de ..");
         jMenuBar1.add(jMenu2);
@@ -224,11 +287,17 @@ public class Ventana extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_cerrarSesionActionPerformed
 
+    private void lotesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_lotesActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_lotesActionPerformed
+
     
     
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     public static javax.swing.JMenu MenuInicio;
+    private javax.swing.JMenu Opciones;
+    public static javax.swing.JLabel apellidoUsuario;
     public static javax.swing.JButton btnClientes;
     public static javax.swing.JButton btnLotes;
     public static javax.swing.JButton btnMinuta;
@@ -237,13 +306,23 @@ public class Ventana extends javax.swing.JFrame {
     private Vista.Panels.Clientes clientes;
     private Vista.Panels.DetalleCuota detallePago;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
+    private javax.swing.JMenu jMenu3;
+    private javax.swing.JMenu jMenu4;
+    private javax.swing.JMenu jMenu5;
     private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JMenuBar jMenuBar2;
+    private javax.swing.JMenuBar jMenuBar3;
     public static javax.swing.JLabel labelTipoUsuario;
     public static javax.swing.JLabel labelUsuario;
+    private javax.swing.JMenuItem lotes;
+    private javax.swing.JMenuItem menuUsuarios;
     private Vista.Panels.Minuta minuta;
+    public static javax.swing.JLabel nombreUsuario;
     public static javax.swing.JPanel panelPrincipal;
     public static Vista.Panels.Botones panel_botones;
+    private javax.swing.JMenuItem propietarios;
     private Vista.Panels.Resumen resumen;
     // End of variables declaration//GEN-END:variables
 
@@ -257,6 +336,13 @@ public void inicializarBotones(){
     btnMinuta.setVerticalTextPosition(SwingConstants.BOTTOM);
     btnMinuta.setHorizontalTextPosition(SwingConstants.CENTER);
 }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        if(e.getSource().equals(menuUsuarios)){
+             new ControladorUsuario(this);
+        }
+    }
  
 
     

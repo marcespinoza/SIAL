@@ -81,6 +81,7 @@ public class ControladorCliente implements ActionListener, MouseListener{
                      "Advertencia",JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, icon);
               if (reply == JOptionPane.YES_OPTION) {
               int dni = Integer.parseInt(vistaClientes.tablaCliente.getModel().getValueAt(row, 2).toString());
+              System.out.println(dni);
               cd.eliminarCliente(dni);
               llenarTabla();
                  } 

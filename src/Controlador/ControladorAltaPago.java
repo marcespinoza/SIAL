@@ -13,6 +13,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  *
@@ -30,9 +33,11 @@ public class ControladorAltaPago implements ActionListener{
         this.parent = parent;
         this.id_control=id_control;
         this.row_count=row_count;
-        this.ac = new AltaCuota(parent, true);
-        this.ac.aceptarBtn.addActionListener(this);
-        this.ac.cancelarBtn.addActionListener(this);
+        ac = new AltaCuota(parent, true);
+        ac.cuota_total.setEnabled(false);
+        ac.modificar_monto.addActionListener(this);
+        ac.aceptarBtn.addActionListener(this);
+        ac.cancelarBtn.addActionListener(this);
         ac.setVisible(true);
     }
 
@@ -52,26 +57,34 @@ public class ControladorAltaPago implements ActionListener{
                    double gastos = Double.parseDouble(rs.getString(4));
                    double bolsa_cemento = Double.parseDouble(rs.getString(5));
                    double ultimo_saldo_bolsa_cemento = Double.parseDouble(rs_cuota.getString(10));
-                   calcularValores(ultimo_saldo, cuota_pura, gastos,bolsa_cemento, ultimo_saldo_bolsa_cemento);                  
-                 
-               } catch (SQLException ex) {
+                   calcularValores(ultimo_saldo, cuota_pura, gastos, bolsa_cemento, ultimo_saldo_bolsa_cemento);                 
+                
+                } catch (SQLException ex) {
                }
            }
             if(e.getSource() == ac.cancelarBtn){
                ac.dispose();
            }
+            if(e.getSource() == ac.modificar_monto){
+                if(ac.cuota_total.isEnabled()){
+                    ac.cuota_total.setEnabled(false);
+                }else{
+                    ac.cuota_total.setEnabled(true);
+                }
+            }
     }
     
     public void calcularValores(double ultimo_saldo, double cuota_pura, double gastos,double bolsa_cemento, double saldo_bolsa_cemento){          
-               long fecha_pago = ac.fechaPago.getDate().getTime();
+               DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
+               Date date = new Date();
                String detalle = ac.detallePago.getText();
                String observaciones = ac.observacionesPago.getText();
                String tipoPago = ac.tipoPago.getSelectedItem().toString();
-               double haber = cuota_pura + gastos;
+               double haber = cuota_pura;
                double saldo_actual = ultimo_saldo - haber;
                double cemento_haber = bolsa_cemento;
                double cemento_saldo = saldo_bolsa_cemento - bolsa_cemento;
-               cd.altaCuota(new java.sql.Date(fecha_pago),0, detalle, cuota_pura, gastos, 0, haber, saldo_actual, 0, cemento_haber, cemento_saldo, observaciones, tipoPago, id_control);
+               cd.altaCuota(new java.sql.Date(date.getTime()),0, detalle, cuota_pura, gastos, 0, haber, saldo_actual, 0, cemento_haber, cemento_saldo, observaciones, tipoPago, id_control);
                ac.dispose();
     }
         
