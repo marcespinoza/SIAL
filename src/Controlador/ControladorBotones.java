@@ -6,12 +6,9 @@
 package Controlador;
 
 import Vista.Frame.Ventana;
-import Vista.Panels.Botones;
-import Vista.Panels.Minuta;
 import java.awt.CardLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import javax.swing.JButton;
 
 /**
  *
