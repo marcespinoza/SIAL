@@ -64,7 +64,6 @@ public class ControladorLogin implements ActionListener, KeyListener, WindowList
                         if (rs.next()){
                             Ventana.labelUsuario.setText(rs.getString(1));
                             Ventana.labelTipoUsuario.setText(rs.getString(2));
-                            System.out.println(rs.getString(3));
                             Ventana.nombreUsuario.setText(rs.getString(3));
                             Ventana.apellidoUsuario.setText(rs.getString(4));
                             login.dispose();

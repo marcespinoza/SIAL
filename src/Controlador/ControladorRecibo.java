@@ -12,6 +12,7 @@ import Modelo.MinutaDAO;
 import Vista.Dialogs.AltaRecibo;
 import Vista.Frame.Ventana;
 import Vista.Panels.DetalleCuota;
+import Vista.Panels.Minuta;
 import com.itextpdf.text.Chunk;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
@@ -48,7 +49,7 @@ import javax.swing.border.EtchedBorder;
  */
 public class ControladorRecibo implements ActionListener{
     
-    AltaRecibo ar;
+    AltaRecibo ar; 
     MinutaDAO md = new MinutaDAO();
     LoteDAO ld = new LoteDAO();
     ClienteDAO cd = new ClienteDAO();
@@ -103,12 +104,11 @@ public class ControladorRecibo implements ActionListener{
             apellido_propietario = rs.getString(1);
             nombre_propietario = rs.getString(2);
             cuit_propietario = rs.getString(3);
-            System.out.println(cuit_propietario+"cuit");
             ar.apellido_propietario.setText(apellido_propietario);
             ar.nombre_propietario.setText(nombre_propietario);    
             ar.cuit_propietario.setText(cuit_propietario);
         } catch (Exception e) {
-            System.out.println(e.getMessage()+"aca");
+            System.out.println(e.getMessage());
         }
     }
     
@@ -331,7 +331,7 @@ public class ControladorRecibo implements ActionListener{
 
         @Override
         protected Void doInBackground() throws Exception {      
-            DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
+            DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
             Date date = new Date();
             double rendido = importe - gastos_administrativos;
             md.altaMinuta(new java.sql.Date(date.getTime()), apellido_comprador, nombre_comprador, manzana, parcela, importe, rendido, nro_cuota, tipo_pago, nro_random);
@@ -340,7 +340,7 @@ public class ControladorRecibo implements ActionListener{
 
        @Override
        public void done() { 
-           //cc.llenarTabla();
+              
        }
     
 }

@@ -33,7 +33,6 @@ public class ControladorBotones implements ActionListener{
     public void actionPerformed(ActionEvent e) {
         if(e.getSource()==Ventana.btnMinuta){
          CardLayout cl = (CardLayout)(Ventana.panelPrincipal.getLayout());
-         //Ventana.panelPrincipal.add(vistaMinuta, "Minutas");
          cl.show(Ventana.panelPrincipal, "Minuta");
         }
         

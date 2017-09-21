@@ -63,13 +63,28 @@ public class MinutaDAO {
      return rs;
  }
     
-    public ResultSet obtenerMinutasPorFecha(String fecha){
+    public ResultSet minutasPorFecha(String fecha){
      ResultSet rs = null;
      try {
           Connection con = conexion.getConexion();
           String listar = "SELECT * FROM Minuta where fecha_minuta = '"+fecha+"'";
           Statement st = con.createStatement();
           rs = st.executeQuery(listar);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+     return rs;
+ }
+    
+     public ResultSet MinutasPorRango(Date desde, Date hasta){
+     ResultSet rs = null;
+     try {
+          Connection con = conexion.getConexion();
+          PreparedStatement statement =
+          con.prepareStatement("SELECT * FROM minuta WHERE fecha_minuta between ? and ?");
+          statement.setDate(1, desde);
+          statement.setDate(2, hasta);
+          rs = statement.executeQuery();
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }

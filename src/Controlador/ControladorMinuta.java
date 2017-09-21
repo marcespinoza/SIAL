@@ -23,10 +23,18 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.DateFormat;
@@ -46,16 +54,24 @@ public class ControladorMinuta implements MouseListener, ActionListener {
     MinutaDAO md = new MinutaDAO();
     Minuta vistaMinuta;
     private Object [] minuta;
-     private Object [] fechaMinuta;
-     ResultSet resultset = null;
+    private Object [] fechaMinuta;
+    ResultSet resultset = null;
+    File f;
+    JFileChooser chooser;
 
     public ControladorMinuta(Minuta vistaMinuta) {
         this.vistaMinuta=vistaMinuta;
         this.vistaMinuta.tablaFechaMinuta.addMouseListener(this);
         this.vistaMinuta.generarMinuta.addActionListener(this);
         this.vistaMinuta.guardar_en.addActionListener(this);
+        this.vistaMinuta.buscar.addActionListener(this);
         llenarTablaFecha();
     }
+
+    public ControladorMinuta() {
+    }
+    
+    
     
     public void llenarTabla(ResultSet rs){
         resultset = rs;
@@ -84,6 +100,9 @@ public class ControladorMinuta implements MouseListener, ActionListener {
     public void llenarTablaFecha(){
         ResultSet rs = md.obtenerFecha();
         DefaultTableModel model = (DefaultTableModel) vistaMinuta.tablaFechaMinuta.getModel();
+        DefaultTableModel model2 = (DefaultTableModel) vistaMinuta.tablaMinuta.getModel();
+        System.out.println("minutaa");
+        model2.setRowCount(0);
         model.setRowCount(0);
         int nro = 1;
         try {
@@ -104,16 +123,25 @@ public class ControladorMinuta implements MouseListener, ActionListener {
                   if(vistaMinuta.tablaFechaMinuta.getSelectedRow()==-1){
                        JOptionPane.showMessageDialog(null, "Selecciona una minuta", "Atención", JOptionPane.INFORMATION_MESSAGE, null);
                   }else{
-                  generarPdf();
+                      generarPdf();
                 }                
             }
             
             if(e.getSource() == vistaMinuta.guardar_en){
-                JFileChooser chooser = new JFileChooser();
+                chooser = new JFileChooser();
+                 chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
                 chooser.showOpenDialog(chooser);
-                File f = chooser.getCurrentDirectory();
+                f = chooser.getSelectedFile();
                 String path = f.getAbsolutePath();
                 vistaMinuta.path.setText(path);
+            }
+            
+            if(e.getSource() == vistaMinuta.buscar){
+                SimpleDateFormat dcn = new SimpleDateFormat("dd-MM-yyyy");
+                 String desde = dcn.format(vistaMinuta.minutaDesde.getDate() );
+                 String date = dcn.format(vistaMinuta.minutaHasta.getDate() );
+                ResultSet rs = md.MinutasPorRango(new java.sql.Date(vistaMinuta.minutaDesde.getDate().getTime()) , new java.sql.Date(vistaMinuta.minutaHasta.getDate().getTime()));
+                llenarTabla(rs);
             }
     }
 
@@ -123,7 +151,8 @@ public class ControladorMinuta implements MouseListener, ActionListener {
       DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
       java.util.Date date = new java.util.Date();
         try {
-            PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(dateFormat.format(date)+".pdf"));
+            
+           PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(new File(chooser.getSelectedFile(), "Supplier.pdf")));
             document.open();
             Font f=new Font(Font.FontFamily.TIMES_ROMAN,10.0f,0,null);   
             Paragraph titulo = new Paragraph("Minuta diaria");  
@@ -252,6 +281,53 @@ public class ControladorMinuta implements MouseListener, ActionListener {
             Logger.getLogger(DetalleCuota.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+    
+    public void lectura() throws FileNotFoundException, IOException
+    {
+        File file = new File("C:\\Users\\Marcelo\\Documents\\santa_fe.txt");
+
+File temp = File.createTempFile("file", ".txt", file.getParentFile());
+
+String charset = "UTF-8";
+
+//String delete = "\"{\\\"TipoCentro\\\":2,\\\"Horario\\\":\\";
+String delete = ":\\\"<h4>Punto de Carga</h4><br/>KIOSCO<br/>Dirección: <b>";
+
+BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(file), charset));
+
+PrintWriter writer = new PrintWriter(new OutputStreamWriter(new FileOutputStream(temp), charset));
+
+for (String line; (line = reader.readLine()) != null;) {
+   line = line.replace(delete, "");
+    writer.println(line);
+}
+  
+
+reader.close();
+writer.close();
+
+file.delete();
+
+temp.renameTo(file);
+        
+//        File inputFile = new File("C:\\Users\\Marcelo\\Documents\\archivo.txt");
+//        File tempFile = new File("C:\\Users\\Marcelo\\Documents\\archivo2.txt");
+//
+//        BufferedReader reader = new BufferedReader(new FileReader(inputFile));
+//        BufferedWriter writer = new BufferedWriter(new FileWriter(tempFile));
+//
+//        String currentLine;
+//
+//        while((currentLine = reader.readLine()) != null) {
+//            if(null!=currentLine && !currentLine.equalsIgnoreCase("probando")){
+//                writer.write(currentLine + System.getProperty("line.separator"));
+//            }
+//        }
+//        writer.close(); 
+//        reader.close(); 
+//        boolean successful = tempFile.renameTo(inputFile);
+//        System.out.println(successful);
+    }
 
     
     public class SwingWorker extends javax.swing.SwingWorker<Void, Void>{
@@ -261,7 +337,7 @@ public class ControladorMinuta implements MouseListener, ActionListener {
         @Override
         protected Void doInBackground() throws Exception {    
             int row = vistaMinuta.tablaFechaMinuta.getSelectedRow();
-            rs = md.obtenerMinutasPorFecha(vistaMinuta.tablaFechaMinuta.getModel().getValueAt(row,1).toString());
+            rs = md.minutasPorFecha(vistaMinuta.tablaFechaMinuta.getModel().getValueAt(row,1).toString());
             return null;
         }
 

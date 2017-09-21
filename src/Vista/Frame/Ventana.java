@@ -25,8 +25,6 @@ public class Ventana extends javax.swing.JFrame implements ActionListener{
     ControladorLogin cl;
     Minuta vistaMinuta = new Minuta();
     ControladorMinuta cm;
-   // public static JLabel nombreUsuario;
-   // public static JLabel apellidoUsuario;
 
     public Ventana() {
         initComponents();

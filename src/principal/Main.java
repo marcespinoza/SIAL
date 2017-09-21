@@ -8,6 +8,7 @@ package principal;
 import Controlador.ControladorLogin;
 import Vista.Dialogs.Login;
 import Vista.Frame.Ventana;
+import javax.swing.JFrame;
 
 
         
@@ -17,7 +18,7 @@ public class Main {
     
     public static void main(String[] args) {
         Ventana ventana = new Ventana();      
-        ventana.setLocationRelativeTo(null);
+        ventana.setExtendedState(JFrame.MAXIMIZED_BOTH); 
        // ventana.setVisible(true);
     }
     
