@@ -45,7 +45,6 @@ public class AltaCliente extends javax.swing.JDialog {
         calle = new javax.swing.JTextField();
         telefono2 = new javax.swing.JTextField();
         telefono1 = new javax.swing.JTextField();
-        numero = new javax.swing.JTextField();
         documento = new javax.swing.JFormattedTextField();
         jLabel9 = new javax.swing.JLabel();
         jSeparator2 = new javax.swing.JSeparator();
@@ -62,6 +61,7 @@ public class AltaCliente extends javax.swing.JDialog {
         nombres = new javax.swing.JTextField();
         jLabel16 = new javax.swing.JLabel();
         trabajo = new javax.swing.JTextField();
+        numero = new javax.swing.JFormattedTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Alta de cliente");
@@ -101,8 +101,6 @@ public class AltaCliente extends javax.swing.JDialog {
 
         telefono1.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
-        numero.setBorder(javax.swing.BorderFactory.createEtchedBorder());
-
         documento.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         documento.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("########"))));
         documento.addActionListener(new java.awt.event.ActionListener() {
@@ -136,6 +134,7 @@ public class AltaCliente extends javax.swing.JDialog {
         parentescoRef.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
         fech_nacimiento.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        fech_nacimiento.setDateFormatString("dd-MM-yyyy");
 
         nombres.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         nombres.addActionListener(new java.awt.event.ActionListener() {
@@ -147,6 +146,8 @@ public class AltaCliente extends javax.swing.JDialog {
         jLabel16.setText("Fecha nacimiento");
 
         trabajo.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+
+        numero.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("######"))));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -210,15 +211,16 @@ public class AltaCliente extends javax.swing.JDialog {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(trabajo, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(telefono1, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(numero, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(calle, javax.swing.GroupLayout.PREFERRED_SIZE, 296, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(barrio, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(documento, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(apellidos, javax.swing.GroupLayout.PREFERRED_SIZE, 392, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(nombres, javax.swing.GroupLayout.PREFERRED_SIZE, 392, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(fech_nacimiento, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(telefono2, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addComponent(telefono2, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                .addComponent(numero, javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(telefono1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 131, Short.MAX_VALUE)))))
                 .addGap(13, 13, 13))
         );
         layout.setVerticalGroup(
@@ -375,7 +377,7 @@ public class AltaCliente extends javax.swing.JDialog {
     private javax.swing.JSeparator jSeparator2;
     public javax.swing.JTextField nombres;
     public javax.swing.JTextField nombresRef;
-    public javax.swing.JTextField numero;
+    public javax.swing.JFormattedTextField numero;
     public javax.swing.JTextField parentescoRef;
     public javax.swing.JTextField telefono1;
     public javax.swing.JTextField telefono2;

@@ -23,15 +23,17 @@
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="1" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="1" attributes="0">
-                  <Component id="jPanel1" max="32767" attributes="0"/>
-                  <Component id="jScrollPane1" pref="963" max="32767" attributes="0"/>
-              </Group>
-              <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="agregarPagoBtn" alignment="1" min="-2" pref="119" max="-2" attributes="0"/>
-                  <Component id="generarReciboBtn" alignment="1" min="-2" max="-2" attributes="0"/>
-                  <Component id="volverBtn" alignment="1" min="-2" pref="119" max="-2" attributes="0"/>
+                  <Group type="102" attributes="0">
+                      <Component id="jPanel1" max="32767" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="agregarPagoBtn" alignment="1" min="-2" pref="119" max="-2" attributes="0"/>
+                          <Component id="generarReciboBtn" alignment="1" min="-2" max="-2" attributes="0"/>
+                          <Component id="volverBtn" alignment="1" min="-2" pref="119" max="-2" attributes="0"/>
+                      </Group>
+                  </Group>
+                  <Component id="jScrollPane1" max="32767" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
           </Group>
@@ -40,19 +42,22 @@
     <DimensionLayout dim="1">
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="0" attributes="0">
-              <EmptySpace max="-2" attributes="0"/>
-              <Component id="jPanel1" min="-2" max="-2" attributes="0"/>
-              <EmptySpace max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="0" attributes="0">
+              <Group type="103" groupAlignment="0" max="-2" attributes="0">
                   <Group type="102" attributes="0">
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="jPanel1" min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <Group type="102" alignment="1" attributes="0">
+                      <EmptySpace max="32767" attributes="0"/>
                       <Component id="agregarPagoBtn" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="generarReciboBtn" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="volverBtn" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <Component id="jScrollPane1" min="-2" pref="347" max="-2" attributes="0"/>
               </Group>
+              <EmptySpace max="-2" attributes="0"/>
+              <Component id="jScrollPane1" min="-2" pref="347" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
           </Group>
       </Group>
@@ -87,6 +92,7 @@
             </Property>
           </Properties>
           <AuxValues>
+            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new javax.swing.JTable()&#xa;{&#xa;    public Component prepareRenderer(TableCellRenderer renderer, int rowIndex, int vColIndex) {&#xa;        Component c = super.prepareRenderer(renderer, rowIndex, vColIndex);&#xa;        if (isCellSelected(rowIndex, vColIndex)) {&#xa;            c.setBackground(Color.yellow);&#xa;        }&#xa;        return c;&#xa;    }&#xa;}&#xa;"/>
             <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="1"/>
           </AuxValues>
         </Component>
@@ -153,7 +159,7 @@
                       <Component id="direccionLabel" pref="334" max="32767" attributes="0"/>
                       <Component id="telefonoLabel" max="32767" attributes="0"/>
                   </Group>
-                  <EmptySpace max="32767" attributes="0"/>
+                  <EmptySpace pref="214" max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>

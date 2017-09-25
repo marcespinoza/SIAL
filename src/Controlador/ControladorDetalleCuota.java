@@ -8,16 +8,14 @@ package Controlador;
 import Modelo.CuotaDAO;
 import Modelo.RendererTablaCuota;
 import Vista.Frame.Ventana;
-import Vista.Dialogs.AltaCuota;
-import Vista.Panels.Clientes;
 import Vista.Panels.DetalleCuota;
 import java.awt.CardLayout;
+import java.awt.Color;
 import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.ResultSet;
 import javax.swing.JOptionPane;
-import javax.swing.JTable;
 import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
 
@@ -75,7 +73,6 @@ public class ControladorDetalleCuota implements ActionListener{
                 num_cuota ++;
             }
              CardLayout cl = (CardLayout)(Ventana.panelPrincipal.getLayout());
-             //cl.previous(Ventana.panelPrincipal);
              Ventana.panelPrincipal.add(vistaDetallePago, "Detalle_pago");
              cl.show(Ventana.panelPrincipal, "Detalle_pago");
         }catch(Exception e){

@@ -10,10 +10,15 @@ import Controlador.ControladorLogin;
 import Controlador.ControladorMinuta;
 import Controlador.ControladorUsuario;
 import Vista.Panels.Minuta;
+import java.awt.GraphicsConfiguration;
+import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.ImageIcon;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
+import sun.java2d.SunGraphicsEnvironment;
 
 
 /**
@@ -28,10 +33,17 @@ public class Ventana extends javax.swing.JFrame implements ActionListener{
 
     public Ventana() {
         initComponents();
+        GraphicsConfiguration config = this.getGraphicsConfiguration();
+        Rectangle usableBounds = SunGraphicsEnvironment.getUsableBounds(config.getDevice());
+        setMaximizedBounds(usableBounds);
+        setExtendedState(MAXIMIZED_BOTH);        
+        ImageIcon icon = new ImageIcon("src/Imagenes/logo.png_32x32.png");
+        this.setIconImage(icon.getImage());
         cl = new ControladorLogin(this);
         cm = new ControladorMinuta(vistaMinuta);
         panelPrincipal.add(vistaMinuta, "Minuta");
         menuUsuarios.addActionListener(this);
+        about.addActionListener(this);
         inicializarPaneles();
     }
     
@@ -41,8 +53,6 @@ public class Ventana extends javax.swing.JFrame implements ActionListener{
         //-------Controlador para manejar botones superiores - Clientes,Minutas---------//
         ControladorBotones cb = new ControladorBotones(this);
         cc.llenarTabla();
-        ImageIcon icon = new ImageIcon("src/Imagenes/logo.png_32x32.png");
-        this.setIconImage(icon.getImage());
     }
 
     /**
@@ -82,7 +92,8 @@ public class Ventana extends javax.swing.JFrame implements ActionListener{
         propietarios = new javax.swing.JMenuItem();
         lotes = new javax.swing.JMenuItem();
         menuUsuarios = new javax.swing.JMenuItem();
-        jMenu2 = new javax.swing.JMenu();
+        info = new javax.swing.JMenu();
+        about = new javax.swing.JMenuItem();
 
         jMenu1.setText("File");
         jMenuBar2.add(jMenu1);
@@ -98,6 +109,12 @@ public class Ventana extends javax.swing.JFrame implements ActionListener{
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Mi Primer Casa");
+        setResizable(false);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowOpened(java.awt.event.WindowEvent evt) {
+                formWindowOpened(evt);
+            }
+        });
 
         panelPrincipal.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         panelPrincipal.setLayout(new java.awt.CardLayout());
@@ -240,8 +257,12 @@ public class Ventana extends javax.swing.JFrame implements ActionListener{
 
         jMenuBar1.add(Opciones);
 
-        jMenu2.setText("Acerca de ..");
-        jMenuBar1.add(jMenu2);
+        info.setText("Info");
+
+        about.setText("Acerca de ..");
+        info.add(about);
+
+        jMenuBar1.add(info);
 
         setJMenuBar(jMenuBar1);
 
@@ -285,12 +306,17 @@ public class Ventana extends javax.swing.JFrame implements ActionListener{
         // TODO add your handling code here:
     }//GEN-LAST:event_lotesActionPerformed
 
+    private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
+       //this.setExtendedState(JFrame.MAXIMIZED_BOTH);
+    }//GEN-LAST:event_formWindowOpened
+
     
     
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     public static javax.swing.JMenu MenuInicio;
     private javax.swing.JMenu Opciones;
+    public javax.swing.JMenuItem about;
     public static javax.swing.JLabel apellidoUsuario;
     public static javax.swing.JButton btnClientes;
     public static javax.swing.JButton btnLotes;
@@ -299,9 +325,9 @@ public class Ventana extends javax.swing.JFrame implements ActionListener{
     public static javax.swing.JMenuItem cerrarSesion;
     private Vista.Panels.Clientes clientes;
     private Vista.Panels.DetalleCuota detallePago;
+    public javax.swing.JMenu info;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JMenu jMenu1;
-    private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;
     private javax.swing.JMenu jMenu4;
     private javax.swing.JMenu jMenu5;
@@ -336,9 +362,11 @@ public void inicializarBotones(){
         if(e.getSource().equals(menuUsuarios)){
              new ControladorUsuario(this);
         }
+        if(e.getSource().equals(about)){
+          ImageIcon icon = new ImageIcon("src/Imagenes/Iconos/about.png");   
+             JOptionPane.showMessageDialog(null, "Desarrollado por Marcelo Espinoza \n marceloespinoza00@gmail.com","Acerca de ..", HEIGHT, icon);
+        }
     }
- 
-
-    
+     
 }
 

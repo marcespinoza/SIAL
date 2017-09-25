@@ -101,8 +101,6 @@
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Component id="trabajo" min="-2" pref="133" max="-2" attributes="0"/>
-                          <Component id="telefono1" min="-2" pref="131" max="-2" attributes="0"/>
-                          <Component id="numero" min="-2" pref="56" max="-2" attributes="0"/>
                           <Component id="calle" min="-2" pref="296" max="-2" attributes="0"/>
                           <Component id="barrio" min="-2" pref="176" max="-2" attributes="0"/>
                           <Component id="documento" min="-2" pref="134" max="-2" attributes="0"/>
@@ -110,6 +108,10 @@
                           <Component id="nombres" min="-2" pref="392" max="-2" attributes="0"/>
                           <Component id="fech_nacimiento" min="-2" pref="134" max="-2" attributes="0"/>
                           <Component id="telefono2" min="-2" pref="131" max="-2" attributes="0"/>
+                          <Group type="103" alignment="0" groupAlignment="1" max="-2" attributes="0">
+                              <Component id="numero" alignment="0" max="32767" attributes="0"/>
+                              <Component id="telefono1" alignment="0" pref="131" max="32767" attributes="0"/>
+                          </Group>
                       </Group>
                   </Group>
               </Group>
@@ -325,18 +327,6 @@
         <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="1"/>
       </AuxValues>
     </Component>
-    <Component class="javax.swing.JTextField" name="numero">
-      <Properties>
-        <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
-          <Border info="org.netbeans.modules.form.compat2.border.EtchedBorderInfo">
-            <EtchetBorder/>
-          </Border>
-        </Property>
-      </Properties>
-      <AuxValues>
-        <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="1"/>
-      </AuxValues>
-    </Component>
     <Component class="javax.swing.JFormattedTextField" name="documento">
       <Properties>
         <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
@@ -451,6 +441,7 @@
             <EtchetBorder/>
           </Border>
         </Property>
+        <Property name="dateFormatString" type="java.lang.String" value="dd-MM-yyyy"/>
       </Properties>
       <AuxValues>
         <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="1"/>
@@ -482,6 +473,16 @@
           <Border info="org.netbeans.modules.form.compat2.border.EtchedBorderInfo">
             <EtchetBorder/>
           </Border>
+        </Property>
+      </Properties>
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="1"/>
+      </AuxValues>
+    </Component>
+    <Component class="javax.swing.JFormattedTextField" name="numero">
+      <Properties>
+        <Property name="formatterFactory" type="javax.swing.JFormattedTextField$AbstractFormatterFactory" editor="org.netbeans.modules.form.editors.AbstractFormatterFactoryEditor">
+          <Format format="######" subtype="-1" type="0"/>
         </Property>
       </Properties>
       <AuxValues>

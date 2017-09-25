@@ -8,7 +8,8 @@ package Modelo;
 import conexion.Conexion;
 import java.sql.Connection;
 import java.sql.*;
-import javax.swing.table.DefaultTableModel;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 
 /**
@@ -29,7 +30,7 @@ public class ClienteDAO {
      ResultSet rs = null;
      try {
           Connection con = conexion.getConexion();
-          String listar = "SELECT c.Dni, c.Apellidos, c.Nombres, c.barrio, c.calle, c.numero, c.Telefono1, c.trabajo, f.Id_control, f.cantidad_cuotas, f.gastos, f.bolsa_cemento, f.lote_Barrio, f.lote_Manzana, f.lote_Parcela FROM cliente c LEFT JOIN ficha_control f ON c.Dni = f.cliente_Dni"; 
+          String listar = "SELECT c.Dni, c.Apellidos, c.Nombres,c.fecha_nacimiento, c.barrio, c.calle, c.numero, c.Telefono1, c.telefono2, c.trabajo, f.Id_control, f.cantidad_cuotas, f.gastos, f.bolsa_cemento, f.lote_Barrio, f.lote_Manzana, f.lote_Parcela FROM cliente c LEFT JOIN ficha_control f ON c.Dni = f.cliente_Dni"; 
           Statement st = con.createStatement();
           rs = st.executeQuery(listar);
         } catch (Exception e) {
@@ -51,11 +52,13 @@ public class ClienteDAO {
      return rs;
  }
  
- public int altaCliente(int dni, String apellidos, String nombres, Date fech_nacimiento, String barrio, String calle, int numero, String telefono1, String telefono2, String trabajo){
-    int filasAfectadas=0;
+ public int altaCliente(int dni, String apellidos, String nombres, Date fecha_nacimiento, String barrio, String calle, int numero, String telefono1, String telefono2, String trabajo){
+         System.out.println("ffsfs");
+     int filasAfectadas=0;
      try {
          Connection con = conexion.getConexion();
-         String insertar = "Insert into cliente(dni, apellidos, nombres, fecha_nacimiento, barrio, calle, numero, telefono1, telefono2, trabajo) values ('"+dni+"','"+apellidos+"','"+nombres+"','"+fech_nacimiento+"','"+barrio+"','"+calle+"','"+numero+"','"+telefono1+"','"+telefono2+"','"+trabajo+"') ";
+
+         String insertar = "Insert into cliente(dni, apellidos, nombres, fecha_nacimiento, barrio, calle, numero, telefono1, telefono2, trabajo) values ('"+dni+"','"+apellidos+"','"+nombres+"','"+fecha_nacimiento+"','"+barrio+"','"+calle+"','"+numero+"','"+telefono1+"','"+telefono2+"','"+trabajo+"') ";
          PreparedStatement ps = con.prepareStatement(insertar);
          filasAfectadas = ps.executeUpdate();         
      } catch (Exception e) { 
@@ -73,12 +76,34 @@ public class ClienteDAO {
          System.out.println(e.getMessage());
      }
  }
- public void editarCliente(){}
+ public void editarCliente(int dni, String apellidos, String nombres, Date fecha_nacimiento, String barrio, String calle, int numero, String telefono1, String telefono2, String trabajo, int clave_cliente){
+        try {
+            Connection con = conexion.getConexion();
+            String query = "UPDATE cliente SET dni = ?, nombres = ?, apellidos = ?, fecha_nacimiento = ?, barrio = ?, calle = ?, numero = ?, telefono1 = ?, telefono2 = ?, trabajo = ? where dni = ?";
+            PreparedStatement preparedStmt = con.prepareStatement(query);
+            preparedStmt.setInt   (1, dni);
+            preparedStmt.setString(2, nombres);
+            preparedStmt.setString(3, apellidos);
+            preparedStmt.setDate(4, fecha_nacimiento);
+            preparedStmt.setString(5, barrio);
+            preparedStmt.setString(6, calle);
+            preparedStmt.setInt(7, numero);
+            preparedStmt.setString(8, telefono1);
+            preparedStmt.setString(9, telefono2);
+            preparedStmt.setString(10, trabajo);
+            preparedStmt.setInt(11, clave_cliente);
+            preparedStmt.executeUpdate();      
+            preparedStmt.close();
+            con.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(ClienteDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+ }
  public ResultSet buscarCliente(int dni){
      ResultSet rs = null;
      try {
           Connection con = conexion.getConexion();
-          String listar = "SELECT  nombres, apellidos, barrio, calle, numero from cliente where dni = '"+dni+"'"; 
+          String listar = "SELECT  c.apellidos, c.nombres, c.fecha_nacimiento, c.dni, c.barrio, c.calle, c.numero, c.telefono1, c.telefono2, c.trabajo, r.apellidos, r.nombres, r.telefono, r.parentesco from cliente c inner join referencia r on c.dni=r.cliente_dni where dni = '"+dni+"'"; 
           Statement st = con.createStatement();
           rs = st.executeQuery(listar);
         } catch (Exception e) {

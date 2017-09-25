@@ -101,7 +101,6 @@ public class ControladorMinuta implements MouseListener, ActionListener {
         ResultSet rs = md.obtenerFecha();
         DefaultTableModel model = (DefaultTableModel) vistaMinuta.tablaFechaMinuta.getModel();
         DefaultTableModel model2 = (DefaultTableModel) vistaMinuta.tablaMinuta.getModel();
-        System.out.println("minutaa");
         model2.setRowCount(0);
         model.setRowCount(0);
         int nro = 1;
@@ -282,52 +281,7 @@ public class ControladorMinuta implements MouseListener, ActionListener {
         }
     }
     
-    public void lectura() throws FileNotFoundException, IOException
-    {
-        File file = new File("C:\\Users\\Marcelo\\Documents\\santa_fe.txt");
-
-File temp = File.createTempFile("file", ".txt", file.getParentFile());
-
-String charset = "UTF-8";
-
-//String delete = "\"{\\\"TipoCentro\\\":2,\\\"Horario\\\":\\";
-String delete = ":\\\"<h4>Punto de Carga</h4><br/>KIOSCO<br/>Dirección: <b>";
-
-BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(file), charset));
-
-PrintWriter writer = new PrintWriter(new OutputStreamWriter(new FileOutputStream(temp), charset));
-
-for (String line; (line = reader.readLine()) != null;) {
-   line = line.replace(delete, "");
-    writer.println(line);
-}
-  
-
-reader.close();
-writer.close();
-
-file.delete();
-
-temp.renameTo(file);
-        
-//        File inputFile = new File("C:\\Users\\Marcelo\\Documents\\archivo.txt");
-//        File tempFile = new File("C:\\Users\\Marcelo\\Documents\\archivo2.txt");
-//
-//        BufferedReader reader = new BufferedReader(new FileReader(inputFile));
-//        BufferedWriter writer = new BufferedWriter(new FileWriter(tempFile));
-//
-//        String currentLine;
-//
-//        while((currentLine = reader.readLine()) != null) {
-//            if(null!=currentLine && !currentLine.equalsIgnoreCase("probando")){
-//                writer.write(currentLine + System.getProperty("line.separator"));
-//            }
-//        }
-//        writer.close(); 
-//        reader.close(); 
-//        boolean successful = tempFile.renameTo(inputFile);
-//        System.out.println(successful);
-    }
+    
 
     
     public class SwingWorker extends javax.swing.SwingWorker<Void, Void>{

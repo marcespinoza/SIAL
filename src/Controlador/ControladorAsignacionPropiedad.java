@@ -61,8 +61,7 @@ public class ControladorAsignacionPropiedad implements ActionListener{
     @Override
     public void actionPerformed(ActionEvent e) {
           if(e.getSource() == vistaAsignarPropiedad.aceptarBtn){
-              if(validarCampos() == true){
-                  
+              if(validarCampos() == true){                  
                   new SwingWorker().execute();                
                   }
           }
@@ -132,7 +131,7 @@ public class ControladorAsignacionPropiedad implements ActionListener{
         @Override
         protected Void doInBackground() throws Exception {            
            double gastos =Double.parseDouble(vistaAsignarPropiedad.cuota_total.getText())-(Double.parseDouble(vistaAsignarPropiedad.cuota_total.getText())/1.1);
-            id_control = fichaControlDAO.altaFichaControl(vistaAsignarPropiedad.tipo_propiedad.getSelectedItem().toString(), vistaAsignarPropiedad.dimension.getText(), Integer.parseInt(vistaAsignarPropiedad.cantidad_cuotas.getText()),  Double.parseDouble(vistaAsignarPropiedad.cuota_total.getText()), gastos, Double.parseDouble(vistaAsignarPropiedad.bolsa_cemento.getText()), dni, String.valueOf(vistaAsignarPropiedad.barrio.getSelectedItem()),Integer.parseInt((String)vistaAsignarPropiedad.manzana.getSelectedItem()), Integer.parseInt((String)vistaAsignarPropiedad.parcela.getSelectedItem()));
+            id_control = fichaControlDAO.altaFichaControl(vistaAsignarPropiedad.tipo_propiedad.getSelectedItem().toString(), vistaAsignarPropiedad.dimension.getText(), Integer.parseInt(vistaAsignarPropiedad.cantidad_cuotas.getText()),  Double.parseDouble(vistaAsignarPropiedad.cuota_total.getText())-gastos, gastos, Double.parseDouble(vistaAsignarPropiedad.bolsa_cemento.getText()), dni, String.valueOf(vistaAsignarPropiedad.barrio.getSelectedItem()),Integer.parseInt((String)vistaAsignarPropiedad.manzana.getSelectedItem()), Integer.parseInt((String)vistaAsignarPropiedad.parcela.getSelectedItem()));
             cuotaDao.altaCuota(new Date(System.currentTimeMillis()), 0,"Saldo Inicio", 0, 0, Double.parseDouble(vistaAsignarPropiedad.cantidad_cuotas.getText())*(Double.parseDouble(vistaAsignarPropiedad.cuota_total.getText())), 0, Double.parseDouble(vistaAsignarPropiedad.cantidad_cuotas.getText())*(Double.parseDouble(vistaAsignarPropiedad.cuota_total.getText())), Double.parseDouble(vistaAsignarPropiedad.bolsa_cemento.getText())*Double.parseDouble(vistaAsignarPropiedad.cantidad_cuotas.getText()), 0, Double.parseDouble(vistaAsignarPropiedad.bolsa_cemento.getText())*Double.parseDouble(vistaAsignarPropiedad.cantidad_cuotas.getText()), "", "", id_control);         
             return null;
         }

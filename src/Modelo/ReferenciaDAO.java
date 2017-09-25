@@ -10,7 +10,10 @@ import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -29,6 +32,7 @@ public class ReferenciaDAO {
      String rptaRegistro = null;
      try {
          Connection con = conexion.getConexion();
+         System.out.println("Insert into referencia(telefono, apellidos, nombres, parentesco, cliente_dni) values ('"+telefono+"','"+nombres+"','"+apellidos+"','"+parentesco+"','"+dni+"') ");
          String insertar = "Insert into referencia(telefono, apellidos, nombres, parentesco, cliente_dni) values ('"+telefono+"','"+nombres+"','"+apellidos+"','"+parentesco+"','"+dni+"') ";
          PreparedStatement ps = con.prepareStatement(insertar);
          ps.execute();
@@ -36,7 +40,27 @@ public class ReferenciaDAO {
          System.out.println(e.getMessage());
      }
  }
- public void editarReferencia(){}
+ public void editarReferencia(int dni, String telefono,String apellidos, String nombres,  String parentesco, String clave_referencia){
+        try {
+            Connection con = conexion.getConexion();
+            String query = "UPDATE referencia SET cliente_dni = ?, "
+                    + " apellidos = ?, "
+                    + " nombres = ?, "
+                    + " telefono = ?, "
+                    + " parentesco = ? "
+                    + " WHERE telefono = '"+clave_referencia+"'";
+            PreparedStatement preparedStmt = con.prepareStatement(query);
+            preparedStmt.setInt(1, dni);
+            preparedStmt.setString(2, apellidos);
+            preparedStmt.setString(3, nombres);
+            preparedStmt.setString(4, telefono);
+            preparedStmt.setString(5, parentesco);
+            preparedStmt.executeUpdate();            
+            con.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(ReferenciaDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+ }
  public ResultSet obtenerReferencia(int dni){
      ResultSet rs = null;
      try {

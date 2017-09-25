@@ -6,9 +6,12 @@
 package Vista.Panels;
 
 import conexion.Conexion;
+import java.awt.Color;
+import java.awt.Component;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.JOptionPane;
 import javax.swing.RowFilter;
+import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableRowSorter;
 
 /**
@@ -70,7 +73,20 @@ public class Clientes extends javax.swing.JPanel {
         detalleBtn = new javax.swing.JButton();
         asignarBtn = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
-        tablaCliente = new javax.swing.JTable();
+        tablaCliente = new javax.swing.JTable()
+        {
+            public Component prepareRenderer(TableCellRenderer renderer, int rowIndex, int vColIndex) {
+                Component c = super.prepareRenderer(renderer, rowIndex, vColIndex);
+                if (isCellSelected(rowIndex, vColIndex)) {
+                    c.setBackground(Color.yellow);
+                }
+                if(tablaCliente.getValueAt(rowIndex, 10) == null){
+                    c.setBackground(Color.PINK);
+                }
+                return c;
+            }
+        }
+        ;
 
         datosCliente.setBorder(javax.swing.BorderFactory.createTitledBorder("Datos cliente"));
 
@@ -311,11 +327,11 @@ public class Clientes extends javax.swing.JPanel {
 
             },
             new String [] {
-                "Apellido/s", "Nombre/s", "Documento", "Telefono", "Title 5", "Title 6", "Title 7", "Title 8", "Title 9", "Title 10", "Title 11", "Title 12", "Barrio", "Mz.", "Pc."
+                "Apellido/s", "Nombre/s", "Documento", "Telefono", "Title 5", "Title 6", "Title 7", "Title 8", "Title 9", "Title 10", "Title 11", "Title 12", "Title 13", "Title 14", "Barrio", "Mz.", "Pc."
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false, false, false, false, false, false, false, false, false, false
+                false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
