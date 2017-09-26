@@ -54,18 +54,21 @@ public class ControladorRecibo implements ActionListener{
     LoteDAO ld = new LoteDAO();
     ClienteDAO cd = new ClienteDAO();
     FichaControlDAO fcd = new FichaControlDAO();
+    DetalleCuota dc = new DetalleCuota();
     String apellido_propietario, nombre_propietario, cuit_propietario;
     String nombre_comprador, apellido_comprador, domicilio_comprador;
-    String dimension, barrio, tipo_pago;
-    int cant_cuotas, manzana, parcela;
+    String dimension, barrio;
+    int cant_cuotas, manzana, parcela, row;
     double importe, cuota_total, gastos_administrativos;
     int id_control, nro_cuota, nro_random;    
     public static final String IMG = "src/Imagenes/logo_reporte.png";
     public static final String IMG2 = "src/Imagenes/logo_recibo.png";
     Random random = new Random();
 
-    public ControladorRecibo(Frame parent, int id_control, int nro_cuota, String tipo_pago) {
+    public ControladorRecibo(Frame parent, int id_control, DetalleCuota dc, int row) {
         ar = new AltaRecibo(parent, true);
+        this.dc=dc;
+        this.row=row;
         ar.aceptar.addActionListener(this);
         ar.cancelar.addActionListener(this);
         ar.cuit.setEnabled(false);
@@ -91,9 +94,7 @@ public class ControladorRecibo implements ActionListener{
             }
         });
         nro_random = random.nextInt(100);
-        this.nro_cuota=nro_cuota;
         this.id_control=id_control;
-        this.tipo_pago=tipo_pago;
         new SwingWorker().execute();
     }
     
@@ -128,7 +129,7 @@ public class ControladorRecibo implements ActionListener{
     
     private void datosPropiedad(){
         ResultSet rs = fcd.obtenerFichaControl(id_control);
-  
+        
         try {
             rs.next();            
             dimension = rs.getString(1);
@@ -136,20 +137,24 @@ public class ControladorRecibo implements ActionListener{
             barrio= rs.getString(6);
             manzana = rs.getInt(7);
             parcela = rs.getInt(8);
-            cuota_total = Double.parseDouble(rs.getString(3));
-            gastos_administrativos = Double.parseDouble(rs.getString(4));
+            cuota_total = Double.parseDouble(dc.tablaDetallePago.getModel().getValueAt(row, 3).toString());
+            gastos_administrativos = Double.parseDouble(dc.tablaDetallePago.getModel().getValueAt(row, 4).toString());
             importe = cuota_total ;
             ar.importe.setText(String.valueOf(importe));
             ar.total_pagado.setText(String.valueOf(importe));
-            ar.detalle.setText("Paga cuota "+nro_cuota+"/"+cant_cuotas+"\r\nDimension "+dimension +"\r\n"+ barrio +" "+ " Mz. "+manzana +" Pc. "+ parcela);
+            ar.detalle.setText("Paga cuota "+nro_cuota+"/"+cant_cuotas+    "\r\nDimension "+dimension +     "\r\n"+ barrio +" "+ " Mz. "+manzana +" Pc. "+ parcela+   "\r\n"+dc.tablaDetallePago.getModel().getValueAt(row, 2).toString());
         } catch (Exception e) {
         }
     }
     
     public void generarRecibo(){
-      Document document= new Document(PageSize.A4);
+            Document document= new Document(PageSize.A4);
+            DateFormat fecha1 = new SimpleDateFormat("dd/MM/yyyy");
+            DateFormat fecha2 = new SimpleDateFormat("dd.MM.yyyy");
+            java.util.Date date = new java.util.Date();
+            String nombre_pdf = fecha2.format(date)+".pdf";
         try {
-            PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream("report.pdf"));
+            PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(nombre_pdf));
             document.open();
             for (int i = 1; i < 3; i++) {               
             Font f=new Font(Font.FontFamily.TIMES_ROMAN,10.0f,0,null);
@@ -157,23 +162,17 @@ public class ControladorRecibo implements ActionListener{
             Image image2 = Image.getInstance(IMG2);
             image.scaleAbsolute(70, 70);
             image2.scaleAbsolute(25, 38);
-            DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-            java.util.Date date = new java.util.Date();
-            PdfPTable table = new PdfPTable(1); // 3 columns.
-            //table.setTotalWidth(new float[]{ 3,1});
+            PdfPTable table = new PdfPTable(1); 
             table.setWidthPercentage(57);
             table.setHorizontalAlignment(Element.ALIGN_CENTER); 
-            //PdfPCell cell1 = new PdfPCell(new Paragraph(dateFormat.format(date),f));
             PdfPCell cell3 = new PdfPCell(new Paragraph("Recibo por cuenta y orden de terceros"));
-            //cell1.setBorder(Rectangle.NO_BORDER);
             cell3.setHorizontalAlignment(Element.ALIGN_CENTER);
             table.addCell(cell3);
-            //table.addCell(cell1);
             document.add(table); 
             Paragraph para = new Paragraph("Numero: "+ar.nro_recibo.getText(),f);
             Paragraph cuit = new Paragraph("CUIT: 23-07431900-9",f);
             Paragraph ingBrutos = new Paragraph("Ing Brutos: 01-23-07431900-9",f);
-            Paragraph inicAct = new Paragraph(dateFormat.format(date)+"                                                        Inic. Act.: 01-08-2015",f); 
+            Paragraph inicAct = new Paragraph(fecha1.format(date)+"                                                        Inic. Act.: 01-08-2015",f); 
             switch(i){
                 case 1:document.add(new Chunk(image, 0, -55f)); document.add(new Chunk(image2, 190f, -40f));para.setSpacingBefore(-10); break;
                 case 2:document.add(new Chunk(image, 0, -38f)); document.add(new Chunk(image2, 190f, -22));para.setSpacingBefore(-26); break;
@@ -334,7 +333,7 @@ public class ControladorRecibo implements ActionListener{
             DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
             Date date = new Date();
             double rendido = importe - gastos_administrativos;
-            md.altaMinuta(new java.sql.Date(date.getTime()), apellido_comprador, nombre_comprador, manzana, parcela, importe, rendido, nro_cuota, tipo_pago, nro_random);
+            md.altaMinuta(new java.sql.Date(date.getTime()), apellido_comprador, nombre_comprador, manzana, parcela, importe, rendido, nro_cuota, dc.tablaDetallePago.getModel().getValueAt(row, 12).toString(), nro_random);
             return null;
         }
 

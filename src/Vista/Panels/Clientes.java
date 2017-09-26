@@ -11,6 +11,7 @@ import java.awt.Component;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.JOptionPane;
 import javax.swing.RowFilter;
+import javax.swing.table.JTableHeader;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableRowSorter;
 
@@ -322,6 +323,10 @@ public class Clientes extends javax.swing.JPanel {
 
         asignarBtn.setText("Asignar propiedad");
 
+        JTableHeader header = tablaCliente.getTableHeader();
+        Color micolor = new Color(36,47,65);
+        header.setForeground(Color.white);
+        header.setBackground(micolor);
         tablaCliente.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
@@ -339,6 +344,27 @@ public class Clientes extends javax.swing.JPanel {
             }
         });
         jScrollPane2.setViewportView(tablaCliente);
+        if (tablaCliente.getColumnModel().getColumnCount() > 0) {
+            tablaCliente.getColumnModel().getColumn(2).setResizable(false);
+            tablaCliente.getColumnModel().getColumn(2).setPreferredWidth(1);
+            tablaCliente.getColumnModel().getColumn(3).setResizable(false);
+            tablaCliente.getColumnModel().getColumn(3).setPreferredWidth(1);
+            tablaCliente.getColumnModel().getColumn(4).setResizable(false);
+            tablaCliente.getColumnModel().getColumn(5).setResizable(false);
+            tablaCliente.getColumnModel().getColumn(6).setResizable(false);
+            tablaCliente.getColumnModel().getColumn(7).setResizable(false);
+            tablaCliente.getColumnModel().getColumn(8).setResizable(false);
+            tablaCliente.getColumnModel().getColumn(9).setResizable(false);
+            tablaCliente.getColumnModel().getColumn(10).setResizable(false);
+            tablaCliente.getColumnModel().getColumn(11).setResizable(false);
+            tablaCliente.getColumnModel().getColumn(12).setResizable(false);
+            tablaCliente.getColumnModel().getColumn(13).setResizable(false);
+            tablaCliente.getColumnModel().getColumn(14).setResizable(false);
+            tablaCliente.getColumnModel().getColumn(15).setResizable(false);
+            tablaCliente.getColumnModel().getColumn(15).setPreferredWidth(1);
+            tablaCliente.getColumnModel().getColumn(16).setResizable(false);
+            tablaCliente.getColumnModel().getColumn(16).setPreferredWidth(1);
+        }
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);

@@ -26,33 +26,33 @@ import javax.swing.table.DefaultTableModel;
 public class ControladorDetalleCuota implements ActionListener{
     
     RendererTablaCuota r = new RendererTablaCuota();
-    DetalleCuota vistaDetallePago = new DetalleCuota();
+    DetalleCuota dc = new DetalleCuota();
     CuotaDAO dp = new CuotaDAO();
     Object [] detallePago;
     String apellido;
     String nombre;
     int id_control;
     
-    public ControladorDetalleCuota(DetalleCuota vistaDetallePago, String apellido, String nombre, String telefono, String barrio,String calle,int numero,int id_control) {
-        this.vistaDetallePago = vistaDetallePago;
+    public ControladorDetalleCuota(DetalleCuota dc, String apellido, String nombre, String telefono, String barrio,String calle,int numero,int id_control) {
+        this.dc = dc;
         this.apellido=apellido;
         this.nombre=nombre;
         this.id_control=id_control;
-        vistaDetallePago.volverBtn.addActionListener(this);
-        vistaDetallePago.agregarPagoBtn.addActionListener(this);
-        vistaDetallePago.generarReciboBtn.addActionListener(this);
-        vistaDetallePago.nombreLabel.setText(this.nombre);
-        vistaDetallePago.apellidoLabel.setText(this.apellido);
-        vistaDetallePago.direccionLabel.setText(barrio +", "+ calle +" "+ numero);
-        vistaDetallePago.telefonoLabel.setText(telefono);
-        this.vistaDetallePago.tablaDetallePago.setDefaultRenderer(Object.class, r);
+        dc.volverBtn.addActionListener(this);
+        dc.agregarPagoBtn.addActionListener(this);
+        dc.generarReciboBtn.addActionListener(this);
+        dc.nombreLabel.setText(this.nombre);
+        dc.apellidoLabel.setText(this.apellido);
+        dc.direccionLabel.setText(barrio +", "+ calle +" "+ numero);
+        dc.telefonoLabel.setText(telefono);
+        this.dc.tablaDetallePago.setDefaultRenderer(Object.class, r);
         llenarTabla(id_control);
     }
     
    public void llenarTabla(int idControl){
        int num_cuota=0;
         ResultSet rs = dp.listaDetalleCuota(idControl);
-        DefaultTableModel model = (DefaultTableModel) vistaDetallePago.tablaDetallePago.getModel();
+        DefaultTableModel model = (DefaultTableModel) dc.tablaDetallePago.getModel();
         model.setRowCount(0);
         try {
             while(rs.next()){
@@ -73,24 +73,24 @@ public class ControladorDetalleCuota implements ActionListener{
                 num_cuota ++;
             }
              CardLayout cl = (CardLayout)(Ventana.panelPrincipal.getLayout());
-             Ventana.panelPrincipal.add(vistaDetallePago, "Detalle_pago");
+             Ventana.panelPrincipal.add(dc, "Detalle_pago");
              cl.show(Ventana.panelPrincipal, "Detalle_pago");
         }catch(Exception e){
         System.out.println(e.getMessage().toString());}  }
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        if(e.getSource() == vistaDetallePago.volverBtn){
+        if(e.getSource() == dc.volverBtn){
             CardLayout cl = (CardLayout)(Ventana.panelPrincipal.getLayout());
             cl.next(Ventana.panelPrincipal);
         }
-        if(e.getSource() == vistaDetallePago.agregarPagoBtn){
-           ControladorAltaPago cac = new ControladorAltaPago((Frame) SwingUtilities.getWindowAncestor(vistaDetallePago), id_control, vistaDetallePago.tablaDetallePago.getRowCount());
+        if(e.getSource() == dc.agregarPagoBtn){
+           ControladorAltaPago cac = new ControladorAltaPago((Frame) SwingUtilities.getWindowAncestor(dc), id_control, dc.tablaDetallePago.getRowCount());
             llenarTabla(id_control);
         }
-        if(e.getSource() == vistaDetallePago.generarReciboBtn){
+        if(e.getSource() == dc.generarReciboBtn){
             
-            int row = vistaDetallePago.tablaDetallePago.getSelectedRow();
+            int row = dc.tablaDetallePago.getSelectedRow();
             switch(row){
                 case -1:
                 JOptionPane.showMessageDialog(null, "Seleccione un pago", "Atención", JOptionPane.INFORMATION_MESSAGE, null);
@@ -99,8 +99,7 @@ public class ControladorDetalleCuota implements ActionListener{
                 JOptionPane.showMessageDialog(null, "Fila no válida", "Atención", JOptionPane.INFORMATION_MESSAGE, null);
                 break;
                 default:
-                int nro_cuota = Integer.parseInt((vistaDetallePago.tablaDetallePago.getValueAt(vistaDetallePago.tablaDetallePago.getModel().getRowCount()-1, 0)).toString());
-                 new ControladorRecibo((Frame) SwingUtilities.getWindowAncestor(vistaDetallePago), id_control, nro_cuota, vistaDetallePago.tablaDetallePago.getModel().getValueAt(row, 12).toString());           
+                 new ControladorRecibo((Frame) SwingUtilities.getWindowAncestor(dc), id_control, dc ,row);           
             }
            
         }
