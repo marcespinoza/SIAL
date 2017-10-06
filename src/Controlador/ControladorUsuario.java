@@ -6,7 +6,7 @@
 package Controlador;
 
 import Modelo.UsuarioDAO;
-import Vista.Dialogs.Usuarios;
+import Vista.Dialogs.Configuracion;
 import Vista.Frame.Ventana;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
@@ -28,32 +28,32 @@ import javax.swing.table.DefaultTableModel;
  */
 public class ControladorUsuario implements MouseListener, ActionListener, KeyListener{
     
-    Usuarios vistaUsuarios;
+    Configuracion vistaConfiguracion;
+    ControladorPropietarios cp;
     UsuarioDAO ud = new UsuarioDAO();
     private Object [] usuarios;
 
-    public ControladorUsuario(Ventana ventana) {
-        vistaUsuarios = new Usuarios(ventana, true);
-        vistaUsuarios.tablaUsuarios.addMouseListener(this);
-        vistaUsuarios.agregar.addActionListener(this);
-        vistaUsuarios.eliminar.addActionListener(this);
-        vistaUsuarios.editar.addActionListener(this);
-        vistaUsuarios.limpiar.addActionListener(this);
-        vistaUsuarios.usuarioTxf.addKeyListener(this);
-        vistaUsuarios.contraseñaTxf.addKeyListener(this);
-        vistaUsuarios.apellidoTxf.addKeyListener(this);
-        vistaUsuarios.nombreTxf.addKeyListener(this);
-        vistaUsuarios.tipo_operador.addMouseListener(this);
-        vistaUsuarios.editar.setEnabled(false);
-        vistaUsuarios.setLocationRelativeTo(null);
+    public ControladorUsuario(Configuracion vistaConfiguracion) {
+        this.vistaConfiguracion = vistaConfiguracion;
+        vistaConfiguracion.usuario.tablaUsuarios.addMouseListener(this);
+        vistaConfiguracion.usuario.agregar.addActionListener(this);
+        vistaConfiguracion.usuario.eliminar.addActionListener(this);
+        vistaConfiguracion.usuario.editar.addActionListener(this);
+        vistaConfiguracion.usuario.limpiar.addActionListener(this);
+        vistaConfiguracion.usuario.usuarioTxf.addKeyListener(this);
+        vistaConfiguracion.usuario.contraseñaTxf.addKeyListener(this);
+        vistaConfiguracion.usuario.apellidoTxf.addKeyListener(this);
+        vistaConfiguracion.usuario.nombreTxf.addKeyListener(this);
+        vistaConfiguracion.usuario.tipo_operador.addMouseListener(this);
+        vistaConfiguracion.usuario.editar.setEnabled(false);
+        vistaConfiguracion.setLocationRelativeTo(null);
         llenarTabla();
-        vistaUsuarios.setVisible(true);
         
     }
     
     public void llenarTabla(){
         ResultSet rs = ud.obtenerUsuarios();
-        DefaultTableModel model = (DefaultTableModel) vistaUsuarios.tablaUsuarios.getModel();
+        DefaultTableModel model = (DefaultTableModel) vistaConfiguracion.usuario.tablaUsuarios.getModel();
         model.setRowCount(0);
         try {
             while(rs.next()){
@@ -73,18 +73,18 @@ public class ControladorUsuario implements MouseListener, ActionListener, KeyLis
 
     @Override
     public void mouseClicked(MouseEvent e) {
-          int row = vistaUsuarios.tablaUsuarios.getSelectedRow();
-          vistaUsuarios.usuarioTxf.setText(vistaUsuarios.tablaUsuarios.getModel().getValueAt(row,0).toString());
-          vistaUsuarios.contraseñaTxf.setText(vistaUsuarios.tablaUsuarios.getModel().getValueAt(row,1).toString());
-          vistaUsuarios.apellidoTxf.setText(vistaUsuarios.tablaUsuarios.getModel().getValueAt(row,2).toString());
-          vistaUsuarios.nombreTxf.setText(vistaUsuarios.tablaUsuarios.getModel().getValueAt(row,3).toString());
-          System.out.println(vistaUsuarios.tablaUsuarios.getModel().getValueAt(row,4).toString());
-          switch(vistaUsuarios.tablaUsuarios.getModel().getValueAt(row,4).toString()){              
-              case "operador":vistaUsuarios.tipo_operador.setSelectedIndex(2);
+          int row = vistaConfiguracion.usuario.tablaUsuarios.getSelectedRow();
+          vistaConfiguracion.usuario.usuarioTxf.setText(vistaConfiguracion.usuario.tablaUsuarios.getModel().getValueAt(row,0).toString());
+          vistaConfiguracion.usuario.contraseñaTxf.setText(vistaConfiguracion.usuario.tablaUsuarios.getModel().getValueAt(row,1).toString());
+          vistaConfiguracion.usuario.apellidoTxf.setText(vistaConfiguracion.usuario.tablaUsuarios.getModel().getValueAt(row,2).toString());
+          vistaConfiguracion.usuario.nombreTxf.setText(vistaConfiguracion.usuario.tablaUsuarios.getModel().getValueAt(row,3).toString());
+          System.out.println(vistaConfiguracion.usuario.tablaUsuarios.getModel().getValueAt(row,4).toString());
+          switch(vistaConfiguracion.usuario.tablaUsuarios.getModel().getValueAt(row,4).toString()){              
+              case "operador":vistaConfiguracion.usuario.tipo_operador.setSelectedIndex(2);
               break;
-              case "administrador":vistaUsuarios.tipo_operador.setSelectedIndex(1);
+              case "administrador":vistaConfiguracion.usuario.tipo_operador.setSelectedIndex(1);
               break;
-              default:vistaUsuarios.tipo_operador.setSelectedIndex(1);
+              default:vistaConfiguracion.usuario.tipo_operador.setSelectedIndex(1);
               break;
           }
     }
@@ -107,36 +107,36 @@ public class ControladorUsuario implements MouseListener, ActionListener, KeyLis
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        if(e.getSource()==vistaUsuarios.limpiar){
+        if(e.getSource()==vistaConfiguracion.usuario.limpiar){
            limpiarCampos();
         }
         
-        if(e.getSource()==vistaUsuarios.editar){
-           ud.actualizarUsuario(vistaUsuarios.usuarioTxf.getText(), vistaUsuarios.contraseñaTxf.getText(), vistaUsuarios.apellidoTxf.getText(), vistaUsuarios.nombreTxf.getText(), vistaUsuarios.tipo_operador.getSelectedItem().toString());
+        if(e.getSource()==vistaConfiguracion.usuario.editar){
+           ud.actualizarUsuario(vistaConfiguracion.usuario.usuarioTxf.getText(), vistaConfiguracion.usuario.contraseñaTxf.getText(), vistaConfiguracion.usuario.apellidoTxf.getText(), vistaConfiguracion.usuario.nombreTxf.getText(), vistaConfiguracion.usuario.tipo_operador.getSelectedItem().toString());
            llenarTabla();
         }
         
-        if(e.getSource()==vistaUsuarios.eliminar){
-            int row = vistaUsuarios.tablaUsuarios.getSelectedRow();
+        if(e.getSource()==vistaConfiguracion.usuario.eliminar){
+            int row = vistaConfiguracion.usuario.tablaUsuarios.getSelectedRow();
             if(row==-1){
               JOptionPane.showMessageDialog(null, "Seleccione un usuario", "Atención", JOptionPane.INFORMATION_MESSAGE, null);
             }else{
               ImageIcon icon = new ImageIcon("src/Imagenes/Iconos/warning.png");   
-             int reply = JOptionPane.showConfirmDialog(null, "Eliminar a "+vistaUsuarios.tablaUsuarios.getModel().getValueAt(row, 2)+" "+""+" "+vistaUsuarios.tablaUsuarios.getModel().getValueAt(row, 3)+"?",
+             int reply = JOptionPane.showConfirmDialog(null, "Eliminar a "+vistaConfiguracion.usuario.tablaUsuarios.getModel().getValueAt(row, 2)+" "+""+" "+vistaConfiguracion.usuario.tablaUsuarios.getModel().getValueAt(row, 3)+"?",
                      "Advertencia",JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, icon);
               if (reply == JOptionPane.YES_OPTION) {
-               String usuario = vistaUsuarios.tablaUsuarios.getModel().getValueAt(row,0).toString();
+               String usuario = vistaConfiguracion.usuario.tablaUsuarios.getModel().getValueAt(row,0).toString();
                ud.eliminarUsuario(usuario);
+               limpiarCampos();
                llenarTabla();
-              llenarTabla();
                  }   
              
             }
         }
         
-           if(e.getSource()==vistaUsuarios.agregar){
+           if(e.getSource()==vistaConfiguracion.usuario.agregar){
              if(validarCampos()){
-              ud.agregarUsuario(vistaUsuarios.usuarioTxf.getText(), vistaUsuarios.contraseñaTxf.getText(), vistaUsuarios.apellidoTxf.getText(), vistaUsuarios.nombreTxf.getText(), String.valueOf(vistaUsuarios.tipo_operador.getSelectedItem()));
+              ud.agregarUsuario(vistaConfiguracion.usuario.usuarioTxf.getText(), vistaConfiguracion.usuario.contraseñaTxf.getText(), vistaConfiguracion.usuario.apellidoTxf.getText(), vistaConfiguracion.usuario.nombreTxf.getText(), String.valueOf(vistaConfiguracion.usuario.tipo_operador.getSelectedItem()));
               llenarTabla();
               limpiarCampos();
              }
@@ -144,45 +144,45 @@ public class ControladorUsuario implements MouseListener, ActionListener, KeyLis
     }
     
     private void limpiarCampos(){
-         vistaUsuarios.usuarioTxf.setText("");
-         vistaUsuarios.contraseñaTxf.setText("");
-         vistaUsuarios.apellidoTxf.setText("");
-         vistaUsuarios.nombreTxf.setText("");
+         vistaConfiguracion.usuario.usuarioTxf.setText("");
+         vistaConfiguracion.usuario.contraseñaTxf.setText("");
+         vistaConfiguracion.usuario.apellidoTxf.setText("");
+         vistaConfiguracion.usuario.nombreTxf.setText("");
     }
     
      public boolean validarCampos(){
         boolean bandera = true;
        
-        if(vistaUsuarios.usuarioTxf.getText().isEmpty()){
-         vistaUsuarios.usuarioTxf.setBorder(BorderFactory.createLineBorder(Color.RED, 1));
+        if(vistaConfiguracion.usuario.usuarioTxf.getText().isEmpty()){
+         vistaConfiguracion.usuario.usuarioTxf.setBorder(BorderFactory.createLineBorder(Color.RED, 1));
          bandera=false;
         }else{
-         vistaUsuarios.usuarioTxf.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
+         vistaConfiguracion.usuario.usuarioTxf.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
         }
-        if(vistaUsuarios.contraseñaTxf.getText().isEmpty()){
-         vistaUsuarios.contraseñaTxf.setBorder(BorderFactory.createLineBorder(Color.RED, 1));
+        if(vistaConfiguracion.usuario.contraseñaTxf.getText().isEmpty()){
+         vistaConfiguracion.usuario.contraseñaTxf.setBorder(BorderFactory.createLineBorder(Color.RED, 1));
          bandera=false;
         }else{
-         vistaUsuarios.contraseñaTxf.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
+         vistaConfiguracion.usuario.contraseñaTxf.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
         }
-        if(vistaUsuarios.apellidoTxf.getText().isEmpty()){
-         vistaUsuarios.apellidoTxf.setBorder(BorderFactory.createLineBorder(Color.RED, 1));
+        if(vistaConfiguracion.usuario.apellidoTxf.getText().isEmpty()){
+         vistaConfiguracion.usuario.apellidoTxf.setBorder(BorderFactory.createLineBorder(Color.RED, 1));
          bandera=false;
         }else{
-         vistaUsuarios.apellidoTxf.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
+         vistaConfiguracion.usuario.apellidoTxf.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
         }
-        if(vistaUsuarios.nombreTxf.getText().isEmpty()){
-         vistaUsuarios.nombreTxf.setBorder(BorderFactory.createLineBorder(Color.RED, 1));
+        if(vistaConfiguracion.usuario.nombreTxf.getText().isEmpty()){
+         vistaConfiguracion.usuario.nombreTxf.setBorder(BorderFactory.createLineBorder(Color.RED, 1));
          bandera=false;
         }else{
-         vistaUsuarios.nombreTxf.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
+         vistaConfiguracion.usuario.nombreTxf.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
         }
         return bandera;
      }
 
     @Override
     public void keyTyped(KeyEvent e) {
-           vistaUsuarios.editar.setEnabled(true);
+           vistaConfiguracion.usuario.editar.setEnabled(true);
     }
 
     @Override

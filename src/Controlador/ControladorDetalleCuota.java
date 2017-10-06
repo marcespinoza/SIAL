@@ -6,6 +6,7 @@
 package Controlador;
 
 import Modelo.CuotaDAO;
+import Modelo.DchoPosesionDAO;
 import Modelo.RendererTablaCuota;
 import Vista.Frame.Ventana;
 import Vista.Panels.DetalleCuota;
@@ -27,8 +28,10 @@ public class ControladorDetalleCuota implements ActionListener{
     
     RendererTablaCuota r = new RendererTablaCuota();
     DetalleCuota dc = new DetalleCuota();
-    CuotaDAO dp = new CuotaDAO();
+    CuotaDAO cd = new CuotaDAO();
+    DchoPosesionDAO dp = new DchoPosesionDAO();
     Object [] detallePago;
+    Object [] dchoPosesion;
     String apellido;
     String nombre;
     int id_control;
@@ -47,11 +50,30 @@ public class ControladorDetalleCuota implements ActionListener{
         dc.telefonoLabel.setText(telefono);
         this.dc.tablaDetallePago.setDefaultRenderer(Object.class, r);
         llenarTabla(id_control);
+        llearTablaDchoPosesion(id_control);
     }
+    
+   public void llearTablaDchoPosesion(int id_control){
+       int num_cuota=1;
+        ResultSet rs = dp.listarCuenta(id_control);
+        DefaultTableModel model = (DefaultTableModel) dc.tablaDchoPosesion.getModel();
+        model.setRowCount(0);
+        try {
+            while(rs.next()){
+                String fecha = rs.getString(1);
+                String monto = rs.getString(2);
+                String detalle = rs.getString(3);    
+                dchoPosesion= new Object[] {num_cuota,fecha, monto, detalle};                    
+                model.addRow(dchoPosesion); 
+                num_cuota ++;
+            }}catch(Exception e){
+        System.out.println(e.getMessage().toString());
+        } 
+   }  
     
    public void llenarTabla(int idControl){
        int num_cuota=0;
-        ResultSet rs = dp.listaDetalleCuota(idControl);
+        ResultSet rs = cd.listaDetalleCuota(idControl);
         DefaultTableModel model = (DefaultTableModel) dc.tablaDetallePago.getModel();
         model.setRowCount(0);
         try {
@@ -76,7 +98,9 @@ public class ControladorDetalleCuota implements ActionListener{
              Ventana.panelPrincipal.add(dc, "Detalle_pago");
              cl.show(Ventana.panelPrincipal, "Detalle_pago");
         }catch(Exception e){
-        System.out.println(e.getMessage().toString());}  }
+        System.out.println(e.getMessage().toString());
+        } 
+   }
 
     @Override
     public void actionPerformed(ActionEvent e) {
@@ -87,6 +111,7 @@ public class ControladorDetalleCuota implements ActionListener{
         if(e.getSource() == dc.agregarPagoBtn){
            ControladorAltaPago cac = new ControladorAltaPago((Frame) SwingUtilities.getWindowAncestor(dc), id_control, dc.tablaDetallePago.getRowCount());
             llenarTabla(id_control);
+            llearTablaDchoPosesion(id_control);
         }
         if(e.getSource() == dc.generarReciboBtn){
             

@@ -34,6 +34,7 @@ public class AltaCuota extends javax.swing.JDialog {
     private void initComponents() {
 
         jLabel4 = new javax.swing.JLabel();
+        tipo_cuenta = new javax.swing.ButtonGroup();
         aceptarBtn = new javax.swing.JButton();
         cancelarBtn = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
@@ -50,6 +51,8 @@ public class AltaCuota extends javax.swing.JDialog {
         jLabel7 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
         gastos = new javax.swing.JTextField();
+        chk_cuota = new javax.swing.JRadioButton();
+        chk_dcho_posesion = new javax.swing.JRadioButton();
 
         jLabel4.setText("Fecha");
 
@@ -94,6 +97,10 @@ public class AltaCuota extends javax.swing.JDialog {
 
         gastos.setEditable(false);
 
+        chk_cuota.setText("Cuota");
+
+        chk_dcho_posesion.setText("Cta. derecho posesion");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -120,14 +127,22 @@ public class AltaCuota extends javax.swing.JDialog {
                             .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 246, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(tipoPago, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(interes, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(gastos, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(cuota_total, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(gastos, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(30, Short.MAX_VALUE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(chk_cuota)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(chk_dcho_posesion)))))
+                .addContainerGap(27, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap(46, Short.MAX_VALUE)
+                .addContainerGap(14, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(chk_cuota)
+                    .addComponent(chk_dcho_posesion))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(cuota_total, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel6))
@@ -217,6 +232,8 @@ public class AltaCuota extends javax.swing.JDialog {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     public javax.swing.JButton aceptarBtn;
     public javax.swing.JButton cancelarBtn;
+    public javax.swing.JRadioButton chk_cuota;
+    public javax.swing.JRadioButton chk_dcho_posesion;
     public javax.swing.JTextField cuota_total;
     public javax.swing.JTextArea detallePago;
     public javax.swing.JTextField gastos;
@@ -232,5 +249,6 @@ public class AltaCuota extends javax.swing.JDialog {
     private javax.swing.JScrollPane jScrollPane3;
     public javax.swing.JTextArea observacionesPago;
     public javax.swing.JComboBox<String> tipoPago;
+    public javax.swing.ButtonGroup tipo_cuenta;
     // End of variables declaration//GEN-END:variables
 }

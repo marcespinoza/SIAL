@@ -6,6 +6,7 @@
 package Vista.Frame;
 import Controlador.ControladorCliente;
 import Controlador.ControladorBotones;
+import Controlador.ControladorConfiguracion;
 import Controlador.ControladorLogin;
 import Controlador.ControladorMinuta;
 import Controlador.ControladorUsuario;
@@ -88,7 +89,7 @@ public class Ventana extends javax.swing.JFrame implements ActionListener{
         jMenuBar1 = new javax.swing.JMenuBar();
         MenuInicio = new javax.swing.JMenu();
         cerrarSesion = new javax.swing.JMenuItem();
-        Opciones = new javax.swing.JMenu();
+        opciones = new javax.swing.JMenu();
         propietarios = new javax.swing.JMenuItem();
         lotes = new javax.swing.JMenuItem();
         menuUsuarios = new javax.swing.JMenuItem();
@@ -239,10 +240,10 @@ public class Ventana extends javax.swing.JFrame implements ActionListener{
 
         jMenuBar1.add(MenuInicio);
 
-        Opciones.setText("Opciones");
+        opciones.setText("Configuracion");
 
         propietarios.setText("Propietarios");
-        Opciones.add(propietarios);
+        opciones.add(propietarios);
 
         lotes.setText("Lotes");
         lotes.addActionListener(new java.awt.event.ActionListener() {
@@ -250,12 +251,12 @@ public class Ventana extends javax.swing.JFrame implements ActionListener{
                 lotesActionPerformed(evt);
             }
         });
-        Opciones.add(lotes);
+        opciones.add(lotes);
 
         menuUsuarios.setText("Usuarios");
-        Opciones.add(menuUsuarios);
+        opciones.add(menuUsuarios);
 
-        jMenuBar1.add(Opciones);
+        jMenuBar1.add(opciones);
 
         info.setText("Info");
 
@@ -315,7 +316,6 @@ public class Ventana extends javax.swing.JFrame implements ActionListener{
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     public static javax.swing.JMenu MenuInicio;
-    private javax.swing.JMenu Opciones;
     public javax.swing.JMenuItem about;
     public static javax.swing.JLabel apellidoUsuario;
     public static javax.swing.JButton btnClientes;
@@ -340,6 +340,7 @@ public class Ventana extends javax.swing.JFrame implements ActionListener{
     private javax.swing.JMenuItem menuUsuarios;
     private Vista.Panels.Minuta minuta;
     public static javax.swing.JLabel nombreUsuario;
+    private javax.swing.JMenu opciones;
     private Vista.Panels.PanelBotones panelBotones1;
     public static javax.swing.JPanel panelPrincipal;
     private javax.swing.JMenuItem propietarios;
@@ -360,7 +361,7 @@ public void inicializarBotones(){
     @Override
     public void actionPerformed(ActionEvent e) {
         if(e.getSource().equals(menuUsuarios)){
-             new ControladorUsuario(this);
+             new ControladorConfiguracion(this);
         }
         if(e.getSource().equals(about)){
           ImageIcon icon = new ImageIcon("src/Imagenes/Iconos/about.png");   

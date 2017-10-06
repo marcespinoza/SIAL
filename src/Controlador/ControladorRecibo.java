@@ -86,11 +86,37 @@ public class ControladorRecibo implements ActionListener{
         ar.monotributo.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if(ar.monotributo.isSelected()){
-                    ar.cuit.setEnabled(true);
-                }else{
-                    ar.cuit.setEnabled(false);
-                }
+                    ar.cuit.setEnabled(true);                
+            }
+        });
+        ar.cons_final.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                    ar.cuit.setEnabled(false);                
+            }
+        });
+        ar.resp_insc.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                    ar.cuit.setEnabled(false);                
+            }
+        });
+        ar.resp_no_insc.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                    ar.cuit.setEnabled(false);                
+            }
+        });
+        ar.exento.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                    ar.cuit.setEnabled(false);                
+            }
+        });
+        ar.cons_final.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                    ar.cuit.setEnabled(false);                
             }
         });
         nro_random = random.nextInt(100);
@@ -142,7 +168,7 @@ public class ControladorRecibo implements ActionListener{
             importe = cuota_total ;
             ar.importe.setText(String.valueOf(importe));
             ar.total_pagado.setText(String.valueOf(importe));
-            ar.detalle.setText("Paga cuota "+nro_cuota+"/"+cant_cuotas+    "\r\nDimension "+dimension +     "\r\n"+ barrio +" "+ " Mz. "+manzana +" Pc. "+ parcela+   "\r\n"+dc.tablaDetallePago.getModel().getValueAt(row, 2).toString());
+            ar.detalle.setText("Paga cuota "+dc.tablaDetallePago.getModel().getValueAt(row, 0).toString()+"/"+cant_cuotas+    "\r\nDimension "+dimension +     "\r\n"+ barrio +" "+ " Mz. "+manzana +" Pc. "+ parcela+   "\r\n"+dc.tablaDetallePago.getModel().getValueAt(row, 2).toString());
         } catch (Exception e) {
         }
     }

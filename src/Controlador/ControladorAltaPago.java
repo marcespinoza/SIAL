@@ -6,6 +6,7 @@
 package Controlador;
 
 import Modelo.CuotaDAO;
+import Modelo.DchoPosesionDAO;
 import Modelo.FichaControlDAO;
 import Vista.Dialogs.AltaCuota;
 import java.awt.Color;
@@ -32,6 +33,7 @@ public class ControladorAltaPago implements ActionListener, KeyListener{
     
     Frame parent;
     CuotaDAO cd = new CuotaDAO();
+    DchoPosesionDAO dp = new DchoPosesionDAO();
     AltaCuota ac;
     int id_control;
     int row_count;
@@ -43,6 +45,9 @@ public class ControladorAltaPago implements ActionListener, KeyListener{
         this.id_control=id_control;
         this.row_count=row_count;
         ac = new AltaCuota(parent, true);
+        ac.tipo_cuenta.add(ac.chk_cuota);
+        ac.tipo_cuenta.add(ac.chk_dcho_posesion);
+        ac.chk_cuota.setSelected(true);
         ac.interes.addKeyListener(this);
         ac.aceptarBtn.addActionListener(this);
         ac.cancelarBtn.addActionListener(this);
@@ -69,6 +74,7 @@ public class ControladorAltaPago implements ActionListener, KeyListener{
     public void actionPerformed(ActionEvent e) {
         
            if(e.getSource() == ac.aceptarBtn){
+              if(ac.chk_cuota.isSelected()){
                if(validarCampos()){
                FichaControlDAO fcd = new FichaControlDAO();
                ResultSet rs = fcd.obtenerFichaControl(id_control);
@@ -85,7 +91,14 @@ public class ControladorAltaPago implements ActionListener, KeyListener{
                    calcularValores(ultimo_saldo, cuota_pura, gastos, bolsa_cemento, ultimo_saldo_bolsa_cemento);                
                 
                 } catch (SQLException ex) {
-               }}
+               }
+               }
+              }else{                  
+                   DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
+                   Date date = new Date(); 
+                  dp.altaDchoPosesion(new java.sql.Date(date.getTime()), Double.parseDouble(ac.cuota_total.getText()), ac.detallePago.getText(), id_control);
+                  ac.dispose();
+              }
            }
             if(e.getSource() == ac.cancelarBtn){
                ac.dispose();
