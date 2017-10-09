@@ -42,7 +42,7 @@ public class PropietarioDAO {
      public void editarPropietarios(String apellidos, String nombres, String cuit){
          try {
              Connection con = conexion.getConexion();
-             PreparedStatement pstm = con.prepareStatement("update propietarios " +
+             PreparedStatement pstm = con.prepareStatement("update propietario" +
                      "set apellidos= ?  ,  " +
                      "nombres= ? , " +
                      "cuit= ?  " +
@@ -69,8 +69,35 @@ public class PropietarioDAO {
         }
      return rs;
      }
+     
+       public ResultSet obtenerApellidos(){
+          ResultSet rs = null;
+     try {
+          Connection con = conexion.getConexion();         
+          String listar = "SELECT apellidos from propietario"; 
+          Statement st = con.createStatement();
+          rs = st.executeQuery(listar);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+     return rs;
+     }
+     
+       public ResultSet obtenerNombres(String apellidos){
+          ResultSet rs = null;
+     try {
+          Connection con = conexion.getConexion();         
+          String listar = "SELECT nombres, cuit from propietario where apellidos='"+apellidos+"'"; 
+          Statement st = con.createStatement();
+          rs = st.executeQuery(listar);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+     return rs;
+     }  
+       
      public void eliminarPropietarios(String cuit){
-          try {
+         try {
          Connection con = conexion.getConexion();
          String eliminar = "delete from propietario where cuit='"+cuit+"'";
          PreparedStatement ps = con.prepareStatement(eliminar);
