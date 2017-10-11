@@ -9,6 +9,7 @@ import Modelo.ClienteDAO;
 import Modelo.ReferenciaDAO;
 import Vista.Dialogs.AltaCliente;
 import Vista.Frame.Ventana;
+import Vista.Panels.Clientes;
 import java.awt.Color;
 import java.awt.Frame;
 import java.awt.event.ActionEvent;
@@ -33,10 +34,12 @@ public class ControladorAltaCliente implements ActionListener{
     ClienteDAO cd = new ClienteDAO();
     ReferenciaDAO rd = new ReferenciaDAO();
     ControladorCliente cc = new ControladorCliente();
+    Clientes clientes;
     
     
-    public ControladorAltaCliente(Ventana ventana){
-        ac = new AltaCliente(ventana, true);   
+    public ControladorAltaCliente(Ventana ventana, Clientes clientes){
+        ac = new AltaCliente(ventana, true);  
+        this.clientes=clientes;
         this.ac.aceptar.addActionListener(this);
         this.ac.cancelar.addActionListener(this);
         ac.setVisible(true);
@@ -146,8 +149,8 @@ public class ControladorAltaCliente implements ActionListener{
 
        @Override
        public void done() { 
-             rd.altaReferencia(ac.telefonoRef.getText(), ac.apellidosRef.getText(), ac.nombresRef.getText(), ac.parentescoRef.getText(), Integer.parseInt(ac.documento.getText()));
-             cc.llenarTabla();
+            rd.altaReferencia(ac.telefonoRef.getText(), ac.apellidosRef.getText(), ac.nombresRef.getText(), ac.parentescoRef.getText(), Integer.parseInt(ac.documento.getText()));
+            cc.llenarTabla(0);
             ac.dispose();   
        }
     

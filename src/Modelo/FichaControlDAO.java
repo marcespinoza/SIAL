@@ -52,6 +52,18 @@ public class FichaControlDAO {
      return rs;
  }
     
+     public ResultSet obtenerMontoCuotas(){
+     ResultSet rs = null;
+     try {
+          Connection con = conexion.getConexion();
+          String listar = "SELECT cuota_pura FROM ficha_control"; 
+          Statement st = con.createStatement();
+          rs = st.executeQuery(listar);
+        } catch (Exception e) {
+        }
+     return rs;
+ }
+    
     public ResultSet obtenerFichaControl(int id_control){
      ResultSet rs = null;
      try {

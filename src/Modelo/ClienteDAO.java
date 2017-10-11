@@ -26,11 +26,25 @@ public class ClienteDAO {
     }
     
  public void obtenerClientes(){}
+ 
  public ResultSet clientesPorLotes(){
      ResultSet rs = null;
      try {
           Connection con = conexion.getConexion();
           String listar = "SELECT c.Dni, c.Apellidos, c.Nombres,c.fecha_nacimiento, c.barrio, c.calle, c.numero, c.Telefono1, c.telefono2, c.trabajo, f.Id_control, f.cantidad_cuotas, f.gastos, f.bolsa_cemento, f.lote_Barrio, f.lote_Manzana, f.lote_Parcela FROM cliente c LEFT JOIN ficha_control f ON c.Dni = f.cliente_Dni"; 
+          Statement st = con.createStatement();
+          rs = st.executeQuery(listar);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+     return rs;
+ }
+ 
+  public ResultSet clientesPorCuotas(double monto){
+     ResultSet rs = null;
+     try {
+          Connection con = conexion.getConexion();
+          String listar = "SELECT c.Dni, c.Apellidos, c.Nombres,c.fecha_nacimiento, c.barrio, c.calle, c.numero, c.Telefono1, c.telefono2, c.trabajo, f.Id_control, f.cantidad_cuotas, f.gastos, f.bolsa_cemento, f.lote_Barrio, f.lote_Manzana, f.lote_Parcela FROM cliente c LEFT JOIN ficha_control f ON c.Dni = f.cliente_Dni where f.cuota_pura='"+monto+"'"; 
           Statement st = con.createStatement();
           rs = st.executeQuery(listar);
         } catch (Exception e) {

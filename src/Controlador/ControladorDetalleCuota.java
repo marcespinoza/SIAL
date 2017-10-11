@@ -11,11 +11,17 @@ import Modelo.RendererTablaCuota;
 import Vista.Frame.Ventana;
 import Vista.Panels.DetalleCuota;
 import java.awt.CardLayout;
-import java.awt.Color;
 import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.sql.ResultSet;
+import java.util.Properties;
+import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
@@ -35,12 +41,16 @@ public class ControladorDetalleCuota implements ActionListener{
     String apellido;
     String nombre;
     int id_control;
+    JFileChooser chooser;
+    File f;
+    File configFile = new File("config.properties");
     
     public ControladorDetalleCuota(DetalleCuota dc, String apellido, String nombre, String telefono, String barrio,String calle,int numero,int id_control) {
         this.dc = dc;
         this.apellido=apellido;
         this.nombre=nombre;
         this.id_control=id_control;
+        dc.guardar.addActionListener(this);
         dc.volverBtn.addActionListener(this);
         dc.agregarPagoBtn.addActionListener(this);
         dc.generarReciboBtn.addActionListener(this);
@@ -51,7 +61,23 @@ public class ControladorDetalleCuota implements ActionListener{
         this.dc.tablaDetallePago.setDefaultRenderer(Object.class, r);
         llenarTabla(id_control);
         llearTablaDchoPosesion(id_control);
+        cargarPathMinuta();
     }
+    
+    public void cargarPathMinuta() {
+        try {
+          FileReader reader = new FileReader(configFile);
+          Properties props = new Properties();
+            props.load(reader); 
+          String pathMinuta = props.getProperty("pathRecibo");
+          dc.path.setText(pathMinuta);
+         reader.close();
+     } catch (FileNotFoundException ex) {
+    // file does not exist
+     } catch (IOException ex) {
+    // I/O error
+     }
+     } 
     
    public void llearTablaDchoPosesion(int id_control){
        int num_cuota=1;
@@ -114,20 +140,42 @@ public class ControladorDetalleCuota implements ActionListener{
             llearTablaDchoPosesion(id_control);
         }
         if(e.getSource() == dc.generarReciboBtn){
-            
+          if(!dc.path.getText().equals("")){            
             int row = dc.tablaDetallePago.getSelectedRow();
             switch(row){
                 case -1:
-                JOptionPane.showMessageDialog(null, "Seleccione un pago", "Atención", JOptionPane.INFORMATION_MESSAGE, null);
+                JOptionPane.showMessageDialog(null, "Seleccione una cuota", "Atención", JOptionPane.INFORMATION_MESSAGE, null);
                 break;
                 case 0:
-                JOptionPane.showMessageDialog(null, "Fila no válida", "Atención", JOptionPane.INFORMATION_MESSAGE, null);
+                JOptionPane.showMessageDialog(null, "Cuota no válida", "Atención", JOptionPane.INFORMATION_MESSAGE, null);
                 break;
                 default:
                  new ControladorRecibo((Frame) SwingUtilities.getWindowAncestor(dc), id_control, dc ,row);           
             }
-           
+          }else{
+            JOptionPane.showMessageDialog(null, "Debe seleccionar ubicación donde guardar el recibo", "Atención", JOptionPane.INFORMATION_MESSAGE, null);
+            }
         }
+        if(e.getSource() == dc.guardar){
+            chooser = new JFileChooser();
+                 chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+                chooser.showOpenDialog(chooser);
+                f = chooser.getSelectedFile();
+                String path = f.getAbsolutePath();
+                dc.path.setText(path);
+                 try {
+                Properties props = new Properties();
+                props.setProperty("pathRecibo", path);
+                FileWriter writer = new FileWriter(configFile);
+                props.store(writer, "config");
+                writer.close();
+                } catch (FileNotFoundException ex) {
+                 // file does not exist
+                } catch (IOException ex) {
+                   // I/O error
+                }
+        }
+        
     }
     
 }

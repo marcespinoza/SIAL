@@ -46,7 +46,7 @@
                       <Group type="103" groupAlignment="3" attributes="0">
                           <Component id="generarMinuta" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="guardar_en" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="path" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="path" alignment="3" min="-2" pref="26" max="-2" attributes="0"/>
                       </Group>
                   </Group>
                   <Group type="102" attributes="0">

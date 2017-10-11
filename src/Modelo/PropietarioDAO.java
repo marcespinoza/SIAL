@@ -96,6 +96,19 @@ public class PropietarioDAO {
      return rs;
      }  
        
+        public ResultSet obtenerCuit(String apellidos, String nombres){
+          ResultSet rs = null;
+     try {
+          Connection con = conexion.getConexion();  
+          String listar = "SELECT cuit from propietario where apellidos='"+apellidos+"' and nombres = '"+nombres+"'"; 
+          Statement st = con.createStatement();
+          rs = st.executeQuery(listar);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+     return rs;
+     }  
+       
      public void eliminarPropietarios(String cuit){
          try {
          Connection con = conexion.getConexion();

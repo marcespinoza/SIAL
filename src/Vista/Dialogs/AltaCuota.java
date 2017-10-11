@@ -46,13 +46,13 @@ public class AltaCuota extends javax.swing.JDialog {
         jScrollPane3 = new javax.swing.JScrollPane();
         detallePago = new javax.swing.JTextArea();
         jLabel6 = new javax.swing.JLabel();
-        interes = new javax.swing.JTextField();
         cuota_total = new javax.swing.JTextField();
         jLabel7 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
         gastos = new javax.swing.JTextField();
         chk_cuota = new javax.swing.JRadioButton();
         chk_dcho_posesion = new javax.swing.JRadioButton();
+        interes = new javax.swing.JFormattedTextField();
 
         jLabel4.setText("Fecha");
 
@@ -101,6 +101,8 @@ public class AltaCuota extends javax.swing.JDialog {
 
         chk_dcho_posesion.setText("Cta. derecho posesion");
 
+        interes.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#0.00"))));
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -126,13 +128,14 @@ public class AltaCuota extends javax.swing.JDialog {
                             .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 246, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 246, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(tipoPago, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(interes, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(gastos, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(cuota_total, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(chk_cuota)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(chk_dcho_posesion)))))
+                                .addComponent(chk_dcho_posesion))
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                .addComponent(interes, javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(gastos, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 105, Short.MAX_VALUE)))))
                 .addContainerGap(27, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -237,7 +240,7 @@ public class AltaCuota extends javax.swing.JDialog {
     public javax.swing.JTextField cuota_total;
     public javax.swing.JTextArea detallePago;
     public javax.swing.JTextField gastos;
-    public javax.swing.JTextField interes;
+    public javax.swing.JFormattedTextField interes;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;

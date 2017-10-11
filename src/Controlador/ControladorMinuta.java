@@ -39,6 +39,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFileChooser;
@@ -58,6 +59,7 @@ public class ControladorMinuta implements MouseListener, ActionListener {
     ResultSet resultset = null;
     File f;
     JFileChooser chooser;
+    File configFile = new File("config.properties");
 
     public ControladorMinuta(Minuta vistaMinuta) {
         this.vistaMinuta=vistaMinuta;
@@ -65,13 +67,24 @@ public class ControladorMinuta implements MouseListener, ActionListener {
         this.vistaMinuta.generarMinuta.addActionListener(this);
         this.vistaMinuta.guardar_en.addActionListener(this);
         this.vistaMinuta.buscar.addActionListener(this);
+        cargarPathMinuta();
         llenarTablaFecha();
     }
 
-    public ControladorMinuta() {
-    }
-    
-    
+    public void cargarPathMinuta() {
+        try {
+          FileReader reader = new FileReader(configFile);
+          Properties props = new Properties();
+            props.load(reader); 
+          String pathMinuta = props.getProperty("pathMinuta");
+          vistaMinuta.path.setText(pathMinuta);
+         reader.close();
+     } catch (FileNotFoundException ex) {
+    // file does not exist
+     } catch (IOException ex) {
+    // I/O error
+     }
+     }   
     
     public void llenarTabla(ResultSet rs){
         resultset = rs;
@@ -133,7 +146,18 @@ public class ControladorMinuta implements MouseListener, ActionListener {
                 f = chooser.getSelectedFile();
                 String path = f.getAbsolutePath();
                 vistaMinuta.path.setText(path);
-            }
+                try {
+                Properties props = new Properties();
+                props.setProperty("pathMinuta", path);
+                FileWriter writer = new FileWriter(configFile);
+                props.store(writer, "config");
+                writer.close();
+                } catch (FileNotFoundException ex) {
+                 // file does not exist
+                } catch (IOException ex) {
+                   // I/O error
+                }
+                }
             
             if(e.getSource() == vistaMinuta.buscar){
                 SimpleDateFormat dcn = new SimpleDateFormat("dd-MM-yyyy");

@@ -168,15 +168,14 @@ public class ControladorEditarCliente implements ActionListener{
 
         @Override
         protected Void doInBackground() throws Exception {            
-             cd.editarCliente(Integer.parseInt(ac.documento.getText()), ac.apellidos.getText(), ac.nombres.getText(), new java.sql.Date(ac.fech_nacimiento.getDate().getTime()), ac.barrio.getText(), ac.calle.getText(), Integer.parseInt(ac.numero.getText()), ac.telefono1.getText(), ac.telefono2.getText(), ac.trabajo.getText(),Integer.parseInt(cliente.get(2).toString()));
-            
+             cd.editarCliente(Integer.parseInt(ac.documento.getText()), ac.apellidos.getText(), ac.nombres.getText(), new java.sql.Date(ac.fech_nacimiento.getDate().getTime()), ac.barrio.getText(), ac.calle.getText(), Integer.parseInt(ac.numero.getText()), ac.telefono1.getText(), ac.telefono2.getText(), ac.trabajo.getText(),Integer.parseInt(cliente.get(2).toString()));        
             return null;
         }
 
        @Override
        public void done() { 
              rd.editarReferencia(Integer.parseInt(ac.documento.getText()),ac.telefonoRef.getText(), ac.apellidosRef.getText(), ac.nombresRef.getText(), ac.parentescoRef.getText(), referencia.get(2).toString());
-             cc.llenarTabla();
+            cc.llenarTabla(0);
              ac.dispose();   
        }
     
