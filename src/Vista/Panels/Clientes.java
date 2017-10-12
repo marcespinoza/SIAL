@@ -480,13 +480,13 @@ public class Clientes extends javax.swing.JPanel {
          DefaultTableModel table = (DefaultTableModel) tablaCliente.getModel();
         TableRowSorter<DefaultTableModel> tr = new TableRowSorter<> (table);
          tablaCliente.setRowSorter(tr);
-         tr.setRowFilter(RowFilter.regexFilter("(?i)" + query,14));
+         tr.setRowFilter(RowFilter.regexFilter("(?i)" + query,16));
     }
     private void filtroManzana(String query){
          DefaultTableModel table = (DefaultTableModel) tablaCliente.getModel();
         TableRowSorter<DefaultTableModel> tr = new TableRowSorter<> (table);
          tablaCliente.setRowSorter(tr);
-         tr.setRowFilter(RowFilter.regexFilter("(?i)" + query,13));
+         tr.setRowFilter(RowFilter.regexFilter("(?i)" + query,15));
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

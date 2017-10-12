@@ -164,12 +164,13 @@ public class ControladorCliente implements ActionListener, MouseListener{
         }
         
         if(e.getSource()== vistaClientes.comboCuotas){
+            if(vistaClientes.comboCuotas.getItemCount()!=0){
             if(vistaClientes.comboCuotas.getSelectedItem().equals("Todos")){
                   llenarTabla(0);}
                    else{
                  llenarTabla(Double.parseDouble(vistaClientes.comboCuotas.getSelectedItem().toString()));
                   }
-        }
+        }}
     }
     
     public void llenarTabla(double monto){

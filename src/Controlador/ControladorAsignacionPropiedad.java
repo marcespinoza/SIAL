@@ -138,6 +138,7 @@ public class ControladorAsignacionPropiedad implements ActionListener{
 
        @Override
        public void done() { 
+           ld.editarPropiedad(vistaAsignarPropiedad.barrio.getSelectedItem().toString(), Integer.parseInt(vistaAsignarPropiedad.manzana.getSelectedItem().toString()) , Integer.parseInt(vistaAsignarPropiedad.parcela.getSelectedItem().toString()));
            vistaAsignarPropiedad.dispose();
        }
     

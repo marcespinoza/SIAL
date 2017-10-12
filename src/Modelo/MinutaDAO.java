@@ -6,6 +6,7 @@
 package Modelo;
 
 import conexion.Conexion;
+import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
@@ -24,7 +25,7 @@ public class MinutaDAO {
         conexion = new Conexion();
     }
     
-    public int altaMinuta(Date fecha, String apellidos, String nombres, int manzana, int parcela, double cobrado, double rendido, int nro_cuota, String observaciones, int id_recibo){
+    public int altaMinuta(Date fecha, String apellidos, String nombres, int manzana, int parcela, BigDecimal cobrado, BigDecimal rendido, int nro_cuota, String observaciones, int id_recibo){
     int filasAfectadas=0;
      try {
          Connection con = conexion.getConexion();
@@ -74,9 +75,22 @@ public class MinutaDAO {
             System.out.println(e.getMessage());
         }
      return rs;
- }
+    }
     
-     public ResultSet MinutasPorRango(Date desde, Date hasta){
+    public ResultSet minutasPorMes(String fecha){
+     ResultSet rs = null;
+     try {
+          Connection con = conexion.getConexion();
+          String listar = "SELECT * FROM Minuta where MONTH(fecha_minuta) = '"+fecha+"'";
+          Statement st = con.createStatement();
+          rs = st.executeQuery(listar);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+     return rs;
+    }
+    
+     public ResultSet minutasPorRango(Date desde, Date hasta){
      ResultSet rs = null;
      try {
           Connection con = conexion.getConexion();

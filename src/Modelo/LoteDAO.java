@@ -7,10 +7,13 @@ package Modelo;
 
 import conexion.Conexion;
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -23,6 +26,23 @@ public class LoteDAO {
     public LoteDAO() {
         conexion = new Conexion();
     }
+    
+    public void editarPropiedad(String barrio,int manzana, int parcela){
+        try {
+            Connection con = conexion.getConexion();
+            String query = "UPDATE lote SET vendido = ? where barrio = ? and manzana =? and parcela=?";
+            PreparedStatement preparedStmt = con.prepareStatement(query);
+            preparedStmt.setInt   (1, 1);
+            preparedStmt.setString(2, barrio);
+            preparedStmt.setInt(3, manzana);
+            preparedStmt.setInt(4, parcela);
+            preparedStmt.executeUpdate();      
+            preparedStmt.close();
+            con.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(ClienteDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+ }
     
      public ResultSet obtenerPropietarioxLote(int id_control){
      ResultSet rs = null;
@@ -41,7 +61,7 @@ public class LoteDAO {
      ResultSet rs = null;
      try {
           Connection con = conexion.getConexion();
-          String listar = "SELECT barrio from lote"; 
+          String listar = "SELECT barrio from lote where vendido=0 "; 
           Statement st = con.createStatement();
           rs = st.executeQuery(listar);
         } catch (Exception e) {
@@ -54,7 +74,7 @@ public class LoteDAO {
      ResultSet rs = null;
      try {
           Connection con = conexion.getConexion();
-          String listar = "SELECT manzana from lote where barrio = '"+barrio+"'"; 
+          String listar = "SELECT manzana from lote where barrio = '"+barrio+"' and vendido=0"; 
           Statement st = con.createStatement();
           rs = st.executeQuery(listar);
         } catch (Exception e) {
@@ -67,7 +87,7 @@ public class LoteDAO {
      ResultSet rs = null;
      try {
           Connection con = conexion.getConexion();
-          String listar = "SELECT parcela from lote where barrio = '"+barrio+"' and manzana = '"+manzana+"'"; 
+          String listar = "SELECT parcela from lote where barrio = '"+barrio+"' and manzana = '"+manzana+"' and vendido=0"; 
           Statement st = con.createStatement();
           rs = st.executeQuery(listar);
         } catch (Exception e) {

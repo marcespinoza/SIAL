@@ -11,12 +11,19 @@ package Vista.Panels;
  */
 public class Minuta extends javax.swing.JPanel {
 
-    /**
-     * Creates new form Minuta
-     */
+   private static Minuta minuta = null;
+    
     public Minuta() {
         initComponents();
     }
+    
+    public static Minuta getInstance(){
+        if( minuta==null){
+            System.out.println("esnullo");
+        minuta= new Minuta();
+        }
+        return minuta;
+          }
 
     /**
      * This method is called from within the constructor to initialize the form.

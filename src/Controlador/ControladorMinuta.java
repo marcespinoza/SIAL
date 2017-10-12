@@ -23,18 +23,12 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.DateFormat;
@@ -71,6 +65,7 @@ public class ControladorMinuta implements MouseListener, ActionListener {
         llenarTablaFecha();
     }
 
+    
     public void cargarPathMinuta() {
         try {
           FileReader reader = new FileReader(configFile);
@@ -111,6 +106,7 @@ public class ControladorMinuta implements MouseListener, ActionListener {
         }}
     
     public void llenarTablaFecha(){
+        System.out.print("table efcha");
         ResultSet rs = md.obtenerFecha();
         DefaultTableModel model = (DefaultTableModel) vistaMinuta.tablaFechaMinuta.getModel();
         DefaultTableModel model2 = (DefaultTableModel) vistaMinuta.tablaMinuta.getModel();
@@ -132,10 +128,13 @@ public class ControladorMinuta implements MouseListener, ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
             if(e.getSource()==vistaMinuta.generarMinuta){
+                if(!vistaMinuta.path.getText().equals("")){
                   if(vistaMinuta.tablaFechaMinuta.getSelectedRow()==-1){
                        JOptionPane.showMessageDialog(null, "Selecciona una minuta", "Atención", JOptionPane.INFORMATION_MESSAGE, null);
                   }else{
                       generarPdf();
+                }}else{
+                 JOptionPane.showMessageDialog(null, "Debe seleccionar ubicación donde guardar la minuta", "Atención", JOptionPane.INFORMATION_MESSAGE, null);
                 }                
             }
             
@@ -163,7 +162,7 @@ public class ControladorMinuta implements MouseListener, ActionListener {
                 SimpleDateFormat dcn = new SimpleDateFormat("dd-MM-yyyy");
                  String desde = dcn.format(vistaMinuta.minutaDesde.getDate() );
                  String date = dcn.format(vistaMinuta.minutaHasta.getDate() );
-                ResultSet rs = md.MinutasPorRango(new java.sql.Date(vistaMinuta.minutaDesde.getDate().getTime()) , new java.sql.Date(vistaMinuta.minutaHasta.getDate().getTime()));
+                ResultSet rs = md.minutasPorRango(new java.sql.Date(vistaMinuta.minutaDesde.getDate().getTime()) , new java.sql.Date(vistaMinuta.minutaHasta.getDate().getTime()));
                 llenarTabla(rs);
             }
     }
@@ -172,10 +171,11 @@ public class ControladorMinuta implements MouseListener, ActionListener {
     public void generarPdf(){
       Document document= new Document(PageSize.A4);
       DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+      DateFormat dateFormat2 = new SimpleDateFormat("dd.MM.yyyy");
       java.util.Date date = new java.util.Date();
         try {
             
-           PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(new File(chooser.getSelectedFile(), "Supplier.pdf")));
+           PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(new File(vistaMinuta.path.getText(), "Minuta-"+dateFormat2.format(date)+".pdf")));
             document.open();
             Font f=new Font(Font.FontFamily.TIMES_ROMAN,10.0f,0,null);   
             Paragraph titulo = new Paragraph("Minuta diaria");  
@@ -303,11 +303,8 @@ public class ControladorMinuta implements MouseListener, ActionListener {
         } catch (IOException ex) {
             Logger.getLogger(DetalleCuota.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }
-    
-    
-
-    
+    }  
+        
     public class SwingWorker extends javax.swing.SwingWorker<Void, Void>{
          
          ResultSet rs;

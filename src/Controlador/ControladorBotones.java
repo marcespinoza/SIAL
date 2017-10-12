@@ -24,7 +24,7 @@ public class ControladorBotones implements ActionListener{
            this.ventana=ventana;
            Ventana.btnMinuta.addActionListener(this);
            Ventana.btnClientes.addActionListener(this);
-           Ventana.btnLotes.addActionListener(this);
+           Ventana.btnResumen.addActionListener(this);
            Ventana.cerrarSesion.addActionListener(this);
     }
 
@@ -34,6 +34,11 @@ public class ControladorBotones implements ActionListener{
         if(e.getSource()==Ventana.btnMinuta){
          CardLayout cl = (CardLayout)(Ventana.panelPrincipal.getLayout());
          cl.show(Ventana.panelPrincipal, "Minuta");
+        }
+        
+        if(e.getSource()==Ventana.btnResumen){
+         CardLayout cl = (CardLayout)(Ventana.panelPrincipal.getLayout());
+         cl.show(Ventana.panelPrincipal, "card4");
         }
         
         if(e.getSource()==Ventana.btnClientes){
