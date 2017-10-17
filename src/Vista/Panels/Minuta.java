@@ -19,7 +19,6 @@ public class Minuta extends javax.swing.JPanel {
     
     public static Minuta getInstance(){
         if( minuta==null){
-            System.out.println("esnullo");
         minuta= new Minuta();
         }
         return minuta;

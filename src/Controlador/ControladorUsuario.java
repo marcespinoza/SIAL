@@ -15,7 +15,13 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.sql.ResultSet;
+import java.util.Properties;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
@@ -32,6 +38,7 @@ public class ControladorUsuario implements MouseListener, ActionListener, KeyLis
     ControladorPropietarios cp;
     UsuarioDAO ud = new UsuarioDAO();
     private Object [] usuarios;
+      File configFile = new File("config.properties");
 
     public ControladorUsuario(Configuracion vistaConfiguracion) {
         this.vistaConfiguracion = vistaConfiguracion;
@@ -129,8 +136,7 @@ public class ControladorUsuario implements MouseListener, ActionListener, KeyLis
                ud.eliminarUsuario(usuario);
                limpiarCampos();
                llenarTabla();
-                 }   
-             
+                 }                
             }
         }
         
@@ -143,6 +149,21 @@ public class ControladorUsuario implements MouseListener, ActionListener, KeyLis
            }
     }
     
+    private void cargarNroRecibo(){
+         try {
+          FileReader reader = new FileReader(configFile);
+          Properties props = new Properties();
+          props.load(reader); 
+          String nroRecibo = props.getProperty("pathMinuta");
+          vistaConfiguracion.propietarios.nroRecibo.setText(nroRecibo);
+          reader.close();
+         } catch (FileNotFoundException ex) {
+        // file does not exist
+        } catch (IOException ex) {
+        // I/O error
+         }
+    }    
+        
     private void limpiarCampos(){
          vistaConfiguracion.usuario.usuarioTxf.setText("");
          vistaConfiguracion.usuario.contraseñaTxf.setText("");

@@ -7,7 +7,6 @@ package Controlador;
 
 import Modelo.PropietarioDAO;
 import Vista.Dialogs.Configuracion;
-import Vista.Frame.Ventana;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -15,7 +14,12 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.sql.ResultSet;
+import java.util.Properties;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
@@ -30,7 +34,8 @@ public class ControladorPropietarios implements MouseListener, ActionListener, K
     
     Configuracion vistaConfiguracion;
     PropietarioDAO pd = new PropietarioDAO();
-    private Object [] propietarios;
+    private Object [] propietarios;    
+    File configFile = new File("config.properties");
 
     public ControladorPropietarios(Configuracion vistaConfiguracion) {
         this.vistaConfiguracion = vistaConfiguracion;
@@ -42,10 +47,36 @@ public class ControladorPropietarios implements MouseListener, ActionListener, K
         vistaConfiguracion.propietarios.apellidoTxf.addKeyListener(this);
         vistaConfiguracion.propietarios.nombreTxf.addKeyListener(this);
         vistaConfiguracion.propietarios.cuitTxf.addKeyListener(this);
+        vistaConfiguracion.propietarios.nroRecibo.addKeyListener(new KeyListener() {
+            @Override
+            public void keyTyped(KeyEvent e) {
+            }
+
+            @Override
+            public void keyPressed(KeyEvent e) {
+            }
+
+            @Override
+            public void keyReleased(KeyEvent e) {
+            }
+        });
         vistaConfiguracion.propietarios.editar.setEnabled(false);
         vistaConfiguracion.setLocationRelativeTo(null);
-        llenarTabla();
-        
+        llenarTabla();        
+    }
+    
+    private void guardarNroRecibo(){
+        try {
+                Properties props = new Properties();
+                props.setProperty("pathMinuta", vistaConfiguracion.propietarios.nroRecibo.getText());
+                FileWriter writer = new FileWriter(configFile);
+                props.store(writer, "config");
+                writer.close();
+                } catch (FileNotFoundException ex) {
+                 // file does not exist
+                } catch (IOException ex) {
+                   // I/O error
+                }
     }
     
     public void llenarTabla(){

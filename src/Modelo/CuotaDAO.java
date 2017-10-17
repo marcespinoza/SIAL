@@ -6,6 +6,7 @@
 package Modelo;
 
 import conexion.Conexion;
+import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
@@ -36,7 +37,7 @@ public class CuotaDAO {
      return rs;
     }
     
-     public int altaCuota(Date fecha_pago,int nro_cuota, String detalle, double cuota_pura, double gastos, double debe, double haber, double saldo, double cemento_debe, double cemento_haber, double cemento_saldo, String observaciones, String tipo_pago, int id_control){
+     public int altaCuota(Date fecha_pago,int nro_cuota, String detalle, BigDecimal cuota_pura, BigDecimal gastos, BigDecimal debe, BigDecimal haber, BigDecimal saldo, BigDecimal cemento_debe, BigDecimal cemento_haber, BigDecimal cemento_saldo, String observaciones, String tipo_pago, int id_control){
     int filasAfectadas=0;
      try {
          Connection con = conexion.getConexion();

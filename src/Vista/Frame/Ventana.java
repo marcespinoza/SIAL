@@ -9,8 +9,10 @@ import Controlador.ControladorBotones;
 import Controlador.ControladorConfiguracion;
 import Controlador.ControladorLogin;
 import Controlador.ControladorMinuta;
+import Controlador.ControladorResumen;
 import Controlador.ControladorUsuario;
 import Vista.Panels.Minuta;
+import Vista.Panels.Resumen;
 import java.awt.GraphicsConfiguration;
 import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
@@ -30,7 +32,9 @@ public class Ventana extends javax.swing.JFrame implements ActionListener{
     
     ControladorLogin cl;
     Minuta vistaMinuta = Minuta.getInstance();
+    Resumen vistaResumen = Resumen.getInstance();
     ControladorMinuta cm;
+    ControladorResumen cr;
 
     public Ventana() {
         initComponents();
@@ -42,8 +46,10 @@ public class Ventana extends javax.swing.JFrame implements ActionListener{
         this.setIconImage(icon.getImage());
         cl = new ControladorLogin(this);
         cm = new ControladorMinuta(vistaMinuta);
+        cr = new ControladorResumen(vistaResumen);
         panelPrincipal.add(vistaMinuta, "Minuta");
-        menuUsuarios.addActionListener(this);
+        panelPrincipal.add(vistaResumen, "Resumen");
+        configuracion.addActionListener(this);
         about.addActionListener(this);
         inicializarPaneles();
     }
@@ -83,11 +89,8 @@ public class Ventana extends javax.swing.JFrame implements ActionListener{
         jMenuBar1 = new javax.swing.JMenuBar();
         MenuInicio = new javax.swing.JMenu();
         cerrarSesion = new javax.swing.JMenuItem();
-        opciones = new javax.swing.JMenu();
-        propietarios = new javax.swing.JMenuItem();
-        lotes = new javax.swing.JMenuItem();
-        menuUsuarios = new javax.swing.JMenuItem();
         info = new javax.swing.JMenu();
+        configuracion = new javax.swing.JMenuItem();
         about = new javax.swing.JMenuItem();
 
         jMenu1.setText("File");
@@ -230,25 +233,10 @@ public class Ventana extends javax.swing.JFrame implements ActionListener{
 
         jMenuBar1.add(MenuInicio);
 
-        opciones.setText("Configuracion");
+        info.setText("Opciones");
 
-        propietarios.setText("Propietarios");
-        opciones.add(propietarios);
-
-        lotes.setText("Lotes");
-        lotes.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                lotesActionPerformed(evt);
-            }
-        });
-        opciones.add(lotes);
-
-        menuUsuarios.setText("Usuarios");
-        opciones.add(menuUsuarios);
-
-        jMenuBar1.add(opciones);
-
-        info.setText("Info");
+        configuracion.setText("Configuración");
+        info.add(configuracion);
 
         about.setText("Acerca de ..");
         info.add(about);
@@ -293,10 +281,6 @@ public class Ventana extends javax.swing.JFrame implements ActionListener{
         // TODO add your handling code here:
     }//GEN-LAST:event_cerrarSesionActionPerformed
 
-    private void lotesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_lotesActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_lotesActionPerformed
-
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
        //this.setExtendedState(JFrame.MAXIMIZED_BOTH);
     }//GEN-LAST:event_formWindowOpened
@@ -313,6 +297,7 @@ public class Ventana extends javax.swing.JFrame implements ActionListener{
     public static javax.swing.JButton btnResumen;
     public static javax.swing.JMenuItem cerrarSesion;
     private Vista.Panels.Clientes clientes;
+    public javax.swing.JMenuItem configuracion;
     private Vista.Panels.DetalleCuota detallePago;
     public javax.swing.JMenu info;
     private javax.swing.JLabel jLabel1;
@@ -325,14 +310,10 @@ public class Ventana extends javax.swing.JFrame implements ActionListener{
     private javax.swing.JMenuBar jMenuBar3;
     public static javax.swing.JLabel labelTipoUsuario;
     public static javax.swing.JLabel labelUsuario;
-    private javax.swing.JMenuItem lotes;
-    private javax.swing.JMenuItem menuUsuarios;
     private Vista.Panels.Minuta minuta;
     public static javax.swing.JLabel nombreUsuario;
-    private javax.swing.JMenu opciones;
     private Vista.Panels.PanelBotones panelBotones1;
     public static javax.swing.JPanel panelPrincipal;
-    private javax.swing.JMenuItem propietarios;
     private Vista.Panels.Resumen resumen;
     // End of variables declaration//GEN-END:variables
 
@@ -347,7 +328,7 @@ public void inicializarBotones(){
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        if(e.getSource().equals(menuUsuarios)){
+        if(e.getSource().equals(configuracion)){
              new ControladorConfiguracion(this);
         }
         if(e.getSource().equals(about)){

@@ -70,16 +70,16 @@ public class ControladorMinuta implements MouseListener, ActionListener {
         try {
           FileReader reader = new FileReader(configFile);
           Properties props = new Properties();
-            props.load(reader); 
+          props.load(reader); 
           String pathMinuta = props.getProperty("pathMinuta");
           vistaMinuta.path.setText(pathMinuta);
-         reader.close();
-     } catch (FileNotFoundException ex) {
-    // file does not exist
-     } catch (IOException ex) {
-    // I/O error
-     }
-     }   
+          reader.close();
+         } catch (FileNotFoundException ex) {
+        // file does not exist
+        } catch (IOException ex) {
+        // I/O error
+         }
+        }   
     
     public void llenarTabla(ResultSet rs){
         resultset = rs;
@@ -92,11 +92,12 @@ public class ControladorMinuta implements MouseListener, ActionListener {
                 String nombres = rs.getString(3);
                 String mzpc = rs.getString(4)+rs.getString(5);  
                 String cobrado = rs.getString(6);
-                String rendido = rs.getString(7);     
-                String nro_cuota = rs.getString(8);
-                String observaciones = rs.getString(9);
-                String nro_recibo = rs.getString(10);
-                minuta = new Object[] {fecha_minuta,nro_recibo, apellidos, nombres, mzpc, cobrado, rendido, nro_cuota, observaciones};
+                String gastos = rs.getString(7);
+                String rendido = rs.getString(8);     
+                String nro_cuota = rs.getString(9);
+                String observaciones = rs.getString(10);
+                String nro_recibo = rs.getString(11);
+                minuta = new Object[] {fecha_minuta,nro_recibo, apellidos, nombres, mzpc, cobrado, gastos, rendido, nro_cuota, observaciones};
                 model.addRow(minuta);   
             } 
             resultset.beforeFirst();
@@ -106,7 +107,6 @@ public class ControladorMinuta implements MouseListener, ActionListener {
         }}
     
     public void llenarTablaFecha(){
-        System.out.print("table efcha");
         ResultSet rs = md.obtenerFecha();
         DefaultTableModel model = (DefaultTableModel) vistaMinuta.tablaFechaMinuta.getModel();
         DefaultTableModel model2 = (DefaultTableModel) vistaMinuta.tablaMinuta.getModel();
@@ -175,7 +175,7 @@ public class ControladorMinuta implements MouseListener, ActionListener {
       java.util.Date date = new java.util.Date();
         try {
             
-           PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(new File(vistaMinuta.path.getText(), "Minuta-"+dateFormat2.format(date)+".pdf")));
+            PdfWriter.getInstance(document, new FileOutputStream(new File(vistaMinuta.path.getText(), "Minuta-"+dateFormat2.format(date)+".pdf")));
             document.open();
             Font f=new Font(Font.FontFamily.TIMES_ROMAN,10.0f,0,null);   
             Paragraph titulo = new Paragraph("Minuta diaria");  
@@ -186,14 +186,15 @@ public class ControladorMinuta implements MouseListener, ActionListener {
             subtitulo.setAlignment(Element.ALIGN_CENTER);
             document.add(subtitulo);
             document.add( Chunk.NEWLINE );
-            PdfPTable table = new PdfPTable(8);            
-            table.setTotalWidth(new float[]{ 1,2,5,2,2,2,2,4});
+            PdfPTable table = new PdfPTable(9);            
+            table.setTotalWidth(new float[]{ 1,2,5,2,2,2,2,2,4});
             table.setWidthPercentage(100);
             PdfPCell orden = new PdfPCell(new Paragraph("ORD",f));
             PdfPCell rbo_nro = new PdfPCell(new Paragraph("Rbo. Nro",f));
             PdfPCell apynom = new PdfPCell(new Paragraph("Apellido y nombre",f));
             PdfPCell mzpc = new PdfPCell(new Paragraph("Mz./Pc.",f));
             PdfPCell cobrado = new PdfPCell(new Paragraph("Cobrado",f));
+            PdfPCell gastos = new PdfPCell(new Paragraph("Gtos. Adm.",f));
             PdfPCell rendido = new PdfPCell(new Paragraph("Rendido",f));
             PdfPCell nro_cuota = new PdfPCell(new Paragraph("Cuota Nro.",f));
             PdfPCell observaciones = new PdfPCell(new Paragraph("Observaciones",f));  
@@ -210,6 +211,7 @@ public class ControladorMinuta implements MouseListener, ActionListener {
             table.addCell(apynom);
             table.addCell(mzpc);
             table.addCell(cobrado);
+            table.addCell(gastos);
             table.addCell(rendido);
             table.addCell(nro_cuota);
             table.addCell(observaciones);
@@ -222,8 +224,8 @@ public class ControladorMinuta implements MouseListener, ActionListener {
               double t_credito = 0;
               double total = 0;
               while(resultset.next()){
-                  PdfPTable table2 = new PdfPTable(8);            
-                  table2.setTotalWidth(new float[]{ 1,2,5,2,2,2,2,4});
+                  PdfPTable table2 = new PdfPTable(9);            
+                  table2.setTotalWidth(new float[]{ 1,2,5,2,2,2,2,2,4});
                   table2.setWidthPercentage(100);
                   table2.addCell(new PdfPCell(new Paragraph(String.valueOf(conta),f)));    
                   PdfPCell detalle_nro_cuota = new PdfPCell(new Paragraph(resultset.getString(10),f));
@@ -235,6 +237,7 @@ public class ControladorMinuta implements MouseListener, ActionListener {
                   table2.addCell(new PdfPCell(new Paragraph(resultset.getString(7),f)));
                   table2.addCell(new PdfPCell(new Paragraph(resultset.getString(8),f)));
                   table2.addCell(new PdfPCell(new Paragraph(resultset.getString(9),f)));
+                  table2.addCell(new PdfPCell(new Paragraph(resultset.getString(10),f)));
                   document.add(table2);
                   acumulador_rendido = acumulador_rendido + Double.parseDouble(resultset.getString(7));
                   switch(resultset.getString(9)){

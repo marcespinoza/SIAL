@@ -15,6 +15,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.math.BigDecimal;
 import java.sql.Date;
 import java.sql.ResultSet;
 import javax.swing.BorderFactory;
@@ -132,7 +133,7 @@ public class ControladorAsignacionPropiedad implements ActionListener{
         protected Void doInBackground() throws Exception {            
            double gastos =Double.parseDouble(vistaAsignarPropiedad.cuota_total.getText())-(Double.parseDouble(vistaAsignarPropiedad.cuota_total.getText())/1.1);
             id_control = fichaControlDAO.altaFichaControl(vistaAsignarPropiedad.tipo_propiedad.getSelectedItem().toString(), vistaAsignarPropiedad.dimension.getText(), Integer.parseInt(vistaAsignarPropiedad.cantidad_cuotas.getText()),  Double.parseDouble(vistaAsignarPropiedad.cuota_total.getText())-gastos, gastos, Double.parseDouble(vistaAsignarPropiedad.bolsa_cemento.getText()), dni, String.valueOf(vistaAsignarPropiedad.barrio.getSelectedItem()),Integer.parseInt((String)vistaAsignarPropiedad.manzana.getSelectedItem()), Integer.parseInt((String)vistaAsignarPropiedad.parcela.getSelectedItem()));
-            cuotaDao.altaCuota(new Date(System.currentTimeMillis()), 0,"Saldo Inicio", 0, 0, Double.parseDouble(vistaAsignarPropiedad.cantidad_cuotas.getText())*(Double.parseDouble(vistaAsignarPropiedad.cuota_total.getText())), 0, Double.parseDouble(vistaAsignarPropiedad.cantidad_cuotas.getText())*(Double.parseDouble(vistaAsignarPropiedad.cuota_total.getText())), Double.parseDouble(vistaAsignarPropiedad.bolsa_cemento.getText())*Double.parseDouble(vistaAsignarPropiedad.cantidad_cuotas.getText()), 0, Double.parseDouble(vistaAsignarPropiedad.bolsa_cemento.getText())*Double.parseDouble(vistaAsignarPropiedad.cantidad_cuotas.getText()), "", "", id_control);         
+            cuotaDao.altaCuota(new Date(System.currentTimeMillis()), 0,"Saldo Inicio", new BigDecimal(0),new BigDecimal(0), new BigDecimal(vistaAsignarPropiedad.cantidad_cuotas.getText()).multiply(new BigDecimal(vistaAsignarPropiedad.cuota_total.getText())), new BigDecimal(0), new BigDecimal(vistaAsignarPropiedad.cantidad_cuotas.getText()).multiply(new BigDecimal(vistaAsignarPropiedad.cuota_total.getText())), new BigDecimal(vistaAsignarPropiedad.bolsa_cemento.getText()).multiply(new BigDecimal(vistaAsignarPropiedad.cantidad_cuotas.getText())), new BigDecimal(0), new BigDecimal(vistaAsignarPropiedad.bolsa_cemento.getText()).multiply(new BigDecimal(vistaAsignarPropiedad.cantidad_cuotas.getText())), "", "", id_control);         
             return null;
         }
 

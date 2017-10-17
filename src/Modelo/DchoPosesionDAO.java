@@ -6,6 +6,7 @@
 package Modelo;
 
 import conexion.Conexion;
+import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
@@ -31,7 +32,7 @@ public class DchoPosesionDAO {
         ResultSet rs = null;
      try {
           Connection con = conexion.getConexion();
-          String listar = "SELECT fecha, monto, detalle from derecho_posesion where id_control='"+id_control+"'"; 
+          String listar = "SELECT fecha, monto,gastos, detalle from derecho_posesion where id_control='"+id_control+"'"; 
           Statement st = con.createStatement();
           rs = st.executeQuery(listar);
         } catch (Exception e) {
@@ -39,16 +40,17 @@ public class DchoPosesionDAO {
      return rs;
     }
     
-    public void altaDchoPosesion(Date date, double monto, String detalle, int id_control){
+    public void altaDchoPosesion(Date date, BigDecimal monto, BigDecimal gastos, String detalle, int id_control){
         try {
             Connection con = conexion.getConexion();
-            String query = " insert into derecho_posesion (fecha, monto, detalle, id_control)"
-                    + " values (?, ?, ?, ?)";
+            String query = " insert into derecho_posesion (fecha, monto,gastos, detalle, id_control)"
+                    + " values (?, ?, ?, ?, ?)";
             PreparedStatement preparedStmt = con.prepareStatement(query);
             preparedStmt.setDate(1, date);
-            preparedStmt.setDouble(2, monto);
-            preparedStmt.setString(3, detalle);
-            preparedStmt.setInt(4, id_control);
+            preparedStmt.setBigDecimal(2, monto);
+            preparedStmt.setBigDecimal(3, gastos);
+            preparedStmt.setString(4, detalle);
+            preparedStmt.setInt(5, id_control);
             preparedStmt.execute();
         } catch (SQLException ex) {
             Logger.getLogger(DchoPosesionDAO.class.getName()).log(Level.SEVERE, null, ex);

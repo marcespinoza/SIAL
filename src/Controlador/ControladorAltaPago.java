@@ -90,7 +90,7 @@ public class ControladorAltaPago implements ActionListener, KeyListener{
     public void nuevoGasto(){
         if(!ac.cuota_total.getText().equals("")){   
                 BigDecimal gasto;
-                 BigDecimal cuota_total = new BigDecimal(ac.cuota_total.getText());
+                BigDecimal cuota_total = new BigDecimal(ac.cuota_total.getText());
                  if(ac.chk_cuota.isSelected()){
                  gasto = cuota_total.subtract(cuota_total.divide(new BigDecimal("1.1"), 2, BigDecimal.ROUND_HALF_UP));
                  }else{
@@ -130,11 +130,11 @@ public class ControladorAltaPago implements ActionListener, KeyListener{
                try {
                    rs.next();
                    rs_cuota.last();
-                   double ultimo_saldo = Double.parseDouble(rs_cuota.getString(7));
-                   double cuota_pura = Double.parseDouble(ac.cuota_total.getText())-Double.parseDouble(ac.gastos.getText());
-                   double gastos = Double.parseDouble(ac.gastos.getText());
-                   double bolsa_cemento = Double.parseDouble(rs.getString(5));
-                   double ultimo_saldo_bolsa_cemento = Double.parseDouble(rs_cuota.getString(10));
+                   BigDecimal ultimo_saldo = new BigDecimal(rs_cuota.getString(7));
+                   BigDecimal cuota_pura = new BigDecimal(ac.cuota_total.getText()).subtract(new BigDecimal(ac.gastos.getText()));
+                   BigDecimal gastos = new BigDecimal(ac.gastos.getText());
+                   BigDecimal bolsa_cemento = new BigDecimal(rs.getString(5));
+                   BigDecimal ultimo_saldo_bolsa_cemento = new BigDecimal(rs_cuota.getString(10));
                    calcularValores(ultimo_saldo, cuota_pura, gastos, bolsa_cemento, ultimo_saldo_bolsa_cemento);                
                 
                 } catch (SQLException ex) {
@@ -143,7 +143,7 @@ public class ControladorAltaPago implements ActionListener, KeyListener{
               }else{                  
                    DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
                    Date date = new Date(); 
-                  dp.altaDchoPosesion(new java.sql.Date(date.getTime()), Double.parseDouble(ac.cuota_total.getText()), ac.detallePago.getText(), id_control);
+                  dp.altaDchoPosesion(new java.sql.Date(date.getTime()), new BigDecimal(ac.cuota_total.getText()),new BigDecimal(ac.gastos.getText()), ac.detallePago.getText(), id_control);
                   ac.dispose();
               }
            }
@@ -158,17 +158,17 @@ public class ControladorAltaPago implements ActionListener, KeyListener{
             }
     }
     
-    public void calcularValores(double ultimo_saldo, double cuota_pura, double gastos,double bolsa_cemento, double saldo_bolsa_cemento){          
+    public void calcularValores(BigDecimal ultimo_saldo, BigDecimal cuota_pura, BigDecimal gastos,BigDecimal bolsa_cemento, BigDecimal saldo_bolsa_cemento){          
                DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
                Date date = new Date();
                String detalle = ac.detallePago.getText();
                String observaciones = ac.observacionesPago.getText();
                String tipoPago = ac.tipoPago.getSelectedItem().toString();
-               double haber = cuota_pura;
-               double saldo_actual = ultimo_saldo - haber;
-               double cemento_haber = bolsa_cemento;
-               double cemento_saldo = saldo_bolsa_cemento - bolsa_cemento;
-               cd.altaCuota(new java.sql.Date(date.getTime()),0, detalle, cuota_pura, gastos, 0, haber, saldo_actual, 0, cemento_haber, cemento_saldo, observaciones, tipoPago, id_control);
+               BigDecimal haber = cuota_pura;
+               BigDecimal saldo_actual = ultimo_saldo.subtract(haber);
+               BigDecimal cemento_haber = bolsa_cemento;
+               BigDecimal cemento_saldo = saldo_bolsa_cemento.subtract(bolsa_cemento);
+               cd.altaCuota(new java.sql.Date(date.getTime()),0, detalle, cuota_pura, gastos, new BigDecimal(0), haber, saldo_actual, new BigDecimal(0), cemento_haber, cemento_saldo, observaciones, tipoPago, id_control);
                ac.dispose();
     }
     
@@ -193,14 +193,11 @@ public class ControladorAltaPago implements ActionListener, KeyListener{
 
     @Override
     public void keyReleased(KeyEvent e) {
-       // if(e.getSource()==ac.cuota_total){
         String interes = ac.interes.getText();
         if(!interes.equals("")){
         BigDecimal gasto_interes = (cuota_total.multiply(new BigDecimal(interes))).divide(new BigDecimal("100"));   
         BigDecimal nueva_cuota = gasto_interes.add(cuota_total);
-        //BigDecimal nuevo_gasto = (nueva_cuota.multiply(new BigDecimal("10"))).divide(new BigDecimal("100"));
         ac.cuota_total.setText(nueva_cuota.toString());
-        //ac.gastos.setText(nuevo_gasto.toString());
         }
         else {
             ac.cuota_total.setText(cuota_total.toString());  

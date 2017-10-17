@@ -66,11 +66,13 @@ public class ControladorRecibo implements ActionListener{
     public static final String IMG = "src/Imagenes/logo_reporte.png";
     public static final String IMG2 = "src/Imagenes/logo_recibo.png";
     Random random = new Random();
+    int tipoPago;
 
-    public ControladorRecibo(Frame parent, int id_control, DetalleCuota dc, int row) {
+    public ControladorRecibo(Frame parent, int id_control, DetalleCuota dc, int row, int tipoPago) {
         ar = new AltaRecibo(parent, true);
         this.dc=dc;
         this.row=row;
+        this.tipoPago=tipoPago;
         ar.aceptar.addActionListener(this);
         ar.cancelar.addActionListener(this);
         ar.cuit.setEnabled(false);
@@ -165,13 +167,22 @@ public class ControladorRecibo implements ActionListener{
             barrio= rs.getString(6);
             manzana = rs.getInt(7);
             parcela = rs.getInt(8);
+            if(tipoPago==1){
             cuota_total = new BigDecimal(dc.tablaDetallePago.getModel().getValueAt(row, 3).toString());
             gastos_administrativos = new BigDecimal(dc.tablaDetallePago.getModel().getValueAt(row, 4).toString());
             cobrado = cuota_total.add(gastos_administrativos) ;
             ar.importe.setText(String.valueOf(cobrado));
-            ar.total_pagado.setText(String.valueOf(cobrado));
+            ar.total_pagado.setText(String.valueOf(cobrado));            
             ar.detalle.setText("Paga cuota "+dc.tablaDetallePago.getModel().getValueAt(row, 0).toString()+"/"+cant_cuotas+    "\r\nDimension "+dimension +     "\r\n"+ barrio +" "+ " Mz. "+manzana +" Pc. "+ parcela+   "\r\n"+dc.tablaDetallePago.getModel().getValueAt(row, 2).toString());
-        } catch (Exception e) {
+            }else if (tipoPago==0){
+              ar.detalle.setText("Cta. derecho posesión "+    "\r\nDimension "+dimension +     "\r\n"+ barrio +" "+ " Mz. "+manzana +" Pc. "+ parcela+   "\r\n"+dc.tablaDetallePago.getModel().getValueAt(row, 2).toString());
+              cuota_total = new BigDecimal(dc.tablaDchoPosesion.getModel().getValueAt(row, 2).toString());
+              gastos_administrativos = new BigDecimal(dc.tablaDetallePago.getModel().getValueAt(row, 3).toString());
+              cobrado = cuota_total.add(gastos_administrativos) ;
+              ar.importe.setText(String.valueOf(cobrado));
+              ar.total_pagado.setText(String.valueOf(cobrado)); 
+            }
+            } catch (Exception e) {
         }
     }
     
@@ -360,7 +371,7 @@ public class ControladorRecibo implements ActionListener{
         protected Void doInBackground() throws Exception {      
             Date date = new Date();
             BigDecimal rendido = cobrado.subtract(gastos_administrativos);
-            md.altaMinuta(new java.sql.Date(date.getTime()), apellido_comprador, nombre_comprador, manzana, parcela, cobrado, rendido, Integer.parseInt(dc.tablaDetallePago.getModel().getValueAt(row, 0).toString()), dc.tablaDetallePago.getModel().getValueAt(row, 12).toString(), nro_random);
+            md.altaMinuta(new java.sql.Date(date.getTime()), apellido_comprador, nombre_comprador, manzana, parcela, cobrado, gastos_administrativos, rendido, Integer.parseInt(dc.tablaDetallePago.getModel().getValueAt(row, 0).toString()), dc.tablaDetallePago.getModel().getValueAt(row, 12).toString(), nro_random);
             return null;
         }
 
