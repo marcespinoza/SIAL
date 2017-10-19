@@ -54,6 +54,20 @@ public class PropietarioDAO {
          }
      }
      
+     public void editarNroRecibo(String apellidos, String nombres, String cuit, int nro_recibo){
+         try {
+             Connection con = conexion.getConexion();
+             PreparedStatement pstm = con.prepareStatement("update propietario set nro_recibo= ? where apellidos= ? and nombres=? and cuit=? ");             
+             pstm.setInt(1,nro_recibo);
+             pstm.setString(2,apellidos);
+             pstm.setString(3,nombres);
+             pstm.setString(4, cuit);
+             pstm.executeUpdate();
+         } catch (SQLException ex) {
+             Logger.getLogger(PropietarioDAO.class.getName()).log(Level.SEVERE, null, ex);
+         }
+     }
+     
      public ResultSet obtenerPropietarios(){
           ResultSet rs = null;
      try {
@@ -97,7 +111,7 @@ public class PropietarioDAO {
           ResultSet rs = null;
      try {
           Connection con = conexion.getConexion();  
-          String listar = "SELECT cuit from propietario where apellidos='"+apellidos+"' and nombres = '"+nombres+"'"; 
+          String listar = "SELECT cuit, nro_recibo from propietario where apellidos='"+apellidos+"' and nombres = '"+nombres+"'"; 
           Statement st = con.createStatement();
           rs = st.executeQuery(listar);
         } catch (Exception e) {

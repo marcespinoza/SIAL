@@ -51,6 +51,7 @@ public class Ventana extends javax.swing.JFrame implements ActionListener{
         panelPrincipal.add(vistaResumen, "Resumen");
         configuracion.addActionListener(this);
         about.addActionListener(this);
+        this.setResizable(false);
         inicializarPaneles();
     }
     

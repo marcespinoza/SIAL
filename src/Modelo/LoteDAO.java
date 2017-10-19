@@ -126,10 +126,10 @@ public class LoteDAO {
      return rs;
      }  
 
-    public void agregarPropiedad(String barrio, String manzana, String parcela, String propietario_apellidos, String propietario_nombres, String propietario_cuit){
+    public void agregarPropiedad(String barrio, String manzana, String parcela, String propietario_apellidos, String propietario_nombres, String propietario_cuit, String propietario_nro_recibo){
        try {
            Connection con = conexion.getConexion();
-           String query="INSERT INTO lote (barrio, manzana, parcela, propietario_apellidos, propietario_nombres, propietario_cuit)VALUES(?,?,?,?,?,?)  ON DUPLICATE KEY UPDATE barrio = VALUES(barrio), manzana = VALUES(manzana), parcela = VALUES(parcela),  propietario_apellidos=VALUES(propietario_apellidos), propietario_nombres = VALUES(propietario_nombres), propietario_cuit = VALUES(propietario_cuit)";
+           String query="INSERT INTO lote (barrio, manzana, parcela, propietario_apellidos, propietario_nombres, propietario_cuit, propietario_nro_recibo)VALUES(?,?,?,?,?,?,?)  ON DUPLICATE KEY UPDATE barrio = VALUES(barrio), manzana = VALUES(manzana), parcela = VALUES(parcela),  propietario_apellidos=VALUES(propietario_apellidos), propietario_nombres = VALUES(propietario_nombres), propietario_cuit = VALUES(propietario_cuit), propietario_nro_recibo = VALUES(propietario_nro_recibo)";
            PreparedStatement stmt = con.prepareStatement(query);
            stmt.setString(1, barrio);
            stmt.setString(2, manzana);
@@ -137,6 +137,7 @@ public class LoteDAO {
            stmt.setString(4, propietario_apellidos);
            stmt.setString(5, propietario_nombres);
            stmt.setString(6, propietario_cuit);
+           stmt.setString(7, propietario_nro_recibo);
            stmt.executeUpdate();
        } catch (SQLException ex) {
            System.out.println(ex.getMessage().toString());

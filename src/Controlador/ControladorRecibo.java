@@ -9,6 +9,7 @@ import Modelo.ClienteDAO;
 import Modelo.FichaControlDAO;
 import Modelo.LoteDAO;
 import Modelo.MinutaDAO;
+import Modelo.PropietarioDAO;
 import Vista.Dialogs.AltaRecibo;
 import Vista.Frame.Ventana;
 import Vista.Panels.DetalleCuota;
@@ -55,6 +56,7 @@ public class ControladorRecibo implements ActionListener{
     MinutaDAO md = new MinutaDAO();
     LoteDAO ld = new LoteDAO();
     ClienteDAO cd = new ClienteDAO();
+    PropietarioDAO pd = new PropietarioDAO();
     FichaControlDAO fcd = new FichaControlDAO();
     DetalleCuota dc = new DetalleCuota();
     String apellido_propietario, nombre_propietario, cuit_propietario, nro_recibo_propietario;
@@ -178,7 +180,7 @@ public class ControladorRecibo implements ActionListener{
              ar.total_pagado.setText(String.valueOf(cobrado));            
              ar.detalle.setText("Paga cuota "+dc.tablaDetallePago.getModel().getValueAt(row, 0).toString()+"/"+cant_cuotas+    "\r\nDimension "+dimension +     "\r\n"+ barrio +" "+ " Mz. "+manzana +" Pc. "+ parcela+   "\r\n"+dc.tablaDetallePago.getModel().getValueAt(row, 2).toString());
             }else if (tipoPago==0){
-              ar.detalle.setText("Cta. derecho posesión "+    "\r\nDimension "+dimension +     "\r\n"+ barrio +" "+ " Mz. "+manzana +" Pc. "+ parcela+   "\r\n"+dc.tablaDetallePago.getModel().getValueAt(row, 2).toString());
+              ar.detalle.setText("Cta. derecho posesión "+    "\r\nDimension "+dimension +     "\r\n"+ barrio +" "+ " Mz. "+manzana +" Pc. "+ parcela+   "\r\n");
               cuota_total = new BigDecimal(dc.tablaDchoPosesion.getModel().getValueAt(row, 2).toString());
               gastos_administrativos = new BigDecimal(dc.tablaDetallePago.getModel().getValueAt(row, 3).toString());
               cobrado = cuota_total.add(gastos_administrativos) ;
@@ -196,7 +198,7 @@ public class ControladorRecibo implements ActionListener{
             java.util.Date date = new java.util.Date();
             String nombre_pdf = fecha2.format(date)+".pdf";
         try {
-            PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(new File(dc.path.getText(), "Recibo-"+ar.nro_recibo.getText()+".pdf")));
+            PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(new File(dc.path.getText(), "Recibo-"+nro_recibo_propietario+".pdf")));
             document.open();
             for (int i = 1; i < 3; i++) {               
             Font f=new Font(Font.FontFamily.TIMES_ROMAN,10.0f,0,null);
@@ -211,7 +213,7 @@ public class ControladorRecibo implements ActionListener{
             cell3.setHorizontalAlignment(Element.ALIGN_CENTER);
             table.addCell(cell3);
             document.add(table); 
-            Paragraph para = new Paragraph("Numero: "+ar.nro_recibo.getText(),f);
+            Paragraph para = new Paragraph("Numero: "+nro_recibo_propietario,f);
             Paragraph cuit = new Paragraph("CUIT: 23-07431900-9",f);
             Paragraph ingBrutos = new Paragraph("Ing Brutos: 01-23-07431900-9",f);
             Paragraph inicAct = new Paragraph(fecha1.format(date)+"                                                        Inic. Act.: 01-08-2015",f); 
@@ -384,6 +386,7 @@ public class ControladorRecibo implements ActionListener{
        @Override
        public void done() { 
             new ControladorMinuta(Minuta.getInstance());
+            pd.editarNroRecibo(apellido_propietario, nombre_propietario, cuit_propietario, Integer.parseInt(nro_recibo_propietario)+1);
        }
     
 }
@@ -395,12 +398,6 @@ public class ControladorRecibo implements ActionListener{
               bandera=false;
          }else{
              ar.son_pesos.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
-          }
-           if(ar.nro_recibo.getText().isEmpty()){
-             ar.nro_recibo.setBorder(BorderFactory.createLineBorder(Color.RED, 1));
-              bandera=false;
-         }else{
-             ar.nro_recibo.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
           }
           return bandera;
       }

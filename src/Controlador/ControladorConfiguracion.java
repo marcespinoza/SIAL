@@ -21,7 +21,16 @@ public class ControladorConfiguracion {
         new ControladorPropietarios(configuracion);
         new ControladorUsuario(configuracion);
         new ControladorPropiedades(configuracion);
-        configuracion.setVisible(true);
+        desactivarBotones();
+        configuracion.setVisible(true);        
+    }
+    
+    public void desactivarBotones(){        
+        if(Ventana.labelTipoUsuario.getText().equals("operador")){
+            configuracion.pestañas.setEnabledAt(0, false);
+            configuracion.pestañas.setEnabledAt(2, false);
+            configuracion.pestañas.setSelectedIndex(1);
+        }
     }
     
 }

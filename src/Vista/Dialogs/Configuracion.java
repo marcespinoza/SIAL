@@ -29,7 +29,7 @@ public class Configuracion extends javax.swing.JDialog {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jTabbedPane1 = new javax.swing.JTabbedPane();
+        pestañas = new javax.swing.JTabbedPane();
         usuario = new Vista.Panels.Usuario();
         propiedades = new Vista.Panels.Propiedades();
         propietarios = new Vista.Panels.Propietarios();
@@ -37,9 +37,9 @@ public class Configuracion extends javax.swing.JDialog {
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Administrar usuarios");
 
-        jTabbedPane1.addTab("Usuarios", usuario);
-        jTabbedPane1.addTab("Propiedades", propiedades);
-        jTabbedPane1.addTab("Propietarios", propietarios);
+        pestañas.addTab("Usuarios", usuario);
+        pestañas.addTab("Propiedades", propiedades);
+        pestañas.addTab("Propietarios", propietarios);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -47,14 +47,14 @@ public class Configuracion extends javax.swing.JDialog {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jTabbedPane1)
+                .addComponent(pestañas)
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jTabbedPane1))
+                .addComponent(pestañas))
         );
 
         pack();
@@ -104,7 +104,7 @@ public class Configuracion extends javax.swing.JDialog {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JTabbedPane jTabbedPane1;
+    public javax.swing.JTabbedPane pestañas;
     public Vista.Panels.Propiedades propiedades;
     public Vista.Panels.Propietarios propietarios;
     public Vista.Panels.Usuario usuario;

@@ -70,6 +70,7 @@ public class ControladorPropiedades implements ActionListener{
         ResultSet cuit = pd.obtenerCuit(apellidos, nombres);
         cuit.next();
         vista.propiedades.cuit.setText(cuit.getString(1));
+        vista.propiedades.nroRecibo.setText(cuit.getString(2));
         ResultSet rs = ld.obtenerPropiedades(apellidos, nombres);
         DefaultTableModel model = (DefaultTableModel) vista.propiedades.tablaPropiedades.getModel();
         model.setRowCount(0);        
@@ -108,7 +109,7 @@ public class ControladorPropiedades implements ActionListener{
             if(validarCampos()){
             if(!vista.propiedades.comboApellido.getSelectedItem().equals("Seleccione")){  
                if(!vista.propiedades.comboNombres.getSelectedItem().equals("Seleccione")){  
-                   ld.agregarPropiedad(vista.propiedades.barrio.getText(), vista.propiedades.mz.getText(), vista.propiedades.pc.getText(), vista.propiedades.comboApellido.getSelectedItem().toString(), vista.propiedades.comboNombres.getSelectedItem().toString(), vista.propiedades.cuit.getText());
+                   ld.agregarPropiedad(vista.propiedades.barrio.getText(), vista.propiedades.mz.getText(), vista.propiedades.pc.getText(), vista.propiedades.comboApellido.getSelectedItem().toString(), vista.propiedades.comboNombres.getSelectedItem().toString(), vista.propiedades.cuit.getText(),vista.propiedades.nroRecibo.getText());
             }
             }
             llenarTabla();}
