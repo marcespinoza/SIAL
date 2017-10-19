@@ -295,7 +295,7 @@
       <Properties>
         <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
           <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
-            <TitledBorder justification="2" title="Cta. derecho poseci&#xf3;n">
+            <TitledBorder justification="2" title="Cta. derecho posesi&#xf3;n">
               <Font PropertyName="font" name="Century Gothic" size="12" style="3"/>
             </TitledBorder>
           </Border>

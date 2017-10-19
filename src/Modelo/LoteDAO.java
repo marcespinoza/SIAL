@@ -48,7 +48,7 @@ public class LoteDAO {
      ResultSet rs = null;
      try {
           Connection con = conexion.getConexion();
-          String listar = "SELECT l.propietario_Apellidos, l.propietario_Nombres, l.propietario_cuit FROM lote l inner JOIN ficha_control f where f.Lote_Manzana=l.Manzana and f.Id_control='"+id_control+"'";
+          String listar = "SELECT l.propietario_Apellidos, l.propietario_Nombres, l.propietario_cuit, l.propietario_nro_recibo FROM lote l inner JOIN ficha_control f where f.Lote_Manzana=l.Manzana and f.Id_control='"+id_control+"'";
           Statement st = con.createStatement();
           rs = st.executeQuery(listar);
         } catch (Exception e) {

@@ -5,6 +5,13 @@
  */
 package Vista.Panels;
 
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.ChartFrame;
+import org.jfree.chart.JFreeChart;
+import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.data.category.DefaultCategoryDataset;
+import org.jfree.data.general.DefaultPieDataset;
+
 /**
  *
  * @author Marcelo
@@ -15,6 +22,30 @@ public class Resumen extends javax.swing.JPanel {
     
     public Resumen() {
         initComponents();
+        
+    }
+    
+    public static void barras(){
+        DefaultCategoryDataset dataset = new DefaultCategoryDataset();  
+         dataset.addValue(1.0, "Egresos", "Enero"); 
+    dataset.addValue(3.0, "Egresos", "Febrero"); 
+    dataset.addValue(2.0, "Egresos", "Marzo"); 
+    dataset.addValue(2.0, "Ingresos", "Enero"); 
+    dataset.addValue(3.0, "Ingresos", "Febrero"); 
+    dataset.addValue(4.0, "Ingresos", "Marzo"); 
+      JFreeChart chart = ChartFactory.createBarChart( 
+    "Grafica de barras", // El titulo de la gráfica 
+    "Mes", // Etiqueta de categoria 
+    "Valor", // Etiqueta de valores 
+    dataset, // Datos 
+    PlotOrientation.VERTICAL, // orientacion 
+    true, // Incluye Leyenda 
+    true, // Incluye tooltips 
+    false // URLs? 
+    ); 
+      ChartFrame frame = new ChartFrame("Graficador", chart); 
+    frame.pack(); 
+    frame.setVisible(true); 
     }
 
      public static Resumen getInstance(){
@@ -41,13 +72,14 @@ public class Resumen extends javax.swing.JPanel {
         mesHasta = new com.toedter.calendar.JMonthChooser();
         añoHasta = new com.toedter.calendar.JYearChooser();
         buscar = new javax.swing.JButton();
+        freeChart = new javax.swing.JPanel();
 
         tablaResumen.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
             new String [] {
-                "Total", "Cuota", "Mes"
+                "Categoria", "Total", "Mes"
             }
         ));
         jScrollPane1.setViewportView(tablaResumen);
@@ -98,6 +130,19 @@ public class Resumen extends javax.swing.JPanel {
 
         buscar.setText("Buscar");
 
+        freeChart.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
+
+        javax.swing.GroupLayout freeChartLayout = new javax.swing.GroupLayout(freeChart);
+        freeChart.setLayout(freeChartLayout);
+        freeChartLayout.setHorizontalGroup(
+            freeChartLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 548, Short.MAX_VALUE)
+        );
+        freeChartLayout.setVerticalGroup(
+            freeChartLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -105,14 +150,18 @@ public class Resumen extends javax.swing.JPanel {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 648, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 728, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(freeChart, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(buscar)))
-                .addContainerGap(130, Short.MAX_VALUE))
+                        .addComponent(buscar)
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -124,8 +173,10 @@ public class Resumen extends javax.swing.JPanel {
                         .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addComponent(buscar))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 212, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(114, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(freeChart, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 314, Short.MAX_VALUE))
+                .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -134,6 +185,7 @@ public class Resumen extends javax.swing.JPanel {
     public com.toedter.calendar.JYearChooser añoDesde;
     public com.toedter.calendar.JYearChooser añoHasta;
     public javax.swing.JButton buscar;
+    public javax.swing.JPanel freeChart;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;

@@ -110,7 +110,7 @@ public class ControladorDetalleCuota implements ActionListener{
                 String monto = rs.getString(2);
                 String gastos = rs.getString(3);    
                 String detalle = rs.getString(4); 
-                dchoPosesion= new Object[] {num_cuota,fecha, monto,gastos, detalle};                    
+                dchoPosesion= new Object[] {num_cuota,fecha, monto,gastos,detalle};                    
                 model.addRow(dchoPosesion); 
                 num_cuota ++;
             }}catch(Exception e){

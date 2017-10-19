@@ -39,18 +39,15 @@ public class PropietarioDAO {
      return rs;
  }
      
-     public void editarPropietarios(String apellidos, String nombres, String cuit){
+     public void editarPropietario(String apellidos, String nombres, String cuit, int nro_recibo){
          try {
              Connection con = conexion.getConexion();
-             PreparedStatement pstm = con.prepareStatement("update propietario" +
-                     "set apellidos= ?  ,  " +
-                     "nombres= ? , " +
-                     "cuit= ?  " +
-                     "where cuit= ? ");             
+             PreparedStatement pstm = con.prepareStatement("update propietario set apellidos= ? , nombres= ? , cuit= ? , nro_recibo= ? where cuit= ? ");             
              pstm.setString(1,apellidos);
              pstm.setString(2,nombres);
              pstm.setString(3,cuit);
-             pstm.setString(4,cuit);
+             pstm.setInt(4, nro_recibo);
+             pstm.setString(5,cuit);
              pstm.executeUpdate();
          } catch (SQLException ex) {
              Logger.getLogger(PropietarioDAO.class.getName()).log(Level.SEVERE, null, ex);
@@ -61,7 +58,7 @@ public class PropietarioDAO {
           ResultSet rs = null;
      try {
           Connection con = conexion.getConexion();         
-          String listar = "SELECT apellidos, nombres, cuit from propietario"; 
+          String listar = "SELECT apellidos, nombres, cuit, nro_recibo from propietario"; 
           Statement st = con.createStatement();
           rs = st.executeQuery(listar);
         } catch (Exception e) {
@@ -119,11 +116,11 @@ public class PropietarioDAO {
          System.out.println(e.getMessage());
      }
      }
-     public int agregarPropietarios(String apellidos, String nombres, String cuit){
+     public int agregarPropietarios(String apellidos, String nombres, String cuit, String nroRecibo){
           int filasAfectadas=0;
      try {
          Connection con = conexion.getConexion();
-         String insertar = "Insert into propietario(apellidos, nombres, cuit) values ('"+apellidos+"','"+nombres+"','"+cuit+"') ";
+         String insertar = "Insert into propietario(apellidos, nombres, cuit, nro_recibo) values ('"+apellidos+"','"+nombres+"','"+cuit+"','"+nroRecibo+"') ";
          PreparedStatement ps = con.prepareStatement(insertar);
          filasAfectadas = ps.executeUpdate();         
      } catch (Exception e) { 

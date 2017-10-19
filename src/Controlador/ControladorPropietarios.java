@@ -47,19 +47,7 @@ public class ControladorPropietarios implements MouseListener, ActionListener, K
         vistaConfiguracion.propietarios.apellidoTxf.addKeyListener(this);
         vistaConfiguracion.propietarios.nombreTxf.addKeyListener(this);
         vistaConfiguracion.propietarios.cuitTxf.addKeyListener(this);
-        vistaConfiguracion.propietarios.nroRecibo.addKeyListener(new KeyListener() {
-            @Override
-            public void keyTyped(KeyEvent e) {
-            }
-
-            @Override
-            public void keyPressed(KeyEvent e) {
-            }
-
-            @Override
-            public void keyReleased(KeyEvent e) {
-            }
-        });
+        vistaConfiguracion.propietarios.nroRecibo.addKeyListener(this);
         vistaConfiguracion.propietarios.editar.setEnabled(false);
         vistaConfiguracion.setLocationRelativeTo(null);
         llenarTabla();        
@@ -88,7 +76,8 @@ public class ControladorPropietarios implements MouseListener, ActionListener, K
                 String apellidos = rs.getString(1);  
                 String nombres = rs.getString(2);
                 String cuit = rs.getString(3);
-                propietarios = new Object[] {apellidos, nombres, cuit};
+                String nroRecibo = rs.getString(4);
+                propietarios = new Object[] {apellidos, nombres, cuit, nroRecibo};
                 model.addRow(propietarios);
             }
         } 
@@ -103,6 +92,7 @@ public class ControladorPropietarios implements MouseListener, ActionListener, K
           vistaConfiguracion.propietarios.apellidoTxf.setText(vistaConfiguracion.propietarios.tablaPropietarios.getModel().getValueAt(row,0).toString());
           vistaConfiguracion.propietarios.nombreTxf.setText(vistaConfiguracion.propietarios.tablaPropietarios.getModel().getValueAt(row,1).toString());
           vistaConfiguracion.propietarios.cuitTxf.setText(vistaConfiguracion.propietarios.tablaPropietarios.getModel().getValueAt(row,2).toString());
+          vistaConfiguracion.propietarios.nroRecibo.setText(vistaConfiguracion.propietarios.tablaPropietarios.getModel().getValueAt(row,3).toString());
      }
 
     @Override
@@ -128,7 +118,7 @@ public class ControladorPropietarios implements MouseListener, ActionListener, K
         }
         
         if(e.getSource()==vistaConfiguracion.propietarios.editar){
-           pd.editarPropietarios(vistaConfiguracion.propietarios.apellidoTxf.getText(), vistaConfiguracion.propietarios.nombreTxf.getText(), vistaConfiguracion.propietarios.cuitTxf.getText());
+           pd.editarPropietario(vistaConfiguracion.propietarios.apellidoTxf.getText(), vistaConfiguracion.propietarios.nombreTxf.getText(), vistaConfiguracion.propietarios.cuitTxf.getText(),Integer.parseInt(vistaConfiguracion.propietarios.nroRecibo.getText()));
            llenarTabla();
         }
         
@@ -151,7 +141,7 @@ public class ControladorPropietarios implements MouseListener, ActionListener, K
         
            if(e.getSource()==vistaConfiguracion.propietarios.agregar){
              if(validarCampos()){
-              pd.agregarPropietarios(vistaConfiguracion.propietarios.apellidoTxf.getText(), vistaConfiguracion.propietarios.nombreTxf.getText(), vistaConfiguracion.propietarios.cuitTxf.getText());
+              pd.agregarPropietarios(vistaConfiguracion.propietarios.apellidoTxf.getText(), vistaConfiguracion.propietarios.nombreTxf.getText(), vistaConfiguracion.propietarios.cuitTxf.getText(), vistaConfiguracion.propietarios.nroRecibo.getText());
               llenarTabla();
               limpiarCampos();
              }
@@ -162,6 +152,7 @@ public class ControladorPropietarios implements MouseListener, ActionListener, K
          vistaConfiguracion.propietarios.apellidoTxf.setText("");
          vistaConfiguracion.propietarios.nombreTxf.setText("");
          vistaConfiguracion.propietarios.cuitTxf.setText("");
+         vistaConfiguracion.propietarios.nroRecibo.setText("");
     }
     
      public boolean validarCampos(){
@@ -184,6 +175,12 @@ public class ControladorPropietarios implements MouseListener, ActionListener, K
          bandera=false;
         }else{
          vistaConfiguracion.propietarios.cuitTxf.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
+        }
+        if(vistaConfiguracion.propietarios.nroRecibo.getText().isEmpty()){
+         vistaConfiguracion.propietarios.nroRecibo.setBorder(BorderFactory.createLineBorder(Color.RED, 1));
+         bandera=false;
+        }else{
+         vistaConfiguracion.propietarios.nroRecibo.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
         }
         return bandera;
      }

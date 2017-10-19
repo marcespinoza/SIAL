@@ -52,11 +52,11 @@ public class Minuta extends javax.swing.JPanel {
 
             },
             new String [] {
-                "Fecha", "Rbo. Nro.", "Apellido/s", "Nombre/s", "Mz. Pc.", "Cobrado", "Rendido", "Cuota cobrada", "Observaciones"
+                "Fecha", "Rbo. Nro.", "Apellido/s", "Nombre/s", "Mz. Pc.", "Cobrado", "Gastos Admin.", "Rendido", "Cuota cobrada", "Observaciones"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false, false, false, false
+                false, false, false, false, false, false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -64,6 +64,14 @@ public class Minuta extends javax.swing.JPanel {
             }
         });
         jScrollPane1.setViewportView(tablaMinuta);
+        if (tablaMinuta.getColumnModel().getColumnCount() > 0) {
+            tablaMinuta.getColumnModel().getColumn(1).setPreferredWidth(1);
+            tablaMinuta.getColumnModel().getColumn(4).setPreferredWidth(1);
+            tablaMinuta.getColumnModel().getColumn(5).setPreferredWidth(1);
+            tablaMinuta.getColumnModel().getColumn(6).setPreferredWidth(1);
+            tablaMinuta.getColumnModel().getColumn(7).setPreferredWidth(1);
+            tablaMinuta.getColumnModel().getColumn(8).setPreferredWidth(1);
+        }
 
         tablaFechaMinuta.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {

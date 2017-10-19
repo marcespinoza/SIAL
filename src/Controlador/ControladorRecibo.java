@@ -57,7 +57,7 @@ public class ControladorRecibo implements ActionListener{
     ClienteDAO cd = new ClienteDAO();
     FichaControlDAO fcd = new FichaControlDAO();
     DetalleCuota dc = new DetalleCuota();
-    String apellido_propietario, nombre_propietario, cuit_propietario;
+    String apellido_propietario, nombre_propietario, cuit_propietario, nro_recibo_propietario;
     String nombre_comprador, apellido_comprador, domicilio_comprador;
     String dimension, barrio;
     int cant_cuotas, manzana, parcela, row;
@@ -67,6 +67,7 @@ public class ControladorRecibo implements ActionListener{
     public static final String IMG2 = "src/Imagenes/logo_recibo.png";
     Random random = new Random();
     int tipoPago;
+    BigDecimal categoria;
 
     public ControladorRecibo(Frame parent, int id_control, DetalleCuota dc, int row, int tipoPago) {
         ar = new AltaRecibo(parent, true);
@@ -135,6 +136,7 @@ public class ControladorRecibo implements ActionListener{
             apellido_propietario = rs.getString(1);
             nombre_propietario = rs.getString(2);
             cuit_propietario = rs.getString(3);
+            nro_recibo_propietario = rs.getString(4);
             ar.apellido_propietario.setText(apellido_propietario);
             ar.nombre_propietario.setText(nombre_propietario);    
             ar.cuit_propietario.setText(cuit_propietario);
@@ -164,16 +166,17 @@ public class ControladorRecibo implements ActionListener{
             rs.next();            
             dimension = rs.getString(1);
             cant_cuotas = rs.getInt(2);
+            categoria = new BigDecimal(rs.getString(3)).add(new BigDecimal(rs.getString(4)));
             barrio= rs.getString(6);
             manzana = rs.getInt(7);
             parcela = rs.getInt(8);
             if(tipoPago==1){
-            cuota_total = new BigDecimal(dc.tablaDetallePago.getModel().getValueAt(row, 3).toString());
-            gastos_administrativos = new BigDecimal(dc.tablaDetallePago.getModel().getValueAt(row, 4).toString());
-            cobrado = cuota_total.add(gastos_administrativos) ;
-            ar.importe.setText(String.valueOf(cobrado));
-            ar.total_pagado.setText(String.valueOf(cobrado));            
-            ar.detalle.setText("Paga cuota "+dc.tablaDetallePago.getModel().getValueAt(row, 0).toString()+"/"+cant_cuotas+    "\r\nDimension "+dimension +     "\r\n"+ barrio +" "+ " Mz. "+manzana +" Pc. "+ parcela+   "\r\n"+dc.tablaDetallePago.getModel().getValueAt(row, 2).toString());
+             cuota_total = new BigDecimal(dc.tablaDetallePago.getModel().getValueAt(row, 3).toString());
+             gastos_administrativos = new BigDecimal(dc.tablaDetallePago.getModel().getValueAt(row, 4).toString());
+             cobrado = cuota_total.add(gastos_administrativos) ;
+             ar.importe.setText(String.valueOf(cobrado));
+             ar.total_pagado.setText(String.valueOf(cobrado));            
+             ar.detalle.setText("Paga cuota "+dc.tablaDetallePago.getModel().getValueAt(row, 0).toString()+"/"+cant_cuotas+    "\r\nDimension "+dimension +     "\r\n"+ barrio +" "+ " Mz. "+manzana +" Pc. "+ parcela+   "\r\n"+dc.tablaDetallePago.getModel().getValueAt(row, 2).toString());
             }else if (tipoPago==0){
               ar.detalle.setText("Cta. derecho posesión "+    "\r\nDimension "+dimension +     "\r\n"+ barrio +" "+ " Mz. "+manzana +" Pc. "+ parcela+   "\r\n"+dc.tablaDetallePago.getModel().getValueAt(row, 2).toString());
               cuota_total = new BigDecimal(dc.tablaDchoPosesion.getModel().getValueAt(row, 2).toString());
@@ -371,9 +374,12 @@ public class ControladorRecibo implements ActionListener{
         protected Void doInBackground() throws Exception {      
             Date date = new Date();
             BigDecimal rendido = cobrado.subtract(gastos_administrativos);
-            md.altaMinuta(new java.sql.Date(date.getTime()), apellido_comprador, nombre_comprador, manzana, parcela, cobrado, gastos_administrativos, rendido, Integer.parseInt(dc.tablaDetallePago.getModel().getValueAt(row, 0).toString()), dc.tablaDetallePago.getModel().getValueAt(row, 12).toString(), nro_random);
-            return null;
-        }
+            if(tipoPago==1){
+              md.altaMinuta(new java.sql.Date(date.getTime()), apellido_comprador, nombre_comprador, manzana, parcela, cobrado, gastos_administrativos, rendido, Integer.parseInt(dc.tablaDetallePago.getModel().getValueAt(row, 0).toString()), dc.tablaDetallePago.getModel().getValueAt(row, 12).toString(), categoria.toString(), Integer.parseInt(nro_recibo_propietario));
+            }else if(tipoPago==0){
+              md.altaMinuta(new java.sql.Date(date.getTime()), apellido_comprador, nombre_comprador, manzana, parcela, cobrado, gastos_administrativos, rendido, Integer.parseInt(dc.tablaDchoPosesion.getModel().getValueAt(row, 0).toString()), dc.tablaDetallePago.getModel().getValueAt(row, 12).toString(), "Cta. derecho posesión",Integer.parseInt(nro_recibo_propietario));
+            }return null;
+             }
 
        @Override
        public void done() { 
