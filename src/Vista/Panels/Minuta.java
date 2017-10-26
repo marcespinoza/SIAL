@@ -22,7 +22,7 @@ public class Minuta extends javax.swing.JPanel {
         minuta= new Minuta();
         }
         return minuta;
-          }
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.

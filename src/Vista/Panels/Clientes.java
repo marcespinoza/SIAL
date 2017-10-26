@@ -21,16 +21,13 @@ import javax.swing.table.TableRowSorter;
  */
 public class Clientes extends javax.swing.JPanel {
 
-        private Object [] clientes;
-        private Object [] lote;
-        private Conexion conexion;
-    /**
-     * Creates new form Clientes
-     */
+    private static Clientes clientes = null;
+    
     public Clientes() {
-        initComponents();
-        conexion = new Conexion();        
+        initComponents();       
     }
+    
+    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -88,6 +85,7 @@ public class Clientes extends javax.swing.JPanel {
             }
         }
         ;
+        agregarPropietario = new javax.swing.JButton();
 
         datosCliente.setBorder(javax.swing.BorderFactory.createTitledBorder("Datos cliente"));
 
@@ -330,11 +328,11 @@ public class Clientes extends javax.swing.JPanel {
 
             },
             new String [] {
-                "Apellido/s", "Nombre/s", "Documento", "Telefono", "Title 5", "Title 6", "Title 7", "Title 8", "Title 9", "Title 10", "Title 11", "Title 12", "Title 13", "Title 14", "Barrio", "Mz.", "Pc."
+                "Title 1", "Title 2", "Title 3", "Title 4", "Title 5", "Title 6", "Title 7", "Title 8", "Title 9", "Title 10", "Title 11", "Title 12", "Title 13", "Title 14", "Title 15", "Title 16", "Title 17"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false
+                true, false, false, false, false, false, false, false, false, false, false, false, false, true, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -345,24 +343,47 @@ public class Clientes extends javax.swing.JPanel {
         if (tablaCliente.getColumnModel().getColumnCount() > 0) {
             tablaCliente.getColumnModel().getColumn(2).setResizable(false);
             tablaCliente.getColumnModel().getColumn(2).setPreferredWidth(1);
-            tablaCliente.getColumnModel().getColumn(3).setResizable(false);
-            tablaCliente.getColumnModel().getColumn(3).setPreferredWidth(1);
-            tablaCliente.getColumnModel().getColumn(4).setResizable(false);
-            tablaCliente.getColumnModel().getColumn(5).setResizable(false);
-            tablaCliente.getColumnModel().getColumn(6).setResizable(false);
-            tablaCliente.getColumnModel().getColumn(7).setResizable(false);
-            tablaCliente.getColumnModel().getColumn(8).setResizable(false);
-            tablaCliente.getColumnModel().getColumn(9).setResizable(false);
-            tablaCliente.getColumnModel().getColumn(10).setResizable(false);
-            tablaCliente.getColumnModel().getColumn(11).setResizable(false);
-            tablaCliente.getColumnModel().getColumn(12).setResizable(false);
-            tablaCliente.getColumnModel().getColumn(13).setResizable(false);
+            tablaCliente.getColumnModel().getColumn(3).setMinWidth(0);
+            tablaCliente.getColumnModel().getColumn(3).setPreferredWidth(0);
+            tablaCliente.getColumnModel().getColumn(3).setMaxWidth(0);
+            tablaCliente.getColumnModel().getColumn(4).setMinWidth(0);
+            tablaCliente.getColumnModel().getColumn(4).setPreferredWidth(0);
+            tablaCliente.getColumnModel().getColumn(4).setMaxWidth(0);
+            tablaCliente.getColumnModel().getColumn(5).setMinWidth(0);
+            tablaCliente.getColumnModel().getColumn(5).setPreferredWidth(0);
+            tablaCliente.getColumnModel().getColumn(5).setMaxWidth(0);
+            tablaCliente.getColumnModel().getColumn(6).setMinWidth(0);
+            tablaCliente.getColumnModel().getColumn(6).setPreferredWidth(0);
+            tablaCliente.getColumnModel().getColumn(6).setMaxWidth(0);
+            tablaCliente.getColumnModel().getColumn(7).setMinWidth(0);
+            tablaCliente.getColumnModel().getColumn(7).setPreferredWidth(0);
+            tablaCliente.getColumnModel().getColumn(7).setMaxWidth(0);
+            tablaCliente.getColumnModel().getColumn(8).setMinWidth(0);
+            tablaCliente.getColumnModel().getColumn(8).setPreferredWidth(0);
+            tablaCliente.getColumnModel().getColumn(8).setMaxWidth(0);
+            tablaCliente.getColumnModel().getColumn(9).setMinWidth(0);
+            tablaCliente.getColumnModel().getColumn(9).setPreferredWidth(0);
+            tablaCliente.getColumnModel().getColumn(9).setMaxWidth(0);
+            tablaCliente.getColumnModel().getColumn(10).setMinWidth(0);
+            tablaCliente.getColumnModel().getColumn(10).setPreferredWidth(0);
+            tablaCliente.getColumnModel().getColumn(10).setMaxWidth(0);
+            tablaCliente.getColumnModel().getColumn(11).setMinWidth(0);
+            tablaCliente.getColumnModel().getColumn(11).setPreferredWidth(0);
+            tablaCliente.getColumnModel().getColumn(11).setMaxWidth(0);
+            tablaCliente.getColumnModel().getColumn(12).setMinWidth(0);
+            tablaCliente.getColumnModel().getColumn(12).setPreferredWidth(0);
+            tablaCliente.getColumnModel().getColumn(12).setMaxWidth(0);
+            tablaCliente.getColumnModel().getColumn(13).setMinWidth(0);
+            tablaCliente.getColumnModel().getColumn(13).setPreferredWidth(0);
+            tablaCliente.getColumnModel().getColumn(13).setMaxWidth(0);
             tablaCliente.getColumnModel().getColumn(14).setResizable(false);
             tablaCliente.getColumnModel().getColumn(15).setResizable(false);
             tablaCliente.getColumnModel().getColumn(15).setPreferredWidth(1);
             tablaCliente.getColumnModel().getColumn(16).setResizable(false);
             tablaCliente.getColumnModel().getColumn(16).setPreferredWidth(1);
         }
+
+        agregarPropietario.setText("Agregar propietario");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -392,7 +413,8 @@ public class Clientes extends javax.swing.JPanel {
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(detalleBtn)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(asignarBtn)))))
+                                .addComponent(asignarBtn))
+                            .addComponent(agregarPropietario))))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -417,7 +439,9 @@ public class Clientes extends javax.swing.JPanel {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(detalleBtn)
                             .addComponent(asignarBtn))
-                        .addGap(41, 41, 41)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(agregarPropietario)
+                        .addGap(9, 9, 9)
                         .addComponent(datosCliente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(datosReferencia, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -491,6 +515,7 @@ public class Clientes extends javax.swing.JPanel {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     public javax.swing.JButton agregarBtn;
+    public javax.swing.JButton agregarPropietario;
     public javax.swing.JTextField apellido_referencia;
     public javax.swing.JButton asignarBtn;
     public javax.swing.JTextField barrio;

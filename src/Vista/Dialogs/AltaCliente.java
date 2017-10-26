@@ -5,6 +5,8 @@
  */
 package Vista.Dialogs;
 
+import javax.swing.text.NumberFormatter;
+
 /**
  *
  * @author Marcelo
@@ -45,7 +47,10 @@ public class AltaCliente extends javax.swing.JDialog {
         calle = new javax.swing.JTextField();
         telefono2 = new javax.swing.JTextField();
         telefono1 = new javax.swing.JTextField();
-        documento = new javax.swing.JFormattedTextField();
+        NumberFormatter nf = new NumberFormatter();
+        nf.setMinimum(3);
+        nf.setMaximum(10);
+        documento = new javax.swing.JFormattedTextField(nf);
         jLabel9 = new javax.swing.JLabel();
         jSeparator2 = new javax.swing.JSeparator();
         jLabel11 = new javax.swing.JLabel();
@@ -62,6 +67,7 @@ public class AltaCliente extends javax.swing.JDialog {
         jLabel16 = new javax.swing.JLabel();
         trabajo = new javax.swing.JTextField();
         numero = new javax.swing.JFormattedTextField();
+        documento2 = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Alta de cliente");
@@ -102,7 +108,7 @@ public class AltaCliente extends javax.swing.JDialog {
         telefono1.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
         documento.setBorder(javax.swing.BorderFactory.createEtchedBorder());
-        documento.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("########"))));
+        documento.setFormatterFactory(null);
         documento.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 documentoActionPerformed(evt);
@@ -213,7 +219,10 @@ public class AltaCliente extends javax.swing.JDialog {
                             .addComponent(trabajo, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(calle, javax.swing.GroupLayout.PREFERRED_SIZE, 296, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(barrio, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(documento, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(documento, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(documento2, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(apellidos, javax.swing.GroupLayout.PREFERRED_SIZE, 392, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(nombres, javax.swing.GroupLayout.PREFERRED_SIZE, 392, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(fech_nacimiento, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -241,7 +250,8 @@ public class AltaCliente extends javax.swing.JDialog {
                 .addGap(5, 5, 5)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
-                    .addComponent(documento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(documento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(documento2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(6, 6, 6)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
@@ -358,6 +368,7 @@ public class AltaCliente extends javax.swing.JDialog {
     public javax.swing.JTextField calle;
     public javax.swing.JButton cancelar;
     public javax.swing.JFormattedTextField documento;
+    public javax.swing.JTextField documento2;
     public com.toedter.calendar.JDateChooser fech_nacimiento;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel11;

@@ -61,7 +61,7 @@ public class LoteDAO {
      ResultSet rs = null;
      try {
           Connection con = conexion.getConexion();
-          String listar = "SELECT barrio from lote where vendido=0 "; 
+          String listar = "SELECT DISTINCT barrio from lote where vendido=0 "; 
           Statement st = con.createStatement();
           rs = st.executeQuery(listar);
         } catch (Exception e) {
@@ -74,7 +74,7 @@ public class LoteDAO {
      ResultSet rs = null;
      try {
           Connection con = conexion.getConexion();
-          String listar = "SELECT manzana from lote where barrio = '"+barrio+"' and vendido=0"; 
+          String listar = "SELECT DISTINCT manzana from lote where barrio = '"+barrio+"' and vendido=0"; 
           Statement st = con.createStatement();
           rs = st.executeQuery(listar);
         } catch (Exception e) {

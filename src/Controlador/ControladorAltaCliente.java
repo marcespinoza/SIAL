@@ -11,37 +11,51 @@ import Vista.Dialogs.AltaCliente;
 import Vista.Frame.Ventana;
 import Vista.Panels.Clientes;
 import java.awt.Color;
-import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.sql.Date;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import javax.swing.BorderFactory;
-import javax.swing.JTable;
 import javax.swing.border.EtchedBorder;
 
 /**
  *
  * @author Marcelo
  */
-public class ControladorAltaCliente implements ActionListener{
+public class ControladorAltaCliente implements ActionListener, KeyListener{
     
     
     AltaCliente ac;
     ClienteDAO cd = new ClienteDAO();
     ReferenciaDAO rd = new ReferenciaDAO();
-    ControladorCliente cc = new ControladorCliente();
+    ControladorCliente cc;
     Clientes clientes;
+    private int id_control=0;
     
-    
-    public ControladorAltaCliente(Ventana ventana, Clientes clientes){
+    public ControladorAltaCliente(Ventana ventana, Clientes clientes, int id_control, ControladorCliente cc){
         ac = new AltaCliente(ventana, true);  
         this.clientes=clientes;
+        this.cc=cc;
+        this.id_control=id_control;
         this.ac.aceptar.addActionListener(this);
         this.ac.cancelar.addActionListener(this);
+        this.ac.parentescoRef.addKeyListener(this);
+        this.ac.documento2.addKeyListener(new KeyListener() {
+            @Override
+            public void keyTyped(KeyEvent e) {
+            }
+
+            @Override
+            public void keyPressed(KeyEvent e) {
+            }
+
+            @Override
+            public void keyReleased(KeyEvent e) {
+                if(Integer.parseInt(ac.documento2.getText())<30){
+                  e.consume();
+                }
+            }
+        });
         ac.setVisible(true);
     }
    
@@ -135,21 +149,37 @@ public class ControladorAltaCliente implements ActionListener{
         }
         return bandera;
     }
+
+    @Override
+    public void keyTyped(KeyEvent e) {
+    }
+
+    @Override
+    public void keyPressed(KeyEvent e) {
+        if (e.getKeyCode()==KeyEvent.VK_ENTER){
+            ac.aceptar.doClick();
+    }
+    }
+
+    @Override
+    public void keyReleased(KeyEvent e) {
+    }
     
     public class AltaClienteSwing extends javax.swing.SwingWorker<Void, Void>{
          
-         int id_control;
 
         @Override
         protected Void doInBackground() throws Exception {     
-             cd.altaCliente(Integer.parseInt(ac.documento.getText()), ac.apellidos.getText(), ac.nombres.getText(), new java.sql.Date(ac.fech_nacimiento.getDate().getTime()), ac.barrio.getText(), ac.calle.getText(), Integer.parseInt(ac.numero.getText()), ac.telefono1.getText(), ac.telefono2.getText(), ac.trabajo.getText());
-
+            cd.altaCliente(Integer.parseInt(ac.documento.getText()), ac.apellidos.getText(), ac.nombres.getText(), new java.sql.Date(ac.fech_nacimiento.getDate().getTime()), ac.barrio.getText(), ac.calle.getText(), Integer.parseInt(ac.numero.getText()), ac.telefono1.getText(), ac.telefono2.getText(), ac.trabajo.getText());
             return null;
         }
 
        @Override
        public void done() { 
             rd.altaReferencia(ac.telefonoRef.getText(), ac.apellidosRef.getText(), ac.nombresRef.getText(), ac.parentescoRef.getText(), Integer.parseInt(ac.documento.getText()));
+            if(id_control!=0){
+              cd.altaClientesXLotes(Integer.parseInt(ac.documento.getText()), id_control);
+            }
             cc.llenarTabla(0);
             ac.dispose();   
        }

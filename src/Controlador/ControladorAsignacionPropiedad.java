@@ -5,6 +5,7 @@
  */
 package Controlador;
 
+import Modelo.ClienteDAO;
 import Modelo.CuotaDAO;
 import Modelo.FichaControlDAO;
 import Modelo.LoteDAO;
@@ -15,6 +16,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.math.BigDecimal;
 import java.sql.Date;
 import java.sql.ResultSet;
@@ -25,13 +28,14 @@ import javax.swing.border.EtchedBorder;
  *
  * @author Marcelo
  */
-public class ControladorAsignacionPropiedad implements ActionListener{
+public class ControladorAsignacionPropiedad implements ActionListener, KeyListener{
     
     private Frame parent;    
     AsignarPropiedad vistaAsignarPropiedad ;
     LoteDAO ld = new LoteDAO();
     FichaControlDAO fichaControlDAO = new FichaControlDAO();
     CuotaDAO cuotaDao = new CuotaDAO();
+    ClienteDAO cd = new ClienteDAO();
     ControladorCliente cc = new ControladorCliente();
     int dni;
 
@@ -41,6 +45,7 @@ public class ControladorAsignacionPropiedad implements ActionListener{
         this.dni=dni;
         this.vistaAsignarPropiedad.aceptarBtn.addActionListener(this);
         this.vistaAsignarPropiedad.cancelarBtn.addActionListener(this);
+        this.vistaAsignarPropiedad.bolsa_cemento.addKeyListener(this);
         this.vistaAsignarPropiedad.barrio.addItemListener(new ItemListener() {
             @Override
             public void itemStateChanged(ItemEvent e) {
@@ -73,6 +78,7 @@ public class ControladorAsignacionPropiedad implements ActionListener{
     
     public void cargarBarrios(){
      ResultSet rs = ld.obtenerBarrios();
+      vistaAsignarPropiedad.barrio.removeAllItems();
         try {
             while(rs.next()){
                 vistaAsignarPropiedad.barrio.addItem(rs.getString(1));
@@ -124,6 +130,21 @@ public class ControladorAsignacionPropiedad implements ActionListener{
         } 
         return bandera;
      }
+
+    @Override
+    public void keyTyped(KeyEvent e) {
+    }
+
+    @Override
+    public void keyPressed(KeyEvent e) {
+        if (e.getKeyCode()==KeyEvent.VK_ENTER){
+            vistaAsignarPropiedad.aceptarBtn.doClick();
+         }
+    }
+
+    @Override
+    public void keyReleased(KeyEvent e) {
+    }
      
      public class SwingWorker extends javax.swing.SwingWorker<Void, Void>{
          
@@ -132,14 +153,16 @@ public class ControladorAsignacionPropiedad implements ActionListener{
         @Override
         protected Void doInBackground() throws Exception {            
            double gastos =Double.parseDouble(vistaAsignarPropiedad.cuota_total.getText())-(Double.parseDouble(vistaAsignarPropiedad.cuota_total.getText())/1.1);
-            id_control = fichaControlDAO.altaFichaControl(vistaAsignarPropiedad.tipo_propiedad.getSelectedItem().toString(), vistaAsignarPropiedad.dimension.getText(), Integer.parseInt(vistaAsignarPropiedad.cantidad_cuotas.getText()),  Double.parseDouble(vistaAsignarPropiedad.cuota_total.getText())-gastos, gastos, Double.parseDouble(vistaAsignarPropiedad.bolsa_cemento.getText()), dni, String.valueOf(vistaAsignarPropiedad.barrio.getSelectedItem()),Integer.parseInt((String)vistaAsignarPropiedad.manzana.getSelectedItem()), Integer.parseInt((String)vistaAsignarPropiedad.parcela.getSelectedItem()));
+            id_control = fichaControlDAO.altaFichaControl(vistaAsignarPropiedad.tipo_propiedad.getSelectedItem().toString(), vistaAsignarPropiedad.dimension.getText(), Integer.parseInt(vistaAsignarPropiedad.cantidad_cuotas.getText()),  Double.parseDouble(vistaAsignarPropiedad.cuota_total.getText())-gastos, gastos, Double.parseDouble(vistaAsignarPropiedad.bolsa_cemento.getText()), String.valueOf(vistaAsignarPropiedad.barrio.getSelectedItem()),Integer.parseInt((String)vistaAsignarPropiedad.manzana.getSelectedItem()), Integer.parseInt((String)vistaAsignarPropiedad.parcela.getSelectedItem()));
             cuotaDao.altaCuota(new Date(System.currentTimeMillis()), 0,"Saldo Inicio", new BigDecimal(0),new BigDecimal(0), new BigDecimal(vistaAsignarPropiedad.cantidad_cuotas.getText()).multiply(new BigDecimal(vistaAsignarPropiedad.cuota_total.getText())), new BigDecimal(0), new BigDecimal(vistaAsignarPropiedad.cantidad_cuotas.getText()).multiply(new BigDecimal(vistaAsignarPropiedad.cuota_total.getText())), new BigDecimal(vistaAsignarPropiedad.bolsa_cemento.getText()).multiply(new BigDecimal(vistaAsignarPropiedad.cantidad_cuotas.getText())), new BigDecimal(0), new BigDecimal(vistaAsignarPropiedad.bolsa_cemento.getText()).multiply(new BigDecimal(vistaAsignarPropiedad.cantidad_cuotas.getText())), "", "", id_control);         
+            
             return null;
         }
 
        @Override
        public void done() { 
-           ld.editarPropiedad(vistaAsignarPropiedad.barrio.getSelectedItem().toString(), Integer.parseInt(vistaAsignarPropiedad.manzana.getSelectedItem().toString()) , Integer.parseInt(vistaAsignarPropiedad.parcela.getSelectedItem().toString()));
+           ld.editarPropiedad(vistaAsignarPropiedad.barrio.getSelectedItem().toString(), Integer.parseInt(vistaAsignarPropiedad.manzana.getSelectedItem().toString()), Integer.parseInt(vistaAsignarPropiedad.parcela.getSelectedItem().toString()));
+           cd.altaClientesXLotes(dni, id_control);
            vistaAsignarPropiedad.dispose();
        }
     

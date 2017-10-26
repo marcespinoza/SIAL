@@ -31,11 +31,11 @@ public class ClienteDAO {
      ResultSet rs = null;
      try {
           Connection con = conexion.getConexion();
-          String listar = "SELECT c.Dni, c.Apellidos, c.Nombres,c.fecha_nacimiento, c.barrio, c.calle, c.numero, c.Telefono1, c.telefono2, c.trabajo, f.Id_control, f.cantidad_cuotas, f.gastos, f.bolsa_cemento, f.lote_Barrio, f.lote_Manzana, f.lote_Parcela FROM cliente c LEFT JOIN ficha_control f ON c.Dni = f.cliente_Dni"; 
+          String listar = "SELECT c.Dni, c.Apellidos, c.Nombres,c.fecha_nacimiento, c.barrio, c.calle, c.numero, c.Telefono1, c.telefono2, c.trabajo, f.Id_control, f.cantidad_cuotas, f.gastos, f.bolsa_cemento, f.lote_Barrio, f.lote_Manzana, f.lote_Parcela FROM (cliente c LEFT JOIN cliente_tiene_ficha_control h ON c.Dni = h.cliente_Dni) left join ficha_control f on f.Id_control=h.ficha_control_Id_control GROUP BY f.Id_control, ifnull(f.Id_control, c.Dni)"; 
           Statement st = con.createStatement();
           rs = st.executeQuery(listar);
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+          System.out.println(e.getMessage());
         }
      return rs;
  }
@@ -64,14 +64,25 @@ public class ClienteDAO {
             System.out.println(e.getMessage());
         }
      return rs;
- }
+     }
+  
+     public void altaClientesXLotes(int dni, int id_control){
+        try {
+            Connection con = conexion.getConexion();
+            String insertar = "insert into cliente_tiene_ficha_control (cliente_dni, ficha_control_id_control) values (?,?)";
+            PreparedStatement stmt = con.prepareStatement(insertar);
+            stmt.setInt(1, dni);
+            stmt.setInt(2, id_control);
+            stmt.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.getLogger(ClienteDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
  
  public int altaCliente(int dni, String apellidos, String nombres, Date fecha_nacimiento, String barrio, String calle, int numero, String telefono1, String telefono2, String trabajo){
-         System.out.println("ffsfs");
      int filasAfectadas=0;
      try {
          Connection con = conexion.getConexion();
-
          String insertar = "Insert into cliente(dni, apellidos, nombres, fecha_nacimiento, barrio, calle, numero, telefono1, telefono2, trabajo) values ('"+dni+"','"+apellidos+"','"+nombres+"','"+fecha_nacimiento+"','"+barrio+"','"+calle+"','"+numero+"','"+telefono1+"','"+telefono2+"','"+trabajo+"') ";
          PreparedStatement ps = con.prepareStatement(insertar);
          filasAfectadas = ps.executeUpdate();         

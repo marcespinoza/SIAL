@@ -47,6 +47,8 @@ public class ControladorPropiedades implements ActionListener{
  public void llenarComboApellidos(){
         try {
             ResultSet rs = pd.obtenerApellidos();
+            vista.propiedades.comboApellido.removeAllItems();
+             vista.propiedades.comboApellido.addItem("Seleccione");
             while (rs.next()) {
                 vista.propiedades.comboApellido.addItem(rs.getString(1));                
             }  } catch (SQLException ex) {
@@ -92,10 +94,12 @@ public class ControladorPropiedades implements ActionListener{
     @Override
     public void actionPerformed(ActionEvent e) {
         if(e.getSource()==vista.propiedades.comboApellido){
+          if(vista.propiedades.comboApellido.getItemCount()!=0){
             if(!vista.propiedades.comboApellido.getSelectedItem().equals("Seleccione")){  
                 apellidos =vista.propiedades.comboApellido.getSelectedItem().toString();
                 llenarComboNombres(apellidos);
             }
+          } 
         }
          if(e.getSource()==vista.propiedades.comboNombres){
            if(vista.propiedades.comboNombres.getItemCount()!=0){

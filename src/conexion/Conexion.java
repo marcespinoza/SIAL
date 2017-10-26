@@ -30,7 +30,7 @@ public class Conexion {
    
     try{
         Class.forName("com.mysql.jdbc.Driver");
-        con = DriverManager.getConnection("jdbc:mysql://localhost:3306/miprimercasa?zeroDateTimeBehavior=convertToNull","root","");
+        con = DriverManager.getConnection("jdbc:mysql://localhost:3306/miprimercasa?zeroDateTimeBehavior=convertToNull","root","MiPrimerCasa");
          // JOptionPane.showMessageDialog(null, "Conectado");
         st =(Statement) con.createStatement();
     }catch (Exception e){

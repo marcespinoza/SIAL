@@ -42,11 +42,13 @@ public class ControladorResumen implements ActionListener{
         ResultSet rs2 = null;
         BigDecimal total1 = new BigDecimal(0);
         BigDecimal total2 = new BigDecimal(0);
+        BigDecimal total3 = new BigDecimal(0);
         rs = md.obtenerMinutasXMes(añoDesde, añoHasta, mesDesde, mesHasta);
         rs2 = md.obtenerMinutasXCategoria(añoDesde, añoHasta, mesDesde, mesHasta);
         DefaultTableModel model = (DefaultTableModel) vistaResumen.tablaResumen.getModel();
         DefaultTableModel model2 = (DefaultTableModel) vistaResumen.tablaResumen2.getModel();
         model.setRowCount(0);
+        model2.setRowCount(0);
         try {
             //--------Minutas discriminados por monto de cuota---------//
             while(rs2.next()){
@@ -60,14 +62,17 @@ public class ControladorResumen implements ActionListener{
             } 
             vistaResumen.totalTabla1.setText(String.valueOf(total1));
             while(rs.next()){
-                String total = rs.getString(1);
-                String mes = rs.getString(2);
-                total2 = total2.add(new BigDecimal(total));
-                resumen2 = new Object[] {mes, total};
-                dataset2.addValue(new BigDecimal(total),"", mes); 
+                String mes = rs.getString(1);
+                String recaudacion = rs.getString(2);
+                String rendido = rs.getString(3);
+                total2 = total2.add(new BigDecimal(recaudacion));
+                total3 = total3.add(new BigDecimal(rendido));
+                resumen2 = new Object[] {mes, recaudacion, rendido};
+                dataset2.addValue(new BigDecimal(recaudacion),"", mes); 
                 model2.addRow(resumen2);   
             } 
             vistaResumen.totalTabla2.setText(String.valueOf(total2));
+            vistaResumen.totalTabla3.setText(String.valueOf(total3));
             graficoUno();
             graficoDos();
         }catch (SQLException e) {

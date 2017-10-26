@@ -24,11 +24,11 @@ public class FichaControlDAO {
         conexion = new Conexion();
     }
     
-    public int altaFichaControl(String tipo_compra, String dimension, int cantidad_cuotas, double cuota_pura, double gastos, double bolsa_cemento, int dni, String barrio, int manzana, int parcela){
+    public int altaFichaControl(String tipo_compra, String dimension, int cantidad_cuotas, double cuota_pura, double gastos, double bolsa_cemento, String barrio, int manzana, int parcela){
          int id_control = 1;
      try {
           Connection con = conexion.getConexion();
-          String insertar = "Insert into ficha_control(tipo_compra, dimension, cantidad_cuotas, cuota_pura, gastos, bolsa_cemento, cliente_dni, lote_barrio, lote_manzana, lote_parcela) values ('"+tipo_compra+"','"+dimension+"','"+cantidad_cuotas+"','"+cuota_pura+"','"+gastos+"','"+bolsa_cemento+"','"+dni+"','"+barrio+"','"+manzana+"','"+parcela+"')";
+          String insertar = "Insert into ficha_control(tipo_compra, dimension, cantidad_cuotas, cuota_pura, gastos, bolsa_cemento, lote_barrio, lote_manzana, lote_parcela) values ('"+tipo_compra+"','"+dimension+"','"+cantidad_cuotas+"','"+cuota_pura+"','"+gastos+"','"+bolsa_cemento+"','"+barrio+"','"+manzana+"','"+parcela+"')";
           PreparedStatement ps = con.prepareStatement(insertar, Statement.RETURN_GENERATED_KEYS);
           ps.executeUpdate();  
           ResultSet rs = ps.getGeneratedKeys();  

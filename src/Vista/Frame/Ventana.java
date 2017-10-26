@@ -10,7 +10,6 @@ import Controlador.ControladorConfiguracion;
 import Controlador.ControladorLogin;
 import Controlador.ControladorMinuta;
 import Controlador.ControladorResumen;
-import Controlador.ControladorUsuario;
 import Vista.Panels.Minuta;
 import Vista.Panels.Resumen;
 import java.awt.GraphicsConfiguration;
@@ -18,7 +17,6 @@ import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.ImageIcon;
-import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
 import sun.java2d.SunGraphicsEnvironment;
@@ -59,7 +57,7 @@ public class Ventana extends javax.swing.JFrame implements ActionListener{
         inicializarBotones();        
         ControladorCliente cc = new ControladorCliente(this, clientes);
         //-------Controlador para manejar botones superiores - Clientes,Minutas---------//
-        ControladorBotones cb = new ControladorBotones(this);
+        new ControladorBotones(this);
         cc.llenarTabla(0);
     }
 

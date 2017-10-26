@@ -103,7 +103,11 @@
                           <Component id="trabajo" min="-2" pref="133" max="-2" attributes="0"/>
                           <Component id="calle" min="-2" pref="296" max="-2" attributes="0"/>
                           <Component id="barrio" min="-2" pref="176" max="-2" attributes="0"/>
-                          <Component id="documento" min="-2" pref="134" max="-2" attributes="0"/>
+                          <Group type="102" attributes="0">
+                              <Component id="documento" min="-2" pref="134" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="documento2" min="-2" pref="132" max="-2" attributes="0"/>
+                          </Group>
                           <Component id="apellidos" min="-2" pref="392" max="-2" attributes="0"/>
                           <Component id="nombres" min="-2" pref="392" max="-2" attributes="0"/>
                           <Component id="fech_nacimiento" min="-2" pref="134" max="-2" attributes="0"/>
@@ -141,6 +145,7 @@
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="jLabel4" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="documento" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="documento2" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace min="-2" pref="6" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
@@ -334,14 +339,16 @@
             <EtchetBorder/>
           </Border>
         </Property>
-        <Property name="formatterFactory" type="javax.swing.JFormattedTextField$AbstractFormatterFactory" editor="org.netbeans.modules.form.editors.AbstractFormatterFactoryEditor">
-          <Format format="########" subtype="-1" type="0"/>
+        <Property name="formatterFactory" type="javax.swing.JFormattedTextField$AbstractFormatterFactory" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+          <Connection code="null" type="code"/>
         </Property>
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="documentoActionPerformed"/>
       </Events>
       <AuxValues>
+        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new javax.swing.JFormattedTextField(nf)"/>
+        <AuxValue name="JavaCodeGenerator_CreateCodePre" type="java.lang.String" value="NumberFormatter nf = new NumberFormatter();&#xa;nf.setMinimum(3);&#xa;nf.setMaximum(10);"/>
         <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="1"/>
       </AuxValues>
     </Component>
@@ -485,6 +492,11 @@
           <Format format="######" subtype="-1" type="0"/>
         </Property>
       </Properties>
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="1"/>
+      </AuxValues>
+    </Component>
+    <Component class="javax.swing.JTextField" name="documento2">
       <AuxValues>
         <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="1"/>
       </AuxValues>

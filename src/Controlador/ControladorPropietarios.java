@@ -135,6 +135,7 @@ public class ControladorPropietarios implements MouseListener, ActionListener, K
                pd.eliminarPropietarios(cuit);
                limpiarCampos();
                llenarTabla();
+               new ControladorPropiedades(vistaConfiguracion);
                  }                
             }
         }
@@ -144,6 +145,7 @@ public class ControladorPropietarios implements MouseListener, ActionListener, K
               pd.agregarPropietarios(vistaConfiguracion.propietarios.apellidoTxf.getText(), vistaConfiguracion.propietarios.nombreTxf.getText(), vistaConfiguracion.propietarios.cuitTxf.getText(), vistaConfiguracion.propietarios.nroRecibo.getText());
               llenarTabla();
               limpiarCampos();
+              new ControladorPropiedades(vistaConfiguracion);
              }
            }
     }

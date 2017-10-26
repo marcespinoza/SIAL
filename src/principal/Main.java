@@ -14,10 +14,9 @@ import javax.swing.JFrame;
         
 public class Main {
 
- private static ControladorLogin cl; 
     
     public static void main(String[] args) {
-        Ventana ventana = new Ventana();      
+        new Ventana();      
        // ventana.setVisible(true);
     }
     
