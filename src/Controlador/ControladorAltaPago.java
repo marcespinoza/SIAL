@@ -8,6 +8,7 @@ package Controlador;
 import Modelo.CuotaDAO;
 import Modelo.DchoPosesionDAO;
 import Modelo.FichaControlDAO;
+import Modelo.LimitadorCaracteres;
 import Vista.Dialogs.AltaCuota;
 import java.awt.Color;
 import java.awt.Frame;
@@ -49,11 +50,15 @@ public class ControladorAltaPago implements ActionListener, KeyListener{
         this.id_control=id_control;
         this.row_count=row_count;
         ac = new AltaCuota(parent, true);
-        ac.tipo_cuenta.add(ac.chk_cuota);
-        ac.tipo_cuenta.add(ac.chk_dcho_posesion);
+        ac.tipo_cuota.add(ac.chk_cuota);
+        ac.tipo_cuota.add(ac.chk_dcho_posesion);
+        ac.tipo_cuota.add(ac.chk_adelanto_cuota);
         ac.chk_cuota.addActionListener(this);
         ac.chk_dcho_posesion.addActionListener(this);
         ac.chk_cuota.setSelected(true);
+        ac.detallePago.setDocument(new LimitadorCaracteres(40));
+        ac.observacionesPago.setDocument(new LimitadorCaracteres(40));
+        ac.cuota_total.setDocument(new LimitadorCaracteres(7));
         ac.cuota_total.addKeyListener(new KeyListener() {
             @Override
             public void keyTyped(KeyEvent e) {
@@ -168,7 +173,7 @@ public class ControladorAltaPago implements ActionListener, KeyListener{
                BigDecimal saldo_actual = ultimo_saldo.subtract(haber);
                BigDecimal cemento_haber = bolsa_cemento;
                BigDecimal cemento_saldo = saldo_bolsa_cemento.subtract(bolsa_cemento);
-               cd.altaCuota(new java.sql.Date(date.getTime()),0, detalle, cuota_pura, gastos, new BigDecimal(0), haber, saldo_actual, new BigDecimal(0), cemento_haber, cemento_saldo, observaciones, tipoPago, id_control);
+               cd.altaCuota(new java.sql.Date(date.getTime()),row_count, detalle, cuota_pura, gastos, new BigDecimal(0), haber, saldo_actual, new BigDecimal(0), cemento_haber, cemento_saldo, observaciones, tipoPago, id_control);
                ac.dispose();
     }
     

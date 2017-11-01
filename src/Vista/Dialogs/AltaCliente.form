@@ -32,36 +32,6 @@
                       <EmptySpace min="2" pref="2" max="-2" attributes="0"/>
                       <Component id="cancelar" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <Group type="102" alignment="0" attributes="0">
-                      <EmptySpace min="10" pref="10" max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="jLabel12" max="32767" attributes="0"/>
-                          <Component id="jLabel15" pref="99" max="32767" attributes="0"/>
-                      </Group>
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Group type="102" attributes="0">
-                              <EmptySpace min="9" pref="9" max="-2" attributes="0"/>
-                              <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="jSeparator2" alignment="0" min="-2" pref="417" max="-2" attributes="0"/>
-                                  <Group type="103" alignment="1" groupAlignment="0" attributes="0">
-                                      <Component id="parentescoRef" alignment="0" min="-2" pref="136" max="-2" attributes="0"/>
-                                      <Group type="102" alignment="1" attributes="0">
-                                          <Component id="telefonoRef" min="-2" pref="136" max="-2" attributes="0"/>
-                                          <EmptySpace min="-2" pref="272" max="-2" attributes="0"/>
-                                      </Group>
-                                  </Group>
-                              </Group>
-                          </Group>
-                          <Group type="102" alignment="0" attributes="0">
-                              <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                              <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                  <Component id="nombresRef" pref="350" max="32767" attributes="0"/>
-                                  <Component id="apellidosRef" max="32767" attributes="0"/>
-                              </Group>
-                              <EmptySpace min="-2" pref="3" max="-2" attributes="0"/>
-                          </Group>
-                      </Group>
-                  </Group>
                   <Group type="102" attributes="0">
                       <EmptySpace min="10" pref="10" max="-2" attributes="0"/>
                       <Component id="jLabel11" min="-2" max="-2" attributes="0"/>
@@ -99,27 +69,55 @@
                           </Group>
                       </Group>
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="0" attributes="0">
+                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
                           <Component id="trabajo" min="-2" pref="133" max="-2" attributes="0"/>
-                          <Component id="calle" min="-2" pref="296" max="-2" attributes="0"/>
                           <Component id="barrio" min="-2" pref="176" max="-2" attributes="0"/>
-                          <Group type="102" attributes="0">
-                              <Component id="documento" min="-2" pref="134" max="-2" attributes="0"/>
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Component id="documento2" min="-2" pref="132" max="-2" attributes="0"/>
-                          </Group>
-                          <Component id="apellidos" min="-2" pref="392" max="-2" attributes="0"/>
-                          <Component id="nombres" min="-2" pref="392" max="-2" attributes="0"/>
+                          <Component id="documento" min="-2" pref="134" max="-2" attributes="0"/>
                           <Component id="fech_nacimiento" min="-2" pref="134" max="-2" attributes="0"/>
                           <Component id="telefono2" min="-2" pref="131" max="-2" attributes="0"/>
                           <Group type="103" alignment="0" groupAlignment="1" max="-2" attributes="0">
                               <Component id="numero" alignment="0" max="32767" attributes="0"/>
                               <Component id="telefono1" alignment="0" pref="131" max="32767" attributes="0"/>
                           </Group>
+                          <Component id="apellidos" alignment="0" pref="288" max="32767" attributes="0"/>
+                          <Component id="calle" alignment="0" max="32767" attributes="0"/>
+                          <Component id="nombres" alignment="0" max="32767" attributes="0"/>
+                      </Group>
+                  </Group>
+                  <Group type="103" alignment="1" groupAlignment="1" attributes="0">
+                      <Group type="102" attributes="0">
+                          <EmptySpace max="32767" attributes="0"/>
+                          <Component id="jSeparator2" min="-2" pref="297" max="-2" attributes="0"/>
+                      </Group>
+                      <Group type="102" alignment="0" attributes="0">
+                          <EmptySpace min="10" pref="10" max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <Component id="jLabel12" max="32767" attributes="0"/>
+                              <Component id="jLabel15" pref="99" max="32767" attributes="0"/>
+                          </Group>
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <Group type="102" attributes="0">
+                                  <EmptySpace min="-2" pref="18" max="-2" attributes="0"/>
+                                  <Group type="103" groupAlignment="0" attributes="0">
+                                      <Component id="parentescoRef" alignment="0" min="-2" pref="136" max="-2" attributes="0"/>
+                                      <Group type="102" alignment="1" attributes="0">
+                                          <Component id="telefonoRef" min="-2" pref="136" max="-2" attributes="0"/>
+                                          <EmptySpace min="-2" pref="152" max="-2" attributes="0"/>
+                                      </Group>
+                                  </Group>
+                              </Group>
+                              <Group type="102" alignment="0" attributes="0">
+                                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                                  <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                                      <Component id="nombresRef" pref="288" max="32767" attributes="0"/>
+                                      <Component id="apellidosRef" max="32767" attributes="0"/>
+                                  </Group>
+                              </Group>
+                          </Group>
                       </Group>
                   </Group>
               </Group>
-              <EmptySpace min="-2" pref="13" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="37" max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -145,7 +143,6 @@
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="jLabel4" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="documento" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="documento2" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace min="-2" pref="6" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
@@ -275,6 +272,9 @@
           <Border info="org.netbeans.modules.form.compat2.border.EtchedBorderInfo">
             <EtchetBorder/>
           </Border>
+        </Property>
+        <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
+          <Color id="Cursor de Texto"/>
         </Property>
       </Properties>
       <AuxValues>
@@ -492,11 +492,6 @@
           <Format format="######" subtype="-1" type="0"/>
         </Property>
       </Properties>
-      <AuxValues>
-        <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="1"/>
-      </AuxValues>
-    </Component>
-    <Component class="javax.swing.JTextField" name="documento2">
       <AuxValues>
         <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="1"/>
       </AuxValues>

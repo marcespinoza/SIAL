@@ -29,7 +29,7 @@ public class CuotaDAO {
          ResultSet rs = null;
      try {
           Connection con = conexion.getConexion();
-          String listar = "SELECT fecha, detalle, cuota_pura, gastos_administrativos, debe, haber, saldo, cemento_debe, cemento_haber, cemento_saldo, observaciones, tipo_pago from linea_control where ficha_control_id_Control = '"+idControl+"' "; 
+          String listar = "SELECT nro_cuota, fecha, detalle, cuota_pura, gastos_administrativos, debe, haber, saldo, cemento_debe, cemento_haber, cemento_saldo, observaciones, tipo_pago from linea_control where ficha_control_id_Control = '"+idControl+"' "; 
           Statement st = con.createStatement();
           rs = st.executeQuery(listar);
         } catch (Exception e) {

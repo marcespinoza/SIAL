@@ -6,6 +6,7 @@
 package Modelo;
 
 import conexion.Conexion;
+import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -24,7 +25,7 @@ public class FichaControlDAO {
         conexion = new Conexion();
     }
     
-    public int altaFichaControl(String tipo_compra, String dimension, int cantidad_cuotas, double cuota_pura, double gastos, double bolsa_cemento, String barrio, int manzana, int parcela){
+    public int altaFichaControl(String tipo_compra, String dimension, int cantidad_cuotas, BigDecimal cuota_pura, BigDecimal gastos, BigDecimal bolsa_cemento, String barrio, int manzana, int parcela){
          int id_control = 1;
      try {
           Connection con = conexion.getConexion();

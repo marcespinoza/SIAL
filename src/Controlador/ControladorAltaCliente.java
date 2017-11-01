@@ -6,6 +6,7 @@
 package Controlador;
 
 import Modelo.ClienteDAO;
+import Modelo.LimitadorCaracteres;
 import Modelo.ReferenciaDAO;
 import Vista.Dialogs.AltaCliente;
 import Vista.Frame.Ventana;
@@ -40,22 +41,19 @@ public class ControladorAltaCliente implements ActionListener, KeyListener{
         this.ac.aceptar.addActionListener(this);
         this.ac.cancelar.addActionListener(this);
         this.ac.parentescoRef.addKeyListener(this);
-        this.ac.documento2.addKeyListener(new KeyListener() {
-            @Override
-            public void keyTyped(KeyEvent e) {
-            }
-
-            @Override
-            public void keyPressed(KeyEvent e) {
-            }
-
-            @Override
-            public void keyReleased(KeyEvent e) {
-                if(Integer.parseInt(ac.documento2.getText())<30){
-                  e.consume();
-                }
-            }
-        });
+        this.ac.documento.setDocument(new LimitadorCaracteres(8));
+        this.ac.apellidos.setDocument(new LimitadorCaracteres(30));
+        this.ac.nombres.setDocument(new LimitadorCaracteres(30));
+        this.ac.barrio.setDocument(new LimitadorCaracteres(20));
+        this.ac.calle.setDocument(new LimitadorCaracteres(25));
+        this.ac.numero.setDocument(new LimitadorCaracteres(5));
+        this.ac.telefono1.setDocument(new LimitadorCaracteres(12));
+        this.ac.telefono2.setDocument(new LimitadorCaracteres(12));        
+        this.ac.trabajo.setDocument(new LimitadorCaracteres(20));
+        this.ac.apellidosRef.setDocument(new LimitadorCaracteres(30));
+        this.ac.nombresRef.setDocument(new LimitadorCaracteres(30));
+        this.ac.telefonoRef.setDocument(new LimitadorCaracteres(12));
+        this.ac.parentescoRef.setDocument(new LimitadorCaracteres(15));
         ac.setVisible(true);
     }
    

@@ -194,7 +194,7 @@ public class ControladorMinuta implements MouseListener, ActionListener {
             PdfPCell apynom = new PdfPCell(new Paragraph("Apellido y nombre",f));
             PdfPCell mzpc = new PdfPCell(new Paragraph("Mz./Pc.",f));
             PdfPCell cobrado = new PdfPCell(new Paragraph("Cobrado",f));
-            PdfPCell gastos = new PdfPCell(new Paragraph("Gtos. Adm.",f));
+            PdfPCell gastos = new PdfPCell(new Paragraph("Gastos. Adm.",f));
             PdfPCell rendido = new PdfPCell(new Paragraph("Rendido",f));
             PdfPCell nro_cuota = new PdfPCell(new Paragraph("Cuota Nro.",f));
             PdfPCell observaciones = new PdfPCell(new Paragraph("Observaciones",f));  
@@ -203,6 +203,7 @@ public class ControladorMinuta implements MouseListener, ActionListener {
             apynom.setHorizontalAlignment(Element.ALIGN_CENTER);
             mzpc.setHorizontalAlignment(Element.ALIGN_CENTER);
             cobrado.setHorizontalAlignment(Element.ALIGN_CENTER);
+            gastos.setHorizontalAlignment(Element.ALIGN_CENTER);
             rendido.setHorizontalAlignment(Element.ALIGN_CENTER);
             nro_cuota.setHorizontalAlignment(Element.ALIGN_CENTER);
             observaciones.setHorizontalAlignment(Element.ALIGN_CENTER);
@@ -228,7 +229,7 @@ public class ControladorMinuta implements MouseListener, ActionListener {
                   table2.setTotalWidth(new float[]{ 1,2,5,2,2,2,2,2,4});
                   table2.setWidthPercentage(100);
                   table2.addCell(new PdfPCell(new Paragraph(String.valueOf(conta),f)));    
-                  PdfPCell detalle_nro_cuota = new PdfPCell(new Paragraph(resultset.getString(10),f));
+                  PdfPCell detalle_nro_cuota = new PdfPCell(new Paragraph(resultset.getString(12),f));
                   detalle_nro_cuota.setHorizontalAlignment(Element.ALIGN_CENTER);
                   table2.addCell(detalle_nro_cuota);
                   table2.addCell(new PdfPCell(new Paragraph(resultset.getString(2)+" "+resultset.getString(3),f)));

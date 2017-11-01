@@ -119,27 +119,26 @@ public class ControladorDetalleCuota implements ActionListener{
    }  
     
    public void llenarTabla(int idControl){
-       int num_cuota=0;
         ResultSet rs = cd.listaDetalleCuota(idControl);
         DefaultTableModel model = (DefaultTableModel) dc.tablaDetallePago.getModel();
         model.setRowCount(0);
         try {
             while(rs.next()){
-                String fecha = rs.getString(1);
-                String detalle = rs.getString(2);
-                String cuota_pura = rs.getString(3);
-                String gastos_admin = rs.getString(4);                
-                String debe = rs.getString(5);
-                String haber = rs.getString(6);                
-                String saldo = rs.getString(7);
-                String cemento_debe = rs.getString(8);
-                String cemento_haber = rs.getString(9);
-                String cemento_saldo = rs.getString(10);
-                String observaciones = rs.getString(11);
-                String tipo_pago = rs.getString(12);
-                detallePago= new Object[] {num_cuota, fecha, detalle, cuota_pura, gastos_admin, debe, haber, saldo, cemento_debe, cemento_haber,cemento_saldo, observaciones, tipo_pago};                    
+                String nro_cuota = rs.getString(1);
+                String fecha = rs.getString(2);
+                String detalle = rs.getString(3);
+                String cuota_pura = rs.getString(4);
+                String gastos_admin = rs.getString(5);                
+                String debe = rs.getString(6);
+                String haber = rs.getString(7);                
+                String saldo = rs.getString(8);
+                String cemento_debe = rs.getString(9);
+                String cemento_haber = rs.getString(10);
+                String cemento_saldo = rs.getString(11);
+                String observaciones = rs.getString(12);
+                String tipo_pago = rs.getString(13);
+                detallePago= new Object[] {nro_cuota, fecha, detalle, cuota_pura, gastos_admin, debe, haber, saldo, cemento_debe, cemento_haber,cemento_saldo, observaciones, tipo_pago};                    
                 model.addRow(detallePago); 
-                num_cuota ++;
             }
              CardLayout cl = (CardLayout)(Ventana.panelPrincipal.getLayout());
              Ventana.panelPrincipal.add(dc, "Detalle_pago");
