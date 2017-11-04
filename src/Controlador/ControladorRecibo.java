@@ -7,6 +7,7 @@ package Controlador;
 
 import Modelo.ClienteDAO;
 import Modelo.FichaControlDAO;
+import Modelo.LimitadorCaracteres;
 import Modelo.LoteDAO;
 import Modelo.MinutaDAO;
 import Modelo.PropietarioDAO;
@@ -89,6 +90,15 @@ public class ControladorRecibo implements ActionListener{
         ar.cons_final.setActionCommand("cons_final");
         ar.monotributo.setActionCommand("cons_final");
         ar.exento.setActionCommand("exento");
+        ar.apellido_propietario.setDocument(new LimitadorCaracteres(30));
+        ar.nombre_propietario.setDocument(new LimitadorCaracteres(30));
+        ar.cuit_propietario.setDocument(new LimitadorCaracteres(14));
+        ar.apellido_comprador.setDocument(new LimitadorCaracteres(30));
+        ar.nombre_comprador.setDocument(new LimitadorCaracteres(30));
+        ar.domicilio_comprador.setDocument(new LimitadorCaracteres(30));
+        ar.importe.setDocument(new LimitadorCaracteres(7));
+        ar.total_pagado.setDocument(new LimitadorCaracteres(7));
+        ar.son_pesos.setDocument(new LimitadorCaracteres(50));
         ar.cons_final.setSelected(true);
         ar.monotributo.addActionListener(new ActionListener() {
             @Override

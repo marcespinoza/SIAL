@@ -42,18 +42,18 @@ public class ControladorDetalleCuota implements ActionListener{
     Object [] dchoPosesion;
     String apellido;
     String nombre;
-    int id_control;
+    int id_control, nro_cuotas;
     JFileChooser chooser;
     File f;
     File configFile = new File("config.properties");
     Boolean cuota = false;
     Boolean posesion = false;
     
-    public ControladorDetalleCuota(DetalleCuota dc, String apellido, String nombre, String telefono, String barrio,String calle,int numero,int id_control) {
-        this.dc = dc;
+    public ControladorDetalleCuota(int nro_cuotas,String apellido, String nombre, String telefono, String barrio,String calle,int numero,int id_control) {
         this.apellido=apellido;
         this.nombre=nombre;
         this.id_control=id_control;
+        this.nro_cuotas=nro_cuotas;
         dc.tablaDchoPosesion.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -100,7 +100,7 @@ public class ControladorDetalleCuota implements ActionListener{
      } 
     
    public void llearTablaDchoPosesion(int id_control){
-       int num_cuota=1;
+        int num_cuota=1;
         ResultSet rs = dp.listarCuenta(id_control);
         DefaultTableModel model = (DefaultTableModel) dc.tablaDchoPosesion.getModel();
         model.setRowCount(0);
@@ -155,7 +155,7 @@ public class ControladorDetalleCuota implements ActionListener{
             cl.next(Ventana.panelPrincipal);
         }
         if(e.getSource() == dc.agregarPagoBtn){
-           ControladorAltaPago cac = new ControladorAltaPago((Frame) SwingUtilities.getWindowAncestor(dc), id_control, dc.tablaDetallePago.getRowCount());
+           ControladorAltaPago cac = new ControladorAltaPago((Frame) SwingUtilities.getWindowAncestor(dc), id_control, dc.tablaDetallePago.getRowCount(), nro_cuotas);
             llenarTabla(id_control);
             llearTablaDchoPosesion(id_control);
         }

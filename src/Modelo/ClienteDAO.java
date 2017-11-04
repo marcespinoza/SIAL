@@ -57,7 +57,7 @@ public class ClienteDAO {
      ResultSet rs = null;
      try {
           Connection con = conexion.getConexion();
-          String listar = "SELECT c.Apellidos, c.Nombres,c.barrio, c.calle, c.numero FROM cliente c LEFT JOIN ficha_control f ON c.Dni = f.cliente_Dni where f.id_control = '"+id_control+"'"; 
+          String listar = "SELECT c.Apellidos, c.Nombres,c.barrio, c.calle, c.numero FROM cliente c LEFT JOIN cliente_tiene_ficha_control f ON c.Dni = f.cliente_Dni where f.ficha_control_id_control = '"+id_control+"'"; 
           Statement st = con.createStatement();
           rs = st.executeQuery(listar);
         } catch (Exception e) {

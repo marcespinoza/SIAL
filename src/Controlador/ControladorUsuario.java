@@ -5,9 +5,9 @@
  */
 package Controlador;
 
+import Modelo.LimitadorCaracteres;
 import Modelo.UsuarioDAO;
 import Vista.Dialogs.Configuracion;
-import Vista.Frame.Ventana;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -18,7 +18,6 @@ import java.awt.event.MouseListener;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.sql.ResultSet;
 import java.util.Properties;
@@ -35,7 +34,6 @@ import javax.swing.table.DefaultTableModel;
 public class ControladorUsuario implements MouseListener, ActionListener, KeyListener{
     
     Configuracion vistaConfiguracion;
-    ControladorPropietarios cp;
     UsuarioDAO ud = new UsuarioDAO();
     private Object [] usuarios;
       File configFile = new File("config.properties");
@@ -48,9 +46,13 @@ public class ControladorUsuario implements MouseListener, ActionListener, KeyLis
         vistaConfiguracion.usuario.editar.addActionListener(this);
         vistaConfiguracion.usuario.limpiar.addActionListener(this);
         vistaConfiguracion.usuario.usuarioTxf.addKeyListener(this);
+        vistaConfiguracion.usuario.usuarioTxf.setDocument(new LimitadorCaracteres(15));
         vistaConfiguracion.usuario.contraseñaTxf.addKeyListener(this);
+        vistaConfiguracion.usuario.contraseñaTxf.setDocument(new LimitadorCaracteres(15));
         vistaConfiguracion.usuario.apellidoTxf.addKeyListener(this);
+        vistaConfiguracion.usuario.apellidoTxf.setDocument(new LimitadorCaracteres(30));
         vistaConfiguracion.usuario.nombreTxf.addKeyListener(this);
+        vistaConfiguracion.usuario.nombreTxf.setDocument(new LimitadorCaracteres(30));
         vistaConfiguracion.usuario.tipo_operador.addMouseListener(this);
         vistaConfiguracion.usuario.editar.setEnabled(false);
         vistaConfiguracion.setLocationRelativeTo(null);

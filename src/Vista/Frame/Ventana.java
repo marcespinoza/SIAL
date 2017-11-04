@@ -297,7 +297,7 @@ public class Ventana extends javax.swing.JFrame implements ActionListener{
     public static javax.swing.JMenuItem cerrarSesion;
     private Vista.Panels.Clientes clientes;
     public javax.swing.JMenuItem configuracion;
-    private Vista.Panels.DetalleCuota detallePago;
+    public Vista.Panels.DetalleCuota detallePago;
     public javax.swing.JMenu info;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JMenu jMenu1;

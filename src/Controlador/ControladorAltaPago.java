@@ -19,9 +19,11 @@ import java.awt.event.KeyListener;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -38,17 +40,19 @@ public class ControladorAltaPago implements ActionListener, KeyListener{
     
     Frame parent;
     CuotaDAO cd = new CuotaDAO();
+    FichaControlDAO fc = new FichaControlDAO();
     DchoPosesionDAO dp = new DchoPosesionDAO();
     AltaCuota ac;
-    int id_control;
+    int id_control, nro_cuotas;
     int row_count;
     BigDecimal cuota_total;
     BigDecimal gastos;
 
-    public ControladorAltaPago(Frame parent, int id_control, int row_count) {
+    public ControladorAltaPago(Frame parent, int id_control, int row_count, int nro_cuotas) {
         this.parent = parent;
         this.id_control=id_control;
         this.row_count=row_count;
+        this.nro_cuotas=nro_cuotas;
         ac = new AltaCuota(parent, true);
         ac.tipo_cuota.add(ac.chk_cuota);
         ac.tipo_cuota.add(ac.chk_dcho_posesion);
@@ -126,7 +130,13 @@ public class ControladorAltaPago implements ActionListener, KeyListener{
     public void actionPerformed(ActionEvent e) {
         
            if(e.getSource() == ac.aceptarBtn){
-              if(ac.chk_cuota.isSelected()){
+            if(ac.chk_dcho_posesion.isSelected()){                  
+                   DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
+                   Date date = new Date(); 
+                  dp.altaDchoPosesion(new java.sql.Date(date.getTime()), new BigDecimal(ac.cuota_total.getText()),new BigDecimal(ac.gastos.getText()), ac.detallePago.getText(), id_control);
+                  ac.dispose();
+             //--------Es un adelanto de cuotas----------/     
+              }else{
                if(validarCampos()){
                FichaControlDAO fcd = new FichaControlDAO();
                ResultSet rs = fcd.obtenerFichaControl(id_control);
@@ -140,16 +150,10 @@ public class ControladorAltaPago implements ActionListener, KeyListener{
                    BigDecimal gastos = new BigDecimal(ac.gastos.getText());
                    BigDecimal bolsa_cemento = new BigDecimal(rs.getString(5));
                    BigDecimal ultimo_saldo_bolsa_cemento = new BigDecimal(rs_cuota.getString(10));
-                   calcularValores(ultimo_saldo, cuota_pura, gastos, bolsa_cemento, ultimo_saldo_bolsa_cemento);                
-                
+                   calcularValores(ultimo_saldo, cuota_pura, gastos, bolsa_cemento, ultimo_saldo_bolsa_cemento);             
                 } catch (SQLException ex) {
                }
-               }
-              }else{                  
-                   DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
-                   Date date = new Date(); 
-                  dp.altaDchoPosesion(new java.sql.Date(date.getTime()), new BigDecimal(ac.cuota_total.getText()),new BigDecimal(ac.gastos.getText()), ac.detallePago.getText(), id_control);
-                  ac.dispose();
+               }             
               }
            }
             if(e.getSource() == ac.cancelarBtn){
@@ -163,8 +167,7 @@ public class ControladorAltaPago implements ActionListener, KeyListener{
             }
     }
     
-    public void calcularValores(BigDecimal ultimo_saldo, BigDecimal cuota_pura, BigDecimal gastos,BigDecimal bolsa_cemento, BigDecimal saldo_bolsa_cemento){          
-               DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
+    public void calcularValores(BigDecimal ultimo_saldo, BigDecimal cuota_pura, BigDecimal gastos,BigDecimal bolsa_cemento, BigDecimal saldo_bolsa_cemento){  
                Date date = new Date();
                String detalle = ac.detallePago.getText();
                String observaciones = ac.observacionesPago.getText();
@@ -173,7 +176,42 @@ public class ControladorAltaPago implements ActionListener, KeyListener{
                BigDecimal saldo_actual = ultimo_saldo.subtract(haber);
                BigDecimal cemento_haber = bolsa_cemento;
                BigDecimal cemento_saldo = saldo_bolsa_cemento.subtract(bolsa_cemento);
-               cd.altaCuota(new java.sql.Date(date.getTime()),row_count, detalle, cuota_pura, gastos, new BigDecimal(0), haber, saldo_actual, new BigDecimal(0), cemento_haber, cemento_saldo, observaciones, tipoPago, id_control);
+               if(ac.chk_adelanto_cuota.isSelected()){
+               //-------Miro si la cuota 180 (la ultima) ya existe------//  
+                  if(cd.getUltimaCuota(nro_cuotas)){
+                   try {
+                       ResultSet rs = cd.getNrosCuotas(id_control);
+                       rs.next();
+                       int cuota = rs.getInt(1);
+                       rs.next();
+                       while(rs.getInt(1)-1==cuota){
+                           cuota=rs.getInt(1);
+                           rs.next();
+                       }
+                       cd.altaCuota(new java.sql.Date(date.getTime()),rs.getInt(1)-1, detalle, cuota_pura, gastos, new BigDecimal(0), haber, saldo_actual, new BigDecimal(0), cemento_haber, cemento_saldo, observaciones, tipoPago, id_control);  
+                       
+                   } catch (SQLException ex) {
+                       Logger.getLogger(ControladorAltaPago.class.getName()).log(Level.SEVERE, null, ex);
+                   }
+                  }else{
+                      cd.altaCuota(new java.sql.Date(date.getTime()),180, detalle, cuota_pura, gastos, new BigDecimal(0), haber, saldo_actual, new BigDecimal(0), cemento_haber, cemento_saldo, observaciones, tipoPago, id_control);                    
+                  }
+               }else{
+                 try {
+                       ResultSet rs = cd.getNrosCuotas(id_control);
+                       rs.next();
+                       int cuota = rs.getInt(1);
+                       rs.next();
+                       while(rs.getInt(1)-1==cuota){
+                           cuota=rs.getInt(1);
+                           rs.next();
+                       }
+                       cd.altaCuota(new java.sql.Date(date.getTime()),cuota+1, detalle, cuota_pura, gastos, new BigDecimal(0), haber, saldo_actual, new BigDecimal(0), cemento_haber, cemento_saldo, observaciones, tipoPago, id_control);  
+                       
+                   } catch (SQLException ex) {
+                       Logger.getLogger(ControladorAltaPago.class.getName()).log(Level.SEVERE, null, ex);
+                   }  
+               }
                ac.dispose();
     }
     

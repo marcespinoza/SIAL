@@ -243,6 +243,8 @@ public class DetalleCuota extends javax.swing.JPanel {
 
         guardar.setText("Guardar en");
 
+        path.setEditable(false);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(

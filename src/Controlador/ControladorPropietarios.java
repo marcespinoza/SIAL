@@ -5,6 +5,7 @@
  */
 package Controlador;
 
+import Modelo.LimitadorCaracteres;
 import Modelo.PropietarioDAO;
 import Vista.Dialogs.Configuracion;
 import java.awt.Color;
@@ -45,8 +46,11 @@ public class ControladorPropietarios implements MouseListener, ActionListener, K
         vistaConfiguracion.propietarios.editar.addActionListener(this);
         vistaConfiguracion.propietarios.limpiar.addActionListener(this);
         vistaConfiguracion.propietarios.apellidoTxf.addKeyListener(this);
+        vistaConfiguracion.propietarios.apellidoTxf.setDocument(new LimitadorCaracteres(30));
         vistaConfiguracion.propietarios.nombreTxf.addKeyListener(this);
+        vistaConfiguracion.propietarios.nombreTxf.setDocument(new LimitadorCaracteres(30));
         vistaConfiguracion.propietarios.cuitTxf.addKeyListener(this);
+        vistaConfiguracion.propietarios.cuitTxf.setDocument(new LimitadorCaracteres(14));
         vistaConfiguracion.propietarios.nroRecibo.addKeyListener(this);
         vistaConfiguracion.propietarios.editar.setEnabled(false);
         vistaConfiguracion.setLocationRelativeTo(null);
