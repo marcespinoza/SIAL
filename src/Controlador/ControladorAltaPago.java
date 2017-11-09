@@ -17,13 +17,10 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -62,29 +59,29 @@ public class ControladorAltaPago implements ActionListener, KeyListener{
         ac.chk_cuota.setSelected(true);
         ac.detallePago.setDocument(new LimitadorCaracteres(40));
         ac.observacionesPago.setDocument(new LimitadorCaracteres(40));
-        ac.cuota_total.setDocument(new LimitadorCaracteres(7));
-        ac.cuota_total.addKeyListener(new KeyListener() {
-            @Override
-            public void keyTyped(KeyEvent e) {
-            }
-
-            @Override
-            public void keyPressed(KeyEvent e) {
-            }
-
-            @Override
-            public void keyReleased(KeyEvent e) {
-             nuevoGasto();
-            }
-             }
-        );
+//        ac.cuota_total.setDocument(new LimitadorCaracteres(7));
+//        ac.cuota_total.addKeyListener(new KeyListener() {
+//            @Override
+//            public void keyTyped(KeyEvent e) {
+//            }
+//
+//            @Override
+//            public void keyPressed(KeyEvent e) {
+//            }
+//
+//            @Override
+//            public void keyReleased(KeyEvent e) {
+//             nuevoGasto();
+//            }
+//             }
+//        );
         ac.cuota_total.getDocument().addDocumentListener(new DocumentListener() {
             @Override
             public void insertUpdate(DocumentEvent e) {    
              nuevoGasto();}
             @Override
             public void removeUpdate(DocumentEvent e) {
-                nuevoGasto();
+             nuevoGasto();
             }
             @Override
             public void changedUpdate(DocumentEvent e) {
@@ -116,9 +113,10 @@ public class ControladorAltaPago implements ActionListener, KeyListener{
             ResultSet rs = fcd.obtenerFichaControl(id_control);
             rs.next();
             cuota_total = new BigDecimal (rs.getString(3)).add(new BigDecimal(rs.getString(4)));
-            gastos = new BigDecimal(rs.getString(4));
+            //gastos = new BigDecimal(rs.getString(4));
             ac.cuota_total.setText(cuota_total.toString());
-            ac.gastos.setText(gastos.toString());
+            //ac.gastos.setText(gastos.toString());
+            nuevoGasto();
             ac.setVisible(true);
             
         } catch (SQLException ex) {
@@ -145,11 +143,11 @@ public class ControladorAltaPago implements ActionListener, KeyListener{
                try {
                    rs.next();
                    rs_cuota.last();
-                   BigDecimal ultimo_saldo = new BigDecimal(rs_cuota.getString(7));
+                   BigDecimal ultimo_saldo = new BigDecimal(rs_cuota.getString(8));
                    BigDecimal cuota_pura = new BigDecimal(ac.cuota_total.getText()).subtract(new BigDecimal(ac.gastos.getText()));
                    BigDecimal gastos = new BigDecimal(ac.gastos.getText());
                    BigDecimal bolsa_cemento = new BigDecimal(rs.getString(5));
-                   BigDecimal ultimo_saldo_bolsa_cemento = new BigDecimal(rs_cuota.getString(10));
+                   BigDecimal ultimo_saldo_bolsa_cemento = new BigDecimal(rs_cuota.getString(11));
                    calcularValores(ultimo_saldo, cuota_pura, gastos, bolsa_cemento, ultimo_saldo_bolsa_cemento);             
                 } catch (SQLException ex) {
                }
@@ -167,7 +165,7 @@ public class ControladorAltaPago implements ActionListener, KeyListener{
             }
     }
     
-    public void calcularValores(BigDecimal ultimo_saldo, BigDecimal cuota_pura, BigDecimal gastos,BigDecimal bolsa_cemento, BigDecimal saldo_bolsa_cemento){  
+    public void calcularValores(BigDecimal ultimo_saldo, BigDecimal cuota_pura, BigDecimal gastos, BigDecimal bolsa_cemento, BigDecimal saldo_bolsa_cemento){  
                Date date = new Date();
                String detalle = ac.detallePago.getText();
                String observaciones = ac.observacionesPago.getText();
@@ -197,17 +195,16 @@ public class ControladorAltaPago implements ActionListener, KeyListener{
                       cd.altaCuota(new java.sql.Date(date.getTime()),180, detalle, cuota_pura, gastos, new BigDecimal(0), haber, saldo_actual, new BigDecimal(0), cemento_haber, cemento_saldo, observaciones, tipoPago, id_control);                    
                   }
                }else{
-                 try {
+                 try {int cuota=0;
                        ResultSet rs = cd.getNrosCuotas(id_control);
                        rs.next();
-                       int cuota = rs.getInt(1);
-                       rs.next();
-                       while(rs.getInt(1)-1==cuota){
-                           cuota=rs.getInt(1);
-                           rs.next();
-                       }
+                       cuota = rs.getInt(1);
+                       //-----Verifico que sea la primer cuota-------//                       
+                         while(rs.next()&&rs.getInt(1)-1==cuota){
+                           cuota=rs.getInt(1);                           
+                         }
                        cd.altaCuota(new java.sql.Date(date.getTime()),cuota+1, detalle, cuota_pura, gastos, new BigDecimal(0), haber, saldo_actual, new BigDecimal(0), cemento_haber, cemento_saldo, observaciones, tipoPago, id_control);  
-                       
+                      
                    } catch (SQLException ex) {
                        Logger.getLogger(ControladorAltaPago.class.getName()).log(Level.SEVERE, null, ex);
                    }  
