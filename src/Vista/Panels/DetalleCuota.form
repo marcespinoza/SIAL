@@ -104,7 +104,7 @@
                 <Column editable="false" title="Cemento debe" type="java.lang.Object"/>
                 <Column editable="false" title="Cemento haber" type="java.lang.Object"/>
                 <Column editable="false" title="Cemento saldo" type="java.lang.Object"/>
-                <Column editable="false" title="Observaciones" type="java.lang.Object"/>
+                <Column editable="true" title="Observaciones" type="java.lang.Object"/>
                 <Column editable="false" title="Tipo pago" type="java.lang.Object"/>
               </Table>
             </Property>

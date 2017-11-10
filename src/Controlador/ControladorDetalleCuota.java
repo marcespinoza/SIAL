@@ -23,16 +23,20 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.sql.ResultSet;
 import java.util.Properties;
+import javax.persistence.Table;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
 
 /**
  *
  * @author Marcelo
  */
-public class ControladorDetalleCuota implements ActionListener{
+public class ControladorDetalleCuota implements ActionListener, TableModelListener{
     
     RendererTablaCuota r = new RendererTablaCuota();
     DetalleCuota dc = new DetalleCuota();
@@ -54,6 +58,7 @@ public class ControladorDetalleCuota implements ActionListener{
         this.nombre=nombre;
         this.id_control=id_control;
         this.nro_cuotas=nro_cuotas;
+        dc.tablaDetallePago.getModel().addTableModelListener(this);
         dc.tablaDchoPosesion.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -201,6 +206,17 @@ public class ControladorDetalleCuota implements ActionListener{
                 }
         }
         
+    }
+
+    @Override
+    public void tableChanged(TableModelEvent e) {
+        //Solo trata cuando cambia el valor de una celda
+         if (e.getType() == TableModelEvent.UPDATE) {
+        int row = e.getFirstRow();
+       int column = e.getColumn();
+        TableModel tableModel = (TableModel)e.getSource();
+        Object data = tableModel.getValueAt(row, column);       
+         cd.actualizarCuota(data.toString(),Integer.parseInt(dc.tablaDetallePago.getModel().getValueAt(row, 0).toString()) ,id_control);}
     }
     
 }

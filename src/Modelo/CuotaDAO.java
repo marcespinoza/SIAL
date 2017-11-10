@@ -82,5 +82,21 @@ public class CuotaDAO {
         }
         return flag;
   }
+  
+  public void actualizarCuota(String obersaciones, int nro_cuota, int id_control){
+        try {
+            Connection con = conexion.getConexion();
+            PreparedStatement ps = con.prepareStatement(
+                    "UPDATE linea_control SET observaciones = ? WHERE nro_cuota = ? AND ficha_control_id_control = ?");
+            ps.setString(1,obersaciones);
+            ps.setInt(2,nro_cuota);
+            ps.setInt(3,id_control);
+            // call executeUpdate to execute our sql update statement
+            ps.executeUpdate();
+            ps.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(CuotaDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+  }
     
 }

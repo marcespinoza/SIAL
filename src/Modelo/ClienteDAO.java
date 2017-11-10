@@ -31,7 +31,7 @@ public class ClienteDAO {
      ResultSet rs = null;
      try {
           Connection con = conexion.getConexion();
-          String listar = "SELECT c.Dni, c.Apellidos, c.Nombres,c.fecha_nacimiento, c.barrio, c.calle, c.numero, c.Telefono1, c.telefono2, c.trabajo, f.Id_control, f.cantidad_cuotas, f.gastos, f.bolsa_cemento, f.lote_Barrio, f.lote_Manzana, f.lote_Parcela FROM (cliente c LEFT JOIN cliente_tiene_ficha_control h ON c.Dni = h.cliente_Dni) left join ficha_control f on f.Id_control=h.ficha_control_Id_control GROUP BY f.Id_control, ifnull(f.Id_control, c.Dni)"; 
+          String listar = "SELECT c.Dni, c.Apellidos, c.Nombres,c.fecha_nacimiento, c.barrio, c.calle, c.numero, c.Telefono1, c.telefono2, c.trabajo, f.Id_control, f.cantidad_cuotas, f.gastos, f.bolsa_cemento, f.lote_Barrio, f.lote_Manzana, f.lote_Parcela FROM (cliente c LEFT JOIN cliente_tiene_ficha_control h ON c.Dni = h.cliente_Dni) left join ficha_control f on f.Id_control=h.ficha_control_Id_control GROUP BY f.Id_control, c.dni, ifnull(f.Id_control, c.Dni)"; 
           Statement st = con.createStatement();
           rs = st.executeQuery(listar);
         } catch (Exception e) {
