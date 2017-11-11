@@ -28,12 +28,12 @@ import java.util.logging.Logger;
 public class ControladorLogin implements ActionListener, KeyListener, WindowListener{
     
    Login login;  
-   Frame frame;
+   Ventana frame;
    UsuarioDAO ud = new UsuarioDAO();
 
-    public ControladorLogin(Frame frame) {
-        login = new Login(frame, true);
+    public ControladorLogin(Ventana frame) {        
         this.frame = frame;
+        login = new Login(frame, true);
         login.usuario.addKeyListener(this);
         login.contraseña.addKeyListener(this);
         login.cancelar.addActionListener(this);

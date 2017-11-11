@@ -16,8 +16,6 @@ import java.awt.event.ActionListener;
  */
 public class ControladorBotones implements ActionListener{
     
-   // Minuta vistaMinuta = new Minuta();  
-    //ControladorMinuta cm = new ControladorMinuta(vistaMinuta);
     Ventana ventana;
  
     public ControladorBotones(Ventana ventana) {

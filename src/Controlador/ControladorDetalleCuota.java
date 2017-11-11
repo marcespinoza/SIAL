@@ -83,7 +83,7 @@ public class ControladorDetalleCuota implements ActionListener, TableModelListen
         dc.apellidoLabel.setText(this.apellido);
         dc.direccionLabel.setText(barrio +", "+ calle +" "+ numero);
         dc.telefonoLabel.setText(telefono);
-        this.dc.tablaDetallePago.setDefaultRenderer(Object.class, r);
+        dc.tablaDetallePago.setDefaultRenderer(Object.class, r);
         llenarTabla(id_control);
         llearTablaDchoPosesion(id_control);
         cargarPathMinuta();

@@ -201,6 +201,9 @@ public class DetalleCuota extends javax.swing.JPanel {
 
         jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Cta. derecho posesión", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Century Gothic", 3, 12))); // NOI18N
 
+        JTableHeader headerPosesion = tablaDchoPosesion.getTableHeader();
+        headerPosesion.setForeground(Color.white);
+        headerPosesion.setBackground(micolor);
         tablaDchoPosesion.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 

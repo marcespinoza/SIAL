@@ -5,6 +5,9 @@
  */
 package Vista.Panels;
 
+import java.awt.Color;
+import javax.swing.table.JTableHeader;
+
 /**
  *
  * @author Marcelo Espinoza
@@ -47,6 +50,10 @@ public class Minuta extends javax.swing.JPanel {
         jLabel2 = new javax.swing.JLabel();
         buscar = new javax.swing.JButton();
 
+        JTableHeader header = tablaMinuta.getTableHeader();
+        Color micolor = new Color(36,47,65);
+        header.setForeground(Color.white);
+        header.setBackground(micolor);
         tablaMinuta.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
@@ -73,6 +80,9 @@ public class Minuta extends javax.swing.JPanel {
             tablaMinuta.getColumnModel().getColumn(8).setPreferredWidth(1);
         }
 
+        JTableHeader headerMinuta = tablaFechaMinuta.getTableHeader();
+        headerMinuta.setForeground(Color.white);
+        headerMinuta.setBackground(micolor);
         tablaFechaMinuta.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null},

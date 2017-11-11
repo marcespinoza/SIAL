@@ -5,6 +5,7 @@
  */
 package Controlador;
 
+import static Controlador.ControladorRecibo.IMG;
 import Modelo.MinutaDAO;
 import Vista.Panels.DetalleCuota;
 import Vista.Panels.Minuta;
@@ -13,6 +14,7 @@ import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Element;
 import com.itextpdf.text.Font;
+import com.itextpdf.text.Image;
 import com.itextpdf.text.PageSize;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.Rectangle;
@@ -54,6 +56,7 @@ public class ControladorMinuta implements MouseListener, ActionListener {
     File f;
     JFileChooser chooser;
     File configFile = new File("config.properties");
+    public static final String IMG = "src/Imagenes/logo_reporte.png";
 
     public ControladorMinuta(Minuta vistaMinuta) {
         this.vistaMinuta=vistaMinuta;
@@ -140,8 +143,8 @@ public class ControladorMinuta implements MouseListener, ActionListener {
             
             if(e.getSource() == vistaMinuta.guardar_en){
                 chooser = new JFileChooser();
-                 chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-                chooser.showOpenDialog(chooser);
+                chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+                chooser.showOpenDialog(null);
                 f = chooser.getSelectedFile();
                 String path = f.getAbsolutePath();
                 vistaMinuta.path.setText(path);
@@ -177,7 +180,10 @@ public class ControladorMinuta implements MouseListener, ActionListener {
             
             PdfWriter.getInstance(document, new FileOutputStream(new File(vistaMinuta.path.getText(), "Minuta-"+dateFormat2.format(date)+".pdf")));
             document.open();
-            Font f=new Font(Font.FontFamily.TIMES_ROMAN,10.0f,0,null);   
+            Image image = Image.getInstance(IMG); 
+            image.scaleAbsolute(70, 70);
+            Font f=new Font(Font.FontFamily.TIMES_ROMAN,10.0f,0,null); 
+            document.add(new Chunk(image, 0, -55f));
             Paragraph titulo = new Paragraph("Minuta diaria");  
             titulo.setAlignment(Element.ALIGN_CENTER);
             document.add(titulo);
@@ -240,7 +246,7 @@ public class ControladorMinuta implements MouseListener, ActionListener {
                   table2.addCell(new PdfPCell(new Paragraph(resultset.getString(9),f)));
                   table2.addCell(new PdfPCell(new Paragraph(resultset.getString(10),f)));
                   document.add(table2);
-                  acumulador_rendido = acumulador_rendido + Double.parseDouble(resultset.getString(7));
+                  acumulador_rendido = acumulador_rendido + Double.parseDouble(resultset.getString(8));
                   switch(resultset.getString(9)){
                       case "Dpto. Bancario":deposito = deposito + Double.parseDouble(resultset.getString(7));break; 
                       case "Tarjeta credito":t_debito = t_debito + Double.parseDouble(resultset.getString(7));break;

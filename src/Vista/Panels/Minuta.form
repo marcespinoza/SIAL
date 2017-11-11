@@ -147,6 +147,7 @@
             </Property>
           </Properties>
           <AuxValues>
+            <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="JTableHeader header = tablaMinuta.getTableHeader();&#xa;Color micolor = new Color(36,47,65);&#xa;header.setForeground(Color.white);&#xa;header.setBackground(micolor);"/>
             <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="1"/>
           </AuxValues>
         </Component>
@@ -169,6 +170,7 @@
             </Property>
           </Properties>
           <AuxValues>
+            <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="JTableHeader headerMinuta = tablaFechaMinuta.getTableHeader();&#xa;headerMinuta.setForeground(Color.white);&#xa;headerMinuta.setBackground(micolor);"/>
             <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="1"/>
           </AuxValues>
         </Component>

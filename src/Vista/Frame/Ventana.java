@@ -42,6 +42,7 @@ public class Ventana extends javax.swing.JFrame implements ActionListener{
         setExtendedState(MAXIMIZED_BOTH);        
         ImageIcon icon = new ImageIcon("src/Imagenes/logo.png_32x32.png");
         this.setIconImage(icon.getImage());
+        inicializarPaneles();
         cl = new ControladorLogin(this);
         cm = new ControladorMinuta(vistaMinuta);
         cr = new ControladorResumen(vistaResumen);
@@ -50,7 +51,7 @@ public class Ventana extends javax.swing.JFrame implements ActionListener{
         configuracion.addActionListener(this);
         about.addActionListener(this);
         this.setResizable(false);
-        inicializarPaneles();
+        
     }
     
     public void inicializarPaneles(){
