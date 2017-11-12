@@ -11,7 +11,6 @@ import Modelo.ReferenciaDAO;
 import Modelo.RendererTablaCliente;
 import Vista.Frame.Ventana;
 import Vista.Panels.Clientes;
-import Vista.Panels.DetalleCuota;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Frame;
@@ -63,6 +62,7 @@ public class ControladorCliente implements ActionListener, MouseListener{
         this.vistaClientes.asignarBtn.addActionListener(this);
         this.vistaClientes.tablaCliente.addMouseListener(this);
         this.vistaClientes.agregarPropietario.addActionListener(this);
+        this.vistaClientes.cambiarPropietario.addActionListener(this);
         this.vistaClientes.comboCuotas.addActionListener(this);
         vistaClientes.datosCliente.setBorder(BorderFactory.createTitledBorder(
 				BorderFactory.createLineBorder(Color.BLACK), "Datos cliente"));
@@ -80,20 +80,34 @@ public class ControladorCliente implements ActionListener, MouseListener{
     
     @Override
     public void actionPerformed(ActionEvent e) {
-        
+          if(e.getSource() == vistaClientes.cambiarPropietario){
+              int row = vistaClientes.tablaCliente.getSelectedRow();
+              //--------Verifico que haya seleccionado alguna fila----------//
+              if(row != -1){
+              new ControladorAltaCliente((Ventana) SwingUtilities.getWindowAncestor(vistaClientes), Integer.parseInt(vistaClientes.tablaCliente.getModel().getValueAt(row, 10).toString()),  Integer.parseInt(vistaClientes.tablaCliente.getModel().getValueAt(row, 2).toString()), true);
+              if(vistaClientes.comboCuotas.getSelectedItem().equals("Todos")){
+              llenarTabla(0);}
+            else{
+                llenarTabla(Double.parseDouble(vistaClientes.comboCuotas.getSelectedItem().toString()));
+            }
+          
+            }else{
+              JOptionPane.showMessageDialog(null, "Seleccione un propietarhhio de la lista", "Atención", JOptionPane.INFORMATION_MESSAGE, null);
+             }}
         if(e.getSource() == vistaClientes.agregarPropietario){
             int row = vistaClientes.tablaCliente.getSelectedRow();
            if(row != -1){
                if(vistaClientes.tablaCliente.getValueAt(row, 10) != null){
-                  new ControladorAltaCliente((Ventana) SwingUtilities.getWindowAncestor(vistaClientes), vistaClientes, Integer.parseInt(vistaClientes.tablaCliente.getModel().getValueAt(row, 10).toString()), this);
+                  new ControladorAltaCliente((Ventana) SwingUtilities.getWindowAncestor(vistaClientes),  Integer.parseInt(vistaClientes.tablaCliente.getModel().getValueAt(row, 10).toString()), 0, false);
+                  llenarTabla(0);
                }else{
                   JOptionPane.showMessageDialog(null, "Debe asignar una propiedad", "Atención", JOptionPane.INFORMATION_MESSAGE, null); 
                }}else{
-               JOptionPane.showMessageDialog(null, "Seleccione un cliente de la lista", "Atención", JOptionPane.INFORMATION_MESSAGE, null);
+               JOptionPane.showMessageDialog(null, "Seleccione un propietario de la lista", "Atención", JOptionPane.INFORMATION_MESSAGE, null);
            } 
         }
         if(e.getSource() == vistaClientes.agregarBtn){  
-            new ControladorAltaCliente((Ventana) SwingUtilities.getWindowAncestor(vistaClientes), vistaClientes,0, this);
+            new ControladorAltaCliente((Ventana) SwingUtilities.getWindowAncestor(vistaClientes), 0,0, false);
             if(vistaClientes.comboCuotas.getSelectedItem().equals("Todos")){
                  llenarTabla(0);}
             else{

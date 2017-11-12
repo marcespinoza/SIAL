@@ -91,6 +91,20 @@ public class FichaControlDAO {
      return id_control;
  }
     
- 
+  public void cambiarPropietario(int nuevo_dni, int viejo_dni, int id_ficha_control){
+        try {
+            Connection con = conexion.getConexion();
+            PreparedStatement ps = con.prepareStatement(
+                    "UPDATE cliente_tiene_ficha_control SET cliente_dni = ? WHERE cliente_dni = ? AND ficha_control_id_control = ?");
+            ps.setInt(1,nuevo_dni);
+            ps.setInt(2,viejo_dni);
+            ps.setInt(3,id_ficha_control);
+            // call executeUpdate to execute our sql update statement
+            ps.executeUpdate();
+            ps.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(CuotaDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+  }
     
 }
