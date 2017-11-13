@@ -5,11 +5,26 @@
  */
 package Controlador;
 
+import static Controlador.ControladorMinuta.IMG;
 import Modelo.CuotaDAO;
 import Modelo.DchoPosesionDAO;
+import Modelo.FichaControlDAO;
 import Modelo.RendererTablaCuota;
 import Vista.Frame.Ventana;
 import Vista.Panels.DetalleCuota;
+import com.itextpdf.text.BadElementException;
+import com.itextpdf.text.Chunk;
+import com.itextpdf.text.Document;
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.Element;
+import com.itextpdf.text.Font;
+import com.itextpdf.text.Image;
+import com.itextpdf.text.PageSize;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.Phrase;
+import com.itextpdf.text.pdf.PdfPCell;
+import com.itextpdf.text.pdf.PdfPTable;
+import com.itextpdf.text.pdf.PdfWriter;
 import java.awt.CardLayout;
 import java.awt.Frame;
 import java.awt.event.ActionEvent;
@@ -18,12 +33,17 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Properties;
-import javax.persistence.Table;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
@@ -42,6 +62,7 @@ public class ControladorDetalleCuota implements ActionListener, TableModelListen
     DetalleCuota dc = new DetalleCuota();
     CuotaDAO cd = new CuotaDAO();
     DchoPosesionDAO dp = new DchoPosesionDAO();
+    FichaControlDAO fcd = new FichaControlDAO();
     Object [] detallePago;
     Object [] dchoPosesion;
     String apellido;
@@ -52,6 +73,8 @@ public class ControladorDetalleCuota implements ActionListener, TableModelListen
     File configFile = new File("config.properties");
     Boolean cuota = false;
     Boolean posesion = false;
+    public static final String IMG = "src/Imagenes/logo_reporte.png";
+    ResultSet detalleCuota;
     
     public ControladorDetalleCuota(int nro_cuotas,String apellido, String nombre, String telefono, String barrio,String calle,int numero,int id_control) {
         this.apellido=apellido;
@@ -79,6 +102,7 @@ public class ControladorDetalleCuota implements ActionListener, TableModelListen
         dc.volverBtn.addActionListener(this);
         dc.agregarPagoBtn.addActionListener(this);
         dc.generarReciboBtn.addActionListener(this);
+        dc.resumenCliente.addActionListener(this);
         dc.nombreLabel.setText(this.nombre);
         dc.apellidoLabel.setText(this.apellido);
         dc.direccionLabel.setText(barrio +", "+ calle +" "+ numero);
@@ -93,15 +117,15 @@ public class ControladorDetalleCuota implements ActionListener, TableModelListen
         try {
           FileReader reader = new FileReader(configFile);
           Properties props = new Properties();
-            props.load(reader); 
+          props.load(reader); 
           String pathMinuta = props.getProperty("pathRecibo");
           dc.path.setText(pathMinuta);
          reader.close();
-     } catch (FileNotFoundException ex) {
-    // file does not exist
-     } catch (IOException ex) {
-    // I/O error
-     }
+       } catch (FileNotFoundException ex) {
+      // file does not exist
+       } catch (IOException ex) {
+      // I/O error
+       }
      } 
     
    public void llearTablaDchoPosesion(int id_control){
@@ -124,27 +148,31 @@ public class ControladorDetalleCuota implements ActionListener, TableModelListen
    }  
     
    public void llenarTabla(int idControl){
-        ResultSet rs = cd.listaDetalleCuota(idControl);
+        detalleCuota = cd.listaDetalleCuota(idControl);
         DefaultTableModel model = (DefaultTableModel) dc.tablaDetallePago.getModel();
         model.setRowCount(0);
         try {
-            while(rs.next()){
-                String nro_cuota = rs.getString(1);
-                String fecha = rs.getString(2);
-                String detalle = rs.getString(3);
-                String cuota_pura = rs.getString(4);
-                String gastos_admin = rs.getString(5);                
-                String debe = rs.getString(6);
-                String haber = rs.getString(7);                
-                String saldo = rs.getString(8);
-                String cemento_debe = rs.getString(9);
-                String cemento_haber = rs.getString(10);
-                String cemento_saldo = rs.getString(11);
-                String observaciones = rs.getString(12);
-                String tipo_pago = rs.getString(13);
+            while(detalleCuota.next()){
+                String nro_cuota = detalleCuota.getString(1);
+                String fecha = detalleCuota.getString(2);
+                String detalle = detalleCuota.getString(3);
+                String cuota_pura = detalleCuota.getString(4);
+                String gastos_admin = detalleCuota.getString(5);                
+                String debe = detalleCuota.getString(6);
+                String haber = detalleCuota.getString(7);                
+                String saldo = detalleCuota.getString(8);
+                String cemento_debe = detalleCuota.getString(9);
+                String cemento_haber = detalleCuota.getString(10);
+                String cemento_saldo = detalleCuota.getString(11);
+                String observaciones = detalleCuota.getString(12);
+                String tipo_pago = detalleCuota.getString(13);
                 detallePago= new Object[] {nro_cuota, fecha, detalle, cuota_pura, gastos_admin, debe, haber, saldo, cemento_debe, cemento_haber,cemento_saldo, observaciones, tipo_pago};                    
                 model.addRow(detallePago); 
             }
+            //---------Reseteo resultset para recorrerlo nuevamente cuando quiero---------//
+            //---------crear resumen de cliente--------------------------------------------//
+            
+            detalleCuota.beforeFirst();
              CardLayout cl = (CardLayout)(Ventana.panelPrincipal.getLayout());
              Ventana.panelPrincipal.add(dc, "Detalle_pago");
              cl.show(Ventana.panelPrincipal, "Detalle_pago");
@@ -163,6 +191,9 @@ public class ControladorDetalleCuota implements ActionListener, TableModelListen
            ControladorAltaPago cac = new ControladorAltaPago((Frame) SwingUtilities.getWindowAncestor(dc), id_control, dc.tablaDetallePago.getRowCount(), nro_cuotas);
             llenarTabla(id_control);
             llearTablaDchoPosesion(id_control);
+        }
+        if(e.getSource() == dc.resumenCliente){
+            generarResumenPdf();
         }
         if(e.getSource() == dc.generarReciboBtn){
           if(!dc.path.getText().equals("")){        
@@ -187,8 +218,8 @@ public class ControladorDetalleCuota implements ActionListener, TableModelListen
             }
         }
         if(e.getSource() == dc.guardar){
-            chooser = new JFileChooser();
-                 chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+                chooser = new JFileChooser();
+                chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
                 chooser.showOpenDialog(chooser);
                 f = chooser.getSelectedFile();
                 String path = f.getAbsolutePath();
@@ -204,19 +235,80 @@ public class ControladorDetalleCuota implements ActionListener, TableModelListen
                 } catch (IOException ex) {
                    // I/O error
                 }
-        }
-        
+        }        
     }
 
     @Override
     public void tableChanged(TableModelEvent e) {
-        //Solo trata cuando cambia el valor de una celda
+        //------Solo trata cuando cambia el valor de una celda--------//
          if (e.getType() == TableModelEvent.UPDATE) {
-        int row = e.getFirstRow();
-       int column = e.getColumn();
-        TableModel tableModel = (TableModel)e.getSource();
-        Object data = tableModel.getValueAt(row, column);       
-         cd.actualizarCuota(data.toString(),Integer.parseInt(dc.tablaDetallePago.getModel().getValueAt(row, 0).toString()) ,id_control);}
+          int row = e.getFirstRow();
+          int column = e.getColumn();
+          TableModel tableModel = (TableModel)e.getSource();
+          Object data = tableModel.getValueAt(row, column);       
+          cd.actualizarCuota(data.toString(),Integer.parseInt(dc.tablaDetallePago.getModel().getValueAt(row, 0).toString()) ,id_control);}
     }
+    
+    private void generarResumenPdf(){
+            Document document= new Document(PageSize.A4);
+            DateFormat fecha1 = new SimpleDateFormat("dd/MM/yyyy");
+            java.util.Date date = new java.util.Date();            
+            Font f=new Font(Font.FontFamily.TIMES_ROMAN,10.0f,0,null);
+            ResultSet rs = fcd.obtenerFichaControl(id_control); 
+            
+        try {
+            rs.next();
+            PdfWriter.getInstance(document, new FileOutputStream(new File(dc.path.getText(), "Resumen "+dc.nombreLabel.getText()+" "+ dc.apellidoLabel.getText()+".pdf")));
+            document.open();       
+            Image image = Image.getInstance(IMG); 
+            image.scaleAbsolute(70, 70);
+            document.add(new Chunk(image, 0, -55f));
+            Chunk titulo = new Chunk("Resumen cliente");
+            titulo.setUnderline(0.1f, -2f); 
+            Phrase ph1 = new Phrase(titulo);
+            Paragraph ph = new Paragraph();
+            ph.add(ph1);
+            ph.setAlignment(Element.ALIGN_CENTER);
+            document.add(ph);
+            document.add( Chunk.NEWLINE );
+            document.add( Chunk.NEWLINE );
+            document.add( Chunk.NEWLINE );
+            document.add(new Paragraph("Apellido y nombres: "+dc.nombreLabel.getText()+" "+ dc.apellidoLabel.getText(),f));
+            document.add(new Paragraph("Direcciòn: "+dc.direccionLabel.getText(),f));
+            document.add( Chunk.NEWLINE );
+            document.add(new Paragraph("Propiedad: "+rs.getString(6)+" - Mz: "+rs.getString(7)+" - Pc: "+rs.getString(8),f));
+            document.add( Chunk.NEWLINE );
+            PdfPTable table = new PdfPTable(3); 
+            table.setTotalWidth(new float[]{ 1,1,2});
+            table.setWidthPercentage(100);
+            PdfPCell nro_cuota = new PdfPCell(new Paragraph("Nro. cuota",f));
+            PdfPCell fecha_pago = new PdfPCell(new Paragraph("Fch. pago",f));
+            PdfPCell saldo = new PdfPCell(new Paragraph("Saldo",f));
+            nro_cuota.setHorizontalAlignment(Element.ALIGN_CENTER);
+            fecha_pago.setHorizontalAlignment(Element.ALIGN_CENTER);
+            saldo.setHorizontalAlignment(Element.ALIGN_CENTER);
+            table.addCell(nro_cuota);
+            table.addCell(fecha_pago);
+            table.addCell(saldo);
+            document.add(table); 
+            while(detalleCuota.next()){
+                  PdfPTable table2 = new PdfPTable(3);            
+                  table2.setTotalWidth(new float[]{ 1,1,2});
+                  table2.setWidthPercentage(100);
+                  table2.addCell(new PdfPCell(new Paragraph(detalleCuota.getString(1),f)));
+                  table2.addCell(new PdfPCell(new Paragraph(detalleCuota.getString(2),f)));
+                  table2.addCell(new PdfPCell(new Paragraph(detalleCuota.getString(8),f)));
+                  document.add(table2);
+              }
+            document.close();
+        }            
+            catch (DocumentException ex) {
+            Logger.getLogger(DetalleCuota.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(ControladorDetalleCuota.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            Logger.getLogger(ControladorDetalleCuota.class.getName()).log(Level.SEVERE, null, ex);
+        }}
+    
     
 }

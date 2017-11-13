@@ -204,11 +204,9 @@ public class ControladorRecibo implements ActionListener{
     public void generarRecibo(){
             Document document= new Document(PageSize.A4);
             DateFormat fecha1 = new SimpleDateFormat("dd/MM/yyyy");
-            DateFormat fecha2 = new SimpleDateFormat("dd.MM.yyyy");
             java.util.Date date = new java.util.Date();
-            String nombre_pdf = fecha2.format(date)+".pdf";
         try {
-            PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(new File(dc.path.getText(), "Recibo-"+nro_recibo_propietario+".pdf")));
+            PdfWriter.getInstance(document, new FileOutputStream(new File(dc.path.getText(), "Recibo-"+nro_recibo_propietario+".pdf")));
             document.open();
             for (int i = 1; i < 3; i++) {               
             Font f=new Font(Font.FontFamily.TIMES_ROMAN,10.0f,0,null);
@@ -297,7 +295,7 @@ public class ControladorRecibo implements ActionListener{
             table3.addCell(detalle);
             table3.addCell(importe);
             document.add(table3);
-             PdfPTable table4 = new PdfPTable(2);
+            PdfPTable table4 = new PdfPTable(2);
             table4.setTotalWidth(new float[]{ 3,1});
             table4.setWidthPercentage(100);
             PdfPCell detalle2 = new PdfPCell(new Paragraph(ar.detalle.getText(),f));
