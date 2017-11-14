@@ -175,8 +175,7 @@ public class ControladorEditarCliente implements ActionListener{
        @Override
        public void done() { 
              rd.editarReferencia(Integer.parseInt(ac.documento.getText()),ac.telefonoRef.getText(), ac.apellidosRef.getText(), ac.nombresRef.getText(), ac.parentescoRef.getText(), referencia.get(2).toString());
-            cc.llenarTabla(0);
-             ac.dispose();   
+           ac.dispose();   
        }
     
 }

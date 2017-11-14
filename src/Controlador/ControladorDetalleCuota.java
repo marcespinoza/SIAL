@@ -37,6 +37,7 @@ import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.DateFormat;
@@ -175,11 +176,11 @@ public class ControladorDetalleCuota implements ActionListener, TableModelListen
             //---------crear resumen de cliente--------------------------------------------//
             
             detalleCuota.beforeFirst();
-             CardLayout cl = (CardLayout)(Ventana.panelPrincipal.getLayout());
-             Ventana.panelPrincipal.add(dc, "Detalle_pago");
-             cl.show(Ventana.panelPrincipal, "Detalle_pago");
+            CardLayout cl = (CardLayout)(Ventana.panelPrincipal.getLayout());
+            Ventana.panelPrincipal.add(dc, "Detalle_pago");
+            cl.show(Ventana.panelPrincipal, "Detalle_pago");
         }catch(Exception e){
-             System.out.println(e.getMessage().toString());
+            System.out.println(e.getMessage().toString());
         } 
    }
 
@@ -257,11 +258,10 @@ public class ControladorDetalleCuota implements ActionListener, TableModelListen
     
     private void generarResumenPdf(){
             Document document= new Document(PageSize.A4);
-            DateFormat fecha1 = new SimpleDateFormat("dd/MM/yyyy");
-            java.util.Date date = new java.util.Date();            
+            DateFormat fecha1 = new SimpleDateFormat("dd/MM/yyyy");   
+            java.util.Date date = new java.util.Date();
             Font f=new Font(Font.FontFamily.TIMES_ROMAN,10.0f,0,null);
             ResultSet rs = fcd.obtenerFichaControl(id_control); 
-            
         try {
             rs.next();
             PdfWriter.getInstance(document, new FileOutputStream(new File(dc.path.getText(), "Resumen "+dc.nombreLabel.getText()+" "+ dc.apellidoLabel.getText()+".pdf")));
@@ -269,7 +269,7 @@ public class ControladorDetalleCuota implements ActionListener, TableModelListen
             Image image = Image.getInstance(IMG); 
             image.scaleAbsolute(70, 70);
             document.add(new Chunk(image, 0, -55f));
-            Chunk titulo = new Chunk("Resumen cliente");
+            Chunk titulo = new Chunk("Resumen cliente" );
             titulo.setUnderline(0.1f, -2f); 
             Phrase ph1 = new Phrase(titulo);
             Paragraph ph = new Paragraph();
@@ -286,38 +286,59 @@ public class ControladorDetalleCuota implements ActionListener, TableModelListen
             //------Cabeceras de las columnas de las cuotas---------//
             if(dc.tablaDetallePago.getRowCount()!=1){//---Si la tabla tiene 1 fila no imprimo cabeceras----//
             document.add( Chunk.NEWLINE );    
-            Paragraph cuotas = new Paragraph("Cuotas",f);
-            cuotas.setAlignment(Element.ALIGN_CENTER);
-            document.add(cuotas);
+            Chunk cuotas = new Chunk("Cuotas");
+            cuotas.setUnderline(0.1f, -2f); 
+            Phrase ph2 = new Phrase(cuotas);
+            Paragraph ph3 = new Paragraph();
+            ph3.add(ph2);
+            ph3.setAlignment(Element.ALIGN_CENTER);
+            document.add(ph3);
             document.add( Chunk.NEWLINE );
-            PdfPTable table = new PdfPTable(3); 
-            table.setTotalWidth(new float[]{ 1,1,2});
+            PdfPTable table = new PdfPTable(4); 
+            table.setTotalWidth(new float[]{ 1,1,2,2});
             table.setWidthPercentage(100);
             PdfPCell nro_cuota = new PdfPCell(new Paragraph("Nro. cuota",f));
             PdfPCell fecha_pago = new PdfPCell(new Paragraph("Fch. pago",f));
+            PdfPCell monto_cuota = new PdfPCell(new Paragraph("Monto",f));
             PdfPCell saldo = new PdfPCell(new Paragraph("Saldo",f));
             nro_cuota.setHorizontalAlignment(Element.ALIGN_CENTER);
             fecha_pago.setHorizontalAlignment(Element.ALIGN_CENTER);
+            monto_cuota.setHorizontalAlignment(Element.ALIGN_CENTER);
             saldo.setHorizontalAlignment(Element.ALIGN_CENTER);
             table.addCell(nro_cuota);
             table.addCell(fecha_pago);
+            table.addCell(monto_cuota);
             table.addCell(saldo);
             document.add(table); 
+            detalleCuota.next();
+            PdfPTable primerLinea = new PdfPTable(4);            
+            primerLinea.setTotalWidth(new float[]{ 1,1,2,2});
+            primerLinea.setWidthPercentage(100);
+            primerLinea.addCell(new PdfPCell(new Paragraph("-",f))).setHorizontalAlignment(Element.ALIGN_CENTER);
+            primerLinea.addCell(new PdfPCell(new Paragraph(detalleCuota.getString(2),f))).setHorizontalAlignment(Element.ALIGN_CENTER);
+            primerLinea.addCell(new PdfPCell(new Paragraph("Saldo inicial",f))).setHorizontalAlignment(Element.ALIGN_CENTER);
+            primerLinea.addCell(new PdfPCell(new Paragraph(detalleCuota.getString(8),f))).setHorizontalAlignment(Element.ALIGN_CENTER);
+            document.add(primerLinea);            
             while(detalleCuota.next()){
-                  PdfPTable table2 = new PdfPTable(3);            
-                  table2.setTotalWidth(new float[]{ 1,1,2});
+                  PdfPTable table2 = new PdfPTable(4);            
+                  table2.setTotalWidth(new float[]{ 1,1,2,2});
                   table2.setWidthPercentage(100);
-                  table2.addCell(new PdfPCell(new Paragraph(detalleCuota.getString(1),f)));
-                  table2.addCell(new PdfPCell(new Paragraph(detalleCuota.getString(2),f)));
-                  table2.addCell(new PdfPCell(new Paragraph(detalleCuota.getString(8),f)));
+                  table2.addCell(new PdfPCell(new Paragraph(detalleCuota.getString(1),f))).setHorizontalAlignment(Element.ALIGN_CENTER);
+                  table2.addCell(new PdfPCell(new Paragraph(detalleCuota.getString(2),f))).setHorizontalAlignment(Element.ALIGN_CENTER);
+                  table2.addCell(new PdfPCell(new Paragraph(String.valueOf(new BigDecimal(detalleCuota.getString(4)).add(new BigDecimal(detalleCuota.getString(5)))),f))).setHorizontalAlignment(Element.ALIGN_CENTER);
+                  table2.addCell(new PdfPCell(new Paragraph(detalleCuota.getString(8),f))).setHorizontalAlignment(Element.ALIGN_CENTER);
                   document.add(table2);
               }}
             //------------Cabecera de las columnas de derecho de posesion------------//
             if(dc.tablaDchoPosesion.getRowCount()!=0){//---Veo si la tabla derecho de posesion tiene algun elemento-----//
             document.add( Chunk.NEWLINE );
-            Paragraph dchoPosesion = new Paragraph("Derecho de posesión",f);
-            dchoPosesion.setAlignment(Element.ALIGN_CENTER);
-            document.add(dchoPosesion);
+            Chunk cuotas = new Chunk("Cta. Derecho de Posesión");
+            cuotas.setUnderline(0.1f, -2f); 
+            Phrase ph2 = new Phrase(cuotas);
+            Paragraph ph3 = new Paragraph();
+            ph3.add(ph2);
+            ph3.setAlignment(Element.ALIGN_CENTER);
+            document.add(ph3);
             document.add( Chunk.NEWLINE );
             PdfPTable table2 = new PdfPTable(3); 
             table2.setTotalWidth(new float[]{ 1,1,2});
@@ -337,9 +358,9 @@ public class ControladorDetalleCuota implements ActionListener, TableModelListen
                   PdfPTable table3 = new PdfPTable(3);            
                   table3.setTotalWidth(new float[]{ 1,1,2});
                   table3.setWidthPercentage(100);
-                  table3.addCell(new PdfPCell(new Paragraph(i)));
-                  table3.addCell(new PdfPCell(new Paragraph(derechoPosesion.getString(1),f)));
-                  table3.addCell(new PdfPCell(new Paragraph(derechoPosesion.getString(2),f)));
+                  table3.addCell(new PdfPCell(new Paragraph(String.valueOf(i),f))).setHorizontalAlignment(Element.ALIGN_CENTER);
+                  table3.addCell(new PdfPCell(new Paragraph(derechoPosesion.getString(1),f))).setHorizontalAlignment(Element.ALIGN_CENTER);
+                  table3.addCell(new PdfPCell(new Paragraph(derechoPosesion.getString(2),f))).setHorizontalAlignment(Element.ALIGN_CENTER);
                   document.add(table3);
                   i++;
               }}

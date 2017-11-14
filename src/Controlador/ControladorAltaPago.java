@@ -17,6 +17,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.DateFormat;
@@ -59,22 +60,6 @@ public class ControladorAltaPago implements ActionListener, KeyListener{
         ac.chk_cuota.setSelected(true);
         ac.detallePago.setDocument(new LimitadorCaracteres(40));
         ac.observacionesPago.setDocument(new LimitadorCaracteres(40));
-//        ac.cuota_total.setDocument(new LimitadorCaracteres(7));
-//        ac.cuota_total.addKeyListener(new KeyListener() {
-//            @Override
-//            public void keyTyped(KeyEvent e) {
-//            }
-//
-//            @Override
-//            public void keyPressed(KeyEvent e) {
-//            }
-//
-//            @Override
-//            public void keyReleased(KeyEvent e) {
-//             nuevoGasto();
-//            }
-//             }
-//        );
         ac.cuota_total.getDocument().addDocumentListener(new DocumentListener() {
             @Override
             public void insertUpdate(DocumentEvent e) {    
@@ -170,10 +155,10 @@ public class ControladorAltaPago implements ActionListener, KeyListener{
                String detalle = ac.detallePago.getText();
                String observaciones = ac.observacionesPago.getText();
                String tipoPago = ac.tipoPago.getSelectedItem().toString();
-               BigDecimal haber = cuota_pura;
+               BigDecimal haber = cuota_pura.add(gastos);
                BigDecimal saldo_actual = ultimo_saldo.subtract(haber);
-               BigDecimal cemento_haber = bolsa_cemento;
-               BigDecimal cemento_saldo = saldo_bolsa_cemento.subtract(bolsa_cemento);
+               BigDecimal cemento_haber = haber.divide(bolsa_cemento, 2, RoundingMode.HALF_UP);
+               BigDecimal cemento_saldo = saldo_bolsa_cemento.subtract(haber.divide(bolsa_cemento, 2, RoundingMode.HALF_UP));
                if(ac.chk_adelanto_cuota.isSelected()){
                //-------Miro si la cuota 180 (la ultima) ya existe------//  
                   if(cd.getUltimaCuota(nro_cuotas)){
