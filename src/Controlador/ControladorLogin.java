@@ -16,6 +16,10 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.logging.Level;
@@ -30,6 +34,7 @@ public class ControladorLogin implements ActionListener, KeyListener, WindowList
    Login login;  
    Ventana frame;
    UsuarioDAO ud = new UsuarioDAO();
+   FileWriter writer;
 
     public ControladorLogin(Ventana frame) {        
         this.frame = frame;
@@ -65,14 +70,23 @@ public class ControladorLogin implements ActionListener, KeyListener, WindowList
                             Ventana.labelUsuario.setText(rs.getString(1));
                             Ventana.labelTipoUsuario.setText(rs.getString(2));
                             Ventana.nombreUsuario.setText(rs.getString(3));
-                            Ventana.apellidoUsuario.setText(rs.getString(4));
+                            Ventana.apellidoUsuario.setText(rs.getString(4));                            
+                            File file = new File("log.txt");
+                            file.createNewFile();
+                            FileWriter writer = new FileWriter(file);
+                            BufferedWriter bw = new BufferedWriter( writer );
+                            bw.write(rs.getString(3)+" "+rs.getString(4));
+                            bw.close();
                             login.dispose();
                             frame.setVisible(true);
                         }else{
                             login.aviso.setText("* Usuario y/o contraseña incorrectos");              
-                        }    } catch (SQLException ex) {
+                        }  
+                     } catch (SQLException ex) {
                         Logger.getLogger(ControladorLogin.class.getName()).log(Level.SEVERE, null, ex);
-                    }
+                    } catch (IOException ex) {
+                        Logger.getLogger(ControladorLogin.class.getName()).log(Level.SEVERE, null, ex);
+                    } 
               }
             }
             if(e.getSource() == login.cancelar){

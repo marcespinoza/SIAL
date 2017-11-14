@@ -74,7 +74,7 @@ public class ControladorDetalleCuota implements ActionListener, TableModelListen
     Boolean cuota = false;
     Boolean posesion = false;
     public static final String IMG = "src/Imagenes/logo_reporte.png";
-    ResultSet detalleCuota;
+    ResultSet detalleCuota, derechoPosesion;
     
     public ControladorDetalleCuota(int nro_cuotas,String apellido, String nombre, String telefono, String barrio,String calle,int numero,int id_control) {
         this.apellido=apellido;
@@ -130,19 +130,21 @@ public class ControladorDetalleCuota implements ActionListener, TableModelListen
     
    public void llearTablaDchoPosesion(int id_control){
         int num_cuota=1;
-        ResultSet rs = dp.listarCuenta(id_control);
+        derechoPosesion = dp.listarCuenta(id_control);
         DefaultTableModel model = (DefaultTableModel) dc.tablaDchoPosesion.getModel();
         model.setRowCount(0);
         try {
-            while(rs.next()){
-                String fecha = rs.getString(1);
-                String monto = rs.getString(2);
-                String gastos = rs.getString(3);    
-                String detalle = rs.getString(4); 
+            while(derechoPosesion.next()){
+                String fecha = derechoPosesion.getString(1);
+                String monto = derechoPosesion.getString(2);
+                String gastos = derechoPosesion.getString(3);    
+                String detalle = derechoPosesion.getString(4); 
                 dchoPosesion= new Object[] {num_cuota,fecha, monto,gastos,detalle};                    
                 model.addRow(dchoPosesion); 
                 num_cuota ++;
-            }}catch(Exception e){
+            }
+            derechoPosesion.beforeFirst();
+        }catch(Exception e){
         System.out.println(e.getMessage().toString());
         } 
    }  
@@ -193,7 +195,11 @@ public class ControladorDetalleCuota implements ActionListener, TableModelListen
             llearTablaDchoPosesion(id_control);
         }
         if(e.getSource() == dc.resumenCliente){
-            generarResumenPdf();
+            if(dc.tablaDetallePago.getRowCount()==1 && dc.tablaDchoPosesion.getRowCount()==0){
+               JOptionPane.showMessageDialog(null, "No hay datos para mostrar", "Atención", JOptionPane.INFORMATION_MESSAGE, null); }
+            else{
+                generarResumenPdf();
+            }
         }
         if(e.getSource() == dc.generarReciboBtn){
           if(!dc.path.getText().equals("")){        
@@ -275,8 +281,14 @@ public class ControladorDetalleCuota implements ActionListener, TableModelListen
             document.add( Chunk.NEWLINE );
             document.add(new Paragraph("Apellido y nombres: "+dc.nombreLabel.getText()+" "+ dc.apellidoLabel.getText(),f));
             document.add(new Paragraph("Direcciòn: "+dc.direccionLabel.getText(),f));
-            document.add( Chunk.NEWLINE );
             document.add(new Paragraph("Propiedad: "+rs.getString(6)+" - Mz: "+rs.getString(7)+" - Pc: "+rs.getString(8),f));
+            document.add( Chunk.NEWLINE );
+            //------Cabeceras de las columnas de las cuotas---------//
+            if(dc.tablaDetallePago.getRowCount()!=1){//---Si la tabla tiene 1 fila no imprimo cabeceras----//
+            document.add( Chunk.NEWLINE );    
+            Paragraph cuotas = new Paragraph("Cuotas",f);
+            cuotas.setAlignment(Element.ALIGN_CENTER);
+            document.add(cuotas);
             document.add( Chunk.NEWLINE );
             PdfPTable table = new PdfPTable(3); 
             table.setTotalWidth(new float[]{ 1,1,2});
@@ -299,7 +311,38 @@ public class ControladorDetalleCuota implements ActionListener, TableModelListen
                   table2.addCell(new PdfPCell(new Paragraph(detalleCuota.getString(2),f)));
                   table2.addCell(new PdfPCell(new Paragraph(detalleCuota.getString(8),f)));
                   document.add(table2);
-              }
+              }}
+            //------------Cabecera de las columnas de derecho de posesion------------//
+            if(dc.tablaDchoPosesion.getRowCount()!=0){//---Veo si la tabla derecho de posesion tiene algun elemento-----//
+            document.add( Chunk.NEWLINE );
+            Paragraph dchoPosesion = new Paragraph("Derecho de posesión",f);
+            dchoPosesion.setAlignment(Element.ALIGN_CENTER);
+            document.add(dchoPosesion);
+            document.add( Chunk.NEWLINE );
+            PdfPTable table2 = new PdfPTable(3); 
+            table2.setTotalWidth(new float[]{ 1,1,2});
+            table2.setWidthPercentage(100);
+            PdfPCell nro_pago = new PdfPCell(new Paragraph("Nro. pago",f));
+            PdfPCell fecha = new PdfPCell(new Paragraph("Fch. pago",f));
+            PdfPCell monto = new PdfPCell(new Paragraph("Monto",f));
+            nro_pago.setHorizontalAlignment(Element.ALIGN_CENTER);
+            fecha.setHorizontalAlignment(Element.ALIGN_CENTER);
+            monto.setHorizontalAlignment(Element.ALIGN_CENTER);
+            table2.addCell(nro_pago);
+            table2.addCell(fecha);
+            table2.addCell(monto);
+            document.add(table2); 
+            int i = 1;
+            while(derechoPosesion.next()){
+                  PdfPTable table3 = new PdfPTable(3);            
+                  table3.setTotalWidth(new float[]{ 1,1,2});
+                  table3.setWidthPercentage(100);
+                  table3.addCell(new PdfPCell(new Paragraph(i)));
+                  table3.addCell(new PdfPCell(new Paragraph(derechoPosesion.getString(1),f)));
+                  table3.addCell(new PdfPCell(new Paragraph(derechoPosesion.getString(2),f)));
+                  document.add(table3);
+                  i++;
+              }}
             document.close();
         }            
             catch (DocumentException ex) {

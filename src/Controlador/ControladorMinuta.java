@@ -5,7 +5,6 @@
  */
 package Controlador;
 
-import static Controlador.ControladorRecibo.IMG;
 import Modelo.MinutaDAO;
 import Vista.Panels.DetalleCuota;
 import Vista.Panels.Minuta;
