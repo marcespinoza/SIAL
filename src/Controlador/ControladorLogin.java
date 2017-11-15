@@ -22,6 +22,10 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.time.DayOfWeek;
+import java.util.Calendar;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -70,13 +74,19 @@ public class ControladorLogin implements ActionListener, KeyListener, WindowList
                             Ventana.labelUsuario.setText(rs.getString(1));
                             Ventana.labelTipoUsuario.setText(rs.getString(2));
                             Ventana.nombreUsuario.setText(rs.getString(3));
-                            Ventana.apellidoUsuario.setText(rs.getString(4));                            
+                            Ventana.apellidoUsuario.setText(rs.getString(4));    
+                            //--------Escribo en el archivo de log quien inició sesion, dia y hora---------//
                             File file = new File("log.txt");
-                            file.createNewFile();
-                            FileWriter writer = new FileWriter(file);
+                            if(!file.exists()){
+                            file.createNewFile();}
+                            FileWriter writer = new FileWriter(file, true);
                             BufferedWriter bw = new BufferedWriter( writer );
-                            bw.write(rs.getString(3)+" "+rs.getString(4));
+                            DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+                            Calendar cal = Calendar.getInstance();
+                            bw.write(rs.getString(3)+" "+rs.getString(4)+" - "+login.tipo_operador.getSelection().getActionCommand()+" - "+dateFormat.format(cal.getTime()));
+                            bw.newLine();
                             bw.close();
+                            //-------Oculto ventana login y muestro el frame----------//
                             login.dispose();
                             frame.setVisible(true);
                         }else{

@@ -70,8 +70,6 @@ public class ControladorCliente implements ActionListener, MouseListener{
 				BorderFactory.createLineBorder(Color.BLACK), "Datos referencia"));
         this.vistaClientes.tablaCliente.setDefaultRenderer(Object.class, r);
         llenarComboCuotas();
-        desactivarBotones();
-        //ocultarColumnas();
     }
 
     public ControladorCliente() {
@@ -291,12 +289,7 @@ public class ControladorCliente implements ActionListener, MouseListener{
         }
     }
     
-    public void desactivarBotones(){        
-        if(Ventana.labelTipoUsuario.getText().equals("operador")){
-            vistaClientes.editarBtn.setEnabled(false);
-            vistaClientes.eliminarBtn.setEnabled(false);
-        }
-    }
+    
 
     @Override
     public void mousePressed(MouseEvent e) {

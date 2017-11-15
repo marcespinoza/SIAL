@@ -9,6 +9,7 @@ import Controlador.ControladorBotones;
 import Controlador.ControladorConfiguracion;
 import Controlador.ControladorLogin;
 import Controlador.ControladorMinuta;
+import Controlador.ControladorRegistro;
 import Controlador.ControladorResumen;
 import Vista.Panels.Minuta;
 import Vista.Panels.Resumen;
@@ -41,14 +42,16 @@ public class Ventana extends javax.swing.JFrame implements ActionListener{
         setMaximizedBounds(usableBounds);
         setExtendedState(MAXIMIZED_BOTH);        
         ImageIcon icon = new ImageIcon("src/Imagenes/logo.png_32x32.png");
-        this.setIconImage(icon.getImage());
+        this.setIconImage(icon.getImage());         
         inicializarPaneles();
         cl = new ControladorLogin(this);
         cm = new ControladorMinuta(vistaMinuta);
-        cr = new ControladorResumen(vistaResumen);
+        cr = new ControladorResumen(vistaResumen);       
+        desactivarBotones();
         panelPrincipal.add(vistaMinuta, "Minuta");
         panelPrincipal.add(vistaResumen, "Resumen");
         configuracion.addActionListener(this);
+        registroEventos.addActionListener(this);
         about.addActionListener(this);
         this.setResizable(false);
         
@@ -91,6 +94,7 @@ public class Ventana extends javax.swing.JFrame implements ActionListener{
         cerrarSesion = new javax.swing.JMenuItem();
         info = new javax.swing.JMenu();
         configuracion = new javax.swing.JMenuItem();
+        registroEventos = new javax.swing.JMenuItem();
         about = new javax.swing.JMenuItem();
 
         jMenu1.setText("File");
@@ -165,10 +169,10 @@ public class Ventana extends javax.swing.JFrame implements ActionListener{
         jLabel1.setForeground(new java.awt.Color(255, 255, 153));
         jLabel1.setText("Usuario:");
 
-        labelUsuario.setFont(new java.awt.Font("Century Gothic", 0, 18)); // NOI18N
+        labelUsuario.setFont(new java.awt.Font("Century Gothic", 1, 18)); // NOI18N
         labelUsuario.setForeground(new java.awt.Color(255, 255, 255));
 
-        labelTipoUsuario.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
+        labelTipoUsuario.setFont(new java.awt.Font("Century Gothic", 0, 14)); // NOI18N
         labelTipoUsuario.setForeground(new java.awt.Color(255, 255, 255));
 
         apellidoUsuario.setText("jLabel3");
@@ -238,6 +242,14 @@ public class Ventana extends javax.swing.JFrame implements ActionListener{
         configuracion.setText("Configuración");
         info.add(configuracion);
 
+        registroEventos.setText("Registro de eventos");
+        registroEventos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                registroEventosActionPerformed(evt);
+            }
+        });
+        info.add(registroEventos);
+
         about.setText("Acerca de ..");
         info.add(about);
 
@@ -285,6 +297,10 @@ public class Ventana extends javax.swing.JFrame implements ActionListener{
        //this.setExtendedState(JFrame.MAXIMIZED_BOTH);
     }//GEN-LAST:event_formWindowOpened
 
+    private void registroEventosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_registroEventosActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_registroEventosActionPerformed
+
     
     
 
@@ -314,10 +330,13 @@ public class Ventana extends javax.swing.JFrame implements ActionListener{
     public static javax.swing.JLabel nombreUsuario;
     private Vista.Panels.PanelBotones panelBotones1;
     public static javax.swing.JPanel panelPrincipal;
+    public javax.swing.JMenuItem registroEventos;
     private Vista.Panels.Resumen resumen;
     // End of variables declaration//GEN-END:variables
 
 public void inicializarBotones(){
+    if(Ventana.labelTipoUsuario.getText().equals("operador"))
+    registroEventos.setEnabled(false);
     btnClientes.setVerticalTextPosition(SwingConstants.BOTTOM);
     btnClientes.setHorizontalTextPosition(SwingConstants.CENTER);
     btnResumen.setVerticalTextPosition(SwingConstants.BOTTOM);
@@ -326,6 +345,15 @@ public void inicializarBotones(){
     btnMinuta.setHorizontalTextPosition(SwingConstants.CENTER);
 }
 
+    public void desactivarBotones(){  
+        System.out.println(Ventana.labelTipoUsuario.getText());
+        if(Ventana.labelTipoUsuario.getText().equals("operador")){
+            clientes.editarBtn.setEnabled(false);
+            clientes.eliminarBtn.setEnabled(false);
+            registroEventos.setEnabled(false);
+        }
+    }
+
     @Override
     public void actionPerformed(ActionEvent e) {
         if(e.getSource().equals(configuracion)){
@@ -333,7 +361,10 @@ public void inicializarBotones(){
         }
         if(e.getSource().equals(about)){
           ImageIcon icon = new ImageIcon("src/Imagenes/Iconos/about.png");   
-             JOptionPane.showMessageDialog(null, "Desarrollado por Marcelo Espinoza \n marceloespinoza00@gmail.com","Acerca de ..", HEIGHT, icon);
+          JOptionPane.showMessageDialog(null, "Desarrollado por Marcelo Espinoza \n marceloespinoza00@gmail.com","Acerca de ..", HEIGHT, icon);
+        }
+        if(e.getSource().equals(registroEventos)){
+           new ControladorRegistro(this);
         }
     }
      
