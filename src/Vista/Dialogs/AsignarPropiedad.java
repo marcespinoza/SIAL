@@ -57,11 +57,11 @@ public class AsignarPropiedad extends javax.swing.JDialog {
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Asignar propiedad");
 
-        jLabel1.setText("Barrio");
+        jLabel1.setText("Barrio/Torre");
 
-        jLabel2.setText("Manzana");
+        jLabel2.setText("Manzana/Piso");
 
-        jLabel3.setText("Parcela");
+        jLabel3.setText("Parcela/Dpto");
 
         jLabel4.setText("Cantidad cuotas");
 

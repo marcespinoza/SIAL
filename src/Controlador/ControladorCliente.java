@@ -73,8 +73,7 @@ public class ControladorCliente implements ActionListener, MouseListener{
     }
 
     public ControladorCliente() {
-    }
-    
+    }    
     
     @Override
     public void actionPerformed(ActionEvent e) {

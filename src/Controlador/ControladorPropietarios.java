@@ -124,6 +124,7 @@ public class ControladorPropietarios implements MouseListener, ActionListener, K
         if(e.getSource()==vistaConfiguracion.propietarios.editar){
            pd.editarPropietario(vistaConfiguracion.propietarios.apellidoTxf.getText(), vistaConfiguracion.propietarios.nombreTxf.getText(), vistaConfiguracion.propietarios.cuitTxf.getText(),Integer.parseInt(vistaConfiguracion.propietarios.nroRecibo.getText()));
            llenarTabla();
+           new ControladorPropiedades(vistaConfiguracion);
         }
         
         if(e.getSource()==vistaConfiguracion.propietarios.eliminar){

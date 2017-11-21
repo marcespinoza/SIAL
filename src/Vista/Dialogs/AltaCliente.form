@@ -78,10 +78,8 @@
                           <Component id="apellidos" alignment="0" pref="288" max="32767" attributes="0"/>
                           <Component id="calle" alignment="0" max="32767" attributes="0"/>
                           <Component id="nombres" alignment="0" max="32767" attributes="0"/>
-                          <Group type="103" alignment="0" groupAlignment="1" max="-2" attributes="0">
-                              <Component id="fech_nac" alignment="0" max="32767" attributes="0"/>
-                              <Component id="documento" alignment="0" pref="134" max="32767" attributes="0"/>
-                          </Group>
+                          <Component id="fech_nac" alignment="0" max="32767" attributes="0"/>
+                          <Component id="documento" alignment="0" pref="134" max="32767" attributes="0"/>
                       </Group>
                   </Group>
                   <Group type="103" alignment="1" groupAlignment="1" attributes="0">

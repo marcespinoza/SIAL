@@ -26,19 +26,6 @@ public class DepartamentoDAO {
         conexion = new Conexion();
     }
     
-      public ResultSet obtenerTorres(String apellidos, String nombres){
-     ResultSet rs = null;
-     try {
-          Connection con = conexion.getConexion();
-          String listar = "SELECT DISTINCT torre from departamento where vendido=0 and propietario_Apellidos='"+apellidos+"' and propietario_nombres='"+nombres+"' "; 
-          Statement st = con.createStatement();
-          rs = st.executeQuery(listar);
-        } catch (Exception e) {
-            System.out.println(e.getMessage().toString());
-        }
-     return rs;
- }
-      
       public void editarDepartamento(String torre,int piso, int dpto){
         try {
             Connection con = conexion.getConexion();
@@ -69,7 +56,7 @@ public class DepartamentoDAO {
      return rs;
  }
      
-     public ResultSet obtenertorres(String apellidos, String nombres){
+     public ResultSet obtenerTorres(String apellidos, String nombres){
      ResultSet rs = null;
      try {
           Connection con = conexion.getConexion();
@@ -141,6 +128,7 @@ public class DepartamentoDAO {
 
     public void agregarDepartamento(String torre, String piso, String dpto, String propietario_apellidos, String propietario_nombres, String propietario_cuit, String propietario_nro_recibo){
        try {
+           System.out.println("propi");
            Connection con = conexion.getConexion();
            String query="INSERT INTO departamento (torre, piso, dpto, propietario_apellidos, propietario_nombres, propietario_cuit, propietario_nro_recibo)VALUES(?,?,?,?,?,?,?)  ON DUPLICATE KEY UPDATE torre = VALUES(torre), piso = VALUES(piso), dpto = VALUES(dpto),  propietario_apellidos=VALUES(propietario_apellidos), propietario_nombres = VALUES(propietario_nombres), propietario_cuit = VALUES(propietario_cuit), propietario_nro_recibo = VALUES(propietario_nro_recibo)";
            PreparedStatement stmt = con.prepareStatement(query);

@@ -80,12 +80,12 @@ public class PropietarioDAO {
         }
      return rs;
      }
-     
+        
       public ResultSet obtenerApellidosXLote(){
           ResultSet rs = null;
      try {
           Connection con = conexion.getConexion();         
-          String listar = "SELECT propietario_apellidos from lote"; 
+          String listar = "SELECT DISTINCT propietario_apellidos from lote"; 
           Statement st = con.createStatement();
           rs = st.executeQuery(listar);
         } catch (Exception e) {
@@ -98,7 +98,7 @@ public class PropietarioDAO {
           ResultSet rs = null;
      try {
           Connection con = conexion.getConexion();         
-          String listar = "SELECT propietario_apellidos from departamento"; 
+          String listar = "SELECT DISTINCT propietario_apellidos from departamento"; 
           Statement st = con.createStatement();
           rs = st.executeQuery(listar);
         } catch (Exception e) {
@@ -111,7 +111,7 @@ public class PropietarioDAO {
           ResultSet rs = null;
      try {
           Connection con = conexion.getConexion();         
-          String listar = "SELECT propietario_nombres from lote where propietario_apellidos='"+apellido+"'"; 
+          String listar = "SELECT DISTINCT propietario_nombres from lote where propietario_apellidos='"+apellido+"'"; 
           Statement st = con.createStatement();
           rs = st.executeQuery(listar);
         } catch (Exception e) {
@@ -124,7 +124,7 @@ public class PropietarioDAO {
           ResultSet rs = null;
      try {
           Connection con = conexion.getConexion();         
-          String listar = "SELECT propietario_nombres from departamento where propietario_apellidos='"+apellido+"'"; 
+          String listar = "SELECT DISTINCT propietario_nombres from departamento where propietario_apellidos='"+apellido+"'"; 
           Statement st = con.createStatement();
           rs = st.executeQuery(listar);
         } catch (Exception e) {

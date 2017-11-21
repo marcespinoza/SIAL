@@ -7,6 +7,7 @@ package Controlador;
 
 import Modelo.ClienteDAO;
 import Modelo.CuotaDAO;
+import Modelo.DepartamentoDAO;
 import Modelo.FichaControlDAO;
 import Modelo.LoteDAO;
 import Modelo.PropiedadesDAO;
@@ -38,6 +39,7 @@ public class ControladorAsignacionPropiedad implements ActionListener, KeyListen
     private Frame parent;    
     AsignarPropiedad vistaAsignarPropiedad ;
     LoteDAO ld = new LoteDAO();
+    DepartamentoDAO dd = new DepartamentoDAO();
     PropietarioDAO pd = new PropietarioDAO();
     FichaControlDAO fichaControlDAO = new FichaControlDAO();
     CuotaDAO cuotaDao = new CuotaDAO();
@@ -61,9 +63,10 @@ public class ControladorAsignacionPropiedad implements ActionListener, KeyListen
         this.vistaAsignarPropiedad.apellido_propietario.addItemListener(new ItemListener() {
             @Override
             public void itemStateChanged(ItemEvent e) {
-                  if (e.getStateChange() == ItemEvent.SELECTED) {
-                if(vistaAsignarPropiedad.apellido_propietario.getSelectedItem().toString()!=("Seleccione") &&vistaAsignarPropiedad.tipo_propiedad.getSelectedItem().toString()!=("Seleccione") );
-                llenarComboNombres(vistaAsignarPropiedad.tipo_propiedad.getSelectedItem().toString(), vistaAsignarPropiedad.apellido_propietario.getSelectedItem().toString());
+               //-----Solo llamo al evento cuando un item es seleccionado, no cuando es cargado o eliminado----//  
+              if (e.getStateChange() == ItemEvent.SELECTED) {
+                if(vistaAsignarPropiedad.apellido_propietario.getSelectedItem().toString()!=("Seleccione") && vistaAsignarPropiedad.tipo_propiedad.getSelectedItem().toString()!=("Seleccione") );
+                 llenarComboNombres(vistaAsignarPropiedad.tipo_propiedad.getSelectedItem().toString(), vistaAsignarPropiedad.apellido_propietario.getSelectedItem().toString());
             }}
         });
         this.vistaAsignarPropiedad.nombre_propietario.addItemListener(new ItemListener() {            
@@ -74,21 +77,25 @@ public class ControladorAsignacionPropiedad implements ActionListener, KeyListen
                 switch (vistaAsignarPropiedad.tipo_propiedad.getSelectedItem().toString()){
                 case "Terreno": cargarBarrios(vistaAsignarPropiedad.apellido_propietario.getSelectedItem().toString(), vistaAsignarPropiedad.nombre_propietario.getSelectedItem().toString()); break;
                 case "Departamento": cargarTorres(vistaAsignarPropiedad.apellido_propietario.getSelectedItem().toString(), vistaAsignarPropiedad.nombre_propietario.getSelectedItem().toString());break;
-            }
-                   }
+              }
+             }
             }
         });
         this.vistaAsignarPropiedad.barrio.addItemListener(new ItemListener() {
             @Override
             public void itemStateChanged(ItemEvent e) {
+                if (e.getStateChange() == ItemEvent.SELECTED) {
                 cargarManzanas(vistaAsignarPropiedad.barrio.getSelectedItem().toString());
+                }
             }
         });
         this.vistaAsignarPropiedad.manzana.addItemListener(new ItemListener() {
             @Override
             public void itemStateChanged(ItemEvent e) {
+                if (e.getStateChange() == ItemEvent.SELECTED) {
                 if(vistaAsignarPropiedad.manzana.getSelectedItem() != null){
                 cargarParcelas(vistaAsignarPropiedad.barrio.getSelectedItem().toString(), Integer.parseInt(vistaAsignarPropiedad.manzana.getSelectedItem().toString()));
+                }
                 }
                 }
         });     
@@ -138,8 +145,6 @@ public class ControladorAsignacionPropiedad implements ActionListener, KeyListen
             vistaAsignarPropiedad.nombre_propietario.addItem("Seleccione");
             if(rs!=null){
             while (rs.next()) {
-                
-                System.out.println(rs.getString(1) );
                 vistaAsignarPropiedad.nombre_propietario.addItem(rs.getString(1));                
             }  
             rs.close();}
@@ -152,8 +157,12 @@ public class ControladorAsignacionPropiedad implements ActionListener, KeyListen
      ResultSet rs = ld.obtenerBarrios(apellidos, nombres);
       vistaAsignarPropiedad.barrio.removeAllItems();
         try {
+            if(rs.next()){
+                vistaAsignarPropiedad.barrio.addItem(rs.getString(1));
             while(rs.next()){
                 vistaAsignarPropiedad.barrio.addItem(rs.getString(1));
+            }}else{
+               vistaAsignarPropiedad.barrio.addItem("Sin propiedades");
             }
         } catch (Exception e) {
         }
@@ -179,8 +188,8 @@ public class ControladorAsignacionPropiedad implements ActionListener, KeyListen
         }
     }
     
-      public void cargarTorres(String apellidos, String nombres){
-     ResultSet rs = ld.obtenerBarrios(apellidos, nombres);
+    public void cargarTorres(String apellidos, String nombres){
+     ResultSet rs = dd.obtenerTorres(apellidos, nombres);
       vistaAsignarPropiedad.barrio.removeAllItems();
         try {
             while(rs.next()){
@@ -189,8 +198,8 @@ public class ControladorAsignacionPropiedad implements ActionListener, KeyListen
         } catch (Exception e) {
         }
     }
-    public void cargarPisos(String barrio){
-        ResultSet rs = ld.manzanasPorBarrio(barrio);        
+    public void cargarPisos(String torre){
+        ResultSet rs = dd.pisosPortorre(torre);        
         vistaAsignarPropiedad.manzana.removeAllItems();
         try {
             while(rs.next()){
@@ -199,8 +208,8 @@ public class ControladorAsignacionPropiedad implements ActionListener, KeyListen
         } catch (Exception e) {
         }
     }
-    public void cargarNroDptos(String barrio, int manzana){
-         ResultSet rs = ld.parcelasPorManzana(barrio, manzana);
+    public void cargarNroDptos(String torre, int piso){
+         ResultSet rs = dd.dptosPorpiso(torre, piso);
         vistaAsignarPropiedad.parcela.removeAllItems();
         try {
             while(rs.next()){
@@ -211,8 +220,7 @@ public class ControladorAsignacionPropiedad implements ActionListener, KeyListen
     }
      
      public boolean validarCampos(){
-        boolean bandera = true;
-       
+        boolean bandera = true;       
         if(vistaAsignarPropiedad.cantidad_cuotas.getText().isEmpty()){
          vistaAsignarPropiedad.cantidad_cuotas.setBorder(BorderFactory.createLineBorder(Color.RED, 1));
          bandera=false;

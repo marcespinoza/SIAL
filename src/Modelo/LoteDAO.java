@@ -111,7 +111,7 @@ public class LoteDAO {
      }
  }
       
-      public ResultSet obtenerPropiedades(String apellidos, String nombres){
+      public ResultSet obtenerLotes(String apellidos, String nombres){
           ResultSet rs = null;
      try {
           Connection con = conexion.getConexion();   
@@ -126,7 +126,7 @@ public class LoteDAO {
      return rs;
      }  
 
-    public void agregarPropiedad(String barrio, String manzana, String parcela, String propietario_apellidos, String propietario_nombres, String propietario_cuit, String propietario_nro_recibo){
+    public void agregarLote(String barrio, String manzana, String parcela, String propietario_apellidos, String propietario_nombres, String propietario_cuit, String propietario_nro_recibo){
        try {
            Connection con = conexion.getConexion();
            String query="INSERT INTO lote (barrio, manzana, parcela, propietario_apellidos, propietario_nombres, propietario_cuit, propietario_nro_recibo)VALUES(?,?,?,?,?,?,?)  ON DUPLICATE KEY UPDATE barrio = VALUES(barrio), manzana = VALUES(manzana), parcela = VALUES(parcela),  propietario_apellidos=VALUES(propietario_apellidos), propietario_nombres = VALUES(propietario_nombres), propietario_cuit = VALUES(propietario_cuit), propietario_nro_recibo = VALUES(propietario_nro_recibo)";

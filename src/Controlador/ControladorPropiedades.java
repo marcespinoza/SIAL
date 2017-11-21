@@ -5,6 +5,7 @@
  */
 package Controlador;
 
+import Modelo.DepartamentoDAO;
 import Modelo.LoteDAO;
 import Modelo.PropiedadesDAO;
 import Modelo.PropietarioDAO;
@@ -12,6 +13,8 @@ import Vista.Dialogs.Configuracion;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.logging.Level;
@@ -32,6 +35,7 @@ public class ControladorPropiedades implements ActionListener{
     PropietarioDAO pd = new PropietarioDAO();
     PropiedadesDAO prod = new PropiedadesDAO();
     LoteDAO ld = new LoteDAO();
+    DepartamentoDAO dd = new DepartamentoDAO();
     private Object [] propiedades;
     String apellidos, nombres, cuit, propiedad;
 
@@ -41,21 +45,26 @@ public class ControladorPropiedades implements ActionListener{
         this.vista.propiedades.comboNombres.addActionListener(this);
         this.vista.propiedades.agregar.addActionListener(this);
         this.vista.propiedades.eliminar.addActionListener(this);
-        llenarComboApellidos(this.vista.propiedades.comboPropiedad.getSelectedItem().toString());
+        this.vista.propiedades.comboPropiedad.addItemListener(new ItemListener() {
+            @Override
+            public void itemStateChanged(ItemEvent e) {
+                llenarComboApellidos();
+                vista.propiedades.tablaPropiedades.removeAll();
+            }
+        });
+        llenarComboApellidos();
     }
     
- public void llenarComboApellidos(String propiedad){
+ public void llenarComboApellidos(){
         try {
             ResultSet rs = null;
-            switch (propiedad){
-                case "Terreno": rs = pd.obtenerApellidosXLote(); break;
-                case "Departamento": rs = pd.obtenerApellidosXDepartamento();break;
-            }
+            rs = pd.obtenerApellidos();
             vista.propiedades.comboApellido.removeAllItems();
-             vista.propiedades.comboApellido.addItem("Seleccione");
+            vista.propiedades.comboApellido.addItem("Seleccione");
+            if(rs!=null){
             while (rs.next()) {
                 vista.propiedades.comboApellido.addItem(rs.getString(1));                
-            }  } catch (SQLException ex) {
+            } } } catch (SQLException ex) {
             Logger.getLogger(ControladorPropiedades.class.getName()).log(Level.SEVERE, null, ex);
         }   
  }   
@@ -72,12 +81,15 @@ public class ControladorPropiedades implements ActionListener{
  }
  
   public void llenarTabla(){
+      ResultSet rs = null;
       try {
         ResultSet cuit = pd.obtenerCuit(apellidos, nombres);
         cuit.next();
         vista.propiedades.cuit.setText(cuit.getString(1));
         vista.propiedades.nroRecibo.setText(cuit.getString(2));
-        ResultSet rs = ld.obtenerPropiedades(apellidos, nombres);
+        switch(vista.propiedades.comboPropiedad.getSelectedItem().toString()){
+            case"Terreno":rs = ld.obtenerLotes(apellidos, nombres);break;
+            case"Departamento":rs = dd.obtenerDepartamentos(apellidos, nombres);break;}
         DefaultTableModel model = (DefaultTableModel) vista.propiedades.tablaPropiedades.getModel();
         model.setRowCount(0);        
             while(rs.next()){
@@ -97,14 +109,7 @@ public class ControladorPropiedades implements ActionListener{
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        if(e.getSource()==vista.propiedades.comboPropiedad){
-          if(vista.propiedades.comboPropiedad.getItemCount()!=0){
-            if(!vista.propiedades.comboPropiedad.getSelectedItem().equals("Seleccione")){  
-                propiedad =vista.propiedades.comboPropiedad.getSelectedItem().toString();
-                llenarComboApellidos(apellidos);
-            }
-          } 
-        }
+        
         if(e.getSource()==vista.propiedades.comboApellido){
           if(vista.propiedades.comboApellido.getItemCount()!=0){
             if(!vista.propiedades.comboApellido.getSelectedItem().equals("Seleccione")){  
@@ -125,8 +130,11 @@ public class ControladorPropiedades implements ActionListener{
             if(validarCampos()){
             if(!vista.propiedades.comboApellido.getSelectedItem().equals("Seleccione")){  
                if(!vista.propiedades.comboNombres.getSelectedItem().equals("Seleccione")){  
-                   ld.agregarPropiedad(vista.propiedades.barrio.getText(), vista.propiedades.mz.getText(), vista.propiedades.pc.getText(), vista.propiedades.comboApellido.getSelectedItem().toString(), vista.propiedades.comboNombres.getSelectedItem().toString(), vista.propiedades.cuit.getText(),vista.propiedades.nroRecibo.getText());
-            }
+                switch(vista.propiedades.comboPropiedad.getSelectedItem().toString()){   
+                        case "Terreno": ld.agregarLote(vista.propiedades.barrio.getText(), vista.propiedades.mz.getText(), vista.propiedades.pc.getText(), vista.propiedades.comboApellido.getSelectedItem().toString(), vista.propiedades.comboNombres.getSelectedItem().toString(), vista.propiedades.cuit.getText(),vista.propiedades.nroRecibo.getText());
+                        case "Departamento":dd.agregarDepartamento(vista.propiedades.barrio.getText(), vista.propiedades.mz.getText(), vista.propiedades.pc.getText(), vista.propiedades.comboApellido.getSelectedItem().toString(), vista.propiedades.comboNombres.getSelectedItem().toString(), vista.propiedades.cuit.getText(),vista.propiedades.nroRecibo.getText());    
+                }
+             }
             }
             llenarTabla();}
         }
