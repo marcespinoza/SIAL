@@ -33,7 +33,7 @@ public class ControladorPropiedades implements ActionListener{
     PropiedadesDAO prod = new PropiedadesDAO();
     LoteDAO ld = new LoteDAO();
     private Object [] propiedades;
-    String apellidos, nombres, cuit;
+    String apellidos, nombres, cuit, propiedad;
 
     public ControladorPropiedades(Configuracion vistaConfiguracion) {
         this.vista=vistaConfiguracion;
@@ -41,12 +41,16 @@ public class ControladorPropiedades implements ActionListener{
         this.vista.propiedades.comboNombres.addActionListener(this);
         this.vista.propiedades.agregar.addActionListener(this);
         this.vista.propiedades.eliminar.addActionListener(this);
-        llenarComboApellidos();
+        llenarComboApellidos(this.vista.propiedades.comboPropiedad.getSelectedItem().toString());
     }
     
- public void llenarComboApellidos(){
+ public void llenarComboApellidos(String propiedad){
         try {
-            ResultSet rs = pd.obtenerApellidos();
+            ResultSet rs = null;
+            switch (propiedad){
+                case "Terreno": rs = pd.obtenerApellidosXLote(); break;
+                case "Departamento": rs = pd.obtenerApellidosXDepartamento();break;
+            }
             vista.propiedades.comboApellido.removeAllItems();
              vista.propiedades.comboApellido.addItem("Seleccione");
             while (rs.next()) {
@@ -93,6 +97,14 @@ public class ControladorPropiedades implements ActionListener{
 
     @Override
     public void actionPerformed(ActionEvent e) {
+        if(e.getSource()==vista.propiedades.comboPropiedad){
+          if(vista.propiedades.comboPropiedad.getItemCount()!=0){
+            if(!vista.propiedades.comboPropiedad.getSelectedItem().equals("Seleccione")){  
+                propiedad =vista.propiedades.comboPropiedad.getSelectedItem().toString();
+                llenarComboApellidos(apellidos);
+            }
+          } 
+        }
         if(e.getSource()==vista.propiedades.comboApellido){
           if(vista.propiedades.comboApellido.getItemCount()!=0){
             if(!vista.propiedades.comboApellido.getSelectedItem().equals("Seleccione")){  

@@ -9,6 +9,8 @@ import Modelo.ClienteDAO;
 import Modelo.CuotaDAO;
 import Modelo.FichaControlDAO;
 import Modelo.LoteDAO;
+import Modelo.PropiedadesDAO;
+import Modelo.PropietarioDAO;
 import Vista.Dialogs.AsignarPropiedad;
 import java.awt.Color;
 import java.awt.Frame;
@@ -21,6 +23,9 @@ import java.awt.event.KeyListener;
 import java.math.BigDecimal;
 import java.sql.Date;
 import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.BorderFactory;
 import javax.swing.border.EtchedBorder;
 
@@ -33,6 +38,7 @@ public class ControladorAsignacionPropiedad implements ActionListener, KeyListen
     private Frame parent;    
     AsignarPropiedad vistaAsignarPropiedad ;
     LoteDAO ld = new LoteDAO();
+    PropietarioDAO pd = new PropietarioDAO();
     FichaControlDAO fichaControlDAO = new FichaControlDAO();
     CuotaDAO cuotaDao = new CuotaDAO();
     ClienteDAO cd = new ClienteDAO();
@@ -46,6 +52,32 @@ public class ControladorAsignacionPropiedad implements ActionListener, KeyListen
         this.vistaAsignarPropiedad.aceptarBtn.addActionListener(this);
         this.vistaAsignarPropiedad.cancelarBtn.addActionListener(this);
         this.vistaAsignarPropiedad.bolsa_cemento.addKeyListener(this);
+        this.vistaAsignarPropiedad.tipo_propiedad.addItemListener(new ItemListener() {
+            @Override
+            public void itemStateChanged(ItemEvent e) {
+                llenarComboApellidos(vistaAsignarPropiedad.tipo_propiedad.getSelectedItem().toString());
+            }
+        });
+        this.vistaAsignarPropiedad.apellido_propietario.addItemListener(new ItemListener() {
+            @Override
+            public void itemStateChanged(ItemEvent e) {
+                  if (e.getStateChange() == ItemEvent.SELECTED) {
+                if(vistaAsignarPropiedad.apellido_propietario.getSelectedItem().toString()!=("Seleccione") &&vistaAsignarPropiedad.tipo_propiedad.getSelectedItem().toString()!=("Seleccione") );
+                llenarComboNombres(vistaAsignarPropiedad.tipo_propiedad.getSelectedItem().toString(), vistaAsignarPropiedad.apellido_propietario.getSelectedItem().toString());
+            }}
+        });
+        this.vistaAsignarPropiedad.nombre_propietario.addItemListener(new ItemListener() {            
+            @Override
+            public void itemStateChanged(ItemEvent e) {
+                //-----Solo llamo al evento cuando un item es seleccionado, no cuando es cargado o eliminado----//
+              if (e.getStateChange() == ItemEvent.SELECTED) {
+                switch (vistaAsignarPropiedad.tipo_propiedad.getSelectedItem().toString()){
+                case "Terreno": cargarBarrios(vistaAsignarPropiedad.apellido_propietario.getSelectedItem().toString(), vistaAsignarPropiedad.nombre_propietario.getSelectedItem().toString()); break;
+                case "Departamento": cargarTorres(vistaAsignarPropiedad.apellido_propietario.getSelectedItem().toString(), vistaAsignarPropiedad.nombre_propietario.getSelectedItem().toString());break;
+            }
+                   }
+            }
+        });
         this.vistaAsignarPropiedad.barrio.addItemListener(new ItemListener() {
             @Override
             public void itemStateChanged(ItemEvent e) {
@@ -59,9 +91,9 @@ public class ControladorAsignacionPropiedad implements ActionListener, KeyListen
                 cargarParcelas(vistaAsignarPropiedad.barrio.getSelectedItem().toString(), Integer.parseInt(vistaAsignarPropiedad.manzana.getSelectedItem().toString()));
                 }
                 }
-        });
-        cargarBarrios();        
-        vistaAsignarPropiedad.setVisible(true);
+        });     
+        llenarComboApellidos(vistaAsignarPropiedad.tipo_propiedad.getSelectedItem().toString());
+        vistaAsignarPropiedad.setVisible(true);       
     }
 
     @Override
@@ -76,8 +108,48 @@ public class ControladorAsignacionPropiedad implements ActionListener, KeyListen
           }
     }
     
-    public void cargarBarrios(){
-     ResultSet rs = ld.obtenerBarrios();
+     public void llenarComboApellidos(String propiedad){
+        try {
+            ResultSet rs=null;
+            switch (propiedad){
+                case "Terreno": rs = pd.obtenerApellidosXLote(); break;
+                case "Departamento": rs = pd.obtenerApellidosXDepartamento();break;
+            }
+            vistaAsignarPropiedad.apellido_propietario.removeAllItems();
+            vistaAsignarPropiedad.apellido_propietario.addItem("Seleccione");
+            if(rs!=null){
+            while (rs.next()) {
+                vistaAsignarPropiedad.apellido_propietario.addItem(rs.getString(1));                
+            }  
+            rs.close();}
+        } catch (SQLException ex) {
+            Logger.getLogger(ControladorPropiedades.class.getName()).log(Level.SEVERE, null, ex);
+        }   
+ } 
+     
+      public void llenarComboNombres(String propiedad, String apellido){
+        try {
+            ResultSet rs = null;
+            switch (propiedad){
+                case "Terreno": rs = pd.obtenerNombresXLote(apellido); break;
+                case "Departamento": rs = pd.obtenerNombresXDepartamento(apellido);break;
+            }
+            vistaAsignarPropiedad.nombre_propietario.removeAllItems();
+            vistaAsignarPropiedad.nombre_propietario.addItem("Seleccione");
+            if(rs!=null){
+            while (rs.next()) {
+                
+                System.out.println(rs.getString(1) );
+                vistaAsignarPropiedad.nombre_propietario.addItem(rs.getString(1));                
+            }  
+            rs.close();}
+        } catch (SQLException ex) {
+            Logger.getLogger(ControladorPropiedades.class.getName()).log(Level.SEVERE, null, ex);
+        }   
+ } 
+    
+    public void cargarBarrios(String apellidos, String nombres){
+     ResultSet rs = ld.obtenerBarrios(apellidos, nombres);
       vistaAsignarPropiedad.barrio.removeAllItems();
         try {
             while(rs.next()){
@@ -97,6 +169,37 @@ public class ControladorAsignacionPropiedad implements ActionListener, KeyListen
         }
     }
     public void cargarParcelas(String barrio, int manzana){
+         ResultSet rs = ld.parcelasPorManzana(barrio, manzana);
+        vistaAsignarPropiedad.parcela.removeAllItems();
+        try {
+            while(rs.next()){
+                vistaAsignarPropiedad.parcela.addItem(rs.getString(1));
+            }
+        } catch (Exception e) {
+        }
+    }
+    
+      public void cargarTorres(String apellidos, String nombres){
+     ResultSet rs = ld.obtenerBarrios(apellidos, nombres);
+      vistaAsignarPropiedad.barrio.removeAllItems();
+        try {
+            while(rs.next()){
+                vistaAsignarPropiedad.barrio.addItem(rs.getString(1));
+            }
+        } catch (Exception e) {
+        }
+    }
+    public void cargarPisos(String barrio){
+        ResultSet rs = ld.manzanasPorBarrio(barrio);        
+        vistaAsignarPropiedad.manzana.removeAllItems();
+        try {
+            while(rs.next()){
+                vistaAsignarPropiedad.manzana.addItem(rs.getString(1));
+            }
+        } catch (Exception e) {
+        }
+    }
+    public void cargarNroDptos(String barrio, int manzana){
          ResultSet rs = ld.parcelasPorManzana(barrio, manzana);
         vistaAsignarPropiedad.parcela.removeAllItems();
         try {

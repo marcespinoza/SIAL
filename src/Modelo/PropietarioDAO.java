@@ -81,6 +81,58 @@ public class PropietarioDAO {
      return rs;
      }
      
+      public ResultSet obtenerApellidosXLote(){
+          ResultSet rs = null;
+     try {
+          Connection con = conexion.getConexion();         
+          String listar = "SELECT propietario_apellidos from lote"; 
+          Statement st = con.createStatement();
+          rs = st.executeQuery(listar);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+     return rs;
+     }      
+     
+      public ResultSet obtenerApellidosXDepartamento(){
+          ResultSet rs = null;
+     try {
+          Connection con = conexion.getConexion();         
+          String listar = "SELECT propietario_apellidos from departamento"; 
+          Statement st = con.createStatement();
+          rs = st.executeQuery(listar);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+     return rs;
+     }
+      
+        public ResultSet obtenerNombresXLote(String apellido){
+          ResultSet rs = null;
+     try {
+          Connection con = conexion.getConexion();         
+          String listar = "SELECT propietario_nombres from lote where propietario_apellidos='"+apellido+"'"; 
+          Statement st = con.createStatement();
+          rs = st.executeQuery(listar);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+     return rs;
+     }      
+     
+      public ResultSet obtenerNombresXDepartamento(String apellido){
+          ResultSet rs = null;
+     try {
+          Connection con = conexion.getConexion();         
+          String listar = "SELECT propietario_nombres from departamento where propietario_apellidos='"+apellido+"'"; 
+          Statement st = con.createStatement();
+          rs = st.executeQuery(listar);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+     return rs;
+     }
+      
        public ResultSet obtenerApellidos(){
           ResultSet rs = null;
      try {

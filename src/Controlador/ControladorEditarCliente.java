@@ -62,11 +62,11 @@ public class ControladorEditarCliente implements ActionListener{
             //------------datos cliente a editar--------//
             ac.apellidos.setText(cliente.get(0).toString());
             ac.nombres.setText(cliente.get(1).toString());
-            try {
-               ac.fech_nacimiento.setDate((java.util.Date) simpleDateFormat.parse(cliente.get(8).toString()));
-             } catch (ParseException ex) {
-               Logger.getLogger(ControladorEditarCliente.class.getName()).log(Level.SEVERE, null, ex);
-            }
+//            try {
+//               ac.fech_nac.setText(simpleDateFormat.parse(cliente.get(8).toString()));
+//             } catch (ParseException ex) {
+//               Logger.getLogger(ControladorEditarCliente.class.getName()).log(Level.SEVERE, null, ex);
+//            }
             ac.documento.setText(cliente.get(2).toString());
             ac.barrio.setText(cliente.get(5).toString());
             ac.calle.setText(cliente.get(6).toString());
@@ -99,11 +99,11 @@ public class ControladorEditarCliente implements ActionListener{
         }else{
          ac.nombres.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
         }
-        if(ac.fech_nacimiento.getDate() == null){
-         ac.fech_nacimiento.setBorder(BorderFactory.createLineBorder(Color.RED, 1));
+        if(ac.fech_nac.getDate() == null){
+         ac.fech_nac.setBorder(BorderFactory.createLineBorder(Color.RED, 1));
          bandera=false;
         }else{
-         ac.fech_nacimiento.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
+         ac.fech_nac.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
         }
         if(ac.documento.getText().isEmpty()){
          ac.documento.setBorder(BorderFactory.createLineBorder(Color.RED, 1));
@@ -168,7 +168,7 @@ public class ControladorEditarCliente implements ActionListener{
 
         @Override
         protected Void doInBackground() throws Exception {            
-             cd.editarCliente(Integer.parseInt(ac.documento.getText()), ac.apellidos.getText(), ac.nombres.getText(), new java.sql.Date(ac.fech_nacimiento.getDate().getTime()), ac.barrio.getText(), ac.calle.getText(), Integer.parseInt(ac.numero.getText()), ac.telefono1.getText(), ac.telefono2.getText(), ac.trabajo.getText(),Integer.parseInt(cliente.get(2).toString()));        
+             cd.editarCliente(Integer.parseInt(ac.documento.getText()), ac.apellidos.getText(), ac.nombres.getText(),new java.sql.Date(ac.fech_nac.getDate().getTime()), ac.barrio.getText(), ac.calle.getText(), Integer.parseInt(ac.numero.getText()), ac.telefono1.getText(), ac.telefono2.getText(), ac.trabajo.getText(),Integer.parseInt(cliente.get(2).toString()));        
             return null;
         }
 

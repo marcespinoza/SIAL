@@ -29,14 +29,16 @@ public class ClienteDAO {
  
  public ResultSet clientesPorLotes(){
      ResultSet rs = null;
+     Statement st = null;
+     Connection con = null;
      try {
-          Connection con = conexion.getConexion();
+          con = conexion.getConexion();
           String listar = "SELECT c.Dni, c.Apellidos, c.Nombres,c.fecha_nacimiento, c.barrio, c.calle, c.numero, c.Telefono1, c.telefono2, c.trabajo, f.Id_control, f.cantidad_cuotas, f.gastos, f.bolsa_cemento, f.lote_Barrio, f.lote_Manzana, f.lote_Parcela FROM (cliente c LEFT JOIN cliente_tiene_ficha_control h ON c.Dni = h.cliente_Dni) left join ficha_control f on f.Id_control=h.ficha_control_Id_control GROUP BY f.Id_control, c.dni, ifnull(f.Id_control, c.Dni)"; 
-          Statement st = con.createStatement();
+          st = con.createStatement();
           rs = st.executeQuery(listar);
-        } catch (Exception e) {
-          System.out.println(e.getMessage());
-        }
+        } catch (SQLException ex) {
+          System.out.println(ex.getMessage());
+        } 
      return rs;
  }
  
@@ -76,6 +78,7 @@ public class ClienteDAO {
             stmt.executeUpdate();
         } catch (SQLException ex) {
             Logger.getLogger(ClienteDAO.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println(ex.getMessage());
         }
     }
  
@@ -83,7 +86,7 @@ public class ClienteDAO {
      int filasAfectadas=0;
      try {
          Connection con = conexion.getConexion();
-         String insertar = "Insert into cliente(dni, apellidos, nombres, fecha_nacimiento, barrio, calle, numero, telefono1, telefono2, trabajo) values ('"+dni+"','"+apellidos+"','"+nombres+"','"+fecha_nacimiento+"','"+barrio+"','"+calle+"','"+numero+"','"+telefono1+"','"+telefono2+"','"+trabajo+"') ";
+         String insertar = "Insert into cliente(dni, apellidos, nombres, fecha_nacimiento, barrio, calle, numero, telefono1, telefono2, trabajo) values ('"+dni+"','"+apellidos+"','"+nombres+"','"+fecha_nacimiento+"','"+barrio+"','"+calle+"','"+numero+"','"+telefono1+"','"+telefono2+"','"+trabajo+"')";
          PreparedStatement ps = con.prepareStatement(insertar);
          filasAfectadas = ps.executeUpdate();         
      } catch (Exception e) { 

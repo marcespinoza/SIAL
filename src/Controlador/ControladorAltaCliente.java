@@ -11,12 +11,13 @@ import Modelo.LimitadorCaracteres;
 import Modelo.ReferenciaDAO;
 import Vista.Dialogs.AltaCliente;
 import Vista.Frame.Ventana;
-import Vista.Panels.Clientes;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import javax.swing.BorderFactory;
 import javax.swing.border.EtchedBorder;
 
@@ -84,11 +85,11 @@ public class ControladorAltaCliente implements ActionListener, KeyListener{
         }else{
          ac.nombres.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
         }
-        if(ac.fech_nacimiento.getDate() == null){
-         ac.fech_nacimiento.setBorder(BorderFactory.createLineBorder(Color.RED));
+        if(ac.fech_nac.getDate()== null){
+         ac.fech_nac.setBorder(BorderFactory.createLineBorder(Color.RED));
          bandera=false;
         }else{
-         ac.fech_nacimiento.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
+         ac.fech_nac.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
         }
         if(ac.documento.getText().isEmpty()){
          ac.documento.setBorder(BorderFactory.createLineBorder(Color.RED));
@@ -164,11 +165,13 @@ public class ControladorAltaCliente implements ActionListener, KeyListener{
     
     public class AltaClienteSwing extends javax.swing.SwingWorker<Void, Void>{         
 
+        DateFormat df = new SimpleDateFormat("dd-MMM-yyyy");
+        
         @Override
-        protected Void doInBackground() throws Exception {     
-            cd.altaCliente(Integer.parseInt(ac.documento.getText()), ac.apellidos.getText(), ac.nombres.getText(), new java.sql.Date(ac.fech_nacimiento.getDate().getTime()), ac.barrio.getText(), ac.calle.getText(), Integer.parseInt(ac.numero.getText()), ac.telefono1.getText(), ac.telefono2.getText(), ac.trabajo.getText());
-            if(bandera)
-            fd.cambiarPropietario(Integer.parseInt(ac.documento.getText()), dni, id_control);
+        protected Void doInBackground() throws Exception {  
+            cd.altaCliente(Integer.parseInt(ac.documento.getText()), ac.apellidos.getText(), ac.nombres.getText(),new java.sql.Date(ac.fech_nac.getDate().getTime()), ac.barrio.getText(), ac.calle.getText(), Integer.parseInt(ac.numero.getText()), ac.telefono1.getText(), ac.telefono2.getText(), ac.trabajo.getText());
+            if(bandera){
+            fd.cambiarPropietario(Integer.parseInt(ac.documento.getText()), dni, id_control);}
             return null;
         }
 

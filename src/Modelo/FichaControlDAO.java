@@ -104,6 +104,7 @@ public class FichaControlDAO {
             ps.close();
         } catch (SQLException ex) {
             Logger.getLogger(CuotaDAO.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println(ex.getMessage());
         }
   }
     
