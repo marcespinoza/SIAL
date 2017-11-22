@@ -32,7 +32,6 @@ public class ReferenciaDAO {
  public void altaReferencia(String telefono, String apellidos, String nombres, String parentesco, int dni){
      String rptaRegistro = null;
      try {
-         System.out.println("Insert into referencia (telefono, apellidos, nombres, parentesco, cliente_dni) values ('"+telefono+"','"+apellidos+"','"+nombres+"','"+parentesco+"','"+dni+"') ");
          Connection con = conexion.getConexion();
          String insertar = "Insert into referencia (telefono, apellidos, nombres, parentesco, cliente_dni) values ('"+telefono+"','"+apellidos+"','"+nombres+"','"+parentesco+"','"+dni+"') ";
          PreparedStatement ps = con.prepareStatement(insertar);

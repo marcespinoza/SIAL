@@ -53,6 +53,8 @@ public class AsignarPropiedad extends javax.swing.JDialog {
         jLabel11 = new javax.swing.JLabel();
         nombre_propietario = new javax.swing.JComboBox<>();
         jLabel12 = new javax.swing.JLabel();
+        fch_suscripción = new com.toedter.calendar.JDateChooser();
+        jLabel14 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Asignar propiedad");
@@ -87,10 +89,18 @@ public class AsignarPropiedad extends javax.swing.JDialog {
 
         jLabel12.setText("Nombre Propietario");
 
+        jLabel14.setText("Fecha suscripción");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(aceptarBtn)
+                .addGap(18, 18, 18)
+                .addComponent(cancelarBtn)
+                .addGap(95, 95, 95))
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
@@ -114,26 +124,28 @@ public class AsignarPropiedad extends javax.swing.JDialog {
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jLabel10)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jLabel7)))))
+                                .addComponent(jLabel7))))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jLabel14)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(bolsa_cemento)
-                    .addComponent(cuota_total)
-                    .addComponent(cantidad_cuotas)
-                    .addComponent(dimension)
-                    .addComponent(tipo_propiedad, 0, 219, Short.MAX_VALUE)
-                    .addComponent(parcela, 0, 219, Short.MAX_VALUE)
-                    .addComponent(manzana, 0, 219, Short.MAX_VALUE)
-                    .addComponent(barrio, 0, 219, Short.MAX_VALUE)
-                    .addComponent(apellido_propietario, 0, 219, Short.MAX_VALUE)
-                    .addComponent(nombre_propietario, 0, 219, Short.MAX_VALUE))
-                .addGap(42, 42, 42))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(aceptarBtn)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(cancelarBtn)
-                .addGap(107, 107, 107))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(bolsa_cemento)
+                            .addComponent(cuota_total)
+                            .addComponent(cantidad_cuotas)
+                            .addComponent(dimension)
+                            .addComponent(tipo_propiedad, 0, 219, Short.MAX_VALUE)
+                            .addComponent(parcela, 0, 219, Short.MAX_VALUE)
+                            .addComponent(manzana, 0, 219, Short.MAX_VALUE)
+                            .addComponent(barrio, 0, 219, Short.MAX_VALUE)
+                            .addComponent(apellido_propietario, 0, 219, Short.MAX_VALUE)
+                            .addComponent(nombre_propietario, 0, 219, Short.MAX_VALUE))
+                        .addGap(42, 42, 42))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(fch_suscripción, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -146,7 +158,7 @@ public class AsignarPropiedad extends javax.swing.JDialog {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(apellido_propietario, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel11))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 7, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(nombre_propietario, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel12))
@@ -180,11 +192,15 @@ public class AsignarPropiedad extends javax.swing.JDialog {
                     .addComponent(bolsa_cemento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel13)
                     .addComponent(jLabel5))
+                .addGap(5, 5, 5)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(fch_suscripción, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel14))
                 .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(cancelarBtn)
-                    .addComponent(aceptarBtn))
-                .addGap(44, 44, 44))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(aceptarBtn)
+                    .addComponent(cancelarBtn))
+                .addGap(32, 32, 32))
         );
 
         pack();
@@ -241,11 +257,13 @@ public class AsignarPropiedad extends javax.swing.JDialog {
     public javax.swing.JTextField cantidad_cuotas;
     public javax.swing.JTextField cuota_total;
     public javax.swing.JTextField dimension;
+    public com.toedter.calendar.JDateChooser fch_suscripción;
     private javax.swing.JLabel jLabel1;
     public javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
+    private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;

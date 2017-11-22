@@ -157,8 +157,8 @@ public class ControladorAltaPago implements ActionListener, KeyListener{
                String tipoPago = ac.tipoPago.getSelectedItem().toString();
                BigDecimal haber = cuota_pura.add(gastos);
                BigDecimal saldo_actual = ultimo_saldo.subtract(haber);
-               BigDecimal cemento_haber = haber.divide(bolsa_cemento, 2, RoundingMode.HALF_UP);
-               BigDecimal cemento_saldo = saldo_bolsa_cemento.subtract(haber.divide(bolsa_cemento, 2, RoundingMode.HALF_UP));
+               BigDecimal cemento_haber = haber.divide(bolsa_cemento, 2, RoundingMode.DOWN);
+               BigDecimal cemento_saldo = saldo_bolsa_cemento.subtract(cemento_haber);
                if(ac.chk_adelanto_cuota.isSelected()){
                //-------Miro si la cuota 180 (la ultima) ya existe------//  
                   if(cd.getUltimaCuota(nro_cuotas)){

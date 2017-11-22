@@ -24,7 +24,14 @@
   <Layout>
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Group type="102" attributes="0">
+          <Group type="102" alignment="1" attributes="0">
+              <EmptySpace max="32767" attributes="0"/>
+              <Component id="aceptarBtn" min="-2" max="-2" attributes="0"/>
+              <EmptySpace type="separate" max="-2" attributes="0"/>
+              <Component id="cancelarBtn" min="-2" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="95" max="-2" attributes="0"/>
+          </Group>
+          <Group type="102" alignment="0" attributes="0">
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="0" attributes="0">
                       <EmptySpace min="-2" pref="38" max="-2" attributes="0"/>
@@ -54,28 +61,33 @@
                           </Group>
                       </Group>
                   </Group>
+                  <Group type="102" alignment="1" attributes="0">
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="jLabel14" min="-2" max="-2" attributes="0"/>
+                  </Group>
               </Group>
               <EmptySpace type="unrelated" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="bolsa_cemento" max="32767" attributes="0"/>
-                  <Component id="cuota_total" alignment="0" max="32767" attributes="0"/>
-                  <Component id="cantidad_cuotas" alignment="0" max="32767" attributes="0"/>
-                  <Component id="dimension" alignment="0" max="32767" attributes="0"/>
-                  <Component id="tipo_propiedad" alignment="0" pref="219" max="32767" attributes="0"/>
-                  <Component id="parcela" alignment="0" pref="219" max="32767" attributes="0"/>
-                  <Component id="manzana" alignment="0" pref="219" max="32767" attributes="0"/>
-                  <Component id="barrio" alignment="0" pref="219" max="32767" attributes="0"/>
-                  <Component id="apellido_propietario" alignment="0" pref="219" max="32767" attributes="0"/>
-                  <Component id="nombre_propietario" alignment="0" pref="219" max="32767" attributes="0"/>
+                  <Group type="102" attributes="0">
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="bolsa_cemento" max="32767" attributes="0"/>
+                          <Component id="cuota_total" alignment="0" max="32767" attributes="0"/>
+                          <Component id="cantidad_cuotas" alignment="0" max="32767" attributes="0"/>
+                          <Component id="dimension" alignment="0" max="32767" attributes="0"/>
+                          <Component id="tipo_propiedad" alignment="0" pref="219" max="32767" attributes="0"/>
+                          <Component id="parcela" alignment="0" pref="219" max="32767" attributes="0"/>
+                          <Component id="manzana" alignment="0" pref="219" max="32767" attributes="0"/>
+                          <Component id="barrio" alignment="0" pref="219" max="32767" attributes="0"/>
+                          <Component id="apellido_propietario" alignment="0" pref="219" max="32767" attributes="0"/>
+                          <Component id="nombre_propietario" alignment="0" pref="219" max="32767" attributes="0"/>
+                      </Group>
+                      <EmptySpace min="-2" pref="42" max="-2" attributes="0"/>
+                  </Group>
+                  <Group type="102" attributes="0">
+                      <Component id="fch_suscripción" min="-2" pref="139" max="-2" attributes="0"/>
+                      <EmptySpace max="32767" attributes="0"/>
+                  </Group>
               </Group>
-              <EmptySpace min="-2" pref="42" max="-2" attributes="0"/>
-          </Group>
-          <Group type="102" alignment="1" attributes="0">
-              <EmptySpace max="32767" attributes="0"/>
-              <Component id="aceptarBtn" min="-2" max="-2" attributes="0"/>
-              <EmptySpace max="-2" attributes="0"/>
-              <Component id="cancelarBtn" min="-2" max="-2" attributes="0"/>
-              <EmptySpace min="-2" pref="107" max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -92,7 +104,7 @@
                   <Component id="apellido_propietario" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="jLabel11" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace max="32767" attributes="0"/>
+              <EmptySpace pref="7" max="32767" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="nombre_propietario" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="jLabel12" alignment="3" min="-2" max="-2" attributes="0"/>
@@ -134,12 +146,17 @@
                   <Component id="jLabel13" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="jLabel5" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace type="separate" max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="cancelarBtn" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="aceptarBtn" alignment="3" min="-2" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Component id="fch_suscripción" min="-2" max="-2" attributes="0"/>
+                  <Component id="jLabel14" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace min="-2" pref="44" max="-2" attributes="0"/>
+              <EmptySpace type="separate" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Component id="aceptarBtn" min="-2" max="-2" attributes="0"/>
+                  <Component id="cancelarBtn" alignment="0" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace min="-2" pref="32" max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -313,6 +330,16 @@
     <Component class="javax.swing.JLabel" name="jLabel12">
       <Properties>
         <Property name="text" type="java.lang.String" value="Nombre Propietario"/>
+      </Properties>
+    </Component>
+    <Component class="com.toedter.calendar.JDateChooser" name="fch_suscripci&#xf3;n">
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="1"/>
+      </AuxValues>
+    </Component>
+    <Component class="javax.swing.JLabel" name="jLabel14">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Fecha suscripci&#xf3;n"/>
       </Properties>
     </Component>
   </SubComponents>
