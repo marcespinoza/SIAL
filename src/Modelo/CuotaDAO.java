@@ -28,11 +28,23 @@ public class CuotaDAO {
         conexion = new Conexion();
     }
     
+    public ResultSet listaDetalleCuotaXsaldo(int idControl){
+         ResultSet rs = null;
+     try {
+          Connection con = conexion.getConexion();
+          String listar = "SELECT nro_cuota, fecha, detalle, cuota_pura, gastos_administrativos, debe, haber, saldo, cemento_debe, cemento_haber, cemento_saldo, observaciones, tipo_pago from linea_control where ficha_control_id_Control = '"+idControl+"' order by saldo desc "; 
+          Statement st = con.createStatement();
+          rs = st.executeQuery(listar);
+        } catch (Exception e) {
+        }
+     return rs;
+    }
+    
     public ResultSet listaDetalleCuota(int idControl){
          ResultSet rs = null;
      try {
           Connection con = conexion.getConexion();
-          String listar = "SELECT nro_cuota, fecha, detalle, cuota_pura, gastos_administrativos, debe, haber, saldo, cemento_debe, cemento_haber, cemento_saldo, observaciones, tipo_pago from linea_control where ficha_control_id_Control = '"+idControl+"' "; 
+          String listar = "SELECT nro_cuota, fecha, detalle, cuota_pura, gastos_administrativos, debe, haber, saldo, cemento_debe, cemento_haber, cemento_saldo, observaciones, tipo_pago from linea_control where ficha_control_id_Control = '"+idControl+"'"; 
           Statement st = con.createStatement();
           rs = st.executeQuery(listar);
         } catch (Exception e) {

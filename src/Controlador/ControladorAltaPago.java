@@ -114,17 +114,17 @@ public class ControladorAltaPago implements ActionListener, KeyListener{
         
            if(e.getSource() == ac.aceptarBtn){
             if(ac.chk_dcho_posesion.isSelected()){                  
-                   DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
-                   Date date = new Date(); 
-                  dp.altaDchoPosesion(new java.sql.Date(date.getTime()), new BigDecimal(ac.cuota_total.getText()),new BigDecimal(ac.gastos.getText()), ac.detallePago.getText(), id_control);
-                  ac.dispose();
+                DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
+                Date date = new Date(); 
+             //dp.altaDchoPosesion(new java.sql.Date(date.getTime()), new BigDecimal(ac.cuota_total.getText()),new BigDecimal(ac.gastos.getText()), ac.detallePago.getText(), id_control);
+                ac.dispose();
              //--------Es un adelanto de cuotas----------/     
               }else{
                if(validarCampos()){
                FichaControlDAO fcd = new FichaControlDAO();
                ResultSet rs = fcd.obtenerFichaControl(id_control);
                CuotaDAO cd = new CuotaDAO();
-               ResultSet rs_cuota = cd.listaDetalleCuota(id_control);
+               ResultSet rs_cuota = cd.listaDetalleCuotaXsaldo(id_control);
                try {
                    rs.next();
                    rs_cuota.last();
@@ -185,7 +185,7 @@ public class ControladorAltaPago implements ActionListener, KeyListener{
                        rs.next();
                        cuota = rs.getInt(1);
                        //-----Verifico que sea la primer cuota-------//                       
-                         while(rs.next()&&rs.getInt(1)-1==cuota){
+                         while(rs.next()&& rs.getInt(1)-1==cuota){
                            cuota=rs.getInt(1);                           
                          }
                        cd.altaCuota(new java.sql.Date(date.getTime()),cuota+1, detalle, cuota_pura, gastos, new BigDecimal(0), haber, saldo_actual, new BigDecimal(0), cemento_haber, cemento_saldo, observaciones, tipoPago, id_control);  

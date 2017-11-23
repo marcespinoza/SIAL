@@ -5,14 +5,13 @@
  */
 package Controlador;
 
-import static Controlador.ControladorMinuta.IMG;
 import Modelo.CuotaDAO;
 import Modelo.DchoPosesionDAO;
 import Modelo.FichaControlDAO;
 import Modelo.RendererTablaCuota;
+import Modelo.RendererTablaDchoPosesion;
 import Vista.Frame.Ventana;
 import Vista.Panels.DetalleCuota;
-import com.itextpdf.text.BadElementException;
 import com.itextpdf.text.Chunk;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
@@ -60,6 +59,7 @@ import javax.swing.table.TableModel;
 public class ControladorDetalleCuota implements ActionListener, TableModelListener{
     
     RendererTablaCuota r = new RendererTablaCuota();
+    RendererTablaDchoPosesion rdp = new RendererTablaDchoPosesion();
     DetalleCuota dc = new DetalleCuota();
     CuotaDAO cd = new CuotaDAO();
     DchoPosesionDAO dp = new DchoPosesionDAO();
@@ -89,7 +89,7 @@ public class ControladorDetalleCuota implements ActionListener, TableModelListen
              posesion = true;
              cuota = false;
              dc.tablaDetallePago.getSelectionModel().clearSelection();
-        }
+          }
         });
         dc.tablaDetallePago.addMouseListener(new MouseAdapter() {
             @Override
@@ -97,7 +97,7 @@ public class ControladorDetalleCuota implements ActionListener, TableModelListen
              posesion = false;
              cuota=true;
              dc.tablaDchoPosesion.getSelectionModel().clearSelection();
-        }
+          }
         });
         dc.guardar.addActionListener(this);
         dc.volverBtn.addActionListener(this);
@@ -109,6 +109,7 @@ public class ControladorDetalleCuota implements ActionListener, TableModelListen
         dc.direccionLabel.setText(barrio +", "+ calle +" "+ numero);
         dc.telefonoLabel.setText(telefono);
         dc.tablaDetallePago.setDefaultRenderer(Object.class, r);
+        dc.tablaDchoPosesion.setDefaultRenderer(Object.class, rdp);
         llenarTabla(id_control);
         llearTablaDchoPosesion(id_control);
         cargarPathMinuta();
@@ -130,7 +131,7 @@ public class ControladorDetalleCuota implements ActionListener, TableModelListen
      } 
     
    public void llearTablaDchoPosesion(int id_control){
-        int num_cuota=1;
+        int num_cuota=0;
         derechoPosesion = dp.listarCuenta(id_control);
         DefaultTableModel model = (DefaultTableModel) dc.tablaDchoPosesion.getModel();
         model.setRowCount(0);
@@ -138,9 +139,12 @@ public class ControladorDetalleCuota implements ActionListener, TableModelListen
             while(derechoPosesion.next()){
                 String fecha = derechoPosesion.getString(1);
                 String monto = derechoPosesion.getString(2);
-                String gastos = derechoPosesion.getString(3);    
-                String detalle = derechoPosesion.getString(4); 
-                dchoPosesion= new Object[] {num_cuota,fecha, monto,gastos,detalle};                    
+                String gastos = derechoPosesion.getString(3); 
+                String cemento_debe = derechoPosesion.getString(4); 
+                String cemento_haber = derechoPosesion.getString(5); 
+                String cemento_saldo = derechoPosesion.getString(6); 
+                String detalle = derechoPosesion.getString(7); 
+                dchoPosesion= new Object[] {num_cuota,fecha, monto,gastos,cemento_debe, cemento_haber, cemento_saldo, detalle};                    
                 model.addRow(dchoPosesion); 
                 num_cuota ++;
             }
@@ -174,7 +178,6 @@ public class ControladorDetalleCuota implements ActionListener, TableModelListen
             }
             //---------Reseteo resultset para recorrerlo nuevamente cuando quiero---------//
             //---------crear resumen de cliente--------------------------------------------//
-            
             detalleCuota.beforeFirst();
             CardLayout cl = (CardLayout)(Ventana.panelPrincipal.getLayout());
             Ventana.panelPrincipal.add(dc, "Detalle_pago");
@@ -203,10 +206,11 @@ public class ControladorDetalleCuota implements ActionListener, TableModelListen
             }
         }
         if(e.getSource() == dc.generarReciboBtn){
-          if(!dc.path.getText().equals("")){        
-             if(cuota){
-            int row = dc.tablaDetallePago.getSelectedRow();
-            switch(row){
+          if(!dc.path.getText().equals("")){ 
+              if(cuota || posesion){
+              if(cuota){
+               int row = dc.tablaDetallePago.getSelectedRow();
+               switch(row){
                 case -1:
                 JOptionPane.showMessageDialog(null, "Seleccione una cuota", "Atención", JOptionPane.INFORMATION_MESSAGE, null);
                 break;
@@ -214,12 +218,15 @@ public class ControladorDetalleCuota implements ActionListener, TableModelListen
                 JOptionPane.showMessageDialog(null, "Cuota no válida", "Atención", JOptionPane.INFORMATION_MESSAGE, null);
                 break;
                 default:
-                 new ControladorRecibo((Frame) SwingUtilities.getWindowAncestor(dc), id_control, dc ,row, 1);           
+                new ControladorRecibo((Frame) SwingUtilities.getWindowAncestor(dc), id_control, dc ,row, 1);           
             }
              }else if(posesion){
-                  int row = dc.tablaDchoPosesion.getSelectedRow();
+                 int row = dc.tablaDchoPosesion.getSelectedRow();
                  new ControladorRecibo((Frame) SwingUtilities.getWindowAncestor(dc), id_control, dc ,row, 0);  
              }
+              }else{
+               JOptionPane.showMessageDialog(null, "Seleccione un pago", "Atención", JOptionPane.INFORMATION_MESSAGE, null);
+              }
           }else{
             JOptionPane.showMessageDialog(null, "Debe seleccionar ubicación donde guardar el recibo", "Atención", JOptionPane.INFORMATION_MESSAGE, null);
             }

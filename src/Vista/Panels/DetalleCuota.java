@@ -210,11 +210,11 @@ public class DetalleCuota extends javax.swing.JPanel {
 
             },
             new String [] {
-                "Nro. cuota", "Fecha", "Monto", "Gastos", "Detalle"
+                "Nro. cuota", "Fecha", "Monto", "Cto debe", "Cto haber", "Cto Saldo", "Gastos", "Detalle"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false
+                false, false, false, false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -232,6 +232,11 @@ public class DetalleCuota extends javax.swing.JPanel {
             tablaDchoPosesion.getColumnModel().getColumn(3).setResizable(false);
             tablaDchoPosesion.getColumnModel().getColumn(3).setPreferredWidth(1);
             tablaDchoPosesion.getColumnModel().getColumn(4).setResizable(false);
+            tablaDchoPosesion.getColumnModel().getColumn(4).setPreferredWidth(1);
+            tablaDchoPosesion.getColumnModel().getColumn(5).setResizable(false);
+            tablaDchoPosesion.getColumnModel().getColumn(5).setPreferredWidth(1);
+            tablaDchoPosesion.getColumnModel().getColumn(6).setResizable(false);
+            tablaDchoPosesion.getColumnModel().getColumn(6).setPreferredWidth(1);
         }
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);

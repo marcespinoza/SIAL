@@ -32,7 +32,7 @@ public class DchoPosesionDAO {
         ResultSet rs = null;
      try {
           Connection con = conexion.getConexion();
-          String listar = "SELECT fecha, monto,gastos, detalle from derecho_posesion where id_control='"+id_control+"'"; 
+          String listar = "SELECT fecha, monto,gastos,cemento_debe, cemento_haber, cemento_saldo, detalle from derecho_posesion where id_control='"+id_control+"'"; 
           Statement st = con.createStatement();
           rs = st.executeQuery(listar);
         } catch (Exception e) {
@@ -40,17 +40,21 @@ public class DchoPosesionDAO {
      return rs;
     }
     
-    public void altaDchoPosesion(Date date, BigDecimal monto, BigDecimal gastos, String detalle, int id_control){
+    public void altaDchoPosesion(Date date, BigDecimal monto, BigDecimal gastos, BigDecimal cementoDebe, BigDecimal cementoHaber, BigDecimal cementoSaldo, String detalle, int id_control){
         try {
+            System.out.println(cementoDebe+" "+cementoHaber);
             Connection con = conexion.getConexion();
-            String query = " insert into derecho_posesion (fecha, monto,gastos, detalle, id_control)"
-                    + " values (?, ?, ?, ?, ?)";
+            String query = " insert into derecho_posesion (fecha, monto,gastos,cemento_debe, cemento_haber, cemento_saldo, detalle, id_control)"
+                    + " values (?, ?, ?, ?, ?, ?, ?, ?)";
             PreparedStatement preparedStmt = con.prepareStatement(query);
             preparedStmt.setDate(1, date);
             preparedStmt.setBigDecimal(2, monto);
             preparedStmt.setBigDecimal(3, gastos);
-            preparedStmt.setString(4, detalle);
-            preparedStmt.setInt(5, id_control);
+            preparedStmt.setBigDecimal(4, cementoDebe);
+            preparedStmt.setBigDecimal(5, cementoHaber);
+            preparedStmt.setBigDecimal(6, cementoSaldo);
+            preparedStmt.setString(7, detalle);
+            preparedStmt.setInt(8, id_control);
             preparedStmt.execute();
         } catch (SQLException ex) {
             Logger.getLogger(DchoPosesionDAO.class.getName()).log(Level.SEVERE, null, ex);
