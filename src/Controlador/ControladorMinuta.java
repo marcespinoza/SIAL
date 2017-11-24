@@ -143,7 +143,7 @@ public class ControladorMinuta implements MouseListener, ActionListener {
             if(e.getSource() == vistaMinuta.guardar_en){
                 chooser = new JFileChooser();
                 chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-                chooser.showOpenDialog(null);
+                chooser.showOpenDialog(chooser);
                 f = chooser.getSelectedFile();
                 String path = f.getAbsolutePath();
                 vistaMinuta.path.setText(path);

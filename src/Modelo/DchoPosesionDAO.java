@@ -42,7 +42,6 @@ public class DchoPosesionDAO {
     
     public void altaDchoPosesion(Date date, BigDecimal monto, BigDecimal gastos, BigDecimal cementoDebe, BigDecimal cementoHaber, BigDecimal cementoSaldo, String detalle, int id_control){
         try {
-            System.out.println(cementoDebe+" "+cementoHaber);
             Connection con = conexion.getConexion();
             String query = " insert into derecho_posesion (fecha, monto,gastos,cemento_debe, cemento_haber, cemento_saldo, detalle, id_control)"
                     + " values (?, ?, ?, ?, ?, ?, ?, ?)";

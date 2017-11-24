@@ -194,7 +194,7 @@ public class ControladorDetalleCuota implements ActionListener, TableModelListen
             cl.next(Ventana.panelPrincipal);
         }
         if(e.getSource() == dc.agregarPagoBtn){
-           ControladorAltaPago cac = new ControladorAltaPago((Frame) SwingUtilities.getWindowAncestor(dc), id_control, dc.tablaDetallePago.getRowCount(), nro_cuotas);
+            new ControladorAltaPago((Frame) SwingUtilities.getWindowAncestor(dc), id_control, dc.tablaDetallePago.getRowCount(), nro_cuotas);
             llenarTabla(id_control);
             llearTablaDchoPosesion(id_control);
         }
@@ -206,14 +206,12 @@ public class ControladorDetalleCuota implements ActionListener, TableModelListen
             }
         }
         if(e.getSource() == dc.generarReciboBtn){
-          if(!dc.path.getText().equals("")){ 
+          if(!dc.path.getText().equals("")){
+            //----verifica si esta seleccionado alguna fila de alguna de las dos tablas--------//  
               if(cuota || posesion){
               if(cuota){
                int row = dc.tablaDetallePago.getSelectedRow();
                switch(row){
-                case -1:
-                JOptionPane.showMessageDialog(null, "Seleccione una cuota", "Atención", JOptionPane.INFORMATION_MESSAGE, null);
-                break;
                 case 0:
                 JOptionPane.showMessageDialog(null, "Cuota no válida", "Atención", JOptionPane.INFORMATION_MESSAGE, null);
                 break;
@@ -222,8 +220,14 @@ public class ControladorDetalleCuota implements ActionListener, TableModelListen
             }
              }else if(posesion){
                  int row = dc.tablaDchoPosesion.getSelectedRow();
+                  switch(row){
+                case 0:
+                JOptionPane.showMessageDialog(null, "Fila no válida", "Atención", JOptionPane.INFORMATION_MESSAGE, null);
+                break;
+                default:
                  new ControladorRecibo((Frame) SwingUtilities.getWindowAncestor(dc), id_control, dc ,row, 0);  
-             }
+                }
+               }
               }else{
                JOptionPane.showMessageDialog(null, "Seleccione un pago", "Atención", JOptionPane.INFORMATION_MESSAGE, null);
               }

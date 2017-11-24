@@ -166,24 +166,32 @@ public class ControladorAltaCliente implements ActionListener, KeyListener{
     public class AltaClienteSwing extends javax.swing.SwingWorker<Void, Void>{         
 
         DateFormat df = new SimpleDateFormat("dd-MMM-yyyy");
+        int alta = 0;
         
         @Override
         protected Void doInBackground() throws Exception {  
-            cd.altaCliente(Integer.parseInt(ac.documento.getText()), ac.apellidos.getText(), ac.nombres.getText(),new java.sql.Date(ac.fech_nac.getDate().getTime()), ac.barrio.getText(), ac.calle.getText(), Integer.parseInt(ac.numero.getText()), ac.telefono1.getText(), ac.telefono2.getText(), ac.trabajo.getText());
-            if(bandera){
-            fd.cambiarPropietario(Integer.parseInt(ac.documento.getText()), dni, id_control);}
+            alta = cd.altaCliente(Integer.parseInt(ac.documento.getText()), ac.apellidos.getText(), ac.nombres.getText(),new java.sql.Date(ac.fech_nac.getDate().getTime()), ac.barrio.getText(), ac.calle.getText(), Integer.parseInt(ac.numero.getText()), ac.telefono1.getText(), ac.telefono2.getText(), ac.trabajo.getText());
+            
             return null;
         }
 
        @Override
        public void done() { 
-            rd.altaReferencia(ac.telefonoRef.getText(), ac.apellidosRef.getText(), ac.nombresRef.getText(), ac.parentescoRef.getText(), Integer.parseInt(ac.documento.getText()));
-            //------Si es id_control es distinto de cero, entonces estoy agregando un propietario mas-----//
-            //------a un lote que ya posee un propietario-------------------------------------------------//
+           //--------Si alta es igual a 1 el cliente ya existe-----------//
+           if(alta==1){
+           if(bandera){
+             fd.cambiarPropietario(Integer.parseInt(ac.documento.getText()), dni, id_control);
+            }
+              rd.altaReferencia(ac.telefonoRef.getText(), ac.apellidosRef.getText(), ac.nombresRef.getText(), ac.parentescoRef.getText(), Integer.parseInt(ac.documento.getText()));
+              //------Si el id_control es distinto de cero, entonces estoy agregando un propietario mas-----//
+              //------a un lote que ya posee un propietario-------------------------------------------------//
             if(id_control!=0 && !bandera){
               cd.altaClientesXLotes(Integer.parseInt(ac.documento.getText()), id_control);
             }
-            ac.dispose();   
+            ac.dispose(); }
+            else{
+            ac.aviso.setText("*Documento duplicado");
+           }
        }
     
 }

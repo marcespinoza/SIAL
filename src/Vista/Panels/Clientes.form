@@ -666,7 +666,7 @@
             </Property>
           </Properties>
           <AuxValues>
-            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new javax.swing.JTable()&#xa;{&#xa;    public Component prepareRenderer(TableCellRenderer renderer, int rowIndex, int vColIndex) {&#xa;        Component c = super.prepareRenderer(renderer, rowIndex, vColIndex);&#xa;        if (isCellSelected(rowIndex, vColIndex)) {&#xa;            c.setBackground(Color.yellow);&#xa;        }&#xa;        if(tablaCliente.getValueAt(rowIndex, 10) == null){&#xa;            c.setBackground(Color.PINK);&#xa;        }&#xa;        return c;&#xa;    }&#xa;}&#xa;"/>
+            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new javax.swing.JTable()&#xa;{&#xa;    public Component prepareRenderer(TableCellRenderer renderer, int rowIndex, int vColIndex) {&#xa;        Component c = super.prepareRenderer(renderer, rowIndex, vColIndex);&#xa;        if(tablaCliente.getValueAt(rowIndex, 10) == null){&#xa;            c.setBackground(Color.PINK);&#xa;        }&#xa;        if (isCellSelected(rowIndex, vColIndex)) {&#xa;            c.setBackground(Color.yellow);&#xa;        }        &#xa;        return c;&#xa;    }&#xa;}&#xa;"/>
             <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="JTableHeader header = tablaCliente.getTableHeader();&#xa;Color micolor = new Color(36,47,65);&#xa;header.setForeground(Color.white);&#xa;header.setBackground(micolor);"/>
             <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="1"/>
           </AuxValues>

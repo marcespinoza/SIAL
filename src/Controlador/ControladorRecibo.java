@@ -191,8 +191,9 @@ public class ControladorRecibo implements ActionListener{
              ar.detalle.setText("Paga cuota "+dc.tablaDetallePago.getModel().getValueAt(row, 0).toString()+"/"+cant_cuotas+    "\r\nDimension "+dimension +     "\r\n"+ barrio +" "+ " Mz. "+manzana +" Pc. "+ parcela+   "\r\n"+dc.tablaDetallePago.getModel().getValueAt(row, 2).toString());
             }else if (tipoPago==0){
               ar.detalle.setText("Cta. derecho posesión "+    "\r\nDimension "+dimension +     "\r\n"+ barrio +" "+ " Mz. "+manzana +" Pc. "+ parcela+   "\r\n");
+              System.out.println(row);
               cuota_total = new BigDecimal(dc.tablaDchoPosesion.getModel().getValueAt(row, 2).toString());
-              gastos_administrativos = new BigDecimal(dc.tablaDetallePago.getModel().getValueAt(row, 3).toString());
+              gastos_administrativos = new BigDecimal(dc.tablaDchoPosesion.getModel().getValueAt(row, 3).toString());
               cobrado = cuota_total.add(gastos_administrativos) ;
               ar.importe.setText(String.valueOf(cobrado));
               ar.total_pagado.setText(String.valueOf(cobrado)); 

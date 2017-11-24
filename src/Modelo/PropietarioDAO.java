@@ -39,18 +39,19 @@ public class PropietarioDAO {
      return rs;
  }
      
-     public void editarPropietario(String apellidos, String nombres, String cuit, int nro_recibo){
+     public void editarPropietario(String apellidos, String nombres, String cuit, int nro_recibo, String backup_cuit){
          try {
              Connection con = conexion.getConexion();
-             PreparedStatement pstm = con.prepareStatement("update propietario set apellidos= ? , nombres= ? , cuit= ? , nro_recibo= ? where cuit= ? ");             
+             PreparedStatement pstm = con.prepareStatement("UPDATE propietario set apellidos= ? , nombres= ? , cuit= ? , nro_recibo= ? where cuit= ? ");             
              pstm.setString(1,apellidos);
              pstm.setString(2,nombres);
              pstm.setString(3,cuit);
              pstm.setInt(4, nro_recibo);
-             pstm.setString(5,cuit);
+             pstm.setString(5,backup_cuit);
              pstm.executeUpdate();
          } catch (SQLException ex) {
              Logger.getLogger(PropietarioDAO.class.getName()).log(Level.SEVERE, null, ex);
+             System.out.println(ex.getMessage());
          }
      }
      

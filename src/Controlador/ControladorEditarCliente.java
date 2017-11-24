@@ -62,11 +62,6 @@ public class ControladorEditarCliente implements ActionListener{
             //------------datos cliente a editar--------//
             ac.apellidos.setText(cliente.get(0).toString());
             ac.nombres.setText(cliente.get(1).toString());
-//            try {
-//               ac.fech_nac.setText(simpleDateFormat.parse(cliente.get(8).toString()));
-//             } catch (ParseException ex) {
-//               Logger.getLogger(ControladorEditarCliente.class.getName()).log(Level.SEVERE, null, ex);
-//            }
             ac.documento.setText(cliente.get(2).toString());
             ac.barrio.setText(cliente.get(5).toString());
             ac.calle.setText(cliente.get(6).toString());

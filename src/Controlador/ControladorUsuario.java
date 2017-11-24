@@ -87,7 +87,6 @@ public class ControladorUsuario implements MouseListener, ActionListener, KeyLis
           vistaConfiguracion.usuario.contraseñaTxf.setText(vistaConfiguracion.usuario.tablaUsuarios.getModel().getValueAt(row,1).toString());
           vistaConfiguracion.usuario.apellidoTxf.setText(vistaConfiguracion.usuario.tablaUsuarios.getModel().getValueAt(row,2).toString());
           vistaConfiguracion.usuario.nombreTxf.setText(vistaConfiguracion.usuario.tablaUsuarios.getModel().getValueAt(row,3).toString());
-          System.out.println(vistaConfiguracion.usuario.tablaUsuarios.getModel().getValueAt(row,4).toString());
           switch(vistaConfiguracion.usuario.tablaUsuarios.getModel().getValueAt(row,4).toString()){              
               case "operador":vistaConfiguracion.usuario.tipo_operador.setSelectedIndex(2);
               break;

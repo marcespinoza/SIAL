@@ -96,8 +96,11 @@ public class ControladorPropiedades implements ActionListener{
                 String barrio = rs.getString(1);  
                 String manzana = rs.getString(2);
                 String parcela = rs.getString(3);
-                String vendido = rs.getString(4);
-                propiedades = new Object[] {barrio, manzana, parcela, vendido};
+                if(rs.getString(4).equals("0")){
+                  propiedades = new Object[] {barrio, manzana, parcela, "Libre"};}
+                else{
+                   propiedades = new Object[] {barrio, manzana, parcela, "Vendido"};  
+                }
                 model.addRow(propiedades);
             }
          rs.previous();

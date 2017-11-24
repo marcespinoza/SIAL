@@ -16,11 +16,7 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.sql.ResultSet;
-import java.util.Properties;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
@@ -37,6 +33,7 @@ public class ControladorPropietarios implements MouseListener, ActionListener, K
     PropietarioDAO pd = new PropietarioDAO();
     private Object [] propietarios;    
     File configFile = new File("config.properties");
+    String backup_cuit=null;
 
     public ControladorPropietarios(Configuracion vistaConfiguracion) {
         this.vistaConfiguracion = vistaConfiguracion;
@@ -55,20 +52,6 @@ public class ControladorPropietarios implements MouseListener, ActionListener, K
         vistaConfiguracion.propietarios.editar.setEnabled(false);
         vistaConfiguracion.setLocationRelativeTo(null);
         llenarTabla();        
-    }
-    
-    private void guardarNroRecibo(){
-        try {
-                Properties props = new Properties();
-                props.setProperty("pathMinuta", vistaConfiguracion.propietarios.nroRecibo.getText());
-                FileWriter writer = new FileWriter(configFile);
-                props.store(writer, "config");
-                writer.close();
-                } catch (FileNotFoundException ex) {
-                 // file does not exist
-                } catch (IOException ex) {
-                   // I/O error
-                }
     }
     
     public void llenarTabla(){
@@ -97,7 +80,8 @@ public class ControladorPropietarios implements MouseListener, ActionListener, K
           vistaConfiguracion.propietarios.nombreTxf.setText(vistaConfiguracion.propietarios.tablaPropietarios.getModel().getValueAt(row,1).toString());
           vistaConfiguracion.propietarios.cuitTxf.setText(vistaConfiguracion.propietarios.tablaPropietarios.getModel().getValueAt(row,2).toString());
           vistaConfiguracion.propietarios.nroRecibo.setText(vistaConfiguracion.propietarios.tablaPropietarios.getModel().getValueAt(row,3).toString());
-     }
+          backup_cuit = vistaConfiguracion.propietarios.tablaPropietarios.getModel().getValueAt(row,2).toString();
+    }
 
     @Override
     public void mousePressed(MouseEvent e) {
@@ -122,7 +106,7 @@ public class ControladorPropietarios implements MouseListener, ActionListener, K
         }
         
         if(e.getSource()==vistaConfiguracion.propietarios.editar){
-           pd.editarPropietario(vistaConfiguracion.propietarios.apellidoTxf.getText(), vistaConfiguracion.propietarios.nombreTxf.getText(), vistaConfiguracion.propietarios.cuitTxf.getText(),Integer.parseInt(vistaConfiguracion.propietarios.nroRecibo.getText()));
+           pd.editarPropietario(vistaConfiguracion.propietarios.apellidoTxf.getText(), vistaConfiguracion.propietarios.nombreTxf.getText(), vistaConfiguracion.propietarios.cuitTxf.getText(),Integer.parseInt(vistaConfiguracion.propietarios.nroRecibo.getText()), backup_cuit);
            llenarTabla();
            new ControladorPropiedades(vistaConfiguracion);
         }

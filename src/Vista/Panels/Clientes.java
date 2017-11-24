@@ -75,11 +75,11 @@ public class Clientes extends javax.swing.JPanel {
         {
             public Component prepareRenderer(TableCellRenderer renderer, int rowIndex, int vColIndex) {
                 Component c = super.prepareRenderer(renderer, rowIndex, vColIndex);
-                if (isCellSelected(rowIndex, vColIndex)) {
-                    c.setBackground(Color.yellow);
-                }
                 if(tablaCliente.getValueAt(rowIndex, 10) == null){
                     c.setBackground(Color.PINK);
+                }
+                if (isCellSelected(rowIndex, vColIndex)) {
+                    c.setBackground(Color.yellow);
                 }
                 return c;
             }

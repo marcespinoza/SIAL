@@ -89,8 +89,11 @@ public class ClienteDAO {
          String insertar = "Insert into cliente(dni, apellidos, nombres, fecha_nacimiento, barrio, calle, numero, telefono1, telefono2, trabajo) values ('"+dni+"','"+apellidos+"','"+nombres+"','"+fecha_nacimiento+"','"+barrio+"','"+calle+"','"+numero+"','"+telefono1+"','"+telefono2+"','"+trabajo+"')";
          PreparedStatement ps = con.prepareStatement(insertar);
          filasAfectadas = ps.executeUpdate();         
-     } catch (Exception e) { 
-         System.out.println(e.getMessage());
+     } catch (SQLException e) { 
+         //--------1062 es el codigo de error para claves duplicadas------//
+         if(e.getErrorCode() == 1062){
+           filasAfectadas = 0; 
+    }
      }
      return filasAfectadas;
  }
