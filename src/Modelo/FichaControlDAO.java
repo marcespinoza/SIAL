@@ -8,6 +8,7 @@ package Modelo;
 import conexion.Conexion;
 import java.math.BigDecimal;
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -28,11 +29,11 @@ public class FichaControlDAO {
         conexion = new Conexion();
     }
     
-    public int altaFichaControl(String tipo_compra, String dimension, int cantidad_cuotas, BigDecimal cuota_pura, BigDecimal gastos, BigDecimal bolsa_cemento, String barrio, int manzana, int parcela){
+    public int altaFichaControl(String tipo_compra, String dimension, int cantidad_cuotas, BigDecimal cuota_pura, BigDecimal gastos, BigDecimal bolsa_cemento, Date fch_actualizacion, String barrio, int manzana, int parcela){
          int id_control = 1;
      try {
           Connection con = conexion.getConexion();
-          String insertar = "Insert into ficha_control(tipo_compra, dimension, cantidad_cuotas, cuota_pura, gastos, bolsa_cemento, lote_barrio, lote_manzana, lote_parcela) values ('"+tipo_compra+"','"+dimension+"','"+cantidad_cuotas+"','"+cuota_pura+"','"+gastos+"','"+bolsa_cemento+"','"+barrio+"','"+manzana+"','"+parcela+"')";
+          String insertar = "Insert into ficha_control(tipo_compra, dimension, cantidad_cuotas, cuota_pura, gastos, bolsa_cemento, fecha_actualizacion, lote_barrio, lote_manzana, lote_parcela) values ('"+tipo_compra+"','"+dimension+"','"+cantidad_cuotas+"','"+cuota_pura+"','"+gastos+"','"+bolsa_cemento+"', '"+fch_actualizacion+"','"+barrio+"','"+manzana+"','"+parcela+"')";
           PreparedStatement ps = con.prepareStatement(insertar, Statement.RETURN_GENERATED_KEYS);
           ps.executeUpdate();  
           ResultSet rs = ps.getGeneratedKeys();  

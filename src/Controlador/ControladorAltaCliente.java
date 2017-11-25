@@ -109,12 +109,6 @@ public class ControladorAltaCliente implements ActionListener, KeyListener{
         }else{
          ac.calle.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
         }
-        if(ac.numero.getText().isEmpty()){
-         ac.numero.setBorder(BorderFactory.createLineBorder(Color.RED));
-         bandera=false;
-        }else{
-         ac.numero.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
-        }
         if(ac.telefono1.getText().isEmpty()){
          ac.telefono1.setBorder(BorderFactory.createLineBorder(Color.RED));
          bandera=false;
