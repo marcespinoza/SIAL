@@ -37,6 +37,8 @@ import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
+import org.joda.time.LocalDate;
+import org.joda.time.Years;
 
 /**
  *
@@ -51,6 +53,7 @@ public class ControladorCliente implements ActionListener, MouseListener{
     FichaControlDAO fd = new FichaControlDAO();
     Ventana ventana;
     private Object [] clientes;
+    private Object[] cumpleaños;
     private List<Object> cliente = new ArrayList<Object>();
     private List<Object> referencia = new ArrayList<Object>();
     public static final DefaultTableCellRenderer DEFAULT_RENDERER = new DefaultTableCellRenderer();
@@ -215,16 +218,23 @@ public class ControladorCliente implements ActionListener, MouseListener{
             rs = cd.clientesPorLotes();}
         else{
             rs = cd.clientesPorCuotas(monto);
-        }
+        }        
         DefaultTableModel model = (DefaultTableModel) vistaClientes.tablaCliente.getModel();
         model.setRowCount(0);
         SimpleDateFormat sdf=new SimpleDateFormat("dd-MM-YYYY");
+        String fch_actualizacion = "";
+        String actualizar_cemento = "";
+        String cumpleaños;
         try {
             while(rs.next()){
+                cumpleaños = "0";
                 String dni = rs.getString(1);
                 String apellidos = rs.getString(2);
                 String nombres = rs.getString(3);
-                String fecha_nacimiento = rs.getString(4);
+                String fecha_nacimiento = sdf.format(rs.getDate(4));
+                //------Controlo dia y mes para saber si es el cumpleaños--------//
+                if(LocalDate.now().getMonthOfYear()==new LocalDate(rs.getDate(4)).getMonthOfYear() && LocalDate.now().getDayOfMonth()==new LocalDate(rs.getDate(4)).getDayOfMonth())
+                 fecha_nacimiento = "1";
                 String barrio = rs.getString(5);                
                 String calle = rs.getString(6);
                 String numero = rs.getString(7);                
@@ -235,11 +245,22 @@ public class ControladorCliente implements ActionListener, MouseListener{
                 String cantidad_cuotas = rs.getString(12);
                 String gastos = rs.getString(13);
                 String bolsa_cemento = rs.getString(14);
-                String fch_actualizacion = sdf.format(rs.getDate(15));
+                if(rs.getDate(15)!=null){
+                    fch_actualizacion = sdf.format(rs.getDate(15));
+                    //----Controlo si ya paso un año de la ultima fecha de actualizacion de la bolsa de cemento----//
+                     if((Years.yearsBetween(new LocalDate(rs.getDate(15)), LocalDate.now())).getYears()>=1){
+                         actualizar_cemento = "1";
+                     }else{
+                          actualizar_cemento = "0";
+                     }
+                }else{
+                    fch_actualizacion = "";
+                    actualizar_cemento = "0";
+                }               
                 String barrio_prop = rs.getString(16);
                 String manzana_prop = rs.getString(17);
                 String parcela_prop = rs.getString(18);  
-                clientes = new Object[] {apellidos, nombres, dni, telefono1, telefono2, barrio, calle, numero, fecha_nacimiento,trabajo, idControl, cantidad_cuotas, gastos, bolsa_cemento, fch_actualizacion, barrio_prop, manzana_prop, parcela_prop};
+                clientes = new Object[] {apellidos, nombres, dni, telefono1, telefono2, barrio, calle, numero, fecha_nacimiento, trabajo, idControl, cantidad_cuotas, gastos, bolsa_cemento, fch_actualizacion, barrio_prop, manzana_prop, parcela_prop, actualizar_cemento, cumpleaños};
                 model.addRow(clientes);   
              }
                 
@@ -248,42 +269,10 @@ public class ControladorCliente implements ActionListener, MouseListener{
         }
     }
     
-    private void ocultarColumnas(){
-                vistaClientes.tablaCliente.getColumnModel().getColumn(4).setMinWidth(0);
-                vistaClientes.tablaCliente.getColumnModel().getColumn(4).setMaxWidth(0);
-                vistaClientes.tablaCliente.getColumnModel().getColumn(4).setWidth(0);
-                vistaClientes.tablaCliente.getColumnModel().getColumn(5).setMinWidth(0);
-                vistaClientes.tablaCliente.getColumnModel().getColumn(5).setMaxWidth(0);
-                vistaClientes.tablaCliente.getColumnModel().getColumn(5).setWidth(0);
-                vistaClientes.tablaCliente.getColumnModel().getColumn(6).setMinWidth(0);
-                vistaClientes.tablaCliente.getColumnModel().getColumn(6).setMaxWidth(0);
-                vistaClientes.tablaCliente.getColumnModel().getColumn(6).setWidth(0);
-                vistaClientes.tablaCliente.getColumnModel().getColumn(7).setMinWidth(0);
-                vistaClientes.tablaCliente.getColumnModel().getColumn(7).setMaxWidth(0);
-                vistaClientes.tablaCliente.getColumnModel().getColumn(7).setWidth(0);
-                vistaClientes.tablaCliente.getColumnModel().getColumn(8).setMinWidth(0);
-                vistaClientes.tablaCliente.getColumnModel().getColumn(8).setMaxWidth(0);
-                vistaClientes.tablaCliente.getColumnModel().getColumn(8).setWidth(0);
-                vistaClientes.tablaCliente.getColumnModel().getColumn(9).setMinWidth(0);
-                vistaClientes.tablaCliente.getColumnModel().getColumn(9).setMaxWidth(0);
-                vistaClientes.tablaCliente.getColumnModel().getColumn(9).setWidth(0);
-                vistaClientes.tablaCliente.getColumnModel().getColumn(10).setMinWidth(0);
-                vistaClientes.tablaCliente.getColumnModel().getColumn(10).setMaxWidth(0);
-                vistaClientes.tablaCliente.getColumnModel().getColumn(10).setWidth(0);
-                vistaClientes.tablaCliente.getColumnModel().getColumn(11).setMinWidth(0);
-                vistaClientes.tablaCliente.getColumnModel().getColumn(11).setMaxWidth(0);
-                vistaClientes.tablaCliente.getColumnModel().getColumn(11).setWidth(0);
-                vistaClientes.tablaCliente.getColumnModel().getColumn(12).setMinWidth(0);
-                vistaClientes.tablaCliente.getColumnModel().getColumn(12).setMaxWidth(0);
-                vistaClientes.tablaCliente.getColumnModel().getColumn(12).setWidth(0);
-                vistaClientes.tablaCliente.getColumnModel().getColumn(13).setMinWidth(0);
-                vistaClientes.tablaCliente.getColumnModel().getColumn(13).setMaxWidth(0);
-                vistaClientes.tablaCliente.getColumnModel().getColumn(13).setWidth(0);
-                vistaClientes.tablaCliente.getColumnModel().getColumn(14).setMinWidth(0);
-                vistaClientes.tablaCliente.getColumnModel().getColumn(14).setMaxWidth(0);
-                vistaClientes.tablaCliente.getColumnModel().getColumn(14).setWidth(0);
+    
+    private void controlCumpleaños(){
     }
-
+    
     @Override
     public void mouseClicked(MouseEvent e) {
         int row = vistaClientes.tablaCliente.getSelectedRow();       
@@ -293,9 +282,15 @@ public class ControladorCliente implements ActionListener, MouseListener{
         vistaClientes.trabajo.setText(vistaClientes.tablaCliente.getModel().getValueAt(row, 9).toString());  
         //-------Si no tiene propiedad asignada entonces este valor va a ser nulo--------//
         if(vistaClientes.tablaCliente.getModel().getValueAt(row, 13)!=null){
+            //----Muestro valor bolsa de cemento y fecha de actualizacion---------//
             vistaClientes.fch_actualizacion.setText(vistaClientes.tablaCliente.getModel().getValueAt(row, 14).toString());
             vistaClientes.bolsa_cemento.setText("$ "+vistaClientes.tablaCliente.getModel().getValueAt(row, 13).toString());
-}
+        }
+        if(vistaClientes.tablaCliente.getModel().getValueAt(row, 18).toString()=="1"){
+            vistaClientes.advertencia.setText("-- Actualizar precio bolsa cemento --");
+        }else{
+            vistaClientes.advertencia.setText("");
+        }
         ResultSet rs = rd.obtenerReferencia(Integer.parseInt(vistaClientes.tablaCliente.getModel().getValueAt(row,2).toString()));
         try {
             while(rs.next()){

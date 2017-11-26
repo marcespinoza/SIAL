@@ -94,6 +94,7 @@ public class Clientes extends javax.swing.JPanel {
         jLabel15 = new javax.swing.JLabel();
         fch_actualizacion = new javax.swing.JLabel();
         bolsa_cemento = new javax.swing.JTextField();
+        advertencia = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
         jLabel18 = new javax.swing.JLabel();
 
@@ -364,11 +365,11 @@ public class Clientes extends javax.swing.JPanel {
 
             },
             new String [] {
-                "Apellido/s", "Nombre/s", "Documento", "Title 4", "Title 5", "Title 6", "Title 7", "Title 8", "Title 9", "Title 10", "Title 11", "Title 12", "Title 13", "Title 14", "Title 15", "Barrio", "Manzana", "Parcela"
+                "Apellido/s", "Nombre/s", "Documento", "Title 4", "Title 5", "Title 6", "Title 7", "Title 8", "Title 9", "Title 10", "Title 11", "Title 12", "Title 13", "Title 14", "Title 15", "Barrio", "Manzana", "Parcela", "actualizar_cto", "cumpleaños"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                true, false, false, false, false, false, false, false, false, false, false, false, false, true, true, false, false, false
+                true, false, false, false, false, false, false, false, false, false, false, false, false, true, true, false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -412,11 +413,19 @@ public class Clientes extends javax.swing.JPanel {
             tablaCliente.getColumnModel().getColumn(13).setMinWidth(0);
             tablaCliente.getColumnModel().getColumn(13).setPreferredWidth(0);
             tablaCliente.getColumnModel().getColumn(13).setMaxWidth(0);
-            tablaCliente.getColumnModel().getColumn(14).setResizable(false);
+            tablaCliente.getColumnModel().getColumn(14).setMinWidth(0);
+            tablaCliente.getColumnModel().getColumn(14).setPreferredWidth(0);
+            tablaCliente.getColumnModel().getColumn(14).setMaxWidth(0);
             tablaCliente.getColumnModel().getColumn(15).setResizable(false);
             tablaCliente.getColumnModel().getColumn(15).setPreferredWidth(1);
             tablaCliente.getColumnModel().getColumn(16).setResizable(false);
             tablaCliente.getColumnModel().getColumn(16).setPreferredWidth(1);
+            tablaCliente.getColumnModel().getColumn(18).setMinWidth(0);
+            tablaCliente.getColumnModel().getColumn(18).setPreferredWidth(0);
+            tablaCliente.getColumnModel().getColumn(18).setMaxWidth(0);
+            tablaCliente.getColumnModel().getColumn(19).setMinWidth(0);
+            tablaCliente.getColumnModel().getColumn(19).setPreferredWidth(0);
+            tablaCliente.getColumnModel().getColumn(19).setMaxWidth(0);
         }
 
         agregarPropietario.setText("Agregar propietario");
@@ -433,6 +442,8 @@ public class Clientes extends javax.swing.JPanel {
 
         fch_actualizacion.setFont(new java.awt.Font("Century Gothic", 1, 14)); // NOI18N
 
+        advertencia.setForeground(new java.awt.Color(255, 0, 0));
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -440,14 +451,19 @@ public class Clientes extends javax.swing.JPanel {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel14)
-                    .addComponent(jLabel15))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(fch_actualizacion, javax.swing.GroupLayout.DEFAULT_SIZE, 118, Short.MAX_VALUE)
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(bolsa_cemento, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                        .addComponent(advertencia, javax.swing.GroupLayout.PREFERRED_SIZE, 252, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel14)
+                            .addComponent(jLabel15))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(fch_actualizacion, javax.swing.GroupLayout.DEFAULT_SIZE, 118, Short.MAX_VALUE)
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addComponent(bolsa_cemento, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 0, Short.MAX_VALUE)))))
                 .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
@@ -461,7 +477,9 @@ public class Clientes extends javax.swing.JPanel {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel15)
                     .addComponent(bolsa_cemento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(38, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(advertencia, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jPanel3.setBackground(java.awt.Color.pink);
@@ -649,6 +667,7 @@ public class Clientes extends javax.swing.JPanel {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    public javax.swing.JLabel advertencia;
     public javax.swing.JButton agregarBtn;
     public javax.swing.JButton agregarPropietario;
     public javax.swing.JTextField apellido_referencia;
