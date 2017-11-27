@@ -20,10 +20,12 @@ public class ControladorBotones implements ActionListener{
  
     public ControladorBotones(Ventana ventana) {
            this.ventana=ventana;
-           Ventana.btnMinuta.addActionListener(this);
-           Ventana.btnClientes.addActionListener(this);
-           Ventana.btnResumen.addActionListener(this);
-           Ventana.cerrarSesion.addActionListener(this);
+           ventana.btnMinuta.addActionListener(this);
+           ventana.btnClientes.addActionListener(this);
+           ventana.btnResumen.addActionListener(this);
+           ventana.btnCumpleaños.addActionListener(this);
+           ventana.btnCumpleaños.setVisible(false);
+           ventana.cerrarSesion.addActionListener(this);
     }
 
 

@@ -20,11 +20,8 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.text.DateFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -51,9 +48,10 @@ public class ControladorCliente implements ActionListener, MouseListener{
     ClienteDAO cd = new ClienteDAO();
     ReferenciaDAO rd = new ReferenciaDAO();
     FichaControlDAO fd = new FichaControlDAO();
+    private ArrayList<String[]> cumpleaños = new ArrayList<String[]>();
     Ventana ventana;
     private Object [] clientes;
-    private Object[] cumpleaños;
+    private String [] detalleCumpleaños;
     private List<Object> cliente = new ArrayList<Object>();
     private List<Object> referencia = new ArrayList<Object>();
     public static final DefaultTableCellRenderer DEFAULT_RENDERER = new DefaultTableCellRenderer();
@@ -233,8 +231,9 @@ public class ControladorCliente implements ActionListener, MouseListener{
                 String nombres = rs.getString(3);
                 String fecha_nacimiento = sdf.format(rs.getDate(4));
                 //------Controlo dia y mes para saber si es el cumpleaños--------//
-                if(LocalDate.now().getMonthOfYear()==new LocalDate(rs.getDate(4)).getMonthOfYear() && LocalDate.now().getDayOfMonth()==new LocalDate(rs.getDate(4)).getDayOfMonth())
-                 fecha_nacimiento = "1";
+                if(LocalDate.now().getMonthOfYear()==new LocalDate(rs.getDate(4)).getMonthOfYear() && LocalDate.now().getDayOfMonth()==new LocalDate(rs.getDate(4)).getDayOfMonth()){
+                 cumpleaños = "1";
+                }
                 String barrio = rs.getString(5);                
                 String calle = rs.getString(6);
                 String numero = rs.getString(7);                
@@ -263,6 +262,7 @@ public class ControladorCliente implements ActionListener, MouseListener{
                 clientes = new Object[] {apellidos, nombres, dni, telefono1, telefono2, barrio, calle, numero, fecha_nacimiento, trabajo, idControl, cantidad_cuotas, gastos, bolsa_cemento, fch_actualizacion, barrio_prop, manzana_prop, parcela_prop, actualizar_cemento, cumpleaños};
                 model.addRow(clientes);   
              }
+            controlCumpleaños();
                 
         } catch (Exception e) {
             System.out.println(e.getMessage());
@@ -271,6 +271,25 @@ public class ControladorCliente implements ActionListener, MouseListener{
     
     
     private void controlCumpleaños(){
+        cumpleaños.clear();
+        DefaultTableModel model = (DefaultTableModel) vistaClientes.tablaCliente.getModel();
+        int row = model.getRowCount();
+        
+            System.out.println(row);
+        for (int i = 0; i < model.getRowCount(); i++) {
+            //----Si tiene un 1 en la columna cumpleaños, es su cumpleaños (y si!!!)--------//
+         if(vistaClientes.tablaCliente.getModel().getValueAt(i, 19).toString().equals("1")){
+            String nombre = vistaClientes.tablaCliente.getModel().getValueAt(i, 2).toString();
+            String apellido = vistaClientes.tablaCliente.getModel().getValueAt(i, 1).toString();
+            String fch_nacimiento = vistaClientes.tablaCliente.getModel().getValueAt(i, 19).toString();
+            String telefono = vistaClientes.tablaCliente.getModel().getValueAt(i, 19).toString();
+            detalleCumpleaños = new String[] {nombre, apellido, fch_nacimiento, telefono};
+            cumpleaños.add(detalleCumpleaños);
+         }
+        }
+        if(!cumpleaños.isEmpty()){
+            Ventana.btnCumpleaños.setVisible(true);
+        }
     }
     
     @Override
@@ -286,7 +305,7 @@ public class ControladorCliente implements ActionListener, MouseListener{
             vistaClientes.fch_actualizacion.setText(vistaClientes.tablaCliente.getModel().getValueAt(row, 14).toString());
             vistaClientes.bolsa_cemento.setText("$ "+vistaClientes.tablaCliente.getModel().getValueAt(row, 13).toString());
         }
-        if(vistaClientes.tablaCliente.getModel().getValueAt(row, 18).toString()=="1"){
+        if(vistaClientes.tablaCliente.getModel().getValueAt(row, 18).toString().equals("1")){
             vistaClientes.advertencia.setText("-- Actualizar precio bolsa cemento --");
         }else{
             vistaClientes.advertencia.setText("");
