@@ -32,7 +32,7 @@ public class Ventana extends javax.swing.JFrame implements ActionListener{
     ControladorLogin cl;
     Minuta vistaMinuta = Minuta.getInstance();
     Resumen vistaResumen = Resumen.getInstance();
-    ControladorMinuta cm;
+    public static ControladorMinuta cm;
     ControladorResumen cr;
 
     public Ventana() {
@@ -180,8 +180,7 @@ public class Ventana extends javax.swing.JFrame implements ActionListener{
 
         nombreUsuario.setText("jLabel2");
 
-        btnCumpleaños.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/iconos/cumpleaños.png"))); // NOI18N
-        btnCumpleaños.setText("Cumpleaños");
+        btnCumpleaños.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/iconos/cake.png"))); // NOI18N
         btnCumpleaños.setMargin(new java.awt.Insets(2, 2, 2, 2));
         btnCumpleaños.setMaximumSize(new java.awt.Dimension(92, 34));
         btnCumpleaños.setMinimumSize(new java.awt.Dimension(92, 34));
@@ -205,7 +204,7 @@ public class Ventana extends javax.swing.JFrame implements ActionListener{
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnMinuta, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnCumpleaños, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btnCumpleaños, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(nombreUsuario)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)

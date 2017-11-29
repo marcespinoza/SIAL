@@ -17,6 +17,9 @@ public class ControladorCumpleaños {
     Cumpleaños cumple;
 
     public ControladorCumpleaños(Ventana ventana) {
+        cumple = Cumpleaños.getInstance(ventana, true);
+        cumple.setLocationRelativeTo(null);
+        cumple.setVisible(true);
     }
     
 }

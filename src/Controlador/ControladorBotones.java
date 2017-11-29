@@ -46,6 +46,10 @@ public class ControladorBotones implements ActionListener{
          cl.show(Ventana.panelPrincipal, "card2");
         }
         
+        if(e.getSource()==Ventana.btnCumpleaños){
+         new ControladorCumpleaños(ventana);
+        }
+        
         if(e.getSource()==Ventana.cerrarSesion){
           ventana.dispose();
           new Ventana().setVisible(true);

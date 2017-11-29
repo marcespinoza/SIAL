@@ -5,15 +5,9 @@
  */
 package principal;
 
-import Controlador.ControladorLogin;
-import Vista.Dialogs.Login;
 import Vista.Frame.Ventana;
-import javax.swing.JFrame;
-
-
         
 public class Main {
-
     
     public static void main(String[] args) {
         new Ventana();      

@@ -31,6 +31,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
@@ -71,6 +72,8 @@ public class ControladorDetalleCuota implements ActionListener, TableModelListen
     int id_control, nro_cuotas;
     JFileChooser chooser;
     File f;
+    FileInputStream fileIn = null;
+    FileOutputStream fileOut = null;
     File configFile = new File("config.properties");
     Boolean cuota = false;
     Boolean posesion = false;
@@ -238,21 +241,23 @@ public class ControladorDetalleCuota implements ActionListener, TableModelListen
         if(e.getSource() == dc.guardar){
                 chooser = new JFileChooser();
                 chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-                chooser.showOpenDialog(chooser);
+                int returnVal = chooser.showOpenDialog(chooser);
+                if(returnVal==JFileChooser.APPROVE_OPTION){
                 f = chooser.getSelectedFile();
                 String path = f.getAbsolutePath();
                 dc.path.setText(path);
                  try {
-                Properties props = new Properties();
+                Properties props = new Properties();                
+                fileIn = new FileInputStream(configFile);
+                props.load(fileIn);
                 props.setProperty("pathRecibo", path);
-                FileWriter writer = new FileWriter(configFile);
-                props.store(writer, "config");
-                writer.close();
+                fileOut = new FileOutputStream(configFile);
+                props.store(fileOut, "config");
                 } catch (FileNotFoundException ex) {
                  // file does not exist
                 } catch (IOException ex) {
                    // I/O error
-                }
+                }}
         }        
     }
 

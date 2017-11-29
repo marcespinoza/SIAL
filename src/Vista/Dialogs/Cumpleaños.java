@@ -5,18 +5,28 @@
  */
 package Vista.Dialogs;
 
+import Vista.Panels.Minuta;
+
 /**
  *
  * @author Marcelo Espinoza
  */
 public class Cumpleaños extends javax.swing.JDialog {
 
+    private static Cumpleaños cumpleaños = null;
     /**
      * Creates new form Cumpleaños
      */
     public Cumpleaños(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+    }
+    
+      public static Cumpleaños getInstance(java.awt.Frame parent, boolean modal){
+        if( cumpleaños==null){
+        cumpleaños= new Cumpleaños(parent, modal);
+        }
+        return cumpleaños;
     }
 
     /**

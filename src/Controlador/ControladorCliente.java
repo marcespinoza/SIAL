@@ -9,6 +9,7 @@ import Modelo.ClienteDAO;
 import Modelo.FichaControlDAO;
 import Modelo.ReferenciaDAO;
 import Modelo.RendererTablaCliente;
+import Vista.Dialogs.Cumpleaños;
 import Vista.Frame.Ventana;
 import Vista.Panels.Clientes;
 import java.awt.Color;
@@ -20,6 +21,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -45,6 +47,7 @@ public class ControladorCliente implements ActionListener, MouseListener{
     
     RendererTablaCliente r = new RendererTablaCliente();
     Clientes vistaClientes;
+    Cumpleaños dialogCumpleaños;
     ClienteDAO cd = new ClienteDAO();
     ReferenciaDAO rd = new ReferenciaDAO();
     FichaControlDAO fd = new FichaControlDAO();
@@ -229,7 +232,7 @@ public class ControladorCliente implements ActionListener, MouseListener{
                 String dni = rs.getString(1);
                 String apellidos = rs.getString(2);
                 String nombres = rs.getString(3);
-                String fecha_nacimiento = sdf.format(rs.getDate(4));
+                String fecha_nacimiento = rs.getString(4);
                 //------Controlo dia y mes para saber si es el cumpleaños--------//
                 if(LocalDate.now().getMonthOfYear()==new LocalDate(rs.getDate(4)).getMonthOfYear() && LocalDate.now().getDayOfMonth()==new LocalDate(rs.getDate(4)).getDayOfMonth()){
                  cumpleaños = "1";
@@ -271,25 +274,35 @@ public class ControladorCliente implements ActionListener, MouseListener{
     
     
     private void controlCumpleaños(){
-        cumpleaños.clear();
+        //-----Limpio la lista de cumpleaños------//
+        dialogCumpleaños = Cumpleaños.getInstance(ventana, true);
         DefaultTableModel model = (DefaultTableModel) vistaClientes.tablaCliente.getModel();
-        int row = model.getRowCount();
-        
-            System.out.println(row);
+        DefaultTableModel modeloCumpleaños = (DefaultTableModel) dialogCumpleaños.tablaCumpleaños.getModel();
+        modeloCumpleaños.setRowCount(0);
+        //----Verifico que la tabla de clientes tenga al menos una fila--------//
+        if(model.getRowCount()!=0){            
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
         for (int i = 0; i < model.getRowCount(); i++) {
             //----Si tiene un 1 en la columna cumpleaños, es su cumpleaños (y si!!!)--------//
          if(vistaClientes.tablaCliente.getModel().getValueAt(i, 19).toString().equals("1")){
-            String nombre = vistaClientes.tablaCliente.getModel().getValueAt(i, 2).toString();
-            String apellido = vistaClientes.tablaCliente.getModel().getValueAt(i, 1).toString();
-            String fch_nacimiento = vistaClientes.tablaCliente.getModel().getValueAt(i, 19).toString();
-            String telefono = vistaClientes.tablaCliente.getModel().getValueAt(i, 19).toString();
-            detalleCumpleaños = new String[] {nombre, apellido, fch_nacimiento, telefono};
-            cumpleaños.add(detalleCumpleaños);
+             try {
+                 String nombre = vistaClientes.tablaCliente.getModel().getValueAt(i, 1).toString();
+                 String apellido = vistaClientes.tablaCliente.getModel().getValueAt(i, 0).toString();
+                 String fch_nacimiento = vistaClientes.tablaCliente.getModel().getValueAt(i, 8).toString();
+                 String edad = Years.yearsBetween(new LocalDate(formatter.parse(fch_nacimiento)), LocalDate.now()).toString();
+                 String telefono = vistaClientes.tablaCliente.getModel().getValueAt(i, 3).toString();
+                 detalleCumpleaños = new String[] {nombre, apellido, fch_nacimiento, edad, telefono};
+                 modeloCumpleaños.addRow(detalleCumpleaños);
+             } catch (ParseException ex) {
+                 Logger.getLogger(ControladorCliente.class.getName()).log(Level.SEVERE, null, ex);
+             }
          }
-        }
-        if(!cumpleaños.isEmpty()){
+        }  
+        //------Si hay cumpleaños en el dia, habilito el boton para mostrar los cumpleaños--------//
+        if(modeloCumpleaños.getRowCount()!=0){
             Ventana.btnCumpleaños.setVisible(true);
         }
+       }  
     }
     
     @Override

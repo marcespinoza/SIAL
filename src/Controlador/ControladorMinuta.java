@@ -25,6 +25,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
@@ -54,6 +55,8 @@ public class ControladorMinuta implements MouseListener, ActionListener {
     ResultSet resultset = null;
     File f;
     JFileChooser chooser;
+    FileInputStream fileIn = null;
+    FileOutputStream fileOut = null;
     File configFile = new File("config.properties");
     public static final String IMG = "src/Imagenes/logo_reporte.png";
 
@@ -143,22 +146,25 @@ public class ControladorMinuta implements MouseListener, ActionListener {
             if(e.getSource() == vistaMinuta.guardar_en){
                 chooser = new JFileChooser();
                 chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-                chooser.showOpenDialog(chooser);
+                int returnVal = chooser.showOpenDialog(chooser);
+                //------Verifico que aprete boton Aceptar------//
+                if(returnVal==JFileChooser.APPROVE_OPTION){
                 f = chooser.getSelectedFile();
                 String path = f.getAbsolutePath();
                 vistaMinuta.path.setText(path);
                 try {
-                Properties props = new Properties();
+                Properties props = new Properties();                
+                fileIn = new FileInputStream(configFile);
+                props.load(fileIn);
                 props.setProperty("pathMinuta", path);
-                FileWriter writer = new FileWriter(configFile);
-                props.store(writer, "config");
-                writer.close();
+                fileOut = new FileOutputStream(configFile);
+                props.store(fileOut, "config");
                 } catch (FileNotFoundException ex) {
                  // file does not exist
                 } catch (IOException ex) {
                    // I/O error
                 }
-                }
+                }}
             
             if(e.getSource() == vistaMinuta.buscar){
                 SimpleDateFormat dcn = new SimpleDateFormat("dd-MM-yyyy");
@@ -177,7 +183,7 @@ public class ControladorMinuta implements MouseListener, ActionListener {
       java.util.Date date = new java.util.Date();
         try {
             
-            PdfWriter.getInstance(document, new FileOutputStream(new File(vistaMinuta.path.getText(), "Minuta-"+dateFormat2.format(date)+".pdf")));
+            PdfWriter.getInstance(document, new FileOutputStream(new File(vistaMinuta.path.getText(), "Minuta - "+dateFormat2.format(date)+".pdf")));
             document.open();
             Image image = Image.getInstance(IMG); 
             image.scaleAbsolute(70, 70);
@@ -192,7 +198,7 @@ public class ControladorMinuta implements MouseListener, ActionListener {
             document.add(subtitulo);
             document.add( Chunk.NEWLINE );
             PdfPTable table = new PdfPTable(9);            
-            table.setTotalWidth(new float[]{ 1,2,5,2,2,2,2,2,4});
+            table.setTotalWidth(new float[]{ 1,2,4,2,2,2,2,2,4});
             table.setWidthPercentage(100);
             PdfPCell orden = new PdfPCell(new Paragraph("ORD",f));
             PdfPCell rbo_nro = new PdfPCell(new Paragraph("Rbo. Nro",f));
@@ -231,7 +237,7 @@ public class ControladorMinuta implements MouseListener, ActionListener {
               double total = 0;
               while(resultset.next()){
                   PdfPTable table2 = new PdfPTable(9);            
-                  table2.setTotalWidth(new float[]{ 1,2,5,2,2,2,2,2,4});
+                  table2.setTotalWidth(new float[]{ 1,2,4,2,2,2,2,2,4});
                   table2.setWidthPercentage(100);
                   table2.addCell(new PdfPCell(new Paragraph(String.valueOf(conta),f)));    
                   PdfPCell detalle_nro_cuota = new PdfPCell(new Paragraph(resultset.getString(12),f));

@@ -65,7 +65,7 @@ public class ControladorRecibo implements ActionListener{
     String dimension, barrio;
     int cant_cuotas, manzana, parcela, row;
     BigDecimal cobrado, cuota_total, gastos_administrativos;
-    int id_control, nro_cuota, nro_random;    
+    int id_control, nro_cuota;    
     public static final String IMG = "src/Imagenes/logo_reporte.png";
     public static final String IMG2 = "src/Imagenes/logo_recibo.png";
     Random random = new Random();
@@ -136,7 +136,6 @@ public class ControladorRecibo implements ActionListener{
                     ar.cuit.setEnabled(false);                
             }
         });
-        nro_random = random.nextInt(100);
         this.id_control=id_control;
         new SwingWorker().execute();
     }
@@ -385,16 +384,17 @@ public class ControladorRecibo implements ActionListener{
         protected Void doInBackground() throws Exception {      
             Date date = new Date();
             BigDecimal rendido = cobrado.subtract(gastos_administrativos);
+            //---Si tipoPago es cuota comun, si es 0 a cuenta de derecho de posesión-------//
             if(tipoPago==1){
               md.altaMinuta(new java.sql.Date(date.getTime()), apellido_comprador, nombre_comprador, manzana, parcela, cobrado, gastos_administrativos, rendido, Integer.parseInt(dc.tablaDetallePago.getModel().getValueAt(row, 0).toString()), dc.tablaDetallePago.getModel().getValueAt(row, 12).toString(), categoria.toString(), Integer.parseInt(nro_recibo_propietario));
             }else if(tipoPago==0){
-              md.altaMinuta(new java.sql.Date(date.getTime()), apellido_comprador, nombre_comprador, manzana, parcela, cobrado, gastos_administrativos, rendido, Integer.parseInt(dc.tablaDchoPosesion.getModel().getValueAt(row, 0).toString()), dc.tablaDetallePago.getModel().getValueAt(row, 12).toString(), "Cta. derecho posesión",Integer.parseInt(nro_recibo_propietario));
+              md.altaMinuta(new java.sql.Date(date.getTime()), apellido_comprador, nombre_comprador, manzana, parcela, cobrado, gastos_administrativos, rendido, Integer.parseInt(dc.tablaDchoPosesion.getModel().getValueAt(row, 0).toString()), dc.tablaDetallePago.getModel().getValueAt(row, 12).toString()+" Dcho. posesión", "Cta. derecho posesión",Integer.parseInt(nro_recibo_propietario));
             }return null;
              }
 
        @Override
        public void done() { 
-            new ControladorMinuta(Minuta.getInstance());
+            Ventana.cm.llenarTablaFecha();
             pd.editarNroRecibo(apellido_propietario, nombre_propietario, cuit_propietario, Integer.parseInt(nro_recibo_propietario)+1);
        }
     

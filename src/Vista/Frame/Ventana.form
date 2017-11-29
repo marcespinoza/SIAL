@@ -230,7 +230,7 @@
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="btnMinuta" min="-2" pref="93" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
-                  <Component id="btnCumpleaños" min="-2" pref="125" max="-2" attributes="0"/>
+                  <Component id="btnCumpleaños" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="32767" attributes="0"/>
                   <Component id="nombreUsuario" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
@@ -393,9 +393,8 @@
         <Component class="javax.swing.JButton" name="btnCumplea&#xf1;os">
           <Properties>
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-              <Image iconType="3" name="/Imagenes/iconos/cumplea&#xf1;os.png"/>
+              <Image iconType="3" name="/Imagenes/iconos/cake.png"/>
             </Property>
-            <Property name="text" type="java.lang.String" value="Cumplea&#xf1;os"/>
             <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
               <Insets value="[2, 2, 2, 2]"/>
             </Property>
