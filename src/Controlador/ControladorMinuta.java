@@ -31,6 +31,8 @@ import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.DateFormat;
@@ -106,7 +108,7 @@ public class ControladorMinuta implements MouseListener, ActionListener {
                 model.addRow(minuta);   
             } 
             resultset.beforeFirst();
-          
+            totalCobrado();
         }catch (SQLException e) {
             System.out.println(e.getMessage());
         }}
@@ -320,7 +322,7 @@ public class ControladorMinuta implements MouseListener, ActionListener {
         }
     }  
         
-    public class SwingWorker extends javax.swing.SwingWorker<Void, Void>{
+    public class MinutasPorFecha extends javax.swing.SwingWorker<Void, Void>{
          
          ResultSet rs;
 
@@ -336,11 +338,23 @@ public class ControladorMinuta implements MouseListener, ActionListener {
            llenarTabla(rs);
        }
     
-}
+     }
+    
+    private void totalCobrado(){
+        BigDecimal total=new BigDecimal(0);
+        for (int i = 0; i < vistaMinuta.tablaMinuta.getRowCount(); i++) {
+            total=total.add(new BigDecimal(vistaMinuta.tablaMinuta.getValueAt(i, 5).toString()));
+            System.out.println(vistaMinuta.tablaMinuta.getValueAt(i, 5).toString());
+        }
+        vistaMinuta.totalCobrado.setText(String.valueOf(total));
+    }
+    private void totalRendido(){
+        
+    }
     
     @Override
     public void mouseClicked(MouseEvent e) {
-         new SwingWorker().execute();
+         new MinutasPorFecha().execute();         
     }
 
     @Override

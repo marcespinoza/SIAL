@@ -10,6 +10,7 @@ import Modelo.DchoPosesionDAO;
 import Modelo.FichaControlDAO;
 import Modelo.RendererTablaCuota;
 import Modelo.RendererTablaDchoPosesion;
+import Vista.Dialogs.ProgressDialog;
 import Vista.Frame.Ventana;
 import Vista.Panels.DetalleCuota;
 import com.itextpdf.text.Chunk;
@@ -45,9 +46,12 @@ import java.text.SimpleDateFormat;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
+import javax.swing.JProgressBar;
 import javax.swing.SwingUtilities;
+import javax.swing.SwingWorker;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
@@ -205,7 +209,7 @@ public class ControladorDetalleCuota implements ActionListener, TableModelListen
             if(dc.tablaDetallePago.getRowCount()==1 && dc.tablaDchoPosesion.getRowCount()==0){
                JOptionPane.showMessageDialog(null, "No hay datos para mostrar", "Atención", JOptionPane.INFORMATION_MESSAGE, null); }
             else{
-                generarResumenPdf();
+                new GenerarResumen().execute();
             }
         }
         if(e.getSource() == dc.generarReciboBtn){
@@ -274,8 +278,7 @@ public class ControladorDetalleCuota implements ActionListener, TableModelListen
     
     private void generarResumenPdf(){
             Document document= new Document(PageSize.A4);
-            //DateFormat fecha1 = new SimpleDateFormat("dd/MM/yyyy");   
-            java.util.Date date = new java.util.Date();
+            //DateFormat fecha1 = new SimpleDateFormat("dd/MM/yyyy");
             Font f=new Font(Font.FontFamily.TIMES_ROMAN,10.0f,0,null);
             ResultSet rs = fcd.obtenerFichaControl(id_control); 
         try {
@@ -349,7 +352,9 @@ public class ControladorDetalleCuota implements ActionListener, TableModelListen
                   table2.addCell(new PdfPCell(new Paragraph(detalleCuota.getString(8),f))).setHorizontalAlignment(Element.ALIGN_CENTER);
                   table2.addCell(new PdfPCell(new Paragraph(detalleCuota.getString(11),f))).setHorizontalAlignment(Element.ALIGN_CENTER);
                   document.add(table2);
-              }}
+              }
+            detalleCuota.beforeFirst();
+            }
             //------------Cabecera de las columnas de derecho de posesion------------//
             if(dc.tablaDchoPosesion.getRowCount()!=0){//---Veo si la tabla derecho de posesion tiene algun elemento-----//
             document.add( Chunk.NEWLINE );
@@ -384,7 +389,9 @@ public class ControladorDetalleCuota implements ActionListener, TableModelListen
                   table3.addCell(new PdfPCell(new Paragraph(derechoPosesion.getString(2),f))).setHorizontalAlignment(Element.ALIGN_CENTER);
                   document.add(table3);
                   i++;
-              }}
+              }
+            derechoPosesion.beforeFirst();
+            }
             document.close();
         }            
             catch (DocumentException ex) {
@@ -393,7 +400,23 @@ public class ControladorDetalleCuota implements ActionListener, TableModelListen
             Logger.getLogger(ControladorDetalleCuota.class.getName()).log(Level.SEVERE, null, ex);
         } catch (SQLException ex) {
             Logger.getLogger(ControladorDetalleCuota.class.getName()).log(Level.SEVERE, null, ex);
-        }}
+        }
+    }
     
     
+    public class GenerarResumen extends SwingWorker<Void, Void>{
+        
+        ProgressDialog pd = new ProgressDialog(dc);
+
+        @Override
+        protected Void doInBackground() throws Exception {            
+            pd.setVisible(true);
+            generarResumenPdf();
+            return null;
+        }
+        @Override
+        public void done(){
+           pd.dispose();
+        }
+}
 }

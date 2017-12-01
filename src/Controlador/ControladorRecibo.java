@@ -137,7 +137,7 @@ public class ControladorRecibo implements ActionListener{
             }
         });
         this.id_control=id_control;
-        new SwingWorker().execute();
+        new RellenarCampos().execute();
     }
     
     private void datosPropietario(){
@@ -171,8 +171,7 @@ public class ControladorRecibo implements ActionListener{
     }
     
     private void datosPropiedad(){
-        ResultSet rs = fcd.obtenerFichaControl(id_control);
-        
+        ResultSet rs = fcd.obtenerFichaControl(id_control);        
         try {
             rs.next();            
             dimension = rs.getString(1);
@@ -349,7 +348,7 @@ public class ControladorRecibo implements ActionListener{
         if(e.getSource() == ar.aceptar){
             if(validarCampos()){
                 ar.dispose();                
-                generarRecibo();
+                
                 new GenerarMinuta().execute();
             }else{
               JOptionPane.showMessageDialog(null, "Rellene todos los campos", "Atención", JOptionPane.INFORMATION_MESSAGE, null);
@@ -360,7 +359,9 @@ public class ControladorRecibo implements ActionListener{
         }
     }
     
-      public class SwingWorker extends javax.swing.SwingWorker<Void, Void>{
+    //---------Hilo para rellenar los campos ni bien se muestra el formulario-----//
+    
+      public class RellenarCampos extends javax.swing.SwingWorker<Void, Void>{
 
         @Override
         protected Void doInBackground() throws Exception {
@@ -376,6 +377,8 @@ public class ControladorRecibo implements ActionListener{
          }    
       }
       
+      //----Hilo para 
+      
        public class GenerarMinuta extends javax.swing.SwingWorker<Void, Void>{
          
          int id_control;
@@ -389,17 +392,17 @@ public class ControladorRecibo implements ActionListener{
               md.altaMinuta(new java.sql.Date(date.getTime()), apellido_comprador, nombre_comprador, manzana, parcela, cobrado, gastos_administrativos, rendido, Integer.parseInt(dc.tablaDetallePago.getModel().getValueAt(row, 0).toString()), dc.tablaDetallePago.getModel().getValueAt(row, 12).toString(), categoria.toString(), Integer.parseInt(nro_recibo_propietario));
             }else if(tipoPago==0){
               md.altaMinuta(new java.sql.Date(date.getTime()), apellido_comprador, nombre_comprador, manzana, parcela, cobrado, gastos_administrativos, rendido, Integer.parseInt(dc.tablaDchoPosesion.getModel().getValueAt(row, 0).toString()), dc.tablaDetallePago.getModel().getValueAt(row, 12).toString()+" Dcho. posesión", "Cta. derecho posesión",Integer.parseInt(nro_recibo_propietario));
-            }return null;
+            }
+             return null;
              }
 
        @Override
        public void done() { 
             Ventana.cm.llenarTablaFecha();
             pd.editarNroRecibo(apellido_propietario, nombre_propietario, cuit_propietario, Integer.parseInt(nro_recibo_propietario)+1);
-       }
-    
+       }    
 }
-      
+       
       public Boolean validarCampos(){
           boolean bandera = true;
            if(ar.son_pesos.getText().isEmpty()){

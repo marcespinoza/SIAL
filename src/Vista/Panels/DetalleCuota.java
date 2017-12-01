@@ -5,34 +5,12 @@
  */
 package Vista.Panels;
 
-import com.itextpdf.text.BadElementException;
-import com.itextpdf.text.BaseColor;
-import com.itextpdf.text.Chunk;
 import com.itextpdf.text.Document;
-import com.itextpdf.text.DocumentException;
-import com.itextpdf.text.Element;
-import com.itextpdf.text.Font;
-import com.itextpdf.text.Font.FontFamily;
-import com.itextpdf.text.Image;
-import com.itextpdf.text.PageSize;
-import com.itextpdf.text.Paragraph;
-import com.itextpdf.text.Rectangle;
-import com.itextpdf.text.pdf.BaseFont;
 import com.itextpdf.text.pdf.PdfContentByte;
-import com.itextpdf.text.pdf.PdfPCell;
-import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfPageEventHelper;
 import com.itextpdf.text.pdf.PdfWriter;
-import conexion.Conexion;
 import java.awt.Color;
 import java.awt.Component;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.swing.JFrame;
-import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 import javax.swing.table.TableCellRenderer;
 
@@ -42,9 +20,6 @@ import javax.swing.table.TableCellRenderer;
  */
 public class DetalleCuota extends javax.swing.JPanel {
 
-    private String idControl;
-    private Object [] detalles;
-    private String nombre, apellido;
     public static final String IMG = "src/Imagenes/logo_reporte.png";
     
     public DetalleCuota() {
@@ -339,30 +314,6 @@ public class DetalleCuota extends javax.swing.JPanel {
         // TODO add your handling code here:
     }//GEN-LAST:event_guardarActionPerformed
 
-    class ParagraphBorder extends PdfPageEventHelper {
-    public boolean active = false;
-    public void setActive(boolean active) {
-        this.active = active;
-    }
-
-    public float offset = 5;
-    public float startPosition;
-
-    @Override
-    public void onParagraph(PdfWriter writer, Document document, float paragraphPosition) {
-        this.startPosition = paragraphPosition;
-    }
-
-    @Override
-    public void onParagraphEnd(PdfWriter writer, Document document, float paragraphPosition) {
-        if (active) {
-            PdfContentByte cb = writer.getDirectContentUnder();
-            cb.rectangle(document.left(), paragraphPosition - offset,
-                document.right() - document.left(), startPosition - paragraphPosition);
-            cb.stroke();
-        }
-    }
-}
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     public javax.swing.JButton agregarPagoBtn;
