@@ -377,7 +377,7 @@ public class ControladorRecibo implements ActionListener{
          }    
       }
       
-      //----Hilo para 
+      //----Hilo para genera pdf de las minutas-----//
       
        public class GenerarMinuta extends javax.swing.SwingWorker<Void, Void>{
          
@@ -400,8 +400,8 @@ public class ControladorRecibo implements ActionListener{
        public void done() { 
             Ventana.cm.llenarTablaFecha();
             pd.editarNroRecibo(apellido_propietario, nombre_propietario, cuit_propietario, Integer.parseInt(nro_recibo_propietario)+1);
-       }    
-}
+         }    
+        }
        
       public Boolean validarCampos(){
           boolean bandera = true;

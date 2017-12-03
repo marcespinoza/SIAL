@@ -108,5 +108,21 @@ public class FichaControlDAO {
             System.out.println(ex.getMessage());
         }
   }
+  
+   public void actualizarBolsaCemento( BigDecimal precio, Date fecha_actualizacion, String id_control){
+        try {
+            Connection con = conexion.getConexion();
+            PreparedStatement ps = con.prepareStatement(
+                    "UPDATE ficha_control SET bolsa_cemento = ?, fecha_actualizacion = ? WHERE id_control = ?");
+            ps.setBigDecimal(1, precio);
+            ps.setDate(2, fecha_actualizacion);
+            ps.setString(3, id_control);
+            ps.executeUpdate();
+            ps.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(CuotaDAO.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println(ex.getMessage());
+        }
+  }
     
 }

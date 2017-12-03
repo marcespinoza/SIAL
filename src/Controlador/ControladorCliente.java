@@ -17,13 +17,17 @@ import java.awt.Component;
 import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.math.BigDecimal;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -72,6 +76,28 @@ public class ControladorCliente implements ActionListener, MouseListener{
         this.vistaClientes.agregarPropietario.addActionListener(this);
         this.vistaClientes.cambiarPropietario.addActionListener(this);
         this.vistaClientes.comboCuotas.addActionListener(this);
+        this.vistaClientes.bolsa_cemento.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyPressed(KeyEvent e){
+               if(e.getKeyCode()==KeyEvent.VK_ENTER){                   
+                    Date date = new Date();
+                if(!vistaClientes.bolsa_cemento.getText().equals("")){                    
+                    int i = vistaClientes.tablaCliente.getSelectedRow();
+                    System.out.println(vistaClientes.tablaCliente.getModel().getValueAt(i, 10).toString());
+                    fd.actualizarBolsaCemento( new BigDecimal(vistaClientes.bolsa_cemento.getText()), new java.sql.Date(date.getTime()), vistaClientes.tablaCliente.getModel().getValueAt(i, 10).toString());
+                     if(vistaClientes.comboCuotas.getSelectedItem().equals("Todos")){
+                       llenarTabla(0);}
+                     else{
+                        llenarTabla(Double.parseDouble(vistaClientes.comboCuotas.getSelectedItem().toString()));
+                     }
+                     ventana.requestFocusInWindow();
+                }
+                else{
+                   JOptionPane.showMessageDialog(null, "Ingrese un valor", "Atención", JOptionPane.INFORMATION_MESSAGE, null); 
+                }
+               }
+            }
+        });
         vistaClientes.datosCliente.setBorder(BorderFactory.createTitledBorder(
 				BorderFactory.createLineBorder(Color.BLACK), "Datos cliente"));
         vistaClientes.datosReferencia.setBorder(BorderFactory.createTitledBorder(
@@ -316,8 +342,12 @@ public class ControladorCliente implements ActionListener, MouseListener{
         if(vistaClientes.tablaCliente.getModel().getValueAt(row, 13)!=null){
             //----Muestro valor bolsa de cemento y fecha de actualizacion---------//
             vistaClientes.fch_actualizacion.setText(vistaClientes.tablaCliente.getModel().getValueAt(row, 14).toString());
-            vistaClientes.bolsa_cemento.setText("$ "+vistaClientes.tablaCliente.getModel().getValueAt(row, 13).toString());
+            vistaClientes.bolsa_cemento.setText(vistaClientes.tablaCliente.getModel().getValueAt(row, 13).toString());
+        }else{
+            vistaClientes.fch_actualizacion.setText("");
+            vistaClientes.bolsa_cemento.setText("");
         }
+        //----Si tengo un 1 ha pasado un año o mas y tengo que actualizar precio bolsa de cemento-----//
         if(vistaClientes.tablaCliente.getModel().getValueAt(row, 18).toString().equals("1")){
             vistaClientes.advertencia.setText("-- Actualizar precio bolsa cemento --");
         }else{

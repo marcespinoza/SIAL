@@ -403,10 +403,10 @@ public class ControladorDetalleCuota implements ActionListener, TableModelListen
         }
     }
     
-    
+   //-----Hilo para mostrar barra de progreso mientras se crea el resumen de cliente----// 
     public class GenerarResumen extends SwingWorker<Void, Void>{
         
-        ProgressDialog pd = new ProgressDialog(dc);
+        ProgressDialog pd = new ProgressDialog();
 
         @Override
         protected Void doInBackground() throws Exception {            

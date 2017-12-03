@@ -19,13 +19,11 @@ import javax.swing.SwingUtilities;
 public class ProgressDialog extends javax.swing.JDialog {
 
     JProgressBar progressBar = new JProgressBar();
-    DetalleCuota dc;
     /**
      * Creates new form ProgressDialog
      * @param dc
      */
-    public ProgressDialog(DetalleCuota dc) {
-        this.dc=dc;
+    public ProgressDialog() {
         this.setUndecorated(true);
         initComponents();
         this.setLocationRelativeTo(null);
@@ -117,7 +115,7 @@ public class ProgressDialog extends javax.swing.JDialog {
         /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                ProgressDialog dialog = new ProgressDialog(dc);
+                ProgressDialog dialog = new ProgressDialog();
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
                     @Override
                     public void windowClosing(java.awt.event.WindowEvent e) {

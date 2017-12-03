@@ -6,6 +6,7 @@
 package Controlador;
 
 import Modelo.MinutaDAO;
+import Vista.Dialogs.ProgressDialog;
 import Vista.Panels.DetalleCuota;
 import Vista.Panels.Minuta;
 import com.itextpdf.text.Chunk;
@@ -42,6 +43,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
+import javax.swing.SwingWorker;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -139,7 +141,7 @@ public class ControladorMinuta implements MouseListener, ActionListener {
                   if(vistaMinuta.tablaFechaMinuta.getSelectedRow()==-1){
                        JOptionPane.showMessageDialog(null, "Selecciona una minuta", "Atención", JOptionPane.INFORMATION_MESSAGE, null);
                   }else{
-                      generarPdf();
+                      new GenerarPdfMinuta().execute();
                 }}else{
                  JOptionPane.showMessageDialog(null, "Debe seleccionar ubicación donde guardar la minuta", "Atención", JOptionPane.INFORMATION_MESSAGE, null);
                 }                
@@ -372,5 +374,22 @@ public class ControladorMinuta implements MouseListener, ActionListener {
     @Override
     public void mouseExited(MouseEvent e) {
     }
+    
+    //-----Hilo para mostrar barra de progreso mientras se crea el resumen de cliente----// 
+    public class GenerarPdfMinuta extends SwingWorker<Void, Void>{
+        
+        ProgressDialog pd = new ProgressDialog();
+
+        @Override
+        protected Void doInBackground() throws Exception {            
+            pd.setVisible(true);
+            generarPdf();
+            return null;
+        }
+        @Override
+        public void done(){
+           pd.dispose();
+        }
+}
     
 }
