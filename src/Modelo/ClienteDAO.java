@@ -33,7 +33,7 @@ public class ClienteDAO {
      Connection con = null;
      try {
           con = conexion.getConexion();
-          String listar = "SELECT c.Dni, c.Apellidos, c.Nombres,c.fecha_nacimiento, c.barrio, c.calle, c.numero, c.Telefono1, c.telefono2, c.trabajo, f.Id_control, f.cantidad_cuotas, f.gastos, f.bolsa_cemento,f.fecha_actualizacion, f.lote_Barrio, f.lote_Manzana, f.lote_Parcela FROM (cliente c LEFT JOIN cliente_tiene_ficha_control h ON c.Dni = h.cliente_Dni) left join ficha_control f on f.Id_control=h.ficha_control_Id_control GROUP BY f.Id_control, c.dni, ifnull(f.Id_control, c.Dni)"; 
+          String listar = "SELECT c.Dni, c.Apellidos, c.Nombres,c.fecha_nacimiento, c.barrio, c.calle, c.numero, c.Telefono1, c.telefono2, c.trabajo, h.baja, f.Id_control, f.cantidad_cuotas, f.gastos, f.bolsa_cemento, f.fecha_actualizacion, f.lote_Barrio, f.lote_Manzana, f.lote_Parcela FROM (cliente c LEFT JOIN cliente_tiene_lote h ON c.Dni = h.cliente_Dni) left join ficha_control_lote f on f.Id_control=h.Id_control GROUP BY f.Id_control, c.dni, ifnull(f.Id_control, c.Dni)"; 
           st = con.createStatement();
           rs = st.executeQuery(listar);
         } catch (SQLException ex) {
@@ -46,7 +46,7 @@ public class ClienteDAO {
      ResultSet rs = null;
      try {
           Connection con = conexion.getConexion();
-          String listar = "SELECT c.Dni, c.Apellidos, c.Nombres,c.fecha_nacimiento, c.barrio, c.calle, c.numero, c.Telefono1, c.telefono2, c.trabajo, f.Id_control, f.cantidad_cuotas, f.gastos, f.bolsa_cemento, f.lote_Barrio, f.lote_Manzana, f.lote_Parcela FROM (cliente c LEFT JOIN cliente_tiene_ficha_control h ON c.Dni = h.cliente_Dni) left join ficha_control f on f.Id_control=h.ficha_control_Id_control where f.cuota_pura='"+monto+"'"; 
+          String listar = "SELECT c.Dni, c.Apellidos, c.Nombres, c.fecha_nacimiento, c.barrio, c.calle, c.numero, c.Telefono1, c.telefono2, c.trabajo, h.baja, f.Id_control, f.cantidad_cuotas, f.gastos, f.bolsa_cemento, f.lote_Barrio, f.lote_Manzana, f.lote_Parcela FROM (cliente c LEFT JOIN cliente_tiene_lote h ON c.Dni = h.cliente_Dni) left join ficha_control_lote f on f.Id_control=h.Id_control where f.cuota_pura='"+monto+"'"; 
           Statement st = con.createStatement();
           rs = st.executeQuery(listar);
         } catch (Exception e) {
@@ -59,7 +59,7 @@ public class ClienteDAO {
      ResultSet rs = null;
      try {
           Connection con = conexion.getConexion();
-          String listar = "SELECT c.Apellidos, c.Nombres,c.barrio, c.calle, c.numero FROM cliente c LEFT JOIN cliente_tiene_ficha_control f ON c.Dni = f.cliente_Dni where f.ficha_control_id_control = '"+id_control+"'"; 
+          String listar = "SELECT c.Apellidos, c.Nombres,c.barrio, c.calle, c.numero FROM cliente c LEFT JOIN cliente_tiene_lote f ON c.Dni = f.cliente_Dni where f.id_control = '"+id_control+"'"; 
           Statement st = con.createStatement();
           rs = st.executeQuery(listar);
         } catch (Exception e) {
@@ -71,7 +71,7 @@ public class ClienteDAO {
      public void altaClientesXLotes(int dni, int id_control){
         try {
             Connection con = conexion.getConexion();
-            String insertar = "insert into cliente_tiene_ficha_control (cliente_dni, ficha_control_id_control) values (?,?)";
+            String insertar = "insert into cliente_tiene_lote (cliente_dni, id_control) values (?,?)";
             PreparedStatement stmt = con.prepareStatement(insertar);
             stmt.setInt(1, dni);
             stmt.setInt(2, id_control);

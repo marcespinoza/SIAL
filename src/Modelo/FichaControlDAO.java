@@ -23,7 +23,6 @@ import java.util.logging.Logger;
 public class FichaControlDAO {
     
      Conexion conexion;
-    private Object [] clientes;
 
     public FichaControlDAO() {
         conexion = new Conexion();
@@ -33,7 +32,7 @@ public class FichaControlDAO {
          int id_control = 1;
      try {
           Connection con = conexion.getConexion();
-          String insertar = "Insert into ficha_control(tipo_compra, dimension, cantidad_cuotas, cuota_pura, gastos, bolsa_cemento, fecha_actualizacion, lote_barrio, lote_manzana, lote_parcela) values ('"+tipo_compra+"','"+dimension+"','"+cantidad_cuotas+"','"+cuota_pura+"','"+gastos+"','"+bolsa_cemento+"', '"+fch_actualizacion+"','"+barrio+"','"+manzana+"','"+parcela+"')";
+          String insertar = "Insert into ficha_control_lote(tipo_compra, dimension, cantidad_cuotas, cuota_pura, gastos, bolsa_cemento, fecha_actualizacion, lote_barrio, lote_manzana, lote_parcela) values ('"+tipo_compra+"','"+dimension+"','"+cantidad_cuotas+"','"+cuota_pura+"','"+gastos+"','"+bolsa_cemento+"', '"+fch_actualizacion+"','"+barrio+"','"+manzana+"','"+parcela+"')";
           PreparedStatement ps = con.prepareStatement(insertar, Statement.RETURN_GENERATED_KEYS);
           ps.executeUpdate();  
           ResultSet rs = ps.getGeneratedKeys();  
@@ -49,7 +48,7 @@ public class FichaControlDAO {
      ResultSet rs = null;
      try {
           Connection con = conexion.getConexion();
-          String listar = "SELECT precio, gastos, bolsa_cemento FROM cliente c LEFT JOIN ficha_control f ON c.Dni = f.Dni"; 
+          String listar = "SELECT precio, gastos, bolsa_cemento FROM cliente c LEFT JOIN ficha_control_lote f ON c.Dni = f.Dni"; 
           Statement st = con.createStatement();
           rs = st.executeQuery(listar);
         } catch (Exception e) {
@@ -61,7 +60,7 @@ public class FichaControlDAO {
      ResultSet rs = null;
      try {
           Connection con = conexion.getConexion();
-          String listar = "SELECT cuota_pura FROM ficha_control"; 
+          String listar = "SELECT cuota_pura FROM ficha_control_lote"; 
           Statement st = con.createStatement();
           rs = st.executeQuery(listar);
         } catch (Exception e) {
@@ -73,7 +72,7 @@ public class FichaControlDAO {
      ResultSet rs = null;
      try {
           Connection con = conexion.getConexion();
-          String listar = "SELECT dimension, cantidad_cuotas, cuota_pura, gastos, bolsa_cemento, lote_barrio, lote_manzana, lote_parcela,dimension , gastos, cuota_pura FROM ficha_control where id_control = '"+id_control+"'"; 
+          String listar = "SELECT dimension, cantidad_cuotas, cuota_pura, gastos, bolsa_cemento, lote_barrio, lote_manzana, lote_parcela,dimension , gastos, cuota_pura FROM ficha_control_lote where id_control = '"+id_control+"'"; 
           Statement st = con.createStatement();
           rs = st.executeQuery(listar);
         } catch (Exception e) {
@@ -96,10 +95,27 @@ public class FichaControlDAO {
         try {
             Connection con = conexion.getConexion();
             PreparedStatement ps = con.prepareStatement(
-                    "UPDATE cliente_tiene_ficha_control SET cliente_dni = ? WHERE cliente_dni = ? AND ficha_control_id_control = ?");
+                    "UPDATE cliente_tiene_lote SET cliente_dni = ? WHERE cliente_dni = ? AND id_control = ?");
             ps.setInt(1,nuevo_dni);
             ps.setInt(2,viejo_dni);
             ps.setInt(3,id_ficha_control);
+            // call executeUpdate to execute our sql update statement
+            ps.executeUpdate();
+            ps.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(CuotaDAO.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println(ex.getMessage());
+        }
+  }
+  
+  //---------Baja logica de un cliente----------//
+  public void bajaPropietario(int dni, int id_ficha_control){
+        try {
+            Connection con = conexion.getConexion();
+            PreparedStatement ps = con.prepareStatement(
+                    "UPDATE cliente_tiene_lote SET baja = 1 WHERE cliente_dni = ? AND id_control = ?");
+            ps.setInt(1,dni);
+            ps.setInt(2,id_ficha_control);
             // call executeUpdate to execute our sql update statement
             ps.executeUpdate();
             ps.close();
@@ -113,7 +129,7 @@ public class FichaControlDAO {
         try {
             Connection con = conexion.getConexion();
             PreparedStatement ps = con.prepareStatement(
-                    "UPDATE ficha_control SET bolsa_cemento = ?, fecha_actualizacion = ? WHERE id_control = ?");
+                    "UPDATE ficha_control_lote SET bolsa_cemento = ?, fecha_actualizacion = ? WHERE id_control = ?");
             ps.setBigDecimal(1, precio);
             ps.setDate(2, fecha_actualizacion);
             ps.setString(3, id_control);

@@ -17,7 +17,11 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.BorderFactory;
 import javax.swing.border.EtchedBorder;
 
@@ -66,7 +70,7 @@ public class ControladorAltaCliente implements ActionListener, KeyListener{
             }
         }
           if(e.getSource() == ac.cancelar){
-              ac.setVisible(false);
+                ac.dispose();
         }
     }
  
@@ -85,11 +89,11 @@ public class ControladorAltaCliente implements ActionListener, KeyListener{
         }else{
          ac.nombres.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
         }
-        if(ac.fech_nac.getDate()== null){
-         ac.fech_nac.setBorder(BorderFactory.createLineBorder(Color.RED));
+        if(ac.fecha_nac.getText().trim().length()==4){
+         ac.fecha_nac.setBorder(BorderFactory.createLineBorder(Color.RED));
          bandera=false;
         }else{
-         ac.fech_nac.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
+         ac.fecha_nac.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
         }
         if(ac.documento.getText().isEmpty()){
          ac.documento.setBorder(BorderFactory.createLineBorder(Color.RED));
@@ -159,13 +163,14 @@ public class ControladorAltaCliente implements ActionListener, KeyListener{
     
     public class AltaClienteSwing extends javax.swing.SwingWorker<Void, Void>{         
 
-        DateFormat df = new SimpleDateFormat("dd-MMM-yyyy");
+        DateFormat df = new SimpleDateFormat("dd-MM-yyyy");
         int alta = 0;
         
         @Override
-        protected Void doInBackground() throws Exception {  
-            alta = cd.altaCliente(Integer.parseInt(ac.documento.getText()), ac.apellidos.getText(), ac.nombres.getText(),new java.sql.Date(ac.fech_nac.getDate().getTime()), ac.barrio.getText(), ac.calle.getText(), Integer.parseInt(ac.numero.getText()), ac.telefono1.getText(), ac.telefono2.getText(), ac.trabajo.getText());
-            
+        protected Void doInBackground() throws Exception {
+            Date fecha =df.parse(ac.fecha_nac.getText());
+            System.out.println(new java.sql.Date(fecha.getTime()));
+            alta = cd.altaCliente(Integer.parseInt(ac.documento.getText()), ac.apellidos.getText(), ac.nombres.getText(),new java.sql.Date(fecha.getTime()), ac.barrio.getText(), ac.calle.getText(), Integer.parseInt(ac.numero.getText()), ac.telefono1.getText(), ac.telefono2.getText(), ac.trabajo.getText());     
             return null;
         }
 

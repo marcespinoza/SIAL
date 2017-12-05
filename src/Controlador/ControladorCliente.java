@@ -7,6 +7,7 @@ package Controlador;
 
 import Modelo.ClienteDAO;
 import Modelo.FichaControlDAO;
+import Modelo.LoteDAO;
 import Modelo.ReferenciaDAO;
 import Modelo.RendererTablaCliente;
 import Vista.Dialogs.Cumpleaños;
@@ -55,6 +56,7 @@ public class ControladorCliente implements ActionListener, MouseListener{
     ClienteDAO cd = new ClienteDAO();
     ReferenciaDAO rd = new ReferenciaDAO();
     FichaControlDAO fd = new FichaControlDAO();
+    LoteDAO ld = new LoteDAO();
     private ArrayList<String[]> cumpleaños = new ArrayList<String[]>();
     Ventana ventana;
     private Object [] clientes;
@@ -72,6 +74,7 @@ public class ControladorCliente implements ActionListener, MouseListener{
         this.vistaClientes.editarBtn.addActionListener(this);
         this.vistaClientes.detalleBtn.addActionListener(this);
         this.vistaClientes.asignarBtn.addActionListener(this);
+        this.vistaClientes.bajaBtn.addActionListener(this);
         this.vistaClientes.tablaCliente.addMouseListener(this);
         this.vistaClientes.agregarPropietario.addActionListener(this);
         this.vistaClientes.cambiarPropietario.addActionListener(this);
@@ -83,7 +86,6 @@ public class ControladorCliente implements ActionListener, MouseListener{
                     Date date = new Date();
                 if(!vistaClientes.bolsa_cemento.getText().equals("")){                    
                     int i = vistaClientes.tablaCliente.getSelectedRow();
-                    System.out.println(vistaClientes.tablaCliente.getModel().getValueAt(i, 10).toString());
                     fd.actualizarBolsaCemento( new BigDecimal(vistaClientes.bolsa_cemento.getText()), new java.sql.Date(date.getTime()), vistaClientes.tablaCliente.getModel().getValueAt(i, 10).toString());
                      if(vistaClientes.comboCuotas.getSelectedItem().equals("Todos")){
                        llenarTabla(0);}
@@ -160,16 +162,16 @@ public class ControladorCliente implements ActionListener, MouseListener{
               int dni = Integer.parseInt(vistaClientes.tablaCliente.getModel().getValueAt(row, 2).toString());
               cd.eliminarCliente(dni);
               if(vistaClientes.comboCuotas.getSelectedItem().equals("Todos")){
-              llenarTabla(0);}
-                 else{
+                 llenarTabla(0);
+              }
+              else{
                 llenarTabla(Double.parseDouble(vistaClientes.comboCuotas.getSelectedItem().toString()));
-                     }
-                 } 
-                  }
-                 else{
+              }
+               } 
+                }
+              else{
                  JOptionPane.showMessageDialog(null, "Seleccione un cliente de la lista", "Atención", JOptionPane.INFORMATION_MESSAGE, null);
-  
-             }
+               }
         }
         if(e.getSource() == vistaClientes.editarBtn){
             int row = vistaClientes.tablaCliente.getSelectedRow();
@@ -236,7 +238,27 @@ public class ControladorCliente implements ActionListener, MouseListener{
                    else{
                  llenarTabla(Double.parseDouble(vistaClientes.comboCuotas.getSelectedItem().toString()));
                   }
-        }}
+           }
+        }
+        
+        if(e.getSource()==vistaClientes.bajaBtn){
+            int row = vistaClientes.tablaCliente.getSelectedRow();
+           if(row != -1){
+               if(vistaClientes.tablaCliente.getValueAt(row, 10) != null){
+                  fd.bajaPropietario(Integer.parseInt(vistaClientes.tablaCliente.getValueAt(row, 2).toString()), Integer.parseInt(vistaClientes.tablaCliente.getValueAt(row, 11).toString()));
+                  ld.editarPropiedad(0, vistaClientes.tablaCliente.getValueAt(row, 16).toString(), Integer.parseInt(vistaClientes.tablaCliente.getValueAt(row, 17).toString()), Integer.parseInt(vistaClientes.tablaCliente.getValueAt(row, 18).toString()));
+                   if(vistaClientes.comboCuotas.getSelectedItem().equals("Todos")){
+                    llenarTabla(0);}
+                   else{
+                    llenarTabla(Double.parseDouble(vistaClientes.comboCuotas.getSelectedItem().toString()));
+                   }
+               }else{
+                   JOptionPane.showMessageDialog(null, "Seleccione un cliente con una propiedad", "Atención", JOptionPane.INFORMATION_MESSAGE, null);
+               }
+           }else{
+               JOptionPane.showMessageDialog(null, "Seleccione un cliente con propiedad asignada", "Atención", JOptionPane.INFORMATION_MESSAGE, null);
+           }
+        }
     }
     
     public void llenarTabla(double monto){
@@ -269,14 +291,15 @@ public class ControladorCliente implements ActionListener, MouseListener{
                 String telefono1 = rs.getString(8);
                 String telefono2 = rs.getString(9);
                 String trabajo = rs.getString(10);
-                String idControl = rs.getString(11);
-                String cantidad_cuotas = rs.getString(12);
-                String gastos = rs.getString(13);
-                String bolsa_cemento = rs.getString(14);
-                if(rs.getDate(15)!=null){
-                    fch_actualizacion = sdf.format(rs.getDate(15));
+                String  baja = rs.getString(11);
+                String idControl = rs.getString(12);
+                String cantidad_cuotas = rs.getString(13);
+                String gastos = rs.getString(14);
+                String bolsa_cemento = rs.getString(15);
+                if(rs.getDate(16)!=null){
+                    fch_actualizacion = sdf.format(rs.getDate(16));
                     //----Controlo si ya paso un año de la ultima fecha de actualizacion de la bolsa de cemento----//
-                     if((Years.yearsBetween(new LocalDate(rs.getDate(15)), LocalDate.now())).getYears()>=1){
+                     if((Years.yearsBetween(new LocalDate(rs.getDate(16)), LocalDate.now())).getYears()>=1){
                          actualizar_cemento = "1";
                      }else{
                           actualizar_cemento = "0";
@@ -285,10 +308,10 @@ public class ControladorCliente implements ActionListener, MouseListener{
                     fch_actualizacion = "";
                     actualizar_cemento = "0";
                 }               
-                String barrio_prop = rs.getString(16);
-                String manzana_prop = rs.getString(17);
-                String parcela_prop = rs.getString(18);  
-                clientes = new Object[] {apellidos, nombres, dni, telefono1, telefono2, barrio, calle, numero, fecha_nacimiento, trabajo, idControl, cantidad_cuotas, gastos, bolsa_cemento, fch_actualizacion, barrio_prop, manzana_prop, parcela_prop, actualizar_cemento, cumpleaños};
+                String barrio_prop = rs.getString(17);
+                String manzana_prop = rs.getString(18);
+                String parcela_prop = rs.getString(19);  
+                clientes = new Object[] {apellidos, nombres, dni, telefono1, telefono2, barrio, calle, numero, fecha_nacimiento, trabajo, baja, idControl, cantidad_cuotas, gastos, bolsa_cemento, fch_actualizacion, barrio_prop, manzana_prop, parcela_prop, actualizar_cemento, cumpleaños};
                 model.addRow(clientes);   
              }
             controlCumpleaños();
@@ -348,7 +371,7 @@ public class ControladorCliente implements ActionListener, MouseListener{
             vistaClientes.bolsa_cemento.setText("");
         }
         //----Si tengo un 1 ha pasado un año o mas y tengo que actualizar precio bolsa de cemento-----//
-        if(vistaClientes.tablaCliente.getModel().getValueAt(row, 18).toString().equals("1")){
+        if(vistaClientes.tablaCliente.getModel().getValueAt(row, 19).toString().equals("1")){
             vistaClientes.advertencia.setText("-- Actualizar precio bolsa cemento --");
         }else{
             vistaClientes.advertencia.setText("");

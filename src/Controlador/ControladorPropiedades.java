@@ -15,6 +15,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.logging.Level;
@@ -52,6 +54,23 @@ public class ControladorPropiedades implements ActionListener{
                 vista.propiedades.tablaPropiedades.removeAll();
             }
         });
+        this.vista.propiedades.pc.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyPressed(KeyEvent e){
+             if(e.getKeyCode()==KeyEvent.VK_ENTER){
+                 if(validarCampos()){
+            if(!vista.propiedades.comboApellido.getSelectedItem().equals("Seleccione")){  
+               if(!vista.propiedades.comboNombres.getSelectedItem().equals("Seleccione")){  
+                switch(vista.propiedades.comboPropiedad.getSelectedItem().toString()){   
+                        case "Terreno": ld.agregarLote(vista.propiedades.barrio.getText(), vista.propiedades.mz.getText(), vista.propiedades.pc.getText(), vista.propiedades.comboApellido.getSelectedItem().toString(), vista.propiedades.comboNombres.getSelectedItem().toString(), vista.propiedades.cuit.getText(),vista.propiedades.nroRecibo.getText());
+                        case "Departamento":dd.agregarDepartamento(vista.propiedades.barrio.getText(), vista.propiedades.mz.getText(), vista.propiedades.pc.getText(), vista.propiedades.comboApellido.getSelectedItem().toString(), vista.propiedades.comboNombres.getSelectedItem().toString(), vista.propiedades.cuit.getText(),vista.propiedades.nroRecibo.getText());    
+                }
+             }
+            }
+            llenarTabla();}
+             }
+            }
+         });
         llenarComboApellidos();
     }
     

@@ -26,12 +26,12 @@ public class LoteDAO {
         conexion = new Conexion();
     }
     
-    public void editarPropiedad(String barrio,int manzana, int parcela){
+    public void editarPropiedad(int vendido, String barrio,int manzana, int parcela){
         try {
             Connection con = conexion.getConexion();
             String query = "UPDATE lote SET vendido = ? where barrio = ? and manzana =? and parcela=?";
             PreparedStatement preparedStmt = con.prepareStatement(query);
-            preparedStmt.setInt   (1, 1);
+            preparedStmt.setInt   (1, vendido);
             preparedStmt.setString(2, barrio);
             preparedStmt.setInt(3, manzana);
             preparedStmt.setInt(4, parcela);

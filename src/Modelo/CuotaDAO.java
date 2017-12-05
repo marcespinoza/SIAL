@@ -32,7 +32,7 @@ public class CuotaDAO {
          ResultSet rs = null;
      try {
           Connection con = conexion.getConexion();
-          String listar = "SELECT nro_cuota, fecha, detalle, cuota_pura, gastos_administrativos, debe, haber, saldo, cemento_debe, cemento_haber, cemento_saldo, observaciones, tipo_pago from linea_control where ficha_control_id_Control = '"+idControl+"' order by saldo desc "; 
+          String listar = "SELECT nro_cuota, fecha, detalle, cuota_pura, gastos_administrativos, debe, haber, saldo, cemento_debe, cemento_haber, cemento_saldo, observaciones, tipo_pago from linea_control_lote where id_Control = '"+idControl+"' order by saldo desc "; 
           Statement st = con.createStatement();
           rs = st.executeQuery(listar);
         } catch (Exception e) {
@@ -44,7 +44,7 @@ public class CuotaDAO {
          ResultSet rs = null;
      try {
           Connection con = conexion.getConexion();
-          String listar = "SELECT nro_cuota, fecha, detalle, cuota_pura, gastos_administrativos, debe, haber, saldo, cemento_debe, cemento_haber, cemento_saldo, observaciones, tipo_pago from linea_control where ficha_control_id_Control = '"+idControl+"'"; 
+          String listar = "SELECT nro_cuota, fecha, detalle, cuota_pura, gastos_administrativos, debe, haber, saldo, cemento_debe, cemento_haber, cemento_saldo, observaciones, tipo_pago from linea_control_lote where id_Control = '"+idControl+"'"; 
           Statement st = con.createStatement();
           rs = st.executeQuery(listar);
         } catch (Exception e) {
@@ -56,7 +56,7 @@ public class CuotaDAO {
     int filasAfectadas=0;
      try {
          Connection con = conexion.getConexion();
-         String insertar = "Insert into linea_control (fecha, nro_cuota, detalle, cuota_pura, gastos_administrativos, debe, haber, saldo, cemento_debe, cemento_haber, cemento_saldo, observaciones, tipo_pago, ficha_control_id_Control) values ('"+fecha_pago+"','"+nro_cuota+"','"+detalle+"','"+cuota_pura+"','"+gastos+"','"+debe+"','"+haber+"','"+saldo+"','"+cemento_debe+"','"+cemento_haber+"','"+cemento_saldo+"','"+observaciones+"','"+tipo_pago+"','"+id_control+"') ";
+         String insertar = "Insert into linea_control_lote (fecha, nro_cuota, detalle, cuota_pura, gastos_administrativos, debe, haber, saldo, cemento_debe, cemento_haber, cemento_saldo, observaciones, tipo_pago, id_Control) values ('"+fecha_pago+"','"+nro_cuota+"','"+detalle+"','"+cuota_pura+"','"+gastos+"','"+debe+"','"+haber+"','"+saldo+"','"+cemento_debe+"','"+cemento_haber+"','"+cemento_saldo+"','"+observaciones+"','"+tipo_pago+"','"+id_control+"') ";
          PreparedStatement ps = con.prepareStatement(insertar);
          filasAfectadas = ps.executeUpdate();
          
@@ -70,7 +70,7 @@ public class CuotaDAO {
        ResultSet rs = null;
         try {           
             Connection con = conexion.getConexion();
-            String bandera = "select nro_cuota from linea_control where ficha_control_id_control='"+idControl+"'";
+            String bandera = "select nro_cuota from linea_control_lote where id_control='"+idControl+"'";
             Statement st = con.createStatement();
             rs = st.executeQuery(bandera);
         } catch (SQLException ex) {
@@ -85,7 +85,7 @@ public class CuotaDAO {
        ResultSet rs = null;
         try {           
             Connection con = conexion.getConexion();
-            String bandera = "select * from linea_control where nro_cuota='"+nroCuotas+"'";
+            String bandera = "select * from linea_control_lote where nro_cuota='"+nroCuotas+"'";
             Statement st = con.createStatement();
             rs = st.executeQuery(bandera);
             flag = rs.next();
@@ -99,7 +99,7 @@ public class CuotaDAO {
         try {
             Connection con = conexion.getConexion();
             PreparedStatement ps = con.prepareStatement(
-                    "UPDATE linea_control SET observaciones = ? WHERE nro_cuota = ? AND ficha_control_id_control = ?");
+                    "UPDATE linea_control_lote SET observaciones = ? WHERE nro_cuota = ? AND id_control = ?");
             ps.setString(1,obersaciones);
             ps.setInt(2,nro_cuota);
             ps.setInt(3,id_control);

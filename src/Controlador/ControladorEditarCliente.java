@@ -12,8 +12,6 @@ import Vista.Frame.Ventana;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -58,7 +56,9 @@ public class ControladorEditarCliente implements ActionListener{
     }
     
     public void rellenarCampos(){
-            DateFormat simpleDateFormat=new SimpleDateFormat("yyyy-MM-dd");
+            DateFormat dffrom = new SimpleDateFormat("yyyy-MM-dd");
+            DateFormat df = new SimpleDateFormat("dd-MM-yyyy");
+            
             //------------datos cliente a editar--------//
             ac.apellidos.setText(cliente.get(0).toString());
             ac.nombres.setText(cliente.get(1).toString());
@@ -66,6 +66,12 @@ public class ControladorEditarCliente implements ActionListener{
             ac.barrio.setText(cliente.get(5).toString());
             ac.calle.setText(cliente.get(6).toString());
             ac.numero.setText(cliente.get(7).toString());
+            try {
+                 Date today = dffrom.parse(cliente.get(8).toString());
+                 ac.fecha_nac.setText(df.format(today));
+            } catch (ParseException ex) {
+                 Logger.getLogger(ControladorEditarCliente.class.getName()).log(Level.SEVERE, null, ex);
+            }
             ac.telefono1.setText(cliente.get(3).toString());
             ac.telefono2.setText(cliente.get(4).toString());
             ac.trabajo.setText(cliente.get(9).toString());
@@ -94,11 +100,11 @@ public class ControladorEditarCliente implements ActionListener{
         }else{
          ac.nombres.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
         }
-        if(ac.fech_nac.getDate() == null){
-         ac.fech_nac.setBorder(BorderFactory.createLineBorder(Color.RED, 1));
+        if(ac.fecha_nac.getText() == null){
+         ac.fecha_nac.setBorder(BorderFactory.createLineBorder(Color.RED, 1));
          bandera=false;
         }else{
-         ac.fech_nac.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
+         ac.fecha_nac.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
         }
         if(ac.documento.getText().isEmpty()){
          ac.documento.setBorder(BorderFactory.createLineBorder(Color.RED, 1));
@@ -160,10 +166,12 @@ public class ControladorEditarCliente implements ActionListener{
     public class ModificarClienteSwing extends javax.swing.SwingWorker<Void, Void>{
          
          int id_control;
+          DateFormat df = new SimpleDateFormat("dd-MM-yyyy");
 
         @Override
-        protected Void doInBackground() throws Exception {            
-             cd.editarCliente(Integer.parseInt(ac.documento.getText()), ac.apellidos.getText(), ac.nombres.getText(),new java.sql.Date(ac.fech_nac.getDate().getTime()), ac.barrio.getText(), ac.calle.getText(), Integer.parseInt(ac.numero.getText()), ac.telefono1.getText(), ac.telefono2.getText(), ac.trabajo.getText(),Integer.parseInt(cliente.get(2).toString()));        
+        protected Void doInBackground() throws Exception {  
+             Date fecha =df.parse(ac.fecha_nac.getText());
+             cd.editarCliente(Integer.parseInt(ac.documento.getText()), ac.apellidos.getText(), ac.nombres.getText(),new java.sql.Date(fecha.getTime()), ac.barrio.getText(), ac.calle.getText(), Integer.parseInt(ac.numero.getText()), ac.telefono1.getText(), ac.telefono2.getText(), ac.trabajo.getText(),Integer.parseInt(cliente.get(2).toString()));        
             return null;
         }
 

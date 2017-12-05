@@ -96,11 +96,11 @@ public class ControladorAsignacionPropiedad implements ActionListener, KeyListen
             @Override
             public void itemStateChanged(ItemEvent e) {
                 if (e.getStateChange() == ItemEvent.SELECTED) {
-                if(vistaAsignarPropiedad.manzana.getSelectedItem() != null){
+                  if(vistaAsignarPropiedad.manzana.getSelectedItem() != null){
                 cargarParcelas(vistaAsignarPropiedad.barrio.getSelectedItem().toString(), Integer.parseInt(vistaAsignarPropiedad.manzana.getSelectedItem().toString()));
+                  }
                 }
-                }
-                }
+             }
         });     
         llenarComboApellidos(vistaAsignarPropiedad.tipo_propiedad.getSelectedItem().toString());
         vistaAsignarPropiedad.setVisible(true);       
@@ -289,7 +289,7 @@ public class ControladorAsignacionPropiedad implements ActionListener, KeyListen
        @Override
        public void done() { 
            switch(vistaAsignarPropiedad.tipo_propiedad.getSelectedItem().toString()){
-               case "Terreno":ld.editarPropiedad(vistaAsignarPropiedad.barrio.getSelectedItem().toString(), Integer.parseInt(vistaAsignarPropiedad.manzana.getSelectedItem().toString()), Integer.parseInt(vistaAsignarPropiedad.parcela.getSelectedItem().toString())); break;
+               case "Terreno":ld.editarPropiedad(1, vistaAsignarPropiedad.barrio.getSelectedItem().toString(), Integer.parseInt(vistaAsignarPropiedad.manzana.getSelectedItem().toString()), Integer.parseInt(vistaAsignarPropiedad.parcela.getSelectedItem().toString())); break;
                case "Departamento":dd.editarDepartamento(vistaAsignarPropiedad.barrio.getSelectedItem().toString(), Integer.parseInt(vistaAsignarPropiedad.manzana.getSelectedItem().toString()), Integer.parseInt(vistaAsignarPropiedad.parcela.getSelectedItem().toString())); break;
            }
            cd.altaClientesXLotes(dni, id_control);
