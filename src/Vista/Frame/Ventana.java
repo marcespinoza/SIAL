@@ -4,6 +4,7 @@
  * and open the template in the editor.
  */
 package Vista.Frame;
+import Controlador.ControladorBaseDeDatos;
 import Controlador.ControladorCliente;
 import Controlador.ControladorBotones;
 import Controlador.ControladorConfiguracion;
@@ -53,6 +54,7 @@ public class Ventana extends javax.swing.JFrame implements ActionListener{
         configuracion.addActionListener(this);
         registroEventos.addActionListener(this);
         about.addActionListener(this);
+        baseDeDatos.addActionListener(this);
         this.setResizable(false);
         
     }
@@ -96,6 +98,7 @@ public class Ventana extends javax.swing.JFrame implements ActionListener{
         info = new javax.swing.JMenu();
         configuracion = new javax.swing.JMenuItem();
         registroEventos = new javax.swing.JMenuItem();
+        baseDeDatos = new javax.swing.JMenuItem();
         about = new javax.swing.JMenuItem();
 
         jMenu1.setText("File");
@@ -266,6 +269,9 @@ public class Ventana extends javax.swing.JFrame implements ActionListener{
         });
         info.add(registroEventos);
 
+        baseDeDatos.setText("Base de datos");
+        info.add(baseDeDatos);
+
         about.setText("Acerca de ..");
         info.add(about);
 
@@ -328,6 +334,7 @@ public class Ventana extends javax.swing.JFrame implements ActionListener{
     public static javax.swing.JMenu MenuInicio;
     public javax.swing.JMenuItem about;
     public static javax.swing.JLabel apellidoUsuario;
+    public javax.swing.JMenuItem baseDeDatos;
     public static javax.swing.JButton btnClientes;
     public static javax.swing.JButton btnCumpleaños;
     public static javax.swing.JButton btnMinuta;
@@ -380,6 +387,9 @@ public void inicializarBotones(){
     public void actionPerformed(ActionEvent e) {
         if(e.getSource().equals(configuracion)){
              new ControladorConfiguracion(this);
+        }
+        if(e.getSource().equals(baseDeDatos)){
+            new ControladorBaseDeDatos(this);
         }
         if(e.getSource().equals(about)){
           ImageIcon icon = new ImageIcon("src/Imagenes/Iconos/about.png");   
