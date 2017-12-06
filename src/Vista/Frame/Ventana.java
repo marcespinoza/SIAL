@@ -269,6 +269,7 @@ public class Ventana extends javax.swing.JFrame implements ActionListener{
         });
         info.add(registroEventos);
 
+        baseDeDatos.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_B, java.awt.event.InputEvent.CTRL_MASK));
         baseDeDatos.setText("Base de datos");
         info.add(baseDeDatos);
 
