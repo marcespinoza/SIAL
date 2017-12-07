@@ -189,13 +189,13 @@ public class ControladorAltaPago implements ActionListener, KeyListener{
                            cuota=rs.getInt(1);
                            rs.next();
                        }
-                       cd.altaCuota(new java.sql.Date(date.getTime()),rs.getInt(1)-1, detalle, cuota_pura, gastos, new BigDecimal(0), haber, saldo_actual, new BigDecimal(0), cemento_haber, cemento_saldo, observaciones, tipoPago, id_control);  
+                       cd.altaCuotaLote(new java.sql.Date(date.getTime()),rs.getInt(1)-1, detalle, cuota_pura, gastos, new BigDecimal(0), haber, saldo_actual, new BigDecimal(0), cemento_haber, cemento_saldo, observaciones, tipoPago, id_control);  
                        
                    } catch (SQLException ex) {
                        Logger.getLogger(ControladorAltaPago.class.getName()).log(Level.SEVERE, null, ex);
                    }
                   }else{
-                      cd.altaCuota(new java.sql.Date(date.getTime()),180, detalle, cuota_pura, gastos, new BigDecimal(0), haber, saldo_actual, new BigDecimal(0), cemento_haber, cemento_saldo, observaciones, tipoPago, id_control);                    
+                      cd.altaCuotaLote(new java.sql.Date(date.getTime()),180, detalle, cuota_pura, gastos, new BigDecimal(0), haber, saldo_actual, new BigDecimal(0), cemento_haber, cemento_saldo, observaciones, tipoPago, id_control);                    
                   }
                }else{
                  try {int cuota=0;
@@ -206,7 +206,7 @@ public class ControladorAltaPago implements ActionListener, KeyListener{
                          while(rs.next()&& rs.getInt(1)-1==cuota){
                            cuota=rs.getInt(1);                           
                          }
-                       cd.altaCuota(new java.sql.Date(date.getTime()),cuota+1, detalle, cuota_pura, gastos, new BigDecimal(0), haber, saldo_actual, new BigDecimal(0), cemento_haber, cemento_saldo, observaciones, tipoPago, id_control);  
+                       cd.altaCuotaLote(new java.sql.Date(date.getTime()),cuota+1, detalle, cuota_pura, gastos, new BigDecimal(0), haber, saldo_actual, new BigDecimal(0), cemento_haber, cemento_saldo, observaciones, tipoPago, id_control);  
                       
                    } catch (SQLException ex) {
                        Logger.getLogger(ControladorAltaPago.class.getName()).log(Level.SEVERE, null, ex);

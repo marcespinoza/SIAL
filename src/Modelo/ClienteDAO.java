@@ -81,6 +81,20 @@ public class ClienteDAO {
             System.out.println(ex.getMessage());
         }
     }
+     
+     public void altaClientesXDpto(int dni, int id_control){
+        try {
+            Connection con = conexion.getConexion();
+            String insertar = "insert into cliente_tiene_dpto (cliente_dni, id_control) values (?,?)";
+            PreparedStatement stmt = con.prepareStatement(insertar);
+            stmt.setInt(1, dni);
+            stmt.setInt(2, id_control);
+            stmt.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.getLogger(ClienteDAO.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println(ex.getMessage());
+        }
+    }
  
  public int altaCliente(int dni, String apellidos, String nombres, Date fecha_nacimiento, String barrio, String calle, int numero, String telefono1, String telefono2, String trabajo){
      int filasAfectadas=0;

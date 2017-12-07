@@ -162,6 +162,7 @@ public class ControladorDetalleCuota implements ActionListener, TableModelListen
    }  
     
    public void llenarTabla(int idControl){
+       System.out.println(idControl);
         detalleCuota = cd.listaDetalleCuota(idControl);
         DefaultTableModel model = (DefaultTableModel) dc.tablaDetallePago.getModel();
         model.setRowCount(0);

@@ -71,8 +71,14 @@ public class ControladorRecibo implements ActionListener{
     Random random = new Random();
     int tipoPago;
     BigDecimal categoria;
+    String resp_insc =""; 
+    String resp_no_insc=""; 
+    String cons_final=""; 
+    String monotributo=""; 
+    String exento="";
 
     public ControladorRecibo(Frame parent, int id_control, DetalleCuota dc, int row, int tipoPago) {
+        System.out.println(id_control);
         ar = new AltaRecibo(parent, true);
         this.dc=dc;
         this.row=row;
@@ -88,14 +94,14 @@ public class ControladorRecibo implements ActionListener{
         ar.resp_insc.setActionCommand("resp_insc");
         ar.resp_no_insc.setActionCommand("resp_no_insc");
         ar.cons_final.setActionCommand("cons_final");
-        ar.monotributo.setActionCommand("cons_final");
+        ar.monotributo.setActionCommand("monotributo");
         ar.exento.setActionCommand("exento");
         ar.apellido_propietario.setDocument(new LimitadorCaracteres(30));
         ar.nombre_propietario.setDocument(new LimitadorCaracteres(30));
         ar.cuit_propietario.setDocument(new LimitadorCaracteres(14));
         ar.apellido_comprador.setDocument(new LimitadorCaracteres(30));
         ar.nombre_comprador.setDocument(new LimitadorCaracteres(30));
-        ar.domicilio_comprador.setDocument(new LimitadorCaracteres(30));
+        ar.domicilio_comprador.setDocument(new LimitadorCaracteres(40));
         ar.importe.setDocument(new LimitadorCaracteres(7));
         ar.total_pagado.setDocument(new LimitadorCaracteres(7));
         ar.son_pesos.setDocument(new LimitadorCaracteres(50));
@@ -254,33 +260,34 @@ public class ControladorRecibo implements ActionListener{
             PdfPTable checkbox = new PdfPTable(5);
             checkbox.setTotalWidth(new float[]{ 1,1,1,1,1});
             checkbox.setWidthPercentage(100);
+            switch (ar.tipo_cliente.getSelection().getActionCommand()){
+                    case "resp_insc":resp_insc="X"; break;
+                    case "resp_no_insc": resp_no_insc="X"; break;
+                    case "cons_final": cons_final="X"; break;
+                    case "monotributo": monotributo="X"; break;
+                    case "exento": exento="X"; break;
+            }            
             PdfPCell check1 = null;
-            if(ar.tipo_cliente.getSelection().getActionCommand().equals("resp_insc")){
-            check1 = new PdfPCell(new Paragraph("Iva Resp. Inscripto: X",f));}else{
-            check1 = new PdfPCell(new Paragraph("Iva Resp. Inscripto: ",f));
-            }
+            check1 = new PdfPCell(new Paragraph("Iva Resp. Inscripto:"+resp_insc,f));
             check1.setPaddingTop(8);
             check1.setBorder(Rectangle.LEFT);
             checkbox.addCell(check1);
-            PdfPCell check3 = new PdfPCell(new Paragraph("Resp. No Inscripto: ",f));
+            PdfPCell check3 = new PdfPCell(new Paragraph("Resp. No Inscripto:"+resp_no_insc,f));
             check3.setPaddingTop(8);
             check3.setBorder(Rectangle.NO_BORDER);
             checkbox.addCell(check3);
-            PdfPCell check5 = new PdfPCell(new Paragraph("Monotributo: ",f));
+            PdfPCell check5 = new PdfPCell(new Paragraph("Monotributo:"+monotributo,f));
             check5.setPaddingTop(8);
             check5.setPaddingBottom(8);
             check5.setBorder(Rectangle.NO_BORDER);
             checkbox.addCell(check5);
-            PdfPCell check7 = new PdfPCell(new Paragraph("Exento: ",f));
+            PdfPCell check7 = new PdfPCell(new Paragraph("Exento:"+exento,f));
             check7.setPaddingTop(8);
             check7.setPaddingBottom(8);
             check7.setBorder(Rectangle.NO_BORDER);
             checkbox.addCell(check7);
             PdfPCell check9 = null;
-            if(ar.tipo_cliente.getSelection().getActionCommand().equals("cons_final")){
-            check9 = new PdfPCell(new Paragraph("Cons. final: X",f));}else{
-            check9 = new PdfPCell(new Paragraph("Cons. final: ",f));
-            }
+            check9 = new PdfPCell(new Paragraph("Cons. final:"+cons_final,f));           
             check9.setPaddingTop(8);
             check9.setPaddingBottom(8);
             check9.setBorder(Rectangle.RIGHT);
@@ -347,8 +354,8 @@ public class ControladorRecibo implements ActionListener{
     public void actionPerformed(ActionEvent e) {
         if(e.getSource() == ar.aceptar){
             if(validarCampos()){
-                ar.dispose();                
-                
+                ar.dispose();      
+                generarRecibo();
                 new GenerarMinuta().execute();
             }else{
               JOptionPane.showMessageDialog(null, "Rellene todos los campos", "Atención", JOptionPane.INFORMATION_MESSAGE, null);
@@ -359,8 +366,7 @@ public class ControladorRecibo implements ActionListener{
         }
     }
     
-    //---------Hilo para rellenar los campos ni bien se muestra el formulario-----//
-    
+    //---------Hilo para rellenar los campos cuando se muestra el formulario-----//    
       public class RellenarCampos extends javax.swing.SwingWorker<Void, Void>{
 
         @Override
@@ -377,8 +383,7 @@ public class ControladorRecibo implements ActionListener{
          }    
       }
       
-      //----Hilo para genera pdf de las minutas-----//
-      
+      //----Hilo para genera pdf de las minutas-----//      
        public class GenerarMinuta extends javax.swing.SwingWorker<Void, Void>{
          
          int id_control;
@@ -387,7 +392,7 @@ public class ControladorRecibo implements ActionListener{
         protected Void doInBackground() throws Exception {      
             Date date = new Date();
             BigDecimal rendido = cobrado.subtract(gastos_administrativos);
-            //---Si tipoPago es cuota comun, si es 0 a cuenta de derecho de posesión-------//
+            //---Si tipoPago es 1 es cuota comun, si es 0 a cuenta de derecho de posesión-------//
             if(tipoPago==1){
               md.altaMinuta(new java.sql.Date(date.getTime()), apellido_comprador, nombre_comprador, manzana, parcela, cobrado, gastos_administrativos, rendido, Integer.parseInt(dc.tablaDetallePago.getModel().getValueAt(row, 0).toString()), dc.tablaDetallePago.getModel().getValueAt(row, 12).toString(), categoria.toString(), Integer.parseInt(nro_recibo_propietario));
             }else if(tipoPago==0){

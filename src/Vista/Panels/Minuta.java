@@ -74,6 +74,7 @@ public class Minuta extends javax.swing.JPanel {
         });
         jScrollPane1.setViewportView(tablaMinuta);
         if (tablaMinuta.getColumnModel().getColumnCount() > 0) {
+            tablaMinuta.getColumnModel().getColumn(0).setPreferredWidth(1);
             tablaMinuta.getColumnModel().getColumn(1).setPreferredWidth(1);
             tablaMinuta.getColumnModel().getColumn(4).setPreferredWidth(1);
             tablaMinuta.getColumnModel().getColumn(5).setPreferredWidth(1);

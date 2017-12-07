@@ -46,6 +46,8 @@ public class ControladorAltaCliente implements ActionListener, KeyListener{
         this.ac.aceptar.addActionListener(this);
         this.ac.cancelar.addActionListener(this);
         this.ac.parentescoRef.addKeyListener(this);
+        this.ac.documento.addKeyListener(this);
+        this.ac.numero.addKeyListener(this);
         this.ac.documento.setDocument(new LimitadorCaracteres(8));
         this.ac.apellidos.setDocument(new LimitadorCaracteres(30));
         this.ac.nombres.setDocument(new LimitadorCaracteres(30));
@@ -148,6 +150,18 @@ public class ControladorAltaCliente implements ActionListener, KeyListener{
 
     @Override
     public void keyTyped(KeyEvent e) {
+        if(e.getSource()==ac.documento){
+             char vchar = e.getKeyChar();
+             if(!(Character.isDigit(vchar))){
+              e.consume();             
+            }
+        }
+         if(e.getSource()==ac.numero){
+             char vchar = e.getKeyChar();
+             if(!(Character.isDigit(vchar))){
+              e.consume();             
+            }
+        }
     }
 
     @Override
