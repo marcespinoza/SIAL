@@ -109,6 +109,7 @@ public class ControladorMinuta implements MouseListener, ActionListener {
             } 
             resultset.beforeFirst();
             totalCobrado();
+            totalRendido();
         }catch (SQLException e) {
             System.out.println(e.getMessage());
         }}
@@ -344,12 +345,15 @@ public class ControladorMinuta implements MouseListener, ActionListener {
         BigDecimal total=new BigDecimal(0);
         for (int i = 0; i < vistaMinuta.tablaMinuta.getRowCount(); i++) {
             total=total.add(new BigDecimal(vistaMinuta.tablaMinuta.getValueAt(i, 5).toString()));
-            System.out.println(vistaMinuta.tablaMinuta.getValueAt(i, 5).toString());
         }
-        vistaMinuta.totalCobrado.setText(String.valueOf(total));
+        vistaMinuta.totalCobrado.setText("$ " + String.valueOf(total));
     }
     private void totalRendido(){
-        
+          BigDecimal total=new BigDecimal(0);
+        for (int i = 0; i < vistaMinuta.tablaMinuta.getRowCount(); i++) {
+            total=total.add(new BigDecimal(vistaMinuta.tablaMinuta.getValueAt(i, 7).toString()));
+        }
+        vistaMinuta.totalRendido.setText("$ " + String.valueOf(total));
     }
     
     @Override

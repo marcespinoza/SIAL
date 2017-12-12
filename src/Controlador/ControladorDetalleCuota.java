@@ -83,12 +83,16 @@ public class ControladorDetalleCuota implements ActionListener, TableModelListen
     Boolean posesion = false;
     public static final String IMG = "src/Imagenes/logo_reporte.png";
     ResultSet detalleCuota, derechoPosesion;
+    int baja_logica;
     
-    public ControladorDetalleCuota(int nro_cuotas,String apellido, String nombre, String telefono, String barrio,String calle,int numero,int id_control) {
+    public ControladorDetalleCuota(int nro_cuotas,String apellido, String nombre, String telefono, String barrio,String calle,int numero,int id_control, int baja_logica) {
         this.apellido=apellido;
         this.nombre=nombre;
         this.id_control=id_control;
         this.nro_cuotas=nro_cuotas;
+        if(baja_logica==1){
+           dc.agregarPagoBtn.setEnabled(false);
+        }
         dc.tablaDetallePago.getModel().addTableModelListener(this);
         dc.tablaDchoPosesion.addMouseListener(new MouseAdapter() {
             @Override
@@ -162,7 +166,6 @@ public class ControladorDetalleCuota implements ActionListener, TableModelListen
    }  
     
    public void llenarTabla(int idControl){
-       System.out.println(idControl);
         detalleCuota = cd.listaDetalleCuota(idControl);
         DefaultTableModel model = (DefaultTableModel) dc.tablaDetallePago.getModel();
         model.setRowCount(0);

@@ -183,7 +183,6 @@ public class ControladorAltaCliente implements ActionListener, KeyListener{
         @Override
         protected Void doInBackground() throws Exception {
             Date fecha =df.parse(ac.fecha_nac.getText());
-            System.out.println(new java.sql.Date(fecha.getTime()));
             alta = cd.altaCliente(Integer.parseInt(ac.documento.getText()), ac.apellidos.getText(), ac.nombres.getText(),new java.sql.Date(fecha.getTime()), ac.barrio.getText(), ac.calle.getText(), Integer.parseInt(ac.numero.getText()), ac.telefono1.getText(), ac.telefono2.getText(), ac.trabajo.getText());     
             return null;
         }
@@ -196,7 +195,7 @@ public class ControladorAltaCliente implements ActionListener, KeyListener{
              fd.cambiarPropietario(Integer.parseInt(ac.documento.getText()), dni, id_control);
             }
               rd.altaReferencia(ac.telefonoRef.getText(), ac.apellidosRef.getText(), ac.nombresRef.getText(), ac.parentescoRef.getText(), Integer.parseInt(ac.documento.getText()));
-              //------Si el id_control es distinto de cero, entonces estoy agregando un propietario mas-----//
+              //------Si el id_control es distinto de cero y bandera falso, entonces estoy agregando un propietario mas-----//
               //------a un lote que ya posee un propietario-------------------------------------------------//
             if(id_control!=0 && !bandera){
               cd.altaClientesXLotes(Integer.parseInt(ac.documento.getText()), id_control);

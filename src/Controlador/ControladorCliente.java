@@ -86,12 +86,16 @@ public class ControladorCliente implements ActionListener, MouseListener{
                     Date date = new Date();
                 if(!vistaClientes.bolsa_cemento.getText().equals("")){                    
                     int i = vistaClientes.tablaCliente.getSelectedRow();
-                    fd.actualizarBolsaCemento( new BigDecimal(vistaClientes.bolsa_cemento.getText()), new java.sql.Date(date.getTime()), vistaClientes.tablaCliente.getModel().getValueAt(i, 10).toString());
+                    fd.actualizarBolsaCemento( new BigDecimal(vistaClientes.bolsa_cemento.getText()), new java.sql.Date(date.getTime()), vistaClientes.tablaCliente.getModel().getValueAt(i, 11).toString());
                      if(vistaClientes.comboCuotas.getSelectedItem().equals("Todos")){
                        llenarTabla(0);}
                      else{
                         llenarTabla(Double.parseDouble(vistaClientes.comboCuotas.getSelectedItem().toString()));
-                     }
+                         }                     
+                     vistaClientes.tablaCliente.getSelectionModel().clearSelection();
+                     vistaClientes.fch_actualizacion.setText("");
+                     vistaClientes.bolsa_cemento.setText("");
+                     vistaClientes.advertencia.setText("");
                      ventana.requestFocusInWindow();
                 }
                 else{
@@ -126,7 +130,7 @@ public class ControladorCliente implements ActionListener, MouseListener{
               //--------Verifico que haya seleccionado alguna fila----------//
               if(row != -1){
                 if(vistaClientes.tablaCliente.getValueAt(row, 10) != null){  
-                new ControladorAltaCliente((Ventana) SwingUtilities.getWindowAncestor(vistaClientes), Integer.parseInt(vistaClientes.tablaCliente.getModel().getValueAt(row, 10).toString()),  Integer.parseInt(vistaClientes.tablaCliente.getModel().getValueAt(row, 2).toString()), true);
+                new ControladorAltaCliente((Ventana) SwingUtilities.getWindowAncestor(vistaClientes), Integer.parseInt(vistaClientes.tablaCliente.getModel().getValueAt(row, 11).toString()),  Integer.parseInt(vistaClientes.tablaCliente.getModel().getValueAt(row, 2).toString()), true);
                 if(vistaClientes.comboCuotas.getSelectedItem().equals("Todos")){
                 llenarTabla(0);}
             else{
@@ -209,7 +213,7 @@ public class ControladorCliente implements ActionListener, MouseListener{
            int row = vistaClientes.tablaCliente.getSelectedRow();
            if(row != -1){
                if(vistaClientes.tablaCliente.getValueAt(row, 10) != null){
-                   new ControladorDetalleCuota(Integer.parseInt(vistaClientes.tablaCliente.getModel().getValueAt(row, 11).toString()), vistaClientes.tablaCliente.getModel().getValueAt(row, 0).toString(),vistaClientes.tablaCliente.getModel().getValueAt(row, 1).toString(), vistaClientes.tablaCliente.getModel().getValueAt(row, 3).toString(), vistaClientes.tablaCliente.getModel().getValueAt(row, 5).toString(), vistaClientes.tablaCliente.getModel().getValueAt(row, 6).toString(), Integer.parseInt(vistaClientes.tablaCliente.getModel().getValueAt(row, 7).toString()),  Integer.parseInt(vistaClientes.tablaCliente.getModel().getValueAt(row, 11).toString()));
+                   new ControladorDetalleCuota(Integer.parseInt(vistaClientes.tablaCliente.getModel().getValueAt(row, 11).toString()), vistaClientes.tablaCliente.getModel().getValueAt(row, 0).toString(),vistaClientes.tablaCliente.getModel().getValueAt(row, 1).toString(), vistaClientes.tablaCliente.getModel().getValueAt(row, 3).toString(), vistaClientes.tablaCliente.getModel().getValueAt(row, 5).toString(), vistaClientes.tablaCliente.getModel().getValueAt(row, 6).toString(), Integer.parseInt(vistaClientes.tablaCliente.getModel().getValueAt(row, 7).toString()),  Integer.parseInt(vistaClientes.tablaCliente.getModel().getValueAt(row, 11).toString()),Integer.parseInt(vistaClientes.tablaCliente.getModel().getValueAt(row, 10).toString()));
                }else{
                   JOptionPane.showMessageDialog(null, "Debe asignar una propiedad para ver los detalles", "Atención", JOptionPane.INFORMATION_MESSAGE, null); 
                }
@@ -294,7 +298,7 @@ public class ControladorCliente implements ActionListener, MouseListener{
                 String fecha_nacimiento = rs.getString(4);
                 //------Controlo dia y mes para saber si es el cumpleaños--------//
                 if(LocalDate.now().getMonthOfYear()==new LocalDate(rs.getDate(4)).getMonthOfYear() && LocalDate.now().getDayOfMonth()==new LocalDate(rs.getDate(4)).getDayOfMonth()){
-                 cumpleaños = "1";
+                    cumpleaños = "1";
                 }
                 String barrio = rs.getString(5);                
                 String calle = rs.getString(6);
@@ -344,12 +348,12 @@ public class ControladorCliente implements ActionListener, MouseListener{
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
         for (int i = 0; i < model.getRowCount(); i++) {
             //----Si tiene un 1 en la columna cumpleaños, es su cumpleaños (y si!!!)--------//
-         if(vistaClientes.tablaCliente.getModel().getValueAt(i, 19).toString().equals("1")){
+         if(vistaClientes.tablaCliente.getModel().getValueAt(i, 20).toString().equals("1")){
              try {
                  String nombre = vistaClientes.tablaCliente.getModel().getValueAt(i, 1).toString();
                  String apellido = vistaClientes.tablaCliente.getModel().getValueAt(i, 0).toString();
                  String fch_nacimiento = vistaClientes.tablaCliente.getModel().getValueAt(i, 8).toString();
-                 String edad = Years.yearsBetween(new LocalDate(formatter.parse(fch_nacimiento)), LocalDate.now()).toString();
+                 String edad = String.valueOf(Years.yearsBetween(new LocalDate(formatter.parse(fch_nacimiento)), LocalDate.now()).getYears());
                  String telefono = vistaClientes.tablaCliente.getModel().getValueAt(i, 3).toString();
                  detalleCumpleaños = new String[] {nombre, apellido, fch_nacimiento, edad, telefono};
                  modeloCumpleaños.addRow(detalleCumpleaños);
@@ -375,8 +379,8 @@ public class ControladorCliente implements ActionListener, MouseListener{
         //-------Si no tiene propiedad asignada entonces este valor va a ser nulo--------//
         if(vistaClientes.tablaCliente.getModel().getValueAt(row, 13)!=null){
             //----Muestro valor bolsa de cemento y fecha de actualizacion---------//
-            vistaClientes.fch_actualizacion.setText(vistaClientes.tablaCliente.getModel().getValueAt(row, 14).toString());
-            vistaClientes.bolsa_cemento.setText(vistaClientes.tablaCliente.getModel().getValueAt(row, 13).toString());
+            vistaClientes.fch_actualizacion.setText(vistaClientes.tablaCliente.getModel().getValueAt(row, 15).toString());
+            vistaClientes.bolsa_cemento.setText(vistaClientes.tablaCliente.getModel().getValueAt(row, 14).toString());
         }else{
             vistaClientes.fch_actualizacion.setText("");
             vistaClientes.bolsa_cemento.setText("");

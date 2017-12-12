@@ -192,7 +192,7 @@ public class ControladorRecibo implements ActionListener{
              cobrado = cuota_total.add(gastos_administrativos) ;
              ar.importe.setText(String.valueOf(cobrado));
              ar.total_pagado.setText(String.valueOf(cobrado));            
-             ar.detalle.setText("Paga cuota "+dc.tablaDetallePago.getModel().getValueAt(row, 0).toString()+"/"+cant_cuotas+    "\r\nDimension "+dimension +     "\r\n"+ barrio +" "+ " Mz. "+manzana +" Pc. "+ parcela+   "\r\n"+dc.tablaDetallePago.getModel().getValueAt(row, 2).toString());
+             ar.detalle.setText("Paga cuota "+dc.tablaDetallePago.getModel().getValueAt(row, 0).toString()+"/"+cant_cuotas+    "\r\n"+ barrio +" "+ " Mz. "+manzana +" Pc. "+ parcela+    " - Dimensión "+dimension +    "\r\n"+dc.tablaDetallePago.getModel().getValueAt(row, 2).toString());
             }else if (tipoPago==0){
               ar.detalle.setText("Cta. derecho posesión "+    "\r\nDimension "+dimension +     "\r\n"+ barrio +" "+ " Mz. "+manzana +" Pc. "+ parcela+   "\r\n");
               System.out.println(row);
@@ -213,7 +213,7 @@ public class ControladorRecibo implements ActionListener{
         try {
             PdfWriter.getInstance(document, new FileOutputStream(new File(dc.path.getText(), "Recibo-"+nro_recibo_propietario+".pdf")));
             document.open();
-            for (int i = 1; i < 3; i++) {               
+            for (int i = 1; i < 4; i++) {               
             Font f=new Font(Font.FontFamily.TIMES_ROMAN,10.0f,0,null);
             Image image = Image.getInstance(IMG); 
             Image image2 = Image.getInstance(IMG2);
@@ -233,6 +233,7 @@ public class ControladorRecibo implements ActionListener{
             switch(i){
                 case 1:document.add(new Chunk(image, 0, -55f)); document.add(new Chunk(image2, 190f, -40f));para.setSpacingBefore(-10); break;
                 case 2:document.add(new Chunk(image, 0, -38f)); document.add(new Chunk(image2, 190f, -22));para.setSpacingBefore(-26); break;
+                case 3:document.add(new Chunk(image, 0, -28f)); document.add(new Chunk(image2, 190f, -22));para.setSpacingBefore(-26); break;
             }                         
             para.setAlignment(Paragraph.ALIGN_RIGHT);
             cuit.setAlignment(Paragraph.ALIGN_RIGHT);
@@ -336,9 +337,10 @@ public class ControladorRecibo implements ActionListener{
             table6.addCell(cell9);            
             document.add(table6);
             document.add(new Paragraph("Efectivo/otros recepcionado ",f)); 
+            if(i!=3){
             Paragraph linea_punteada = new Paragraph("------------------------------------------------------------------------------------------------------------------------");
             linea_punteada.setAlignment(Rectangle.ALIGN_CENTER);
-            document.add(linea_punteada);
+            document.add(linea_punteada);}
             }
             document.close();
             }catch (DocumentException ex) {
