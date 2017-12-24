@@ -33,7 +33,7 @@ public class ClienteDAO {
      Connection con = null;
      try {
           con = conexion.getConexion();
-          String listar = "SELECT c.Dni, c.Apellidos, c.Nombres,c.fecha_nacimiento, c.barrio, c.calle, c.numero, c.Telefono1, c.telefono2, c.trabajo, h.baja, f.Id_control, f.cantidad_cuotas, f.gastos, f.bolsa_cemento, f.fecha_actualizacion, f.lote_Barrio, f.lote_Manzana, f.lote_Parcela FROM (cliente c LEFT JOIN cliente_tiene_lote h ON c.Dni = h.cliente_Dni) left join ficha_control_lote f on f.Id_control=h.Id_control GROUP BY f.Id_control, c.dni, ifnull(f.Id_control, c.Dni) order by c.apellidos"; 
+          String listar = "SELECT c.Dni, c.Apellidos, c.Nombres,c.fecha_nacimiento, c.barrio, c.calle, c.numero, c.Telefono1, c.telefono2, c.trabajo, h.baja, f.Id_control, f.cantidad_cuotas, f.gastos, f.bolsa_cemento, f.fecha_actualizacion, f.lote_Barrio, f.lote_Manzana, f.lote_Parcela, f.lote_observaciones FROM (cliente c LEFT JOIN cliente_tiene_lote h ON c.Dni = h.cliente_Dni) left join ficha_control_lote f on f.Id_control=h.Id_control GROUP BY f.Id_control, c.dni, ifnull(f.Id_control, c.Dni) order by c.apellidos"; 
           st = con.createStatement();
           rs = st.executeQuery(listar);
         } catch (SQLException ex) {
@@ -46,7 +46,7 @@ public class ClienteDAO {
      ResultSet rs = null;
      try {
           Connection con = conexion.getConexion();
-          String listar = "SELECT c.Dni, c.Apellidos, c.Nombres, c.fecha_nacimiento, c.barrio, c.calle, c.numero, c.Telefono1, c.telefono2, c.trabajo, h.baja, f.Id_control, f.cantidad_cuotas, f.gastos, f.bolsa_cemento, f.lote_Barrio, f.lote_Manzana, f.lote_Parcela FROM (cliente c LEFT JOIN cliente_tiene_lote h ON c.Dni = h.cliente_Dni) left join ficha_control_lote f on f.Id_control=h.Id_control where f.cuota_pura='"+monto+"' order by c.apellidos"; 
+          String listar = "SELECT c.Dni, c.Apellidos, c.Nombres, c.fecha_nacimiento, c.barrio, c.calle, c.numero, c.Telefono1, c.telefono2, c.trabajo, h.baja, f.Id_control, f.cantidad_cuotas, f.gastos, f.bolsa_cemento, f.lote_Barrio, f.lote_Manzana, f.lote_Parcela, f.lote_observaciones FROM (cliente c LEFT JOIN cliente_tiene_lote h ON c.Dni = h.cliente_Dni) left join ficha_control_lote f on f.Id_control=h.Id_control where f.cuota_pura='"+monto+"' order by c.apellidos"; 
           Statement st = con.createStatement();
           rs = st.executeQuery(listar);
         } catch (Exception e) {

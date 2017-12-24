@@ -39,7 +39,8 @@ public class ControladorPropiedades implements ActionListener{
     LoteDAO ld = new LoteDAO();
     DepartamentoDAO dd = new DepartamentoDAO();
     private Object [] propiedades;
-    String apellidos, nombres, cuit, propiedad;
+    String apellidos, nombres, cuit, propiedad, barrio, observaciones;
+    int mz, pc;
 
     public ControladorPropiedades(Configuracion vistaConfiguracion) {
         this.vista=vistaConfiguracion;
@@ -47,6 +48,7 @@ public class ControladorPropiedades implements ActionListener{
         this.vista.propiedades.comboNombres.addActionListener(this);
         this.vista.propiedades.agregar.addActionListener(this);
         this.vista.propiedades.eliminar.addActionListener(this);
+        this.vista.propiedades.guardar.addActionListener(this);
         this.vista.propiedades.comboPropiedad.addItemListener(new ItemListener() {
             @Override
             public void itemStateChanged(ItemEvent e) {
@@ -71,8 +73,22 @@ public class ControladorPropiedades implements ActionListener{
              }
             }
          });
-        llenarComboApellidos();
-    }
+         this.vista.propiedades.tablaPropiedades.addMouseListener(new java.awt.event.MouseAdapter() {
+         @Override
+         public void mouseClicked(java.awt.event.MouseEvent evt) {
+          int row = vista.propiedades.tablaPropiedades.getSelectedRow();
+          vista.propiedades.barrio.setText(vista.propiedades.tablaPropiedades.getModel().getValueAt(row,0).toString());
+          vista.propiedades.mz.setText(vista.propiedades.tablaPropiedades.getModel().getValueAt(row,1).toString());
+          vista.propiedades.pc.setText(vista.propiedades.tablaPropiedades.getModel().getValueAt(row,2).toString());
+          vista.propiedades.observaciones.setText(vista.propiedades.tablaPropiedades.getModel().getValueAt(row,3).toString());
+          barrio = vista.propiedades.tablaPropiedades.getModel().getValueAt(row,0).toString();
+          mz = Integer.parseInt(vista.propiedades.tablaPropiedades.getModel().getValueAt(row,1).toString());
+          pc = Integer.parseInt(vista.propiedades.tablaPropiedades.getModel().getValueAt(row,2).toString());
+          observaciones = vista.propiedades.tablaPropiedades.getModel().getValueAt(row,3).toString();
+         }
+         });
+           llenarComboApellidos();
+         }
     
  public void llenarComboApellidos(){
         try {
@@ -115,10 +131,11 @@ public class ControladorPropiedades implements ActionListener{
                 String barrio = rs.getString(1);  
                 String manzana = rs.getString(2);
                 String parcela = rs.getString(3);
-                if(rs.getString(4).equals("0")){
-                  propiedades = new Object[] {barrio, manzana, parcela, "Libre"};}
+                String observaciones = rs.getString(4);
+                if(rs.getString(5).equals("0")){
+                  propiedades = new Object[] {barrio, manzana, parcela, observaciones, "Libre"};}
                 else{
-                   propiedades = new Object[] {barrio, manzana, parcela, "Vendido"};  
+                   propiedades = new Object[] {barrio, manzana, parcela, observaciones, "Vendido"};  
                 }
                 model.addRow(propiedades);
             }
@@ -148,6 +165,9 @@ public class ControladorPropiedades implements ActionListener{
             }
             }
         }
+        if(e.getSource()==vista.propiedades.guardar){
+          ld.editarLote(barrio, mz, pc, vista.propiedades.barrio.getText(), Integer.parseInt(vista.propiedades.mz.getText()), Integer.parseInt(vista.propiedades.pc.getText()), vista.propiedades.observaciones.getText());
+        } 
         if(e.getSource()==vista.propiedades.agregar){
             if(validarCampos()){
             if(!vista.propiedades.comboApellido.getSelectedItem().equals("Seleccione")){  
@@ -163,9 +183,9 @@ public class ControladorPropiedades implements ActionListener{
         if(e.getSource()==vista.propiedades.eliminar){
             int row=vista.propiedades.tablaPropiedades.getSelectedRow();
             if(row != -1){
-                ImageIcon icon = new ImageIcon("src/Imagenes/Iconos/warning.png");   
+               ImageIcon icon = new ImageIcon("src/Imagenes/Iconos/warning.png");   
              int reply = JOptionPane.showConfirmDialog(null, "Eliminar a "+vista.propiedades.tablaPropiedades.getModel().getValueAt(row, 0)+" "+vista.propiedades.tablaPropiedades.getModel().getValueAt(row, 1)+" "+vista.propiedades.tablaPropiedades.getModel().getValueAt(row, 2)+"?",
-                     "Advertencia",JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, icon);
+               "Advertencia",JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, icon);
               if (reply == JOptionPane.YES_OPTION) {
                ld.eliminarLote(vista.propiedades.tablaPropiedades.getModel().getValueAt(row, 0).toString(), Integer.parseInt(vista.propiedades.tablaPropiedades.getModel().getValueAt(row, 1).toString()), Integer.parseInt(vista.propiedades.tablaPropiedades.getModel().getValueAt(row, 2).toString()));
                llenarTabla();}

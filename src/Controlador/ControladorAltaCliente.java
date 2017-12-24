@@ -17,11 +17,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.text.DateFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.BorderFactory;
 import javax.swing.border.EtchedBorder;
 
@@ -29,6 +26,7 @@ import javax.swing.border.EtchedBorder;
  *
  * @author Marcelo
  */
+
 public class ControladorAltaCliente implements ActionListener, KeyListener{
         
     AltaCliente ac;

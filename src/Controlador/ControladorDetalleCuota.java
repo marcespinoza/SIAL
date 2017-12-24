@@ -247,25 +247,26 @@ public class ControladorDetalleCuota implements ActionListener, TableModelListen
             }
         }
         if(e.getSource() == dc.guardar){
-                chooser = new JFileChooser();
-                chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-                int returnVal = chooser.showOpenDialog(chooser);
-                if(returnVal==JFileChooser.APPROVE_OPTION){
-                f = chooser.getSelectedFile();
-                String path = f.getAbsolutePath();
-                dc.path.setText(path);
-                 try {
-                Properties props = new Properties();                
-                fileIn = new FileInputStream(configFile);
-                props.load(fileIn);
-                props.setProperty("pathRecibo", path);
-                fileOut = new FileOutputStream(configFile);
-                props.store(fileOut, "config");
-                } catch (FileNotFoundException ex) {
+            chooser = new JFileChooser();
+            chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+            int returnVal = chooser.showOpenDialog(chooser);
+            if(returnVal==JFileChooser.APPROVE_OPTION){
+             f = chooser.getSelectedFile();
+             String path = f.getAbsolutePath();
+             dc.path.setText(path);
+             try {
+              Properties props = new Properties();                
+              fileIn = new FileInputStream(configFile);
+              props.load(fileIn);
+              props.setProperty("pathRecibo", path);
+              fileOut = new FileOutputStream(configFile);
+              props.store(fileOut, "config");
+               } catch (FileNotFoundException ex) {
                  // file does not exist
                 } catch (IOException ex) {
                    // I/O error
-                }}
+                }
+            }
         }        
     }
 

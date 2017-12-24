@@ -38,9 +38,12 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.SwingUtilities;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
+import javax.swing.table.TableModel;
 import org.joda.time.LocalDate;
 import org.joda.time.Years;
 
@@ -48,7 +51,7 @@ import org.joda.time.Years;
  *
  * @author Marcelo
  */
-public class ControladorCliente implements ActionListener, MouseListener{
+public class ControladorCliente implements ActionListener, MouseListener, TableModelListener{
     
     RendererTablaCliente r = new RendererTablaCliente();
     Clientes vistaClientes;
@@ -59,6 +62,8 @@ public class ControladorCliente implements ActionListener, MouseListener{
     LoteDAO ld = new LoteDAO();
     private ArrayList<String[]> cumpleaños = new ArrayList<String[]>();
     Ventana ventana;
+    String barrio;
+    int manzana, parcela;
     private Object [] clientes;
     private String [] detalleCumpleaños;
     private List<Object> cliente = new ArrayList<Object>();
@@ -79,6 +84,7 @@ public class ControladorCliente implements ActionListener, MouseListener{
         this.vistaClientes.agregarPropietario.addActionListener(this);
         this.vistaClientes.cambiarPropietario.addActionListener(this);
         this.vistaClientes.comboCuotas.addActionListener(this);
+        this.vistaClientes.tablaCliente.getModel().addTableModelListener(this);
         this.vistaClientes.bolsa_cemento.addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e){
@@ -306,7 +312,7 @@ public class ControladorCliente implements ActionListener, MouseListener{
                 String telefono1 = rs.getString(8);
                 String telefono2 = rs.getString(9);
                 String trabajo = rs.getString(10);
-                String  baja = rs.getString(11);
+                String baja = rs.getString(11);
                 String idControl = rs.getString(12);
                 String cantidad_cuotas = rs.getString(13);
                 String gastos = rs.getString(14);
@@ -326,7 +332,8 @@ public class ControladorCliente implements ActionListener, MouseListener{
                 String barrio_prop = rs.getString(17);
                 String manzana_prop = rs.getString(18);
                 String parcela_prop = rs.getString(19);  
-                clientes = new Object[] {apellidos, nombres, dni, telefono1, telefono2, barrio, calle, numero, fecha_nacimiento, trabajo, baja, idControl, cantidad_cuotas, gastos, bolsa_cemento, fch_actualizacion, barrio_prop, manzana_prop, parcela_prop, actualizar_cemento, cumpleaños};
+                String observaciones = rs.getString(20);
+                clientes = new Object[] {apellidos, nombres, dni, telefono1, telefono2, barrio, calle, numero, fecha_nacimiento, trabajo, baja, idControl, cantidad_cuotas, gastos, bolsa_cemento, fch_actualizacion, barrio_prop, manzana_prop, parcela_prop, observaciones, actualizar_cemento, cumpleaños};
                 model.addRow(clientes);   
              }
             controlCumpleaños();
@@ -371,7 +378,12 @@ public class ControladorCliente implements ActionListener, MouseListener{
     
     @Override
     public void mouseClicked(MouseEvent e) {
-        int row = vistaClientes.tablaCliente.getSelectedRow();       
+        int row = vistaClientes.tablaCliente.getSelectedRow();   
+        //========Respaldo valores barrio, manzana y parcela por si quiere editarlas=========//
+        barrio = vistaClientes.tablaCliente.getModel().getValueAt(row, 16).toString();
+        manzana = Integer.parseInt(vistaClientes.tablaCliente.getModel().getValueAt(row, 17).toString());
+        parcela = Integer.parseInt(vistaClientes.tablaCliente.getModel().getValueAt(row, 18).toString());
+        //=========Fin respaldo===============//
         vistaClientes.barrio.setText(vistaClientes.tablaCliente.getModel().getValueAt(row, 5).toString());
         vistaClientes.calle.setText(vistaClientes.tablaCliente.getModel().getValueAt(row, 6).toString());
         vistaClientes.numero.setText(vistaClientes.tablaCliente.getModel().getValueAt(row, 7).toString());
@@ -386,7 +398,7 @@ public class ControladorCliente implements ActionListener, MouseListener{
             vistaClientes.bolsa_cemento.setText("");
         }
         //----Si tengo un 1 ha pasado un año o mas y tengo que actualizar precio bolsa de cemento-----//
-        if(vistaClientes.tablaCliente.getModel().getValueAt(row, 19).toString().equals("1")){
+        if(vistaClientes.tablaCliente.getModel().getValueAt(row, 20).toString().equals("1")){
             vistaClientes.advertencia.setText("-- Actualizar precio bolsa cemento --");
         }else{
             vistaClientes.advertencia.setText("");
@@ -452,6 +464,17 @@ public class ControladorCliente implements ActionListener, MouseListener{
                  return component;
              }
          });
+    }
+
+    @Override
+    public void tableChanged(TableModelEvent e) {
+          if (e.getType() == TableModelEvent.UPDATE) {
+             int row = e.getFirstRow();
+             int column = e.getColumn();
+             TableModel tableModel = (TableModel)e.getSource();             
+             ld.editarLote(barrio, manzana, parcela, vistaClientes.tablaCliente.getModel().getValueAt(row, 16).toString() , Integer.parseInt(vistaClientes.tablaCliente.getModel().getValueAt(row, 17).toString()) , Integer.parseInt(vistaClientes.tablaCliente.getModel().getValueAt(row, 18).toString()), vistaClientes.tablaCliente.getModel().getValueAt(row, 19).toString() );
+          } 
+          
     }
 
     

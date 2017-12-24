@@ -17,7 +17,7 @@
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="0" attributes="0">
-              <EmptySpace max="-2" attributes="0"/>
+              <EmptySpace min="-2" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="0" attributes="0">
                       <Group type="103" groupAlignment="0" attributes="0">
@@ -26,7 +26,7 @@
                               <EmptySpace max="-2" attributes="0"/>
                               <Component id="comboCuotas" min="-2" pref="110" max="-2" attributes="0"/>
                           </Group>
-                          <Component id="jPanel1" min="-2" max="-2" attributes="0"/>
+                          <Component id="jPanel1" max="32767" attributes="0"/>
                       </Group>
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="102" alignment="0" attributes="0">
@@ -41,14 +41,18 @@
                               <EmptySpace min="14" max="32767" attributes="0"/>
                           </Group>
                           <Group type="102" alignment="0" attributes="0">
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Component id="jPanel2" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace max="32767" attributes="0"/>
-                              <Group type="103" groupAlignment="1" attributes="0">
-                                  <Component id="agregarBtn" min="-2" pref="145" max="-2" attributes="0"/>
-                                  <Component id="editarBtn" min="-2" pref="145" max="-2" attributes="0"/>
+                              <EmptySpace pref="381" max="32767" attributes="0"/>
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Group type="102" attributes="0">
+                                      <EmptySpace min="-2" pref="17" max="-2" attributes="0"/>
+                                      <Component id="editarBtn" min="-2" pref="135" max="-2" attributes="0"/>
+                                  </Group>
+                                  <Group type="102" attributes="0">
+                                      <EmptySpace type="separate" max="-2" attributes="0"/>
+                                      <Component id="agregarBtn" min="-2" pref="134" max="-2" attributes="0"/>
+                                  </Group>
                               </Group>
-                              <EmptySpace max="-2" attributes="0"/>
+                              <EmptySpace min="-2" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" attributes="0">
                                   <Component id="eliminarBtn" min="-2" max="-2" attributes="0"/>
                                   <Component id="bajaBtn" min="-2" pref="145" max="-2" attributes="0"/>
@@ -57,9 +61,15 @@
                           </Group>
                       </Group>
                   </Group>
-                  <Group type="102" alignment="0" attributes="0">
-                      <Component id="jScrollPane2" min="-2" pref="1007" max="-2" attributes="0"/>
-                      <EmptySpace max="-2" attributes="0"/>
+                  <Group type="102" alignment="1" attributes="0">
+                      <Group type="103" groupAlignment="1" attributes="0">
+                          <Group type="102" alignment="1" attributes="0">
+                              <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                              <Component id="jPanel2" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                          <Component id="jScrollPane2" max="32767" attributes="0"/>
+                      </Group>
+                      <EmptySpace min="-2" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" max="-2" attributes="0">
                           <Group type="102" attributes="0">
                               <Component id="detalleBtn" min="-2" pref="145" max="-2" attributes="0"/>
@@ -74,6 +84,7 @@
                           </Group>
                           <Component id="datosReferencia" alignment="0" max="32767" attributes="0"/>
                       </Group>
+                      <EmptySpace min="11" pref="11" max="-2" attributes="0"/>
                   </Group>
               </Group>
           </Group>
@@ -96,12 +107,15 @@
                       </Group>
                   </Group>
                   <Group type="102" alignment="0" attributes="0">
-                      <EmptySpace max="-2" attributes="0"/>
+                      <EmptySpace min="-2" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="1" attributes="0">
-                          <Component id="jPanel1" min="-2" max="-2" attributes="0"/>
-                          <Component id="jPanel2" min="-2" max="-2" attributes="0"/>
+                          <Component id="jPanel1" max="32767" attributes="0"/>
+                          <Group type="102" alignment="1" attributes="0">
+                              <EmptySpace min="5" pref="5" max="-2" attributes="0"/>
+                              <Component id="jPanel2" max="32767" attributes="0"/>
+                          </Group>
                       </Group>
-                      <EmptySpace max="-2" attributes="0"/>
+                      <EmptySpace min="-2" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="103" groupAlignment="0" max="-2" attributes="0">
                               <Component id="jLabel18" max="32767" attributes="0"/>
@@ -118,7 +132,7 @@
                       </Group>
                   </Group>
               </Group>
-              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+              <EmptySpace type="unrelated" min="-2" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" attributes="0">
                       <Group type="103" groupAlignment="3" attributes="0">
@@ -137,7 +151,7 @@
                   </Group>
                   <Component id="jScrollPane2" pref="0" max="32767" attributes="0"/>
               </Group>
-              <EmptySpace max="-2" attributes="0"/>
+              <EmptySpace min="-2" max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -637,7 +651,7 @@
         <Component class="javax.swing.JTable" name="tablaCliente">
           <Properties>
             <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
-              <Table columnCount="21" rowCount="0">
+              <Table columnCount="22" rowCount="0">
                 <Column editable="true" title="Apellido/s" type="java.lang.Object"/>
                 <Column editable="false" title="Nombre/s" type="java.lang.Object"/>
                 <Column editable="false" title="Documento" type="java.lang.Object"/>
@@ -654,9 +668,10 @@
                 <Column editable="false" title="Title 14" type="java.lang.Object"/>
                 <Column editable="true" title="Title 15" type="java.lang.Object"/>
                 <Column editable="true" title="Title 16" type="java.lang.Object"/>
-                <Column editable="false" title="Barrio" type="java.lang.Object"/>
-                <Column editable="false" title="Manzana" type="java.lang.Object"/>
-                <Column editable="false" title="Parcela" type="java.lang.Object"/>
+                <Column editable="true" title="Barrio" type="java.lang.Object"/>
+                <Column editable="true" title="Manzana" type="java.lang.Object"/>
+                <Column editable="true" title="Parcela" type="java.lang.Object"/>
+                <Column editable="true" title="Observacion" type="java.lang.Object"/>
                 <Column editable="false" title="actualizar_cto" type="java.lang.Object"/>
                 <Column editable="false" title="cumplea&#xf1;os" type="java.lang.Object"/>
               </Table>
@@ -758,6 +773,11 @@
                   <Editor/>
                   <Renderer/>
                 </Column>
+                <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
+                  <Title/>
+                  <Editor/>
+                  <Renderer/>
+                </Column>
                 <Column maxWidth="0" minWidth="0" prefWidth="0" resizable="true">
                   <Title/>
                   <Editor/>
@@ -830,7 +850,7 @@
                               <Component id="fch_actualizacion" max="32767" attributes="0"/>
                               <Group type="102" alignment="0" attributes="0">
                                   <Component id="bolsa_cemento" min="-2" pref="93" max="-2" attributes="0"/>
-                                  <EmptySpace min="0" pref="91" max="32767" attributes="0"/>
+                                  <EmptySpace min="0" pref="104" max="32767" attributes="0"/>
                               </Group>
                           </Group>
                       </Group>
@@ -854,7 +874,7 @@
                       <Component id="jLabel16" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
-                  <Component id="advertencia" pref="27" max="32767" attributes="0"/>
+                  <Component id="advertencia" max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>

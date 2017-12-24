@@ -115,7 +115,7 @@ public class LoteDAO {
           ResultSet rs = null;
      try {
           Connection con = conexion.getConexion();   
-          String sql = "SELECT barrio, manzana, parcela, vendido, propietario_cuit from lote where propietario_apellidos =? AND propietario_nombres =? "; 
+          String sql = "SELECT barrio, manzana, parcela, observaciones, vendido, propietario_cuit from lote where propietario_apellidos =? AND propietario_nombres =? "; 
           PreparedStatement preparedStatement = con.prepareStatement(sql);
           preparedStatement.setString(1, apellidos);
           preparedStatement.setString(2, nombres);
@@ -143,5 +143,27 @@ public class LoteDAO {
            System.out.println(ex.getMessage().toString());
        }
 } 
+    
+     public void editarLote(String backup_barrio, int backup_manzana, int backup_parcela, String barrio,int manzana, int parcela, String observaciones){
+        try {
+            System.out.println(backup_barrio+backup_manzana+backup_parcela);
+            Connection con = conexion.getConexion();
+            String query = "UPDATE lote SET barrio = ?, manzana = ?, parcela = ?, observaciones = ? where barrio = ? and manzana =? and parcela=?";
+            PreparedStatement preparedStmt = con.prepareStatement(query);
+            preparedStmt.setString(1, barrio);
+            preparedStmt.setInt(2, manzana);
+            preparedStmt.setInt(3, parcela);
+            preparedStmt.setString(4, observaciones);
+            preparedStmt.setString(5, backup_barrio);
+            preparedStmt.setInt(6, backup_manzana);
+            preparedStmt.setInt(7, backup_parcela);
+            preparedStmt.executeUpdate();      
+            preparedStmt.close();
+            con.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(ClienteDAO.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println(ex.getMessage());
+        }
+ }
     
 }
