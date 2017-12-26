@@ -638,3 +638,11 @@ a a - administrador - 24/12/2017 12:32:50
 a a - administrador - 24/12/2017 12:34:33
 a a - administrador - 24/12/2017 12:35:34
 a a - administrador - 24/12/2017 12:36:45
+a a - administrador - 26/12/2017 09:36:37
+a a - administrador - 26/12/2017 09:44:40
+a a - administrador - 26/12/2017 09:49:24
+a a - administrador - 26/12/2017 09:50:58
+a a - administrador - 26/12/2017 10:00:38
+a a - administrador - 26/12/2017 10:02:19
+a a - administrador - 26/12/2017 13:56:53
+a a - administrador - 26/12/2017 16:32:37

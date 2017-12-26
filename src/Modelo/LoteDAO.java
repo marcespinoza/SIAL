@@ -144,7 +144,8 @@ public class LoteDAO {
        }
 } 
     
-     public void editarLote(String backup_barrio, int backup_manzana, int backup_parcela, String barrio,int manzana, int parcela, String observaciones){
+     public int editarLote(String backup_barrio, int backup_manzana, int backup_parcela, String barrio,int manzana, int parcela, String observaciones){
+         int flag = 0;
         try {
             System.out.println(backup_barrio+backup_manzana+backup_parcela);
             Connection con = conexion.getConexion();
@@ -157,13 +158,13 @@ public class LoteDAO {
             preparedStmt.setString(5, backup_barrio);
             preparedStmt.setInt(6, backup_manzana);
             preparedStmt.setInt(7, backup_parcela);
-            preparedStmt.executeUpdate();      
+            flag = preparedStmt.executeUpdate();      
             preparedStmt.close();
             con.close();
         } catch (SQLException ex) {
             Logger.getLogger(ClienteDAO.class.getName()).log(Level.SEVERE, null, ex);
-            System.out.println(ex.getMessage());
         }
+        return flag;
  }
     
 }

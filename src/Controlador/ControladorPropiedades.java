@@ -6,6 +6,7 @@
 package Controlador;
 
 import Modelo.DepartamentoDAO;
+import Modelo.LimitadorCaracteres;
 import Modelo.LoteDAO;
 import Modelo.PropiedadesDAO;
 import Modelo.PropietarioDAO;
@@ -49,6 +50,10 @@ public class ControladorPropiedades implements ActionListener{
         this.vista.propiedades.agregar.addActionListener(this);
         this.vista.propiedades.eliminar.addActionListener(this);
         this.vista.propiedades.guardar.addActionListener(this);
+        this.vista.propiedades.barrio.setDocument(new LimitadorCaracteres(25));
+        this.vista.propiedades.mz.setDocument(new LimitadorCaracteres(5));
+        this.vista.propiedades.pc.setDocument(new LimitadorCaracteres(5));
+        this.vista.propiedades.observaciones.setDocument(new LimitadorCaracteres(30));
         this.vista.propiedades.comboPropiedad.addItemListener(new ItemListener() {
             @Override
             public void itemStateChanged(ItemEvent e) {
@@ -166,7 +171,15 @@ public class ControladorPropiedades implements ActionListener{
             }
         }
         if(e.getSource()==vista.propiedades.guardar){
-          ld.editarLote(barrio, mz, pc, vista.propiedades.barrio.getText(), Integer.parseInt(vista.propiedades.mz.getText()), Integer.parseInt(vista.propiedades.pc.getText()), vista.propiedades.observaciones.getText());
+            int flag = 0;
+          if(validarCampos()){
+            flag = ld.editarLote(barrio, mz, pc, vista.propiedades.barrio.getText(), Integer.parseInt(vista.propiedades.mz.getText()), Integer.parseInt(vista.propiedades.pc.getText()), vista.propiedades.observaciones.getText());
+            if(flag>0){
+             llenarTabla();}
+            else{
+             JOptionPane.showMessageDialog(null, "Error al guardar cambios. Revise los campos", "Atención", JOptionPane.INFORMATION_MESSAGE, null); 
+            }
+          }
         } 
         if(e.getSource()==vista.propiedades.agregar){
             if(validarCampos()){
