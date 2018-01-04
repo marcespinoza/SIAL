@@ -58,6 +58,7 @@ public class ControladorAltaPago implements ActionListener, KeyListener{
         ac.tipo_cuota.add(ac.chk_adelanto_cuota);
         ac.chk_cuota.addActionListener(this);
         ac.chk_dcho_posesion.addActionListener(this);
+        ac.chk_adelanto_cuota.addActionListener(this);
         ac.chk_cuota.setSelected(true);
         ac.detallePago.setDocument(new LimitadorCaracteres(40));
         ac.observacionesPago.setDocument(new LimitadorCaracteres(40));
@@ -99,9 +100,7 @@ public class ControladorAltaPago implements ActionListener, KeyListener{
             ResultSet rs = fcd.obtenerFichaControl(id_control);
             rs.next();
             cuota_total = new BigDecimal (rs.getString(3)).add(new BigDecimal(rs.getString(4)));
-            //gastos = new BigDecimal(rs.getString(4));
             ac.cuota_total.setText(cuota_total.toString());
-            //ac.gastos.setText(gastos.toString());
             nuevoGasto();
             ac.setVisible(true);
             
@@ -132,7 +131,7 @@ public class ControladorAltaPago implements ActionListener, KeyListener{
                     }
                 ac.dispose();
                 }
-             //--------Es un adelanto de cuotas----------/     
+             //--------Es cuota comun----------/     
               }else{
                if(validarCampos()){
                ResultSet rs = fc.obtenerFichaControl(id_control);
@@ -156,17 +155,18 @@ public class ControladorAltaPago implements ActionListener, KeyListener{
            }
             if(e.getSource() == ac.chk_cuota){
                 nuevoGasto();
+                ac.nro_cuota.setEnabled(true);
             }
             if(e.getSource() == ac.chk_dcho_posesion){
                 nuevoGasto();
+                ac.nro_cuota.setEnabled(false);
             }
+            if(e.getSource()==ac.chk_adelanto_cuota){
+              ac.nro_cuota.setEnabled(false);
+            }
+            
     }
     
-    private void calcularValoresDchoPosesion(){
-        
-      //  dp.altaDchoPosesion(new java.sql.Date(date.getTime()), new BigDecimal(ac.cuota_total.getText()),new BigDecimal(ac.gastos.getText()), ac.detallePago.getText(), id_control);
-
-    }
     
     public void calcularValores(BigDecimal ultimo_saldo, BigDecimal cuota_pura, BigDecimal gastos, BigDecimal bolsa_cemento, BigDecimal saldo_bolsa_cemento){  
                Date date = new Date();
@@ -178,7 +178,7 @@ public class ControladorAltaPago implements ActionListener, KeyListener{
                BigDecimal cemento_haber = haber.divide(bolsa_cemento, 2, RoundingMode.DOWN);
                BigDecimal cemento_saldo = saldo_bolsa_cemento.subtract(cemento_haber);
                if(ac.chk_adelanto_cuota.isSelected()){
-               //-------Miro si la cuota 180 (la ultima) ya existe------//  
+               //-------Miro si la ultima cuota ya existe------//  
                   if(cd.getUltimaCuota(nro_cuotas)){
                    try {
                        ResultSet rs = cd.getNrosCuotas(id_control);
@@ -223,6 +223,14 @@ public class ControladorAltaPago implements ActionListener, KeyListener{
         }else{
          ac.cuota_total.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
         }
+        if(ac.chk_cuota.isSelected()){
+         if(ac.nro_cuota.getText().isEmpty()){
+          ac.nro_cuota.setBorder(BorderFactory.createLineBorder(Color.RED, 1));
+          bandera=false;
+         }else{
+           ac.nro_cuota.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
+         }
+        }
         return bandera;
      }
 
@@ -238,13 +246,12 @@ public class ControladorAltaPago implements ActionListener, KeyListener{
     public void keyReleased(KeyEvent e) {
         String interes = ac.interes.getText();
         if(!interes.equals("")){
-        BigDecimal gasto_interes = (cuota_total.multiply(new BigDecimal(interes))).divide(new BigDecimal("100"));   
-        BigDecimal nueva_cuota = gasto_interes.add(cuota_total);
-        ac.cuota_total.setText(nueva_cuota.toString());
-        }
-        else {
-            ac.cuota_total.setText(cuota_total.toString());  
-            ac.gastos.setText(gastos.toString());  
+          BigDecimal gasto_interes = (cuota_total.multiply(new BigDecimal(interes))).divide(new BigDecimal("100"));   
+          BigDecimal nueva_cuota = gasto_interes.add(cuota_total);
+          ac.cuota_total.setText(nueva_cuota.toString());
+        }else {
+          ac.cuota_total.setText(cuota_total.toString());  
+          ac.gastos.setText(gastos.toString());  
         }
     }
     //}     

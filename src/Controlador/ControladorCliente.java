@@ -8,6 +8,7 @@ package Controlador;
 import Modelo.ClienteDAO;
 import Modelo.FichaControlDAO;
 import Modelo.LoteDAO;
+import Modelo.PropietarioDAO;
 import Modelo.ReferenciaDAO;
 import Modelo.RendererTablaCliente;
 import Vista.Dialogs.Cumpleaños;
@@ -59,6 +60,7 @@ public class ControladorCliente implements ActionListener, MouseListener, TableM
     ClienteDAO cd = new ClienteDAO();
     ReferenciaDAO rd = new ReferenciaDAO();
     FichaControlDAO fd = new FichaControlDAO();
+    PropietarioDAO pd = new PropietarioDAO();
     LoteDAO ld = new LoteDAO();
     private ArrayList<String[]> cumpleaños = new ArrayList<String[]>();
     Ventana ventana;
@@ -69,7 +71,7 @@ public class ControladorCliente implements ActionListener, MouseListener, TableM
     private List<Object> cliente = new ArrayList<Object>();
     private List<Object> referencia = new ArrayList<Object>();
     public static final DefaultTableCellRenderer DEFAULT_RENDERER = new DefaultTableCellRenderer();
-
+    private String nombres, apellidos;
     
     public ControladorCliente(Ventana ventana, Clientes vistaClientes){
         this.vistaClientes=vistaClientes;
@@ -83,7 +85,9 @@ public class ControladorCliente implements ActionListener, MouseListener, TableM
         this.vistaClientes.tablaCliente.addMouseListener(this);
         this.vistaClientes.agregarPropietario.addActionListener(this);
         this.vistaClientes.cambiarPropietario.addActionListener(this);
-        this.vistaClientes.comboCuotas.addActionListener(this);
+        this.vistaClientes.comboApellido.addActionListener(this);
+        this.vistaClientes.comboNombre.addActionListener(this);
+        this.vistaClientes.mostrarTodos.addActionListener(this);
         this.vistaClientes.tablaCliente.getModel().addTableModelListener(this);
         this.vistaClientes.bolsa_cemento.addKeyListener(new KeyAdapter() {
             @Override
@@ -93,11 +97,7 @@ public class ControladorCliente implements ActionListener, MouseListener, TableM
                 if(!vistaClientes.bolsa_cemento.getText().equals("")){                    
                     int i = vistaClientes.tablaCliente.getSelectedRow();
                     fd.actualizarBolsaCemento( new BigDecimal(vistaClientes.bolsa_cemento.getText()), new java.sql.Date(date.getTime()), vistaClientes.tablaCliente.getModel().getValueAt(i, 11).toString());
-                     if(vistaClientes.comboCuotas.getSelectedItem().equals("Todos")){
-                       llenarTabla(0);}
-                     else{
-                        llenarTabla(Double.parseDouble(vistaClientes.comboCuotas.getSelectedItem().toString()));
-                         }                     
+                    llenarTabla();
                      vistaClientes.tablaCliente.getSelectionModel().clearSelection();
                      vistaClientes.fch_actualizacion.setText("");
                      vistaClientes.bolsa_cemento.setText("");
@@ -123,7 +123,7 @@ public class ControladorCliente implements ActionListener, MouseListener, TableM
         vistaClientes.datosReferencia.setBorder(BorderFactory.createTitledBorder(
 				BorderFactory.createLineBorder(Color.BLACK), "Datos referencia"));
         this.vistaClientes.tablaCliente.setDefaultRenderer(Object.class, r);
-        llenarComboCuotas();
+        llenarComboApellidos();
     }
 
     public ControladorCliente() {
@@ -131,17 +131,37 @@ public class ControladorCliente implements ActionListener, MouseListener, TableM
     
     @Override
     public void actionPerformed(ActionEvent e) {
+        
+        if(e.getSource()==vistaClientes.mostrarTodos){
+            vistaClientes.comboApellido.setSelectedIndex(0);
+            vistaClientes.comboNombre.setSelectedIndex(0);
+            llenarTabla();
+        }
+        
+        //=======Eventos sobre comboApellido=====//
+         if(e.getSource()==vistaClientes.comboApellido){
+          if(vistaClientes.comboApellido.getItemCount()!=0){
+            if(!vistaClientes.comboApellido.getSelectedItem().equals("Seleccione")){  
+                apellidos =vistaClientes.comboApellido.getSelectedItem().toString();
+                llenarComboNombres(apellidos);
+            }
+          } 
+        }
+         if(e.getSource()==vistaClientes.comboNombre){
+           if(vistaClientes.comboNombre.getItemCount()!=0){
+            if(!vistaClientes.comboNombre.getSelectedItem().equals("Seleccione")){ 
+                nombres = vistaClientes.comboNombre.getSelectedItem().toString();
+                llenarTabla();
+            }
+            }
+        }
           if(e.getSource() == vistaClientes.cambiarPropietario){
               int row = vistaClientes.tablaCliente.getSelectedRow();
               //--------Verifico que haya seleccionado alguna fila----------//
               if(row != -1){
                 if(vistaClientes.tablaCliente.getValueAt(row, 10) != null){  
                 new ControladorAltaCliente((Ventana) SwingUtilities.getWindowAncestor(vistaClientes), Integer.parseInt(vistaClientes.tablaCliente.getModel().getValueAt(row, 11).toString()),  Integer.parseInt(vistaClientes.tablaCliente.getModel().getValueAt(row, 2).toString()), true);
-                if(vistaClientes.comboCuotas.getSelectedItem().equals("Todos")){
-                llenarTabla(0);}
-            else{
-                llenarTabla(Double.parseDouble(vistaClientes.comboCuotas.getSelectedItem().toString()));
-            }
+                llenarTabla();
                  }          
             }else{
                 JOptionPane.showMessageDialog(null, "Seleccione un propietario de la lista", "Atención", JOptionPane.INFORMATION_MESSAGE, null);
@@ -151,11 +171,7 @@ public class ControladorCliente implements ActionListener, MouseListener, TableM
            if(row != -1){
                if(vistaClientes.tablaCliente.getValueAt(row, 10) != null){
                   new ControladorAltaCliente((Ventana) SwingUtilities.getWindowAncestor(vistaClientes),  Integer.parseInt(vistaClientes.tablaCliente.getModel().getValueAt(row, 10).toString()), 0, false);
-                  if(vistaClientes.comboCuotas.getSelectedItem().equals("Todos")){
-                    llenarTabla(0);}
-                    else{
-                   llenarTabla(Double.parseDouble(vistaClientes.comboCuotas.getSelectedItem().toString()));
-                     }
+                  llenarTabla();
                }else{
                   JOptionPane.showMessageDialog(null, "Debe asignar una propiedad", "Atención", JOptionPane.INFORMATION_MESSAGE, null); 
                }}else{
@@ -164,11 +180,7 @@ public class ControladorCliente implements ActionListener, MouseListener, TableM
         }
         if(e.getSource() == vistaClientes.agregarBtn){  
             new ControladorAltaCliente((Ventana) SwingUtilities.getWindowAncestor(vistaClientes), 0,0, false);
-            if(vistaClientes.comboCuotas.getSelectedItem().equals("Todos")){
-                 llenarTabla(0);}
-            else{
-                llenarTabla(Double.parseDouble(vistaClientes.comboCuotas.getSelectedItem().toString()));
-            }
+            llenarTabla();
          }
         if(e.getSource() == vistaClientes.eliminarBtn){
              int row = vistaClientes.tablaCliente.getSelectedRow(); 
@@ -179,12 +191,7 @@ public class ControladorCliente implements ActionListener, MouseListener, TableM
               if (reply == JOptionPane.YES_OPTION) {
               int dni = Integer.parseInt(vistaClientes.tablaCliente.getModel().getValueAt(row, 2).toString());
               cd.eliminarCliente(dni);
-              if(vistaClientes.comboCuotas.getSelectedItem().equals("Todos")){
-                 llenarTabla(0);
-              }
-              else{
-                llenarTabla(Double.parseDouble(vistaClientes.comboCuotas.getSelectedItem().toString()));
-              }
+              llenarTabla();
                } 
                 }
               else{
@@ -204,11 +211,7 @@ public class ControladorCliente implements ActionListener, MouseListener, TableM
             referencia.add(vistaClientes.telefono_referencia.getText());
             referencia.add(vistaClientes.parentesco.getText());
             new ControladorEditarCliente((Ventana) SwingUtilities.getWindowAncestor(vistaClientes), cliente, referencia);
-            if(vistaClientes.comboCuotas.getSelectedItem().equals("Todos")){
-            llenarTabla(0);}
-            else{
-                llenarTabla(Double.parseDouble(vistaClientes.comboCuotas.getSelectedItem().toString()));
-            }
+            llenarTabla();
             }
             else{
                  JOptionPane.showMessageDialog(null, "Seleccione un cliente de la lista", "Atención", JOptionPane.INFORMATION_MESSAGE, null);
@@ -219,7 +222,7 @@ public class ControladorCliente implements ActionListener, MouseListener, TableM
            int row = vistaClientes.tablaCliente.getSelectedRow();
            if(row != -1){
                if(vistaClientes.tablaCliente.getValueAt(row, 10) != null){
-                   new ControladorDetalleCuota(Integer.parseInt(vistaClientes.tablaCliente.getModel().getValueAt(row, 11).toString()), vistaClientes.tablaCliente.getModel().getValueAt(row, 0).toString(),vistaClientes.tablaCliente.getModel().getValueAt(row, 1).toString(), vistaClientes.tablaCliente.getModel().getValueAt(row, 3).toString(), vistaClientes.tablaCliente.getModel().getValueAt(row, 5).toString(), vistaClientes.tablaCliente.getModel().getValueAt(row, 6).toString(), Integer.parseInt(vistaClientes.tablaCliente.getModel().getValueAt(row, 7).toString()),  Integer.parseInt(vistaClientes.tablaCliente.getModel().getValueAt(row, 11).toString()),Integer.parseInt(vistaClientes.tablaCliente.getModel().getValueAt(row, 10).toString()));
+                   new ControladorDetalleCuota(Integer.parseInt(vistaClientes.tablaCliente.getModel().getValueAt(row, 12).toString()), vistaClientes.tablaCliente.getModel().getValueAt(row, 0).toString(),vistaClientes.tablaCliente.getModel().getValueAt(row, 1).toString(), vistaClientes.tablaCliente.getModel().getValueAt(row, 3).toString(), vistaClientes.tablaCliente.getModel().getValueAt(row, 5).toString(), vistaClientes.tablaCliente.getModel().getValueAt(row, 6).toString(), Integer.parseInt(vistaClientes.tablaCliente.getModel().getValueAt(row, 7).toString()),  Integer.parseInt(vistaClientes.tablaCliente.getModel().getValueAt(row, 11).toString()),Integer.parseInt(vistaClientes.tablaCliente.getModel().getValueAt(row, 10).toString()));
                }else{
                   JOptionPane.showMessageDialog(null, "Debe asignar una propiedad para ver los detalles", "Atención", JOptionPane.INFORMATION_MESSAGE, null); 
                }
@@ -235,12 +238,7 @@ public class ControladorCliente implements ActionListener, MouseListener, TableM
                if(vistaClientes.tablaCliente.getModel().getValueAt(row, 10)== null){
                    //------Paso el dni para crear la ficha de control---------//
                    new ControladorAsignacionPropiedad((Frame) SwingUtilities.getWindowAncestor(vistaClientes), Integer.parseInt(vistaClientes.tablaCliente.getModel().getValueAt(row, 2).toString()));
-                 if(vistaClientes.comboCuotas.getSelectedItem().equals("Todos")){
-                   llenarTabla(0);}
-                   else{
-                   llenarTabla(Double.parseDouble(vistaClientes.comboCuotas.getSelectedItem().toString()));
-                 }
-                   llenarComboCuotas();
+                 llenarTabla();
                 }else{
                    JOptionPane.showMessageDialog(null, "Cliente con propiedad ya asignada", "Atención", JOptionPane.INFORMATION_MESSAGE, null);
                }
@@ -249,15 +247,6 @@ public class ControladorCliente implements ActionListener, MouseListener, TableM
            }  
         }
         
-        if(e.getSource()== vistaClientes.comboCuotas){
-            if(vistaClientes.comboCuotas.getItemCount()!=0){
-            if(vistaClientes.comboCuotas.getSelectedItem().equals("Todos")){
-                  llenarTabla(0);}
-                   else{
-                 llenarTabla(Double.parseDouble(vistaClientes.comboCuotas.getSelectedItem().toString()));
-                  }
-           }
-        }
         
         if(e.getSource()==vistaClientes.bajaBtn){
             int row = vistaClientes.tablaCliente.getSelectedRow();
@@ -266,13 +255,10 @@ public class ControladorCliente implements ActionListener, MouseListener, TableM
                  int reply = JOptionPane.showConfirmDialog(null, "Dar de baja a "+vistaClientes.tablaCliente.getModel().getValueAt(row, 0)+" "+""+" "+vistaClientes.tablaCliente.getModel().getValueAt(row, 1)+"?",
                  "Advertencia",JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null);
                   if (reply == JOptionPane.YES_OPTION) {  
-                  fd.bajaPropietario(Integer.parseInt(vistaClientes.tablaCliente.getValueAt(row, 2).toString()), Integer.parseInt(vistaClientes.tablaCliente.getValueAt(row, 11).toString()));
-                  ld.editarPropiedad(0, vistaClientes.tablaCliente.getValueAt(row, 16).toString(), Integer.parseInt(vistaClientes.tablaCliente.getValueAt(row, 17).toString()), Integer.parseInt(vistaClientes.tablaCliente.getValueAt(row, 18).toString()));
-                   if(vistaClientes.comboCuotas.getSelectedItem().equals("Todos")){
-                    llenarTabla(0);}
-                   else{
-                    llenarTabla(Double.parseDouble(vistaClientes.comboCuotas.getSelectedItem().toString()));
-                   }}
+                    fd.bajaPropietario(Integer.parseInt(vistaClientes.tablaCliente.getValueAt(row, 2).toString()), Integer.parseInt(vistaClientes.tablaCliente.getValueAt(row, 11).toString()));
+                    ld.editarPropiedad(0, vistaClientes.tablaCliente.getValueAt(row, 16).toString(), Integer.parseInt(vistaClientes.tablaCliente.getValueAt(row, 17).toString()), Integer.parseInt(vistaClientes.tablaCliente.getValueAt(row, 18).toString()));
+                    llenarTabla();
+                  }
                    }else{
                      JOptionPane.showMessageDialog(null, "Seleccione un cliente con una propiedad", "Atención", JOptionPane.INFORMATION_MESSAGE, null);
                      }
@@ -282,12 +268,37 @@ public class ControladorCliente implements ActionListener, MouseListener, TableM
         }
     }
     
-    public void llenarTabla(double monto){
+    public void llenarComboApellidos(){
+        try {
+            ResultSet rs = null;
+            rs = pd.obtenerApellidos();
+            vistaClientes.comboApellido.removeAllItems();
+            vistaClientes.comboApellido.addItem("Seleccione");
+            if(rs!=null){
+            while (rs.next()) {
+                vistaClientes.comboApellido.addItem(rs.getString(1));                
+            } } } catch (SQLException ex) {
+            Logger.getLogger(ControladorPropiedades.class.getName()).log(Level.SEVERE, null, ex);
+        }   
+ }   
+  public void llenarComboNombres(String apellidos){
+        try {
+            ResultSet rs = pd.obtenerNombres(apellidos);
+            vistaClientes.comboNombre.removeAllItems();
+            vistaClientes.comboNombre.addItem("Seleccione");
+            while (rs.next()) {
+                vistaClientes.comboNombre.addItem(rs.getString(1));
+            }  } catch (SQLException ex) {
+            Logger.getLogger(ControladorPropiedades.class.getName()).log(Level.SEVERE, null, ex);
+        }   
+ }
+    
+    public void llenarTabla(){
         ResultSet rs;
-        if(monto==0){
+        if(vistaClientes.comboApellido.getSelectedItem().toString()=="Seleccione"){
             rs = cd.clientesPorLotes();}
         else{
-            rs = cd.clientesPorCuotas(monto);
+            rs = cd.clientesPorPropietarios(apellidos, nombres);
         }        
         DefaultTableModel model = (DefaultTableModel) vistaClientes.tablaCliente.getModel();
         model.setRowCount(0);
@@ -380,9 +391,9 @@ public class ControladorCliente implements ActionListener, MouseListener, TableM
     public void mouseClicked(MouseEvent e) {
         int row = vistaClientes.tablaCliente.getSelectedRow();   
         //========Respaldo valores barrio, manzana y parcela por si quiere editarlas=========//
-        barrio = vistaClientes.tablaCliente.getModel().getValueAt(row, 16).toString();
-        manzana = Integer.parseInt(vistaClientes.tablaCliente.getModel().getValueAt(row, 17).toString());
-        parcela = Integer.parseInt(vistaClientes.tablaCliente.getModel().getValueAt(row, 18).toString());
+//        barrio = vistaClientes.tablaCliente.getModel().getValueAt(row, 16).toString();
+//        manzana = Integer.parseInt(vistaClientes.tablaCliente.getModel().getValueAt(row, 17).toString());
+//        parcela = Integer.parseInt(vistaClientes.tablaCliente.getModel().getValueAt(row, 18).toString());
         //=========Fin respaldo===============//
         vistaClientes.barrio.setText(vistaClientes.tablaCliente.getModel().getValueAt(row, 5).toString());
         vistaClientes.calle.setText(vistaClientes.tablaCliente.getModel().getValueAt(row, 6).toString());
@@ -437,19 +448,7 @@ public class ControladorCliente implements ActionListener, MouseListener, TableM
     public void mouseExited(MouseEvent e) {
         //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-    
-    public void llenarComboCuotas(){
-        try {
-            ResultSet rs = fd.obtenerMontoCuotas();
-            vistaClientes.comboCuotas.removeAllItems();
-            vistaClientes.comboCuotas.addItem("Todos");
-            while (rs.next()) {
-                vistaClientes.comboCuotas.addItem(rs.getString(1));
-            }  
-            } catch (SQLException ex) {
-            Logger.getLogger(ControladorPropiedades.class.getName()).log(Level.SEVERE, null, ex);
-        }   
- }
+
     
     public void pintarFila(){
          vistaClientes.tablaCliente.setDefaultRenderer(Object.class, new TableCellRenderer() {

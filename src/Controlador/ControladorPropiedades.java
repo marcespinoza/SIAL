@@ -61,35 +61,36 @@ public class ControladorPropiedades implements ActionListener{
                 vista.propiedades.tablaPropiedades.removeAll();
             }
         });
+        //======KeyListener sobre el campo parcela========//
         this.vista.propiedades.pc.addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e){
              if(e.getKeyCode()==KeyEvent.VK_ENTER){
-                 if(validarCampos()){
-            if(!vista.propiedades.comboApellido.getSelectedItem().equals("Seleccione")){  
-               if(!vista.propiedades.comboNombres.getSelectedItem().equals("Seleccione")){  
-                switch(vista.propiedades.comboPropiedad.getSelectedItem().toString()){   
+               if(validarCampos()){
+                 if(!vista.propiedades.comboApellido.getSelectedItem().equals("Seleccione")){  
+                  if(!vista.propiedades.comboNombres.getSelectedItem().equals("Seleccione")){  
+                    switch(vista.propiedades.comboPropiedad.getSelectedItem().toString()){   
                         case "Terreno": ld.agregarLote(vista.propiedades.barrio.getText(), vista.propiedades.mz.getText(), vista.propiedades.pc.getText(), vista.propiedades.comboApellido.getSelectedItem().toString(), vista.propiedades.comboNombres.getSelectedItem().toString(), vista.propiedades.cuit.getText(),vista.propiedades.nroRecibo.getText());
                         case "Departamento":dd.agregarDepartamento(vista.propiedades.barrio.getText(), vista.propiedades.mz.getText(), vista.propiedades.pc.getText(), vista.propiedades.comboApellido.getSelectedItem().toString(), vista.propiedades.comboNombres.getSelectedItem().toString(), vista.propiedades.cuit.getText(),vista.propiedades.nroRecibo.getText());    
                 }
              }
             }
-            llenarTabla();}
+              llenarTabla();}
              }
             }
          });
          this.vista.propiedades.tablaPropiedades.addMouseListener(new java.awt.event.MouseAdapter() {
          @Override
          public void mouseClicked(java.awt.event.MouseEvent evt) {
-          int row = vista.propiedades.tablaPropiedades.getSelectedRow();
-          vista.propiedades.barrio.setText(vista.propiedades.tablaPropiedades.getModel().getValueAt(row,0).toString());
-          vista.propiedades.mz.setText(vista.propiedades.tablaPropiedades.getModel().getValueAt(row,1).toString());
-          vista.propiedades.pc.setText(vista.propiedades.tablaPropiedades.getModel().getValueAt(row,2).toString());
-          vista.propiedades.observaciones.setText(vista.propiedades.tablaPropiedades.getModel().getValueAt(row,3).toString());
-          barrio = vista.propiedades.tablaPropiedades.getModel().getValueAt(row,0).toString();
-          mz = Integer.parseInt(vista.propiedades.tablaPropiedades.getModel().getValueAt(row,1).toString());
-          pc = Integer.parseInt(vista.propiedades.tablaPropiedades.getModel().getValueAt(row,2).toString());
-          observaciones = vista.propiedades.tablaPropiedades.getModel().getValueAt(row,3).toString();
+           int row = vista.propiedades.tablaPropiedades.getSelectedRow();
+           vista.propiedades.barrio.setText(vista.propiedades.tablaPropiedades.getModel().getValueAt(row,0).toString());
+           vista.propiedades.mz.setText(vista.propiedades.tablaPropiedades.getModel().getValueAt(row,1).toString());
+           vista.propiedades.pc.setText(vista.propiedades.tablaPropiedades.getModel().getValueAt(row,2).toString());
+           vista.propiedades.observaciones.setText(vista.propiedades.tablaPropiedades.getModel().getValueAt(row,3).toString());
+           barrio = vista.propiedades.tablaPropiedades.getModel().getValueAt(row,0).toString();
+           mz = Integer.parseInt(vista.propiedades.tablaPropiedades.getModel().getValueAt(row,1).toString());
+           pc = Integer.parseInt(vista.propiedades.tablaPropiedades.getModel().getValueAt(row,2).toString());
+           observaciones = vista.propiedades.tablaPropiedades.getModel().getValueAt(row,3).toString();
          }
          });
            llenarComboApellidos();

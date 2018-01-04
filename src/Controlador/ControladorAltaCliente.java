@@ -49,8 +49,8 @@ public class ControladorAltaCliente implements ActionListener, KeyListener{
         this.ac.documento.setDocument(new LimitadorCaracteres(8));
         this.ac.apellidos.setDocument(new LimitadorCaracteres(30));
         this.ac.nombres.setDocument(new LimitadorCaracteres(30));
-        this.ac.barrio.setDocument(new LimitadorCaracteres(20));
-        this.ac.calle.setDocument(new LimitadorCaracteres(25));
+        this.ac.barrio.setDocument(new LimitadorCaracteres(30));
+        this.ac.calle.setDocument(new LimitadorCaracteres(40));
         this.ac.numero.setDocument(new LimitadorCaracteres(5));
         this.ac.telefono1.setDocument(new LimitadorCaracteres(12));
         this.ac.telefono2.setDocument(new LimitadorCaracteres(12));        
