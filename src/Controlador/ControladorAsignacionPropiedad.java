@@ -278,19 +278,20 @@ public class ControladorAsignacionPropiedad implements ActionListener, KeyListen
 
         @Override
         protected Void doInBackground() throws Exception {            
-           BigDecimal gastos =(new BigDecimal(vistaAsignarPropiedad.cuota_total.getText()).subtract(new BigDecimal(vistaAsignarPropiedad.cuota_total.getText()))).divide(new BigDecimal(1.1));
+           BigDecimal gastos =new BigDecimal(vistaAsignarPropiedad.cuota_total.getText()).subtract((new BigDecimal(vistaAsignarPropiedad.cuota_total.getText())).divide(new BigDecimal(1.1),2, BigDecimal.ROUND_HALF_UP));
            id_control = fichaControlDAO.altaFichaControl(vistaAsignarPropiedad.tipo_propiedad.getSelectedItem().toString(), vistaAsignarPropiedad.dimension.getText(), Integer.parseInt(vistaAsignarPropiedad.cantidad_cuotas.getText()),  new BigDecimal(vistaAsignarPropiedad.cuota_total.getText()).subtract(gastos), gastos, new BigDecimal(vistaAsignarPropiedad.bolsa_cemento.getText()), new java.sql.Date(vistaAsignarPropiedad.fch_suscripción.getDate().getTime()),String.valueOf(vistaAsignarPropiedad.barrio.getSelectedItem()),Integer.parseInt((String)vistaAsignarPropiedad.manzana.getSelectedItem()), Integer.parseInt((String)vistaAsignarPropiedad.parcela.getSelectedItem()));
-           BigDecimal saldo = new BigDecimal(vistaAsignarPropiedad.cantidad_cuotas.getText()).multiply(new BigDecimal(vistaAsignarPropiedad.cuota_total.getText()));
+          return null;
+        }
+
+       @Override
+       public void done() { 
+            BigDecimal saldo = new BigDecimal(vistaAsignarPropiedad.cantidad_cuotas.getText()).multiply(new BigDecimal(vistaAsignarPropiedad.cuota_total.getText()));
            switch(vistaAsignarPropiedad.tipo_propiedad.getSelectedItem().toString()){
                case "Terreno":cuotaDao.altaCuotaLote(new java.sql.Date(vistaAsignarPropiedad.fch_suscripción.getDate().getTime()), 0,"Saldo Inicio", new BigDecimal(0),new BigDecimal(0), saldo , new BigDecimal(0), saldo, saldo.divide(new BigDecimal(vistaAsignarPropiedad.bolsa_cemento.getText())), new BigDecimal(0), saldo.divide(new BigDecimal(vistaAsignarPropiedad.bolsa_cemento.getText())), "", "", id_control); break;
                case "Departamento":cuotaDao.altaCuotaDpto(new java.sql.Date(vistaAsignarPropiedad.fch_suscripción.getDate().getTime()), 0,"Saldo Inicio", new BigDecimal(0),new BigDecimal(0), saldo , new BigDecimal(0), saldo, saldo.divide(new BigDecimal(vistaAsignarPropiedad.bolsa_cemento.getText())), new BigDecimal(0), saldo.divide(new BigDecimal(vistaAsignarPropiedad.bolsa_cemento.getText())), "", "", id_control);  break;
            }
            dp.altaDchoPosesion(new java.sql.Date(vistaAsignarPropiedad.fch_suscripción.getDate().getTime()), new BigDecimal(0),new BigDecimal(0), new BigDecimal(50000).divide(new BigDecimal(vistaAsignarPropiedad.bolsa_cemento.getText()), 2, RoundingMode.DOWN), new BigDecimal(0),new BigDecimal(50000).divide(new BigDecimal(vistaAsignarPropiedad.bolsa_cemento.getText()), 2, RoundingMode.DOWN), "Saldo Inicio", id_control);
-           return null;
-        }
-
-       @Override
-       public void done() { 
+           
            switch(vistaAsignarPropiedad.tipo_propiedad.getSelectedItem().toString()){
                case "Terreno":ld.editarPropiedad(1, vistaAsignarPropiedad.barrio.getSelectedItem().toString(), Integer.parseInt(vistaAsignarPropiedad.manzana.getSelectedItem().toString()), Integer.parseInt(vistaAsignarPropiedad.parcela.getSelectedItem().toString())); cd.altaClientesXLotes(dni, id_control); break;
                case "Departamento":dd.editarDepartamento(vistaAsignarPropiedad.barrio.getSelectedItem().toString(), Integer.parseInt(vistaAsignarPropiedad.manzana.getSelectedItem().toString()), Integer.parseInt(vistaAsignarPropiedad.parcela.getSelectedItem().toString()));cd.altaClientesXDpto(dni, id_control); break;

@@ -24,6 +24,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.ParseException;
@@ -94,15 +95,20 @@ public class ControladorCliente implements ActionListener, MouseListener, TableM
             public void keyPressed(KeyEvent e){
                if(e.getKeyCode()==KeyEvent.VK_ENTER){                   
                     Date date = new Date();
-                if(!vistaClientes.bolsa_cemento.getText().equals("")){                    
+                if(!vistaClientes.bolsa_cemento.getText().equals("")){                      
                     int i = vistaClientes.tablaCliente.getSelectedRow();
+                    BigDecimal gastos_ = new BigDecimal(vistaClientes.tablaCliente.getModel().getValueAt(i, 13).toString());
+                    BigDecimal cuota_ = new BigDecimal(vistaClientes.tablaCliente.getModel().getValueAt(i, 22).toString());
+                    BigDecimal bolsa_cemento_ = new BigDecimal(vistaClientes.tablaCliente.getModel().getValueAt(i, 14).toString());
+                    BigDecimal nuevo_bolsa_cemento = new BigDecimal(vistaClientes.bolsa_cemento.getText());
+                    BigDecimal nueva_cuota = ((gastos_.add(cuota_)).divide(bolsa_cemento_, 2, RoundingMode.DOWN)).multiply(nuevo_bolsa_cemento);
                     fd.actualizarBolsaCemento( new BigDecimal(vistaClientes.bolsa_cemento.getText()), new java.sql.Date(date.getTime()), vistaClientes.tablaCliente.getModel().getValueAt(i, 11).toString());
                     llenarTabla();
-                     vistaClientes.tablaCliente.getSelectionModel().clearSelection();
-                     vistaClientes.fch_actualizacion.setText("");
-                     vistaClientes.bolsa_cemento.setText("");
-                     vistaClientes.advertencia.setText("");
-                     ventana.requestFocusInWindow();
+                    vistaClientes.tablaCliente.getSelectionModel().clearSelection();
+                    vistaClientes.fch_actualizacion.setText("");
+                    vistaClientes.bolsa_cemento.setText("");
+                    vistaClientes.advertencia.setText("");
+                    ventana.requestFocusInWindow();
                 }
                 else{
                    JOptionPane.showMessageDialog(null, "Ingrese un valor", "Atención", JOptionPane.INFORMATION_MESSAGE, null); 
@@ -170,7 +176,7 @@ public class ControladorCliente implements ActionListener, MouseListener, TableM
                 int row = vistaClientes.tablaCliente.getSelectedRow();
            if(row != -1){
                if(vistaClientes.tablaCliente.getValueAt(row, 10) != null){
-                  new ControladorAltaCliente((Ventana) SwingUtilities.getWindowAncestor(vistaClientes),  Integer.parseInt(vistaClientes.tablaCliente.getModel().getValueAt(row, 10).toString()), 0, false);
+                  new ControladorAltaCliente((Ventana) SwingUtilities.getWindowAncestor(vistaClientes),  Integer.parseInt(vistaClientes.tablaCliente.getModel().getValueAt(row, 11).toString()), 0, false);
                   llenarTabla();
                }else{
                   JOptionPane.showMessageDialog(null, "Debe asignar una propiedad", "Atención", JOptionPane.INFORMATION_MESSAGE, null); 
@@ -344,7 +350,8 @@ public class ControladorCliente implements ActionListener, MouseListener, TableM
                 String manzana_prop = rs.getString(18);
                 String parcela_prop = rs.getString(19);  
                 String observaciones = rs.getString(20);
-                clientes = new Object[] {apellidos, nombres, dni, telefono1, telefono2, barrio, calle, numero, fecha_nacimiento, trabajo, baja, idControl, cantidad_cuotas, gastos, bolsa_cemento, fch_actualizacion, barrio_prop, manzana_prop, parcela_prop, observaciones, actualizar_cemento, cumpleaños};
+                String cuota_pura = rs.getString(21);
+                clientes = new Object[] {apellidos, nombres, dni, telefono1, telefono2, barrio, calle, numero, fecha_nacimiento, trabajo, baja, idControl, cantidad_cuotas, gastos, bolsa_cemento, fch_actualizacion, barrio_prop, manzana_prop, parcela_prop, observaciones, actualizar_cemento, cumpleaños, cuota_pura};
                 model.addRow(clientes);   
              }
             controlCumpleaños();
@@ -467,12 +474,7 @@ public class ControladorCliente implements ActionListener, MouseListener, TableM
 
     @Override
     public void tableChanged(TableModelEvent e) {
-          if (e.getType() == TableModelEvent.UPDATE) {
-             int row = e.getFirstRow();
-             int column = e.getColumn();
-             TableModel tableModel = (TableModel)e.getSource();             
-             ld.editarLote(barrio, manzana, parcela, vistaClientes.tablaCliente.getModel().getValueAt(row, 16).toString() , Integer.parseInt(vistaClientes.tablaCliente.getModel().getValueAt(row, 17).toString()) , Integer.parseInt(vistaClientes.tablaCliente.getModel().getValueAt(row, 18).toString()), vistaClientes.tablaCliente.getModel().getValueAt(row, 19).toString() );
-          } 
+          if (e.getType() == TableModelEvent.UPDATE) {} 
           
     }
 

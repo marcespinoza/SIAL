@@ -46,13 +46,14 @@ public class ControladorAltaPago implements ActionListener, KeyListener{
     int row_count;
     BigDecimal cuota_total;
     BigDecimal gastos;
-
+    private int filas_insertadas=0;
     public ControladorAltaPago(Frame parent, int id_control, int row_count, int nro_cuotas) {
         this.parent = parent;
         this.id_control=id_control;
         this.row_count=row_count;
         this.nro_cuotas=nro_cuotas;
         ac = new AltaCuota(parent, true);
+        ac.aviso.setVisible(false);
         ac.tipo_cuota.add(ac.chk_cuota);
         ac.tipo_cuota.add(ac.chk_dcho_posesion);
         ac.tipo_cuota.add(ac.chk_adelanto_cuota);
@@ -163,8 +164,7 @@ public class ControladorAltaPago implements ActionListener, KeyListener{
             }
             if(e.getSource()==ac.chk_adelanto_cuota){
               ac.nro_cuota.setEnabled(false);
-            }
-            
+            }            
     }
     
     
@@ -182,20 +182,21 @@ public class ControladorAltaPago implements ActionListener, KeyListener{
                   if(cd.getUltimaCuota(nro_cuotas)){
                    try {
                        ResultSet rs = cd.getNrosCuotas(id_control);
+                       //========Avanzo la cuota cero========//
                        rs.next();
                        int cuota = rs.getInt(1);
                        rs.next();
-                       while(rs.getInt(1)-1==cuota){
+                       while(rs.getInt(1)-1==cuota && !rs.isAfterLast()){
                            cuota=rs.getInt(1);
                            rs.next();
                        }
-                       cd.altaCuotaLote(new java.sql.Date(date.getTime()),rs.getInt(1)-1, detalle, cuota_pura, gastos, new BigDecimal(0), haber, saldo_actual, new BigDecimal(0), cemento_haber, cemento_saldo, observaciones, tipoPago, id_control);  
+                       filas_insertadas = cd.altaCuotaLote(new java.sql.Date(date.getTime()),rs.getInt(1)-1, detalle, cuota_pura, gastos, new BigDecimal(0), haber, saldo_actual, new BigDecimal(0), cemento_haber, cemento_saldo, observaciones, tipoPago, id_control);  
                        
                    } catch (SQLException ex) {
                        Logger.getLogger(ControladorAltaPago.class.getName()).log(Level.SEVERE, null, ex);
                    }
                   }else{
-                      cd.altaCuotaLote(new java.sql.Date(date.getTime()),180, detalle, cuota_pura, gastos, new BigDecimal(0), haber, saldo_actual, new BigDecimal(0), cemento_haber, cemento_saldo, observaciones, tipoPago, id_control);                    
+                     filas_insertadas = cd.altaCuotaLote(new java.sql.Date(date.getTime()),nro_cuotas, detalle, cuota_pura, gastos, new BigDecimal(0), haber, saldo_actual, new BigDecimal(0), cemento_haber, cemento_saldo, observaciones, tipoPago, id_control);                    
                   }
                }else{
                  try {int cuota=0;
@@ -206,13 +207,19 @@ public class ControladorAltaPago implements ActionListener, KeyListener{
                          while(rs.next()&& rs.getInt(1)-1==cuota){
                            cuota=rs.getInt(1);                           
                          }
-                       cd.altaCuotaLote(new java.sql.Date(date.getTime()),cuota+1, detalle, cuota_pura, gastos, new BigDecimal(0), haber, saldo_actual, new BigDecimal(0), cemento_haber, cemento_saldo, observaciones, tipoPago, id_control);  
+                       filas_insertadas = cd.altaCuotaLote(new java.sql.Date(date.getTime()),Integer.parseInt(ac.nro_cuota.getText()), detalle, cuota_pura, gastos, new BigDecimal(0), haber, saldo_actual, new BigDecimal(0), cemento_haber, cemento_saldo, observaciones, tipoPago, id_control);  
                       
                    } catch (SQLException ex) {
                        Logger.getLogger(ControladorAltaPago.class.getName()).log(Level.SEVERE, null, ex);
                    }  
                }
-               ac.dispose();
+               if (filas_insertadas==1) {
+                   ac.dispose();
+                   filas_insertadas=0;
+               }else{
+                   ac.aviso.setVisible(true);
+               }
+              
     }
     
      public boolean validarCampos(){

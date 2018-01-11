@@ -34,13 +34,13 @@ public class ControladorAltaCliente implements ActionListener, KeyListener{
     ClienteDAO cd = new ClienteDAO();
     ReferenciaDAO rd = new ReferenciaDAO();
     private int id_control, dni=0;
-    boolean bandera=false;
+    boolean bandera_=false;
     
-    public ControladorAltaCliente(Ventana ventana, int id_control,int dni, boolean bandera){
+    public ControladorAltaCliente(Ventana ventana, int id_control,int dni, boolean bandera_){
         ac = new AltaCliente(ventana, true);  
         this.id_control=id_control;
         this.dni=dni;
-        this.bandera=bandera;
+        this.bandera_=bandera_;
         this.ac.aceptar.addActionListener(this);
         this.ac.cancelar.addActionListener(this);
         this.ac.parentescoRef.addKeyListener(this);
@@ -189,13 +189,15 @@ public class ControladorAltaCliente implements ActionListener, KeyListener{
        public void done() { 
            //--------Si alta es igual a 1 el cliente ya existe-----------//
            if(alta==1){
-           if(bandera){
+           if(bandera_){
              fd.cambiarPropietario(Integer.parseInt(ac.documento.getText()), dni, id_control);
             }
               rd.altaReferencia(ac.telefonoRef.getText(), ac.apellidosRef.getText(), ac.nombresRef.getText(), ac.parentescoRef.getText(), Integer.parseInt(ac.documento.getText()));
               //------Si el id_control es distinto de cero y bandera falso, entonces estoy agregando un propietario mas-----//
               //------a un lote que ya posee un propietario-------------------------------------------------//
-            if(id_control!=0 && !bandera){
+              System.out.println(id_control+"agregar"+bandera_);
+            if(id_control!=0 && !bandera_){
+                
               cd.altaClientesXLotes(Integer.parseInt(ac.documento.getText()), id_control);
             }
             ac.dispose(); }

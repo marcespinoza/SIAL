@@ -128,7 +128,6 @@ public class FichaControlDAO {
   
    public void actualizarBolsaCemento( BigDecimal precio, Date fecha_actualizacion, String id_control){
         try {
-            System.out.println(precio+""+fecha_actualizacion+""+id_control);
             Connection con = conexion.getConexion();
             PreparedStatement ps = con.prepareStatement(
                     "UPDATE ficha_control_lote SET bolsa_cemento = ?, fecha_actualizacion = ? WHERE id_control = ?");
