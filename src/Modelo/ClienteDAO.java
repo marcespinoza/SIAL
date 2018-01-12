@@ -19,7 +19,6 @@ import java.util.logging.Logger;
 public class ClienteDAO {
     
     Conexion conexion;
-    private Object [] clientes;
     
     public ClienteDAO(){
        conexion = new Conexion();

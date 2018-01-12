@@ -102,7 +102,10 @@ public class ControladorCliente implements ActionListener, MouseListener, TableM
                     BigDecimal bolsa_cemento_ = new BigDecimal(vistaClientes.tablaCliente.getModel().getValueAt(i, 14).toString());
                     BigDecimal nuevo_bolsa_cemento = new BigDecimal(vistaClientes.bolsa_cemento.getText());
                     BigDecimal nueva_cuota = ((gastos_.add(cuota_)).divide(bolsa_cemento_, 2, RoundingMode.DOWN)).multiply(nuevo_bolsa_cemento);
-                    fd.actualizarBolsaCemento( new BigDecimal(vistaClientes.bolsa_cemento.getText()), new java.sql.Date(date.getTime()), vistaClientes.tablaCliente.getModel().getValueAt(i, 11).toString());
+                    BigDecimal nuevo_gasto = nueva_cuota.subtract(nueva_cuota.divide(new BigDecimal("1.1"), 2, BigDecimal.ROUND_HALF_UP));
+                    BigDecimal nueva_cuota_pura = nueva_cuota.subtract(nuevo_gasto);
+                    System.out.println(nuevo_gasto+" "+nueva_cuota_pura+" "+ nueva_cuota);
+                    fd.actualizarBolsaCemento( new BigDecimal(vistaClientes.bolsa_cemento.getText()), new java.sql.Date(date.getTime()), vistaClientes.tablaCliente.getModel().getValueAt(i, 11).toString(), nuevo_gasto, nueva_cuota_pura);
                     llenarTabla();
                     vistaClientes.tablaCliente.getSelectionModel().clearSelection();
                     vistaClientes.fch_actualizacion.setText("");

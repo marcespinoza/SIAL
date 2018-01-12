@@ -99,8 +99,6 @@ public class AltaCuota extends javax.swing.JDialog {
 
         jLabel8.setText("Gastos $");
 
-        gastos.setEditable(false);
-
         chk_cuota.setText("Cuota");
 
         chk_dcho_posesion.setText("Cta. derecho posesion");
@@ -177,7 +175,7 @@ public class AltaCuota extends javax.swing.JDialog {
                 .addComponent(chk_dcho_posesion)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(chk_adelanto_cuota)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 11, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(cuota_total, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel9))

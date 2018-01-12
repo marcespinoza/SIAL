@@ -76,6 +76,7 @@ public class ControladorAltaPago implements ActionListener, KeyListener{
             }
          });
         ac.interes.addKeyListener(this);
+        ac.nro_cuota.addKeyListener(this);
         ac.aceptarBtn.addActionListener(this);
         ac.cancelarBtn.addActionListener(this);
         rellenarCampos();
@@ -114,42 +115,7 @@ public class ControladorAltaPago implements ActionListener, KeyListener{
     public void actionPerformed(ActionEvent e) {
         
            if(e.getSource() == ac.aceptarBtn){
-            if(ac.chk_dcho_posesion.isSelected()){ 
-                if(validarCampos()){
-                  DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
-                  Date date = new Date();     
-                  ResultSet rs = fc.obtenerFichaControl(id_control);
-                  ResultSet dpd = dp.listarCuenta(id_control);
-                    try {
-                        rs.next();
-                        dpd.last();
-                        BigDecimal bolsa_cemento = new BigDecimal(rs.getString(5));
-                        BigDecimal cemento_saldo = new BigDecimal(dpd.getString(6));
-                        BigDecimal cant_bolsa = new BigDecimal(ac.cuota_total.getText()).divide(bolsa_cemento, 2, RoundingMode.DOWN);
-                        dp.altaDchoPosesion(new java.sql.Date(date.getTime()), new BigDecimal(ac.cuota_total.getText()),new BigDecimal(ac.gastos.getText()),new BigDecimal(0),cant_bolsa, cemento_saldo.subtract(cant_bolsa),ac.detallePago.getText(), id_control);
-                    } catch (SQLException ex) {
-                        Logger.getLogger(ControladorAltaPago.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                ac.dispose();
-                }
-             //--------Es cuota comun----------/     
-              }else{
-               if(validarCampos()){
-               ResultSet rs = fc.obtenerFichaControl(id_control);
-               ResultSet rs_cuota = cd.listaDetalleCuotaXsaldo(id_control);
-               try {
-                   rs.next();
-                   rs_cuota.last();
-                   BigDecimal ultimo_saldo = new BigDecimal(rs_cuota.getString(8));
-                   BigDecimal cuota_pura = new BigDecimal(ac.cuota_total.getText()).subtract(new BigDecimal(ac.gastos.getText()));
-                   BigDecimal gastos = new BigDecimal(ac.gastos.getText());
-                   BigDecimal bolsa_cemento = new BigDecimal(rs.getString(5));
-                   BigDecimal ultimo_saldo_bolsa_cemento = new BigDecimal(rs_cuota.getString(11));
-                   calcularValores(ultimo_saldo, cuota_pura, gastos, bolsa_cemento, ultimo_saldo_bolsa_cemento);             
-                } catch (SQLException ex) {
-               }
-               }             
-              }
+              altaPago();
            }
             if(e.getSource() == ac.cancelarBtn){
                ac.dispose();
@@ -222,6 +188,45 @@ public class ControladorAltaPago implements ActionListener, KeyListener{
               
     }
     
+    void altaPago(){
+      if(ac.chk_dcho_posesion.isSelected()){ 
+                if(validarCampos()){
+                  DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
+                  Date date = new Date();     
+                  ResultSet rs = fc.obtenerFichaControl(id_control);
+                  ResultSet dpd = dp.listarCuenta(id_control);
+                    try {
+                        rs.next();
+                        dpd.last();
+                        BigDecimal bolsa_cemento = new BigDecimal(rs.getString(5));
+                        BigDecimal cemento_saldo = new BigDecimal(dpd.getString(6));
+                        BigDecimal cant_bolsa = new BigDecimal(ac.cuota_total.getText()).divide(bolsa_cemento, 2, RoundingMode.DOWN);
+                        dp.altaDchoPosesion(new java.sql.Date(date.getTime()), new BigDecimal(ac.cuota_total.getText()),new BigDecimal(ac.gastos.getText()),new BigDecimal(0),cant_bolsa, cemento_saldo.subtract(cant_bolsa),ac.detallePago.getText(), id_control);
+                    } catch (SQLException ex) {
+                        Logger.getLogger(ControladorAltaPago.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                ac.dispose();
+                }
+             //--------Es cuota comun----------/     
+              }else{
+               if(validarCampos()){
+               ResultSet rs = fc.obtenerFichaControl(id_control);
+               ResultSet rs_cuota = cd.listaDetalleCuotaXsaldo(id_control);
+               try {
+                   rs.next();
+                   rs_cuota.last();
+                   BigDecimal ultimo_saldo = new BigDecimal(rs_cuota.getString(8));
+                   BigDecimal cuota_pura = new BigDecimal(ac.cuota_total.getText()).subtract(new BigDecimal(ac.gastos.getText()));
+                   BigDecimal gastos = new BigDecimal(ac.gastos.getText());
+                   BigDecimal bolsa_cemento = new BigDecimal(rs.getString(5));
+                   BigDecimal ultimo_saldo_bolsa_cemento = new BigDecimal(rs_cuota.getString(11));
+                   calcularValores(ultimo_saldo, cuota_pura, gastos, bolsa_cemento, ultimo_saldo_bolsa_cemento);             
+                } catch (SQLException ex) {
+               }
+               }             
+              }
+    }
+    
      public boolean validarCampos(){
         boolean bandera = true;       
         if(ac.cuota_total.getText().isEmpty()){
@@ -247,10 +252,16 @@ public class ControladorAltaPago implements ActionListener, KeyListener{
 
     @Override
     public void keyPressed(KeyEvent e) {
+        if(e.getKeyCode()==KeyEvent.VK_ENTER){ 
+         if(e.getSource()==ac.nro_cuota){
+           altaPago();
+         }
+        }
     }
 
     @Override
     public void keyReleased(KeyEvent e) {
+        if(e.getSource()==ac.interes){
         String interes = ac.interes.getText();
         if(!interes.equals("")){
           BigDecimal gasto_interes = (cuota_total.multiply(new BigDecimal(interes))).divide(new BigDecimal("100"));   
@@ -258,8 +269,8 @@ public class ControladorAltaPago implements ActionListener, KeyListener{
           ac.cuota_total.setText(nueva_cuota.toString());
         }else {
           ac.cuota_total.setText(cuota_total.toString());  
-          ac.gastos.setText(gastos.toString());  
+          //ac.gastos.setText(gastos.toString());  
         }
     }
-    //}     
+    }     
 }
