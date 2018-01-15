@@ -17,27 +17,27 @@ import javax.swing.JOptionPane;
  */
 public class Conexion {
     
-    public Connection con;
+    public Connection con = null;
     public Statement st;
     public ResultSet rs;
     String consulta;
+    private static Conexion conexion;
     
     public Conexion(){
         getConexion();
     }
     
-     public Connection getConexion(){      
+    public Connection getConexion(){      
    
-    try{
+     try{
         Class.forName("com.mysql.jdbc.Driver");
         con = DriverManager.getConnection("jdbc:mysql://localhost:3306/miprimercasa?zeroDateTimeBehavior=convertToNull","root","");
-         // JOptionPane.showMessageDialog(null, "Conectado");
         st =(Statement) con.createStatement();
-    }catch (Exception e){
+     }catch (Exception e){
         JOptionPane.showMessageDialog(null, "Error de conexion");
         System.out.println(e.getMessage());
-    }
-    return con; 
+     }
+     return con; 
 }
     
 }

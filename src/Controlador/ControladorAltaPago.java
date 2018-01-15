@@ -235,6 +235,12 @@ public class ControladorAltaPago implements ActionListener, KeyListener{
         }else{
          ac.cuota_total.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
         }
+        if(ac.gastos.getText().isEmpty()){
+         ac.gastos.setBorder(BorderFactory.createLineBorder(Color.RED, 1));
+         bandera=false;
+        }else{
+         ac.gastos.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
+        }
         if(ac.chk_cuota.isSelected()){
          if(ac.nro_cuota.getText().isEmpty()){
           ac.nro_cuota.setBorder(BorderFactory.createLineBorder(Color.RED, 1));
@@ -268,8 +274,7 @@ public class ControladorAltaPago implements ActionListener, KeyListener{
           BigDecimal nueva_cuota = gasto_interes.add(cuota_total);
           ac.cuota_total.setText(nueva_cuota.toString());
         }else {
-          ac.cuota_total.setText(cuota_total.toString());  
-          //ac.gastos.setText(gastos.toString());  
+          ac.cuota_total.setText(cuota_total.toString());   
         }
     }
     }     

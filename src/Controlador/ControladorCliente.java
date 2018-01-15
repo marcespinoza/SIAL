@@ -39,6 +39,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
+import javax.swing.RowFilter;
 import javax.swing.SwingUtilities;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
@@ -46,6 +47,7 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableModel;
+import javax.swing.table.TableRowSorter;
 import org.joda.time.LocalDate;
 import org.joda.time.Years;
 
@@ -90,6 +92,34 @@ public class ControladorCliente implements ActionListener, MouseListener, TableM
         this.vistaClientes.comboNombre.addActionListener(this);
         this.vistaClientes.mostrarTodos.addActionListener(this);
         this.vistaClientes.tablaCliente.getModel().addTableModelListener(this);
+        this.vistaClientes.buscarTodos.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyReleased(KeyEvent e){
+              String query=vistaClientes.buscarTodos.getText().toLowerCase();
+              filter(query);
+            }
+         });
+        this.vistaClientes.buscarBarrio.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyReleased(KeyEvent e){
+              String query=vistaClientes.buscarBarrio.getText().toLowerCase();
+              filtroBarrio(query);
+            }
+         });
+        this.vistaClientes.buscarManzana.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyReleased(KeyEvent e){
+              String query=vistaClientes.buscarManzana.getText().toLowerCase();
+              filtroManzana(query);
+            }
+         });
+        this.vistaClientes.buscarParcela.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyReleased(KeyEvent e){
+              String query=vistaClientes.buscarParcela.getText().toLowerCase();
+              filtroParcela(query);
+            }
+         });
         this.vistaClientes.bolsa_cemento.addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e){
@@ -213,7 +243,7 @@ public class ControladorCliente implements ActionListener, MouseListener, TableM
             cliente.clear();
             referencia.clear();
             for (int i = 0; i < 14; i++) {
-                cliente.add(vistaClientes.tablaCliente.getModel().getValueAt(row, i));
+                cliente.add(vistaClientes.tablaCliente.getModel().getValueAt(vistaClientes.tablaCliente.convertRowIndexToModel(row), i));
             }
             referencia.add(vistaClientes.apellido_referencia.getText());
             referencia.add(vistaClientes.nombre_referencia.getText());
@@ -376,7 +406,7 @@ public class ControladorCliente implements ActionListener, MouseListener, TableM
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
         for (int i = 0; i < model.getRowCount(); i++) {
             //----Si tiene un 1 en la columna cumpleaños, es su cumpleaños (y si!!!)--------//
-         if(vistaClientes.tablaCliente.getModel().getValueAt(i, 20).toString().equals("1")){
+         if(vistaClientes.tablaCliente.getModel().getValueAt(i, 21).toString().equals("1")){
              try {
                  String nombre = vistaClientes.tablaCliente.getModel().getValueAt(i, 1).toString();
                  String apellido = vistaClientes.tablaCliente.getModel().getValueAt(i, 0).toString();
@@ -401,9 +431,9 @@ public class ControladorCliente implements ActionListener, MouseListener, TableM
     public void mouseClicked(MouseEvent e) {
         int row = vistaClientes.tablaCliente.getSelectedRow();   
         //========Respaldo valores barrio, manzana y parcela por si quiere editarlas=========//
-//        barrio = vistaClientes.tablaCliente.getModel().getValueAt(row, 16).toString();
-//        manzana = Integer.parseInt(vistaClientes.tablaCliente.getModel().getValueAt(row, 17).toString());
-//        parcela = Integer.parseInt(vistaClientes.tablaCliente.getModel().getValueAt(row, 18).toString());
+        // barrio = vistaClientes.tablaCliente.getModel().getValueAt(row, 16).toString();
+        // manzana = Integer.parseInt(vistaClientes.tablaCliente.getModel().getValueAt(row, 17).toString());
+        // parcela = Integer.parseInt(vistaClientes.tablaCliente.getModel().getValueAt(row, 18).toString());
         //=========Fin respaldo===============//
         vistaClientes.barrio.setText(vistaClientes.tablaCliente.getModel().getValueAt(row, 5).toString());
         vistaClientes.calle.setText(vistaClientes.tablaCliente.getModel().getValueAt(row, 6).toString());
@@ -474,12 +504,38 @@ public class ControladorCliente implements ActionListener, MouseListener, TableM
              }
          });
     }
+    
+    private void filter(String query){
+         DefaultTableModel table = (DefaultTableModel) vistaClientes.tablaCliente.getModel();
+         TableRowSorter<DefaultTableModel> tr = new TableRowSorter<> (table);
+         vistaClientes.tablaCliente.setRowSorter(tr);
+         tr.setRowFilter(RowFilter.regexFilter("(?i)" + query));
+    }
+    
+    private void filtroBarrio(String query){
+         DefaultTableModel table = (DefaultTableModel) vistaClientes.tablaCliente.getModel();
+         TableRowSorter<DefaultTableModel> tr = new TableRowSorter<> (table);
+         vistaClientes.tablaCliente.setRowSorter(tr);
+         tr.setRowFilter(RowFilter.regexFilter("(?i)" + query,16));
+    }
+    
+     private void filtroParcela(String query){
+         DefaultTableModel table = (DefaultTableModel) vistaClientes.tablaCliente.getModel();
+         TableRowSorter<DefaultTableModel> tr = new TableRowSorter<> (table);
+         vistaClientes.tablaCliente.setRowSorter(tr);
+         tr.setRowFilter(RowFilter.regexFilter("(?i)" + query,18));
+    }
+    private void filtroManzana(String query){
+         DefaultTableModel table = (DefaultTableModel) vistaClientes.tablaCliente.getModel();
+         TableRowSorter<DefaultTableModel> tr = new TableRowSorter<> (table);
+         vistaClientes.tablaCliente.setRowSorter(tr);
+         tr.setRowFilter(RowFilter.regexFilter("(?i)" + query,17));
+    }
 
     @Override
     public void tableChanged(TableModelEvent e) {
           if (e.getType() == TableModelEvent.UPDATE) {} 
           
     }
-
     
 }
