@@ -16,9 +16,12 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.BorderFactory;
 import javax.swing.border.EtchedBorder;
 
@@ -198,7 +201,11 @@ public class ControladorAltaCliente implements ActionListener, KeyListener{
               System.out.println(id_control+"agregar"+bandera_);
             if(id_control!=0 && !bandera_){
                 
-              cd.altaClientesXLotes(Integer.parseInt(ac.documento.getText()), id_control);
+               try {
+                   cd.altaClientesXLotes(Integer.parseInt(ac.documento.getText()), id_control);
+               } catch (SQLException ex) {
+                   Logger.getLogger(ControladorAltaCliente.class.getName()).log(Level.SEVERE, null, ex);
+               }
             }
             ac.dispose(); }
             else{

@@ -167,7 +167,8 @@ public class ControladorMinuta implements MouseListener, ActionListener {
                 } catch (IOException ex) {
                    // I/O error
                 }
-                }}
+                }
+            }
             
             if(e.getSource() == vistaMinuta.buscar){
                 SimpleDateFormat dcn = new SimpleDateFormat("dd-MM-yyyy");

@@ -293,7 +293,14 @@ public class ControladorAsignacionPropiedad implements ActionListener, KeyListen
            dp.altaDchoPosesion(new java.sql.Date(vistaAsignarPropiedad.fch_suscripción.getDate().getTime()), new BigDecimal(0),new BigDecimal(0), new BigDecimal(50000).divide(new BigDecimal(vistaAsignarPropiedad.bolsa_cemento.getText()), 2, RoundingMode.DOWN), new BigDecimal(0),new BigDecimal(50000).divide(new BigDecimal(vistaAsignarPropiedad.bolsa_cemento.getText()), 2, RoundingMode.DOWN), "Saldo Inicio", id_control);
            
            switch(vistaAsignarPropiedad.tipo_propiedad.getSelectedItem().toString()){
-               case "Terreno":ld.editarPropiedad(1, vistaAsignarPropiedad.barrio.getSelectedItem().toString(), Integer.parseInt(vistaAsignarPropiedad.manzana.getSelectedItem().toString()), Integer.parseInt(vistaAsignarPropiedad.parcela.getSelectedItem().toString())); cd.altaClientesXLotes(dni, id_control); break;
+               case "Terreno":ld.editarPropiedad(1, vistaAsignarPropiedad.barrio.getSelectedItem().toString(), Integer.parseInt(vistaAsignarPropiedad.manzana.getSelectedItem().toString()), Integer.parseInt(vistaAsignarPropiedad.parcela.getSelectedItem().toString())); {
+                try {
+                    cd.altaClientesXLotes(dni, id_control);
+                } catch (SQLException ex) {
+                    Logger.getLogger(ControladorAsignacionPropiedad.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+break;
                case "Departamento":dd.editarDepartamento(vistaAsignarPropiedad.barrio.getSelectedItem().toString(), Integer.parseInt(vistaAsignarPropiedad.manzana.getSelectedItem().toString()), Integer.parseInt(vistaAsignarPropiedad.parcela.getSelectedItem().toString()));cd.altaClientesXDpto(dni, id_control); break;
            }           
            vistaAsignarPropiedad.dispose();

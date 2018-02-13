@@ -67,17 +67,23 @@ public class ClienteDAO {
      return rs;
      }
   
-     public void altaClientesXLotes(int dni, int id_control){
+     public void altaClientesXLotes(int dni, int id_control) throws SQLException{
+         PreparedStatement stmt = null;
         try {
             Connection con = conexion.getConexion();
             String insertar = "insert into cliente_tiene_lote (cliente_dni, id_control) values (?,?)";
-            PreparedStatement stmt = con.prepareStatement(insertar);
+            stmt = con.prepareStatement(insertar);
             stmt.setInt(1, dni);
             stmt.setInt(2, id_control);
             stmt.executeUpdate();
         } catch (SQLException ex) {
             Logger.getLogger(ClienteDAO.class.getName()).log(Level.SEVERE, null, ex);
             System.out.println(ex.getMessage());
+        }finally{
+            conexion.cerrarConexion();
+            if(stmt!=null){
+               stmt.close();
+            }
         }
     }
      
@@ -95,18 +101,24 @@ public class ClienteDAO {
         }
     }
  
- public int altaCliente(int dni, String apellidos, String nombres, Date fecha_nacimiento, String barrio, String calle, int numero, String telefono1, String telefono2, String trabajo){
+ public int altaCliente(int dni, String apellidos, String nombres, Date fecha_nacimiento, String barrio, String calle, int numero, String telefono1, String telefono2, String trabajo) throws SQLException{
      int filasAfectadas=0;
+     PreparedStatement ps = null;
      try {
          Connection con = conexion.getConexion();
          String insertar = "Insert into cliente(dni, apellidos, nombres, fecha_nacimiento, barrio, calle, numero, telefono1, telefono2, trabajo) values ('"+dni+"','"+apellidos+"','"+nombres+"','"+fecha_nacimiento+"','"+barrio+"','"+calle+"','"+numero+"','"+telefono1+"','"+telefono2+"','"+trabajo+"')";
-         PreparedStatement ps = con.prepareStatement(insertar);
+         ps = con.prepareStatement(insertar);
          filasAfectadas = ps.executeUpdate();         
      } catch (SQLException e) { 
          //--------1062 es el codigo de error para claves duplicadas------//
          if(e.getErrorCode() == 1062){
            filasAfectadas = 0; 
-    }
+    }         
+     }finally{
+         conexion.cerrarConexion();
+         if(ps!=null){
+               ps.close();
+            }
      }
      return filasAfectadas;
  }
