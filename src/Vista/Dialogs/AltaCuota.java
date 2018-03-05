@@ -62,6 +62,7 @@ public class AltaCuota extends javax.swing.JDialog {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Alta pago");
+        setResizable(false);
 
         aceptarBtn.setText("Aceptar");
         aceptarBtn.addMouseListener(new java.awt.event.MouseAdapter() {

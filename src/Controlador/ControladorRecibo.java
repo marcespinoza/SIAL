@@ -78,7 +78,6 @@ public class ControladorRecibo implements ActionListener{
     String exento="";
 
     public ControladorRecibo(Frame parent, int id_control, DetalleCuota dc, int row, int tipoPago) {
-        System.out.println(id_control);
         ar = new AltaRecibo(parent, true);
         this.dc=dc;
         this.row=row;
@@ -186,16 +185,17 @@ public class ControladorRecibo implements ActionListener{
             barrio= rs.getString(6);
             manzana = rs.getInt(7);
             parcela = rs.getInt(8);
+            //------Si es 1 es cuota-------//
             if(tipoPago==1){
              cuota_total = new BigDecimal(dc.tablaDetallePago.getModel().getValueAt(row, 3).toString());
              gastos_administrativos = new BigDecimal(dc.tablaDetallePago.getModel().getValueAt(row, 4).toString());
              cobrado = cuota_total.add(gastos_administrativos) ;
              ar.importe.setText(String.valueOf(cobrado));
              ar.total_pagado.setText(String.valueOf(cobrado));            
-             ar.detalle.setText("Paga cuota "+dc.tablaDetallePago.getModel().getValueAt(row, 0).toString()+"/"+cant_cuotas+    "\r\n"+ barrio +" "+ " Mz. "+manzana +" Pc. "+ parcela+    " - Dimensión "+dimension +    "\r\n"+dc.tablaDetallePago.getModel().getValueAt(row, 2).toString());
+             ar.detalle.setText("Paga cuota "+dc.tablaDetallePago.getModel().getValueAt(row, 0).toString()+"/"+cant_cuotas+ " - "+ "Saldo cemento "+dc.tablaDetallePago.getModel().getValueAt(row, 10).toString()+  "\r\n"+ barrio +" "+ " Mz. "+manzana +" Pc. "+ parcela+    " - Dimensión "+dimension +    "\r\n"+dc.tablaDetallePago.getModel().getValueAt(row, 2).toString());
+            //-----Si es 0 es derecho de posesion-------//
             }else if (tipoPago==0){
               ar.detalle.setText("Cta. derecho posesión "+    "\r\nDimension "+dimension +     "\r\n"+ barrio +" "+ " Mz. "+manzana +" Pc. "+ parcela+   "\r\n");
-              System.out.println(row);
               cuota_total = new BigDecimal(dc.tablaDchoPosesion.getModel().getValueAt(row, 2).toString());
               gastos_administrativos = new BigDecimal(dc.tablaDchoPosesion.getModel().getValueAt(row, 3).toString());
               cobrado = cuota_total.add(gastos_administrativos) ;

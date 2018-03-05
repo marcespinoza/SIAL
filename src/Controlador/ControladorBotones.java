@@ -20,12 +20,13 @@ public class ControladorBotones implements ActionListener{
  
     public ControladorBotones(Ventana ventana) {
            this.ventana=ventana;
-           ventana.btnMinuta.addActionListener(this);
-           ventana.btnClientes.addActionListener(this);
-           ventana.btnResumen.addActionListener(this);
-           ventana.btnCumpleaños.addActionListener(this);
-           ventana.btnCumpleaños.setVisible(false);
-           ventana.cerrarSesion.addActionListener(this);
+           Ventana.btnMinuta.addActionListener(this);
+           Ventana.btnClientes.addActionListener(this);
+           Ventana.btnResumen.addActionListener(this);
+           Ventana.btnCumpleaños.addActionListener(this);
+           Ventana.btnCumpleaños.setVisible(false);
+           Ventana.cerrarSesion.addActionListener(this);
+           this.ventana.boton_ayuda.addActionListener(this);
     }
 
 
@@ -55,6 +56,10 @@ public class ControladorBotones implements ActionListener{
           new Ventana().setVisible(true);
         }
         
+        if(e.getSource()==Ventana.boton_ayuda){
+            System.out.print("ayudaaa");
+            new ControladorAyuda(ventana);
+        }
     }    
     
 }
