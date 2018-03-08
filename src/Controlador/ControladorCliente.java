@@ -198,9 +198,15 @@ public class ControladorCliente implements ActionListener, MouseListener, TableM
               int row = vistaClientes.tablaCliente.getSelectedRow();
               //--------Verifico que haya seleccionado alguna fila----------//
               if(row != -1){
-                if(vistaClientes.tablaCliente.getValueAt(row, 10) != null){  
-                new ControladorAltaCliente((Ventana) SwingUtilities.getWindowAncestor(vistaClientes), Integer.parseInt(vistaClientes.tablaCliente.getModel().getValueAt(row, 11).toString()),  Integer.parseInt(vistaClientes.tablaCliente.getModel().getValueAt(row, 2).toString()), true);
-                llenarTabla();
+                if(vistaClientes.tablaCliente.getValueAt(row, 10) != null){ 
+                  String[] options = {"Nuevo", "Existente"};
+                  int seleccion = JOptionPane.showOptionDialog(null, "Cambiar propietario..", "Propietario", JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
+                  if(seleccion==0){
+                    new ControladorAltaCliente((Ventana) SwingUtilities.getWindowAncestor(vistaClientes), Integer.parseInt(vistaClientes.tablaCliente.getModel().getValueAt(row, 11).toString()),  Integer.parseInt(vistaClientes.tablaCliente.getModel().getValueAt(row, 2).toString()), true);
+                    llenarTabla();}
+                   else{
+                      new ControladorPanelClientes((Ventana) SwingUtilities.getWindowAncestor(vistaClientes));
+                  }
                  }          
             }else{
                 JOptionPane.showMessageDialog(null, "Seleccione un propietario de la lista", "Atención", JOptionPane.INFORMATION_MESSAGE, null);
@@ -208,12 +214,13 @@ public class ControladorCliente implements ActionListener, MouseListener, TableM
         if(e.getSource() == vistaClientes.agregarPropietario){
                 int row = vistaClientes.tablaCliente.getSelectedRow();
            if(row != -1){
-               if(vistaClientes.tablaCliente.getValueAt(row, 10) != null){
+               if(vistaClientes.tablaCliente.getValueAt(row, 10) != null){          
                   new ControladorAltaCliente((Ventana) SwingUtilities.getWindowAncestor(vistaClientes),  Integer.parseInt(vistaClientes.tablaCliente.getModel().getValueAt(row, 11).toString()), 0, false);
                   llenarTabla();
                }else{
                   JOptionPane.showMessageDialog(null, "Debe asignar una propiedad", "Atención", JOptionPane.INFORMATION_MESSAGE, null); 
-               }}else{
+               }
+           }else{
                JOptionPane.showMessageDialog(null, "Seleccione un propietario de la lista", "Atención", JOptionPane.INFORMATION_MESSAGE, null);
            } 
         }
