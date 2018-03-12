@@ -194,6 +194,7 @@ public class ControladorCliente implements ActionListener, MouseListener, TableM
             }
             }
         }
+         //-----------Boton cambiar propietario------------//
           if(e.getSource() == vistaClientes.cambiarPropietario){
               int row = vistaClientes.tablaCliente.getSelectedRow();
               //--------Verifico que haya seleccionado alguna fila----------//
@@ -201,16 +202,19 @@ public class ControladorCliente implements ActionListener, MouseListener, TableM
                 if(vistaClientes.tablaCliente.getValueAt(row, 10) != null){ 
                   String[] options = {"Nuevo", "Existente"};
                   int seleccion = JOptionPane.showOptionDialog(null, "Cambiar propietario..", "Propietario", JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
+                 //---Seleccion es 0 se va a cambiar un cliente actual por un cliente nuevo
                   if(seleccion==0){
                     new ControladorAltaCliente((Ventana) SwingUtilities.getWindowAncestor(vistaClientes), Integer.parseInt(vistaClientes.tablaCliente.getModel().getValueAt(row, 11).toString()),  Integer.parseInt(vistaClientes.tablaCliente.getModel().getValueAt(row, 2).toString()), true);
                     llenarTabla();}
-                   else{
-                      new ControladorPanelClientes((Ventana) SwingUtilities.getWindowAncestor(vistaClientes));
+                  else{
+                     new ControladorPanelClientes((Ventana) SwingUtilities.getWindowAncestor(vistaClientes), Integer.parseInt(vistaClientes.tablaCliente.getModel().getValueAt(row, 2).toString()), Integer.parseInt(vistaClientes.tablaCliente.getModel().getValueAt(row, 11).toString()));
+                      llenarTabla();
                   }
                  }          
             }else{
                 JOptionPane.showMessageDialog(null, "Seleccione un propietario de la lista", "Atención", JOptionPane.INFORMATION_MESSAGE, null);
              }}
+        //--------Boton agregar propietario-----------//  
         if(e.getSource() == vistaClientes.agregarPropietario){
                 int row = vistaClientes.tablaCliente.getSelectedRow();
            if(row != -1){

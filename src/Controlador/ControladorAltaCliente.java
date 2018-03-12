@@ -198,9 +198,7 @@ public class ControladorAltaCliente implements ActionListener, KeyListener{
               rd.altaReferencia(ac.telefonoRef.getText(), ac.apellidosRef.getText(), ac.nombresRef.getText(), ac.parentescoRef.getText(), Integer.parseInt(ac.documento.getText()));
               //------Si el id_control es distinto de cero y bandera falso, entonces estoy agregando un propietario mas-----//
               //------a un lote que ya posee un propietario-------------------------------------------------//
-              System.out.println(id_control+"agregar"+bandera_);
-            if(id_control!=0 && !bandera_){
-                
+            if(id_control!=0 && !bandera_){                
                try {
                    cd.altaClientesXLotes(Integer.parseInt(ac.documento.getText()), id_control);
                } catch (SQLException ex) {

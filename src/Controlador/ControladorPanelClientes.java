@@ -6,24 +6,35 @@
 package Controlador;
 
 import Modelo.ClienteDAO;
+import Modelo.FichaControlDAO;
 import Vista.Dialogs.DialogClientes;
 import Vista.Frame.Ventana;
 import java.awt.Dialog;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.sql.ResultSet;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 /**
  *
  * @author Marceloi7
  */
-public class ControladorPanelClientes {
+public class ControladorPanelClientes implements ActionListener{
     
     DialogClientes vc;
     ClienteDAO cd = new ClienteDAO();
     private Object [] clientes;
+    FichaControlDAO fd = new FichaControlDAO();
+    int id_control = 0;
+    int documento = 0;
 
-    public ControladorPanelClientes(Ventana ventana) {        
+    public ControladorPanelClientes(Ventana ventana, int documento, int id_control) {        
         vc = new DialogClientes(ventana, true);
+        this.id_control=id_control;
+        this.documento=documento;
+        vc.aceptar.addActionListener(this);
+        vc.cancelar.addActionListener(this);
         llenarTabla();
         vc.setLocationRelativeTo(null);
         vc.setVisible(true);        
@@ -31,12 +42,12 @@ public class ControladorPanelClientes {
     
     private void llenarTabla(){
         ResultSet rs;
-        rs = cd.clientesPorLotes();
+        rs = cd.clientesSinLotes();
         DefaultTableModel model = (DefaultTableModel) vc.tablaDialogClientes.getModel();
         model.setRowCount(0);
         try {
             while(rs.next()){
-                String apellido = rs.getString(3);
+                String apellido = rs.getString(2);
                 String nombre = rs.getString(3);
                 String documento = rs.getString(1);
                 clientes = new Object[] {apellido, nombre, documento};
@@ -47,5 +58,23 @@ public class ControladorPanelClientes {
                     
                     }
         
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        if(e.getSource()==vc.cancelar){
+            vc.dispose();
+        }
+        if(e.getSource()==vc.aceptar){
+            int row = vc.tablaDialogClientes.getSelectedRow();
+              //--------Verifico que haya seleccionado alguna fila----------//
+              if(row != -1){
+                  fd.cambiarPropietario(Integer.parseInt(vc.tablaDialogClientes.getModel().getValueAt(row, 2).toString()), documento, id_control);
+                  vc.dispose();
+              }else{
+                  JOptionPane.showMessageDialog(null, "Seleccione un propietario de la lista", "Atención", JOptionPane.INFORMATION_MESSAGE, null);  
+              }
+            
+        }
     }
 }

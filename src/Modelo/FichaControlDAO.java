@@ -93,7 +93,6 @@ public class FichaControlDAO {
     
   public void cambiarPropietario(int nuevo_dni, int viejo_dni, int id_ficha_control){
         try {
-            System.out.println(nuevo_dni+""+viejo_dni+""+id_ficha_control);
             Connection con = conexion.getConexion();
             PreparedStatement ps = con.prepareStatement(
                     "UPDATE cliente_tiene_lote SET cliente_dni = ? WHERE cliente_dni = ? AND id_control = ?");

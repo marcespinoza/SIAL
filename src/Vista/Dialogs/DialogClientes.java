@@ -33,6 +33,7 @@ public class DialogClientes extends java.awt.Dialog {
         cancelar = new javax.swing.JButton();
         aceptar = new javax.swing.JButton();
 
+        setTitle("Clientes");
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosing(java.awt.event.WindowEvent evt) {
                 closeDialog(evt);
