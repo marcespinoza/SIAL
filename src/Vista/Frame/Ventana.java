@@ -38,10 +38,11 @@ public class Ventana extends javax.swing.JFrame implements ActionListener{
 
     public Ventana() {
         initComponents();
-        GraphicsConfiguration config = this.getGraphicsConfiguration();
-        Rectangle usableBounds = SunGraphicsEnvironment.getUsableBounds(config.getDevice());
-        setMaximizedBounds(usableBounds);
-        setExtendedState(MAXIMIZED_BOTH);        
+//        GraphicsConfiguration config = this.getGraphicsConfiguration();
+//        Rectangle usableBounds = SunGraphicsEnvironment.getUsableBounds(config.getDevice());
+//        setMaximizedBounds(usableBounds);
+//        setExtendedState(MAXIMIZED_BOTH);        
+        this.setSize(1366, 768);
         ImageIcon icon = new ImageIcon("src/Imagenes/logo.png_32x32.png");
         this.setIconImage(icon.getImage());         
         inicializarPaneles();

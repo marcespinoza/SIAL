@@ -144,7 +144,7 @@ public class ControladorAltaPago implements ActionListener, KeyListener{
                BigDecimal cemento_haber = haber.divide(bolsa_cemento, 2, RoundingMode.DOWN);
                BigDecimal cemento_saldo = saldo_bolsa_cemento.subtract(cemento_haber);
                if(ac.chk_adelanto_cuota.isSelected()){
-               //-------Miro si la ultima cuota ya existe------//  
+               //-------Miro si la ultima cuota ya existe, si el lote es de 180 cuotas, miro si ya hizo adelanto de cuotas entonces puede tener la cuota 180------//  
                   if(cd.getUltimaCuota(nro_cuotas)){
                    try {
                        ResultSet rs = cd.getNrosCuotas(id_control);
@@ -191,7 +191,6 @@ public class ControladorAltaPago implements ActionListener, KeyListener{
     void altaPago(){
       if(ac.chk_dcho_posesion.isSelected()){ 
                 if(validarCampos()){
-                  DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
                   Date date = new Date();     
                   ResultSet rs = fc.obtenerFichaControl(id_control);
                   ResultSet dpd = dp.listarCuenta(id_control);

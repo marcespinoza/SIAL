@@ -11,6 +11,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -24,6 +25,28 @@ public class PropietarioDAO {
     
     public PropietarioDAO() {
         conexion = new Conexion();
+    }
+    
+    public int obtenerNroRecibo(String apellidos, String nombres, String cuit) throws SQLException{
+        int nroRecibo = 0;
+        Propietario propietario;
+         ResultSet rs = null;
+         Connection con = null;
+     try {
+          con = conexion.getConexion();         
+          String listar = "SELECT nro_recibo from propietario where apellidos = '"+apellidos+"' and nombres = '"+nombres+"' and cuit= '"+cuit+"'"; 
+          Statement st = con.createStatement();
+          rs = st.executeQuery(listar);
+          while(rs.next()) { 
+                nroRecibo = Integer.parseInt(rs.getString(1));
+            }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+             if (con != null && con.isClosed()) {
+             con.close();
+        }
+        return nroRecibo;
     }
     
      public ResultSet validarPropietarios(String usuario, String contraseña, String tipo_usuario){

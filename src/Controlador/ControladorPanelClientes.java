@@ -55,8 +55,7 @@ public class ControladorPanelClientes implements ActionListener{
             }
         }
             catch(Exception e){
-                    
-                    }
+        }
         
     }
 

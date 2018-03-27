@@ -274,6 +274,7 @@ public class ControladorDetalleCuota implements ActionListener, TableModelListen
     public void tableChanged(TableModelEvent e) {
         //------Solo trata cuando cambia el valor de una celda--------//
          if (e.getType() == TableModelEvent.UPDATE) {
+             System.out.println("se actualiza");
          }
     }
     

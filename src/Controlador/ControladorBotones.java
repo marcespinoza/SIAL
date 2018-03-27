@@ -57,7 +57,6 @@ public class ControladorBotones implements ActionListener{
         }
         
         if(e.getSource()==Ventana.boton_ayuda){
-            System.out.print("ayudaaa");
             new ControladorAyuda(ventana);
         }
     }    

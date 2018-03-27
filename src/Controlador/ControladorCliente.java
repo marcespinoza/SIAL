@@ -210,7 +210,9 @@ public class ControladorCliente implements ActionListener, MouseListener, TableM
                      new ControladorPanelClientes((Ventana) SwingUtilities.getWindowAncestor(vistaClientes), Integer.parseInt(vistaClientes.tablaCliente.getModel().getValueAt(row, 2).toString()), Integer.parseInt(vistaClientes.tablaCliente.getModel().getValueAt(row, 11).toString()));
                       llenarTabla();
                   }
-                 }          
+                 }else{
+                JOptionPane.showMessageDialog(null, "Debe seleccionar un cliente con una propiedad asignada", "Atención", JOptionPane.INFORMATION_MESSAGE, null);    
+                }          
             }else{
                 JOptionPane.showMessageDialog(null, "Seleccione un propietario de la lista", "Atención", JOptionPane.INFORMATION_MESSAGE, null);
              }}
@@ -545,7 +547,9 @@ public class ControladorCliente implements ActionListener, MouseListener, TableM
 
     @Override
     public void tableChanged(TableModelEvent e) {
-          if (e.getType() == TableModelEvent.UPDATE) {} 
+          if (e.getType() == TableModelEvent.UPDATE) {
+              System.out.println("se actualiza");
+          } 
           
     }
     

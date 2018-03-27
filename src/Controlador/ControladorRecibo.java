@@ -10,11 +10,11 @@ import Modelo.FichaControlDAO;
 import Modelo.LimitadorCaracteres;
 import Modelo.LoteDAO;
 import Modelo.MinutaDAO;
+import Modelo.Propietario;
 import Modelo.PropietarioDAO;
 import Vista.Dialogs.AltaRecibo;
 import Vista.Frame.Ventana;
 import Vista.Panels.DetalleCuota;
-import Vista.Panels.Minuta;
 import com.itextpdf.text.Chunk;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
@@ -39,6 +39,7 @@ import java.math.BigDecimal;
 import java.sql.ResultSet;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Random;
 import java.util.logging.Level;
@@ -60,7 +61,7 @@ public class ControladorRecibo implements ActionListener{
     PropietarioDAO pd = new PropietarioDAO();
     FichaControlDAO fcd = new FichaControlDAO();
     DetalleCuota dc = new DetalleCuota();
-    String apellido_propietario, nombre_propietario, cuit_propietario, nro_recibo_propietario;
+    String apellido_propietario, nombre_propietario, cuit_propietario;
     String nombre_comprador, apellido_comprador, domicilio_comprador;
     String dimension, barrio;
     int cant_cuotas, manzana, parcela, row;
@@ -147,15 +148,17 @@ public class ControladorRecibo implements ActionListener{
     
     private void datosPropietario(){
         ResultSet rs = ld.obtenerPropietarioxLote(id_control);
-        try {
+         int nroRecibo = 0;
+         try {
             rs.next();
             apellido_propietario = rs.getString(1);
             nombre_propietario = rs.getString(2);
             cuit_propietario = rs.getString(3);
-            nro_recibo_propietario = rs.getString(4);
             ar.apellido_propietario.setText(apellido_propietario);
             ar.nombre_propietario.setText(nombre_propietario);    
             ar.cuit_propietario.setText(cuit_propietario);
+            nroRecibo = pd.obtenerNroRecibo(apellido_propietario, nombre_propietario, cuit_propietario);
+            ar.nro_recibo.setText(String.valueOf(nroRecibo));
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
@@ -192,7 +195,7 @@ public class ControladorRecibo implements ActionListener{
              cobrado = cuota_total.add(gastos_administrativos) ;
              ar.importe.setText(String.valueOf(cobrado));
              ar.total_pagado.setText(String.valueOf(cobrado));            
-             ar.detalle.setText("Paga cuota "+dc.tablaDetallePago.getModel().getValueAt(row, 0).toString()+"/"+cant_cuotas+ " - "+ "Saldo cemento "+dc.tablaDetallePago.getModel().getValueAt(row, 10).toString()+  "\r\n"+ barrio +" "+ " Mz. "+manzana +" Pc. "+ parcela+    " - Dimensión "+dimension +    "\r\n"+dc.tablaDetallePago.getModel().getValueAt(row, 2).toString());
+             ar.detalle.setText("Paga cuota "+dc.tablaDetallePago.getModel().getValueAt(row, 0).toString()+"/"+cant_cuotas+ " - "+ "Saldo cemento "+dc.tablaDetallePago.getModel().getValueAt(row, 10).toString()+ " uds." +"\r\n"+ barrio +" "+ " Mz. "+manzana +" Pc. "+ parcela+    " - Dimensión "+dimension +    "\r\n"+dc.tablaDetallePago.getModel().getValueAt(row, 2).toString());
             //-----Si es 0 es derecho de posesion-------//
             }else if (tipoPago==0){
               ar.detalle.setText("Cta. derecho posesión "+    "\r\nDimension "+dimension +     "\r\n"+ barrio +" "+ " Mz. "+manzana +" Pc. "+ parcela+   "\r\n");
@@ -211,7 +214,7 @@ public class ControladorRecibo implements ActionListener{
             DateFormat fecha1 = new SimpleDateFormat("dd/MM/yyyy");
             java.util.Date date = new java.util.Date();
         try {
-            PdfWriter.getInstance(document, new FileOutputStream(new File(dc.path.getText(), "Recibo-"+nro_recibo_propietario+".pdf")));
+            PdfWriter.getInstance(document, new FileOutputStream(new File(dc.path.getText(), "Recibo-"+ar.nro_recibo.getText()+".pdf")));
             document.open();
             for (int i = 1; i < 4; i++) {               
             Font f=new Font(Font.FontFamily.TIMES_ROMAN,10.0f,0,null);
@@ -226,7 +229,7 @@ public class ControladorRecibo implements ActionListener{
             cell3.setHorizontalAlignment(Element.ALIGN_CENTER);
             table.addCell(cell3);
             document.add(table); 
-            Paragraph para = new Paragraph("Numero: "+nro_recibo_propietario,f);
+            Paragraph para = new Paragraph("Numero: "+ar.nro_recibo.getText(),f);
             Paragraph cuit = new Paragraph("CUIT: 23-07431900-9",f);
             Paragraph ingBrutos = new Paragraph("Ing Brutos: 01-23-07431900-9",f);
             Paragraph inicAct = new Paragraph(fecha1.format(date)+"                                                        Inic. Act.: 01-08-2015",f); 
@@ -396,9 +399,9 @@ public class ControladorRecibo implements ActionListener{
             BigDecimal rendido = cobrado.subtract(gastos_administrativos);
             //---Si tipoPago es 1 es cuota comun, si es 0 a cuenta de derecho de posesión-------//
             if(tipoPago==1){
-              md.altaMinuta(new java.sql.Date(date.getTime()), apellido_comprador, nombre_comprador, manzana, parcela, cobrado, gastos_administrativos, rendido, Integer.parseInt(dc.tablaDetallePago.getModel().getValueAt(row, 0).toString()), dc.tablaDetallePago.getModel().getValueAt(row, 12).toString(), categoria.toString(), Integer.parseInt(nro_recibo_propietario));
+              md.altaMinuta(new java.sql.Date(date.getTime()), apellido_comprador, nombre_comprador, manzana, parcela, cobrado, gastos_administrativos, rendido, Integer.parseInt(dc.tablaDetallePago.getModel().getValueAt(row, 0).toString()), dc.tablaDetallePago.getModel().getValueAt(row, 12).toString(), categoria.toString(), Integer.parseInt(ar.nro_recibo.getText()));
             }else if(tipoPago==0){
-              md.altaMinuta(new java.sql.Date(date.getTime()), apellido_comprador, nombre_comprador, manzana, parcela, cobrado, gastos_administrativos, rendido, Integer.parseInt(dc.tablaDchoPosesion.getModel().getValueAt(row, 0).toString()), dc.tablaDetallePago.getModel().getValueAt(row, 12).toString()+" Dcho. posesión", "Cta. derecho posesión",Integer.parseInt(nro_recibo_propietario));
+              md.altaMinuta(new java.sql.Date(date.getTime()), apellido_comprador, nombre_comprador, manzana, parcela, cobrado, gastos_administrativos, rendido, Integer.parseInt(dc.tablaDchoPosesion.getModel().getValueAt(row, 0).toString()), dc.tablaDetallePago.getModel().getValueAt(row, 12).toString()+" Dcho. posesión", "Cta. derecho posesión",Integer.parseInt(ar.nro_recibo.getText()));
             }
              return null;
              }
@@ -406,7 +409,7 @@ public class ControladorRecibo implements ActionListener{
        @Override
        public void done() { 
             Ventana.cm.llenarTablaFecha();
-            pd.editarNroRecibo(apellido_propietario, nombre_propietario, cuit_propietario, Integer.parseInt(nro_recibo_propietario)+1);
+            pd.editarNroRecibo(apellido_propietario, nombre_propietario, cuit_propietario, Integer.parseInt(ar.nro_recibo.getText())+1);
          }    
         }
        
@@ -417,6 +420,12 @@ public class ControladorRecibo implements ActionListener{
               bandera=false;
          }else{
              ar.son_pesos.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
+          }
+            if(ar.nro_recibo.getText().isEmpty()){
+             ar.nro_recibo.setBorder(BorderFactory.createLineBorder(Color.RED, 1));
+              bandera=false;
+         }else{
+             ar.nro_recibo.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
           }
           return bandera;
       }
