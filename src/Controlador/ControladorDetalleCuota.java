@@ -36,33 +36,28 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
-import javax.swing.JProgressBar;
 import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableModel;
 
 /**
  *
  * @author Marcelo
  */
 public class ControladorDetalleCuota implements ActionListener, TableModelListener{
-    
+
+       
     RendererTablaCuota r = new RendererTablaCuota();
     RendererTablaDchoPosesion rdp = new RendererTablaDchoPosesion();
     DetalleCuota dc = new DetalleCuota();
@@ -84,6 +79,9 @@ public class ControladorDetalleCuota implements ActionListener, TableModelListen
     public static final String IMG = "src/Imagenes/logo_reporte.png";
     ResultSet detalleCuota, derechoPosesion;
     int baja_logica;
+    
+    public ControladorDetalleCuota() {
+    }
     
     public ControladorDetalleCuota(int nro_cuotas,String apellido, String nombre, String telefono, String barrio,String calle,int numero,int id_control, int baja_logica) {
         this.apellido=apellido;
@@ -113,6 +111,7 @@ public class ControladorDetalleCuota implements ActionListener, TableModelListen
         dc.guardar.addActionListener(this);
         dc.volverBtn.addActionListener(this);
         dc.agregarPagoBtn.addActionListener(this);
+        dc.eliminarPagoBtn.addActionListener(this);
         dc.generarReciboBtn.addActionListener(this);
         dc.resumenCliente.addActionListener(this);
         dc.nombreLabel.setText(this.nombre);
@@ -183,8 +182,9 @@ public class ControladorDetalleCuota implements ActionListener, TableModelListen
                 String cemento_haber = detalleCuota.getString(10);
                 String cemento_saldo = detalleCuota.getString(11);
                 String observaciones = detalleCuota.getString(12);
-                String tipo_pago = detalleCuota.getString(13);
-                detallePago= new Object[] {nro_cuota, fecha, detalle, cuota_pura, gastos_admin, debe, haber, saldo, cemento_debe, cemento_haber,cemento_saldo, observaciones, tipo_pago};                    
+                String nro_recibo = detalleCuota.getString(13);
+                String tipo_pago = detalleCuota.getString(14);
+                detallePago= new Object[] {nro_cuota, fecha, detalle, cuota_pura, gastos_admin, debe, haber, saldo, cemento_debe, cemento_haber,cemento_saldo, nro_recibo, observaciones, tipo_pago};                    
                 model.addRow(detallePago); 
             }
             //---------Reseteo resultset para recorrerlo nuevamente cuando quiero---------//
@@ -209,6 +209,15 @@ public class ControladorDetalleCuota implements ActionListener, TableModelListen
             llenarTabla(id_control);
             llearTablaDchoPosesion(id_control);
         }
+        if(e.getSource()==dc.eliminarPagoBtn){
+             int row = dc.tablaDetallePago.getSelectedRow();
+             int nro_cuota = Integer.parseInt(dc.tablaDetallePago.getModel().getValueAt(row, 0).toString());
+             if(row!=-1){
+            cd.eliminarCuota(nro_cuota, id_control);}
+             else{
+                JOptionPane.showMessageDialog(null, "Seleccione un pago", "Atención", JOptionPane.INFORMATION_MESSAGE, null);
+             }
+        }
         if(e.getSource() == dc.resumenCliente){
             if(dc.tablaDetallePago.getRowCount()==1 && dc.tablaDchoPosesion.getRowCount()==0){
                JOptionPane.showMessageDialog(null, "No hay datos para mostrar", "Atención", JOptionPane.INFORMATION_MESSAGE, null); }
@@ -223,11 +232,11 @@ public class ControladorDetalleCuota implements ActionListener, TableModelListen
               if(cuota){
                int row = dc.tablaDetallePago.getSelectedRow();
                switch(row){
-                case 0:
-                JOptionPane.showMessageDialog(null, "Cuota no válida", "Atención", JOptionPane.INFORMATION_MESSAGE, null);
-                break;
+                case 0: JOptionPane.showMessageDialog(null, "Cuota no válida", "Atención", JOptionPane.INFORMATION_MESSAGE, null); break;
+                case -1: JOptionPane.showMessageDialog(null, "Seleccione un pago", "Atención", JOptionPane.INFORMATION_MESSAGE, null); break;
                 default:
-                new ControladorRecibo((Frame) SwingUtilities.getWindowAncestor(dc), id_control, dc ,row, 1);           
+                new ControladorRecibo(this,(Frame) SwingUtilities.getWindowAncestor(dc), id_control, dc ,Integer.parseInt(dc.tablaDetallePago.getModel().getValueAt(row, 0).toString()),row, 1);    
+                break;
             }
              }else if(posesion){
                  int row = dc.tablaDchoPosesion.getSelectedRow();
@@ -236,7 +245,7 @@ public class ControladorDetalleCuota implements ActionListener, TableModelListen
                 JOptionPane.showMessageDialog(null, "Fila no válida", "Atención", JOptionPane.INFORMATION_MESSAGE, null);
                 break;
                 default:
-                 new ControladorRecibo((Frame) SwingUtilities.getWindowAncestor(dc), id_control, dc ,row, 0);  
+                 new ControladorRecibo(this,(Frame) SwingUtilities.getWindowAncestor(dc), id_control, dc , Integer.parseInt(dc.tablaDchoPosesion.getModel().getValueAt(row, 0).toString()),row, 0);  
                 }
                }
               }else{

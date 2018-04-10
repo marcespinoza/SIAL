@@ -26,7 +26,7 @@ public class ControladorBotones implements ActionListener{
            Ventana.btnCumpleaños.addActionListener(this);
            Ventana.btnCumpleaños.setVisible(false);
            Ventana.cerrarSesion.addActionListener(this);
-           this.ventana.boton_ayuda.addActionListener(this);
+//           this.ventana.boton_ayuda.addActionListener(this);
     }
 
 
@@ -56,9 +56,9 @@ public class ControladorBotones implements ActionListener{
           new Ventana().setVisible(true);
         }
         
-        if(e.getSource()==Ventana.boton_ayuda){
-            new ControladorAyuda(ventana);
-        }
+//        if(e.getSource()==Ventana.boton_ayuda){
+//            new ControladorAyuda(ventana);
+//        }
     }    
     
 }

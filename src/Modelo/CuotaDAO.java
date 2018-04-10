@@ -44,7 +44,7 @@ public class CuotaDAO {
          ResultSet rs = null;
      try {
           Connection con = conexion.getConexion();
-          String listar = "SELECT nro_cuota, fecha, detalle, cuota_pura, gastos_administrativos, debe, haber, saldo, cemento_debe, cemento_haber, cemento_saldo, observaciones, tipo_pago from linea_control_lote where id_Control = '"+idControl+"'"; 
+          String listar = "SELECT nro_cuota, fecha, detalle, cuota_pura, gastos_administrativos, debe, haber, saldo, cemento_debe, cemento_haber, cemento_saldo, nro_recibo, observaciones, tipo_pago from linea_control_lote where id_Control = '"+idControl+"'"; 
           Statement st = con.createStatement();
           rs = st.executeQuery(listar);
         } catch (Exception e) {
@@ -61,7 +61,7 @@ public class CuotaDAO {
          filasAfectadas = ps.executeUpdate();
          
      } catch (Exception e) {  
-           System.out.println(e.getMessage()+"cuotadao");
+           System.out.println(e.getMessage());
      }
      return filasAfectadas;
  }  
@@ -123,6 +123,35 @@ public class CuotaDAO {
         } catch (SQLException ex) {
             Logger.getLogger(CuotaDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
+  }
+  
+  public void actualizarNroRecibo(int nro_recibo, int nro_cuota, int id_control){
+        try {
+            Connection con = conexion.getConexion();
+            PreparedStatement ps = con.prepareStatement(
+                    "UPDATE linea_control_lote SET Nro_recibo = ? WHERE nro_cuota = ? AND id_control = ?");
+            ps.setInt(1, nro_recibo);
+            ps.setInt(2,nro_cuota);
+            ps.setInt(3,id_control);
+            // call executeUpdate to execute our sql update statement
+            ps.executeUpdate();
+            ps.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(CuotaDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+  }
+  
+  public void eliminarCuota(int nro_cuota, int id_control){
+       try {
+         Connection con = conexion.getConexion();
+         String eliminar = "delete from linea_control_lote where nro_cuota = '"+nro_cuota+"' and id_control='"+id_control+"'";
+         PreparedStatement ps = con.prepareStatement(eliminar);
+         ps.executeUpdate();
+         ps.close();
+         con.close();
+     } catch (Exception e) {
+         System.out.println(e.getMessage());
+     }
   }
     
 }
