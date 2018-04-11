@@ -35,7 +35,9 @@ import java.math.BigDecimal;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -120,18 +122,21 @@ public class ControladorMinuta implements MouseListener, ActionListener {
         DefaultTableModel model2 = (DefaultTableModel) vistaMinuta.tablaMinuta.getModel();
         model2.setRowCount(0);
         model.setRowCount(0);
+        SimpleDateFormat df = new SimpleDateFormat("dd-MM-yyyy");
         int nro = 1;
         try {
             while(rs.next()){
-                String fecha_minuta = rs.getString(1);
-                fechaMinuta = new Object[] {nro,fecha_minuta};
+                Date fecha= rs.getDate(1);
+                fechaMinuta = new Object[] {nro,df.format(fecha)};
                 model.addRow(fechaMinuta); 
                 nro ++;
             }  
          vistaMinuta.tablaFechaMinuta.getColumnModel().getColumn(0).setPreferredWidth(1);   
         }catch (SQLException e) {
             System.out.println(e.getMessage());
-        }}
+        
+        } 
+    }
 
     @Override
     public void actionPerformed(ActionEvent e) {
@@ -327,11 +332,14 @@ public class ControladorMinuta implements MouseListener, ActionListener {
     public class MinutasPorFecha extends javax.swing.SwingWorker<Void, Void>{
          
          ResultSet rs;
+         DateFormat sdfr = new SimpleDateFormat("dd-MM-yyyy");
 
         @Override
         protected Void doInBackground() throws Exception {    
-            int row = vistaMinuta.tablaFechaMinuta.getSelectedRow();
-            rs = md.minutasPorFecha(vistaMinuta.tablaFechaMinuta.getModel().getValueAt(row,1).toString());
+            int row = vistaMinuta.tablaFechaMinuta.getSelectedRow();    
+            Date date = sdfr.parse(vistaMinuta.tablaFechaMinuta.getModel().getValueAt(row,1).toString());
+            SimpleDateFormat input = new SimpleDateFormat("yyyy-MM-dd");
+            rs = md.minutasPorFecha(input.format(date));
             return null;
         }
 

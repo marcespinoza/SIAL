@@ -43,6 +43,7 @@ import java.sql.SQLException;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
@@ -213,7 +214,14 @@ public class ControladorDetalleCuota implements ActionListener, TableModelListen
              int row = dc.tablaDetallePago.getSelectedRow();
              int nro_cuota = Integer.parseInt(dc.tablaDetallePago.getModel().getValueAt(row, 0).toString());
              if(row!=-1){
-            cd.eliminarCuota(nro_cuota, id_control);}
+                 ImageIcon icon = new ImageIcon("src/Imagenes/Iconos/warning.png"); 
+                 int reply = JOptionPane.showConfirmDialog(null, "Eliminar cuota numero "+dc.tablaDetallePago.getModel().getValueAt(row, 0)+"?",
+                     "Advertencia",JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, icon);
+              if (reply == JOptionPane.YES_OPTION) {
+                  cd.eliminarCuota(nro_cuota, id_control);
+                  llenarTabla(id_control);
+               } 
+            }
              else{
                 JOptionPane.showMessageDialog(null, "Seleccione un pago", "Atención", JOptionPane.INFORMATION_MESSAGE, null);
              }

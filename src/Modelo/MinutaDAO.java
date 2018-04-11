@@ -29,11 +29,11 @@ public class MinutaDAO {
     int filasAfectadas=0;
      try {
          Connection con = conexion.getConexion();
-         String insertar = "Insert into minuta(fecha_minuta, apellidos, nombres, manzana, parcela, cobrado, gastos, rendido, nro_cuota, observaciones, categoria, recibo_idRecibo) values ('"+fecha+"','"+apellidos+"','"+nombres+"','"+manzana+"','"+parcela+"','"+cobrado+"','"+gastos+"','"+rendido+"','"+nro_cuota+"','"+observaciones+"','"+categoria+"','"+id_recibo+"') ";
+         String insertar = "Insert into minuta(fecha_minuta, apellidos, nombres, manzana, parcela, cobrado, gastos, rendido, nro_cuota, observaciones, categoria, recibo_id_Recibo) values ('"+fecha+"','"+apellidos+"','"+nombres+"','"+manzana+"','"+parcela+"','"+cobrado+"','"+gastos+"','"+rendido+"','"+nro_cuota+"','"+observaciones+"','"+categoria+"','"+id_recibo+"') ";
          PreparedStatement ps = con.prepareStatement(insertar);
          filasAfectadas = ps.executeUpdate();         
      } catch (Exception e) { 
-         System.out.println(e.getMessage());
+         System.out.println(e.getMessage()+"dat");
      }
      return filasAfectadas;
  }
@@ -92,6 +92,7 @@ public class MinutaDAO {
     
     public ResultSet minutasPorFecha(String fecha){
      ResultSet rs = null;
+     System.out.println(fecha);
      try {
           Connection con = conexion.getConexion();
           String listar = "SELECT * FROM Minuta where fecha_minuta = '"+fecha+"'";
