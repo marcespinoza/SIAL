@@ -406,9 +406,8 @@ public class ControladorRecibo implements ActionListener{
            
             progress.setVisible(true);
             //-----Devuelve id del recibo creado-----//
-            id_recibo = rd.altaRecibo(nro_cuota, apellido_propietario, nombre_propietario);
-         
-             return null;
+            id_recibo = rd.altaRecibo(Integer.parseInt(ar.nro_recibo.getText()), apellido_propietario, nombre_propietario);         
+            return null;
        }
 
        @Override
@@ -426,7 +425,7 @@ public class ControladorRecibo implements ActionListener{
               md.altaMinuta(new java.sql.Date(date.getTime()), apellido_comprador, nombre_comprador, manzana, parcela, cobrado, gastos_administrativos, rendido, Integer.parseInt(dc.tablaDchoPosesion.getModel().getValueAt(row, 0).toString()), dc.tablaDetallePago.getModel().getValueAt(row, 13).toString()+" Dcho. posesión", "Cta. derecho posesión",id_recibo);
             }
             pd.editarNroRecibo(apellido_propietario, nombre_propietario, cuit_propietario, Integer.parseInt(ar.nro_recibo.getText())+1);
-            cuod.actualizarNroRecibo(Integer.parseInt(ar.nro_recibo.getText()), nro_cuota, id_control);
+            cuod.actualizarNroRecibo(Integer.parseInt(ar.nro_recibo.getText()), id_recibo, nro_cuota, id_control);
             progress.dispose();
             ar.dispose();
             cdc.llearTablaDchoPosesion(id_control);

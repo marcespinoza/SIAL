@@ -44,7 +44,7 @@ public class CuotaDAO {
          ResultSet rs = null;
      try {
           Connection con = conexion.getConexion();
-          String listar = "SELECT nro_cuota, fecha, detalle, cuota_pura, gastos_administrativos, debe, haber, saldo, cemento_debe, cemento_haber, cemento_saldo, nro_recibo, observaciones, tipo_pago from linea_control_lote where id_Control = '"+idControl+"'"; 
+          String listar = "SELECT nro_cuota, fecha, detalle, cuota_pura, gastos_administrativos, debe, haber, saldo, cemento_debe, cemento_haber, cemento_saldo, observaciones, nro_recibo, id_recibo, tipo_pago from linea_control_lote where id_Control = '"+idControl+"'"; 
           Statement st = con.createStatement();
           rs = st.executeQuery(listar);
         } catch (Exception e) {
@@ -109,6 +109,7 @@ public class CuotaDAO {
         return flag;
   }
   
+  //------Actualiza las observaciones------//
   public void actualizarCuota(String obersaciones, int nro_cuota, int id_control){
         try {
             Connection con = conexion.getConexion();
@@ -125,14 +126,15 @@ public class CuotaDAO {
         }
   }
   
-  public void actualizarNroRecibo(int nro_recibo, int nro_cuota, int id_control){
+  public void actualizarNroRecibo(int nro_recibo, int id_recibo, int nro_cuota, int id_control){
         try {
             Connection con = conexion.getConexion();
             PreparedStatement ps = con.prepareStatement(
-                    "UPDATE linea_control_lote SET Nro_recibo = ? WHERE nro_cuota = ? AND id_control = ?");
+                    "UPDATE linea_control_lote SET Nro_recibo = ?, id_recibo=? WHERE nro_cuota = ? AND id_control = ?");
             ps.setInt(1, nro_recibo);
-            ps.setInt(2,nro_cuota);
-            ps.setInt(3,id_control);
+            ps.setInt(2, id_recibo);
+            ps.setInt(3,nro_cuota);
+            ps.setInt(4,id_control);
             // call executeUpdate to execute our sql update statement
             ps.executeUpdate();
             ps.close();

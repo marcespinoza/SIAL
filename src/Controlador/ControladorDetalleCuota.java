@@ -8,6 +8,7 @@ package Controlador;
 import Modelo.CuotaDAO;
 import Modelo.DchoPosesionDAO;
 import Modelo.FichaControlDAO;
+import Modelo.MinutaDAO;
 import Modelo.RendererTablaCuota;
 import Modelo.RendererTablaDchoPosesion;
 import Vista.Dialogs.ProgressDialog;
@@ -63,6 +64,7 @@ public class ControladorDetalleCuota implements ActionListener, TableModelListen
     RendererTablaDchoPosesion rdp = new RendererTablaDchoPosesion();
     DetalleCuota dc = new DetalleCuota();
     CuotaDAO cd = new CuotaDAO();
+    MinutaDAO md = new MinutaDAO();
     DchoPosesionDAO dp = new DchoPosesionDAO();
     FichaControlDAO fcd = new FichaControlDAO();
     Object [] detallePago;
@@ -184,8 +186,9 @@ public class ControladorDetalleCuota implements ActionListener, TableModelListen
                 String cemento_saldo = detalleCuota.getString(11);
                 String observaciones = detalleCuota.getString(12);
                 String nro_recibo = detalleCuota.getString(13);
-                String tipo_pago = detalleCuota.getString(14);
-                detallePago= new Object[] {nro_cuota, fecha, detalle, cuota_pura, gastos_admin, debe, haber, saldo, cemento_debe, cemento_haber,cemento_saldo, nro_recibo, observaciones, tipo_pago};                    
+                String id_recibo = detalleCuota.getString(14);
+                String tipo_pago = detalleCuota.getString(15);
+                detallePago= new Object[] {nro_cuota, fecha, detalle, cuota_pura, gastos_admin, debe, haber, saldo, cemento_debe, cemento_haber,cemento_saldo, observaciones, nro_recibo, id_recibo, tipo_pago};                    
                 model.addRow(detallePago); 
             }
             //---------Reseteo resultset para recorrerlo nuevamente cuando quiero---------//
@@ -213,12 +216,14 @@ public class ControladorDetalleCuota implements ActionListener, TableModelListen
         if(e.getSource()==dc.eliminarPagoBtn){
              int row = dc.tablaDetallePago.getSelectedRow();
              int nro_cuota = Integer.parseInt(dc.tablaDetallePago.getModel().getValueAt(row, 0).toString());
+             int id_recibo = Integer.parseInt(dc.tablaDetallePago.getModel().getValueAt(row, 13).toString());
              if(row!=-1){
                  ImageIcon icon = new ImageIcon("src/Imagenes/Iconos/warning.png"); 
                  int reply = JOptionPane.showConfirmDialog(null, "Eliminar cuota numero "+dc.tablaDetallePago.getModel().getValueAt(row, 0)+"?",
                      "Advertencia",JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, icon);
               if (reply == JOptionPane.YES_OPTION) {
                   cd.eliminarCuota(nro_cuota, id_control);
+                  md.eliminarMinuta(id_recibo);
                   llenarTabla(id_control);
                } 
             }

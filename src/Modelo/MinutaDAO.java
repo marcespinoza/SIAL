@@ -11,7 +11,10 @@ import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -29,7 +32,7 @@ public class MinutaDAO {
     int filasAfectadas=0;
      try {
          Connection con = conexion.getConexion();
-         String insertar = "Insert into minuta(fecha_minuta, apellidos, nombres, manzana, parcela, cobrado, gastos, rendido, nro_cuota, observaciones, categoria, recibo_id_Recibo) values ('"+fecha+"','"+apellidos+"','"+nombres+"','"+manzana+"','"+parcela+"','"+cobrado+"','"+gastos+"','"+rendido+"','"+nro_cuota+"','"+observaciones+"','"+categoria+"','"+id_recibo+"') ";
+         String insertar = "Insert into minuta(fecha_minuta, apellidos, nombres, manzana, parcela, cobrado, gastos, rendido, nro_cuota, observaciones, categoria, id_Recibo) values ('"+fecha+"','"+apellidos+"','"+nombres+"','"+manzana+"','"+parcela+"','"+cobrado+"','"+gastos+"','"+rendido+"','"+nro_cuota+"','"+observaciones+"','"+categoria+"','"+id_recibo+"') ";
          PreparedStatement ps = con.prepareStatement(insertar);
          filasAfectadas = ps.executeUpdate();         
      } catch (Exception e) { 
@@ -92,7 +95,6 @@ public class MinutaDAO {
     
     public ResultSet minutasPorFecha(String fecha){
      ResultSet rs = null;
-     System.out.println(fecha);
      try {
           Connection con = conexion.getConexion();
           String listar = "SELECT * FROM Minuta where fecha_minuta = '"+fecha+"'";
@@ -131,5 +133,21 @@ public class MinutaDAO {
         }
      return rs;
  }
+     
+   public void eliminarMinuta(int idRecibo){
+       
+        try {
+            Connection con = conexion.getConexion();
+            String query = "UPDATE minuta SET baja = 1 where id_recibo = ?";
+            PreparedStatement preparedStmt = con.prepareStatement(query);
+            preparedStmt.setInt   (1, idRecibo);
+            preparedStmt.executeUpdate();      
+            preparedStmt.close();
+            con.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(MinutaDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+ } 
     
 }

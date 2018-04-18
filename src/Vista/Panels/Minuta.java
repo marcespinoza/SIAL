@@ -6,7 +6,9 @@
 package Vista.Panels;
 
 import java.awt.Color;
+import java.awt.Component;
 import javax.swing.table.JTableHeader;
+import javax.swing.table.TableCellRenderer;
 
 /**
  *
@@ -37,7 +39,18 @@ public class Minuta extends javax.swing.JPanel {
     private void initComponents() {
 
         jScrollPane1 = new javax.swing.JScrollPane();
-        tablaMinuta = new javax.swing.JTable();
+        tablaMinuta = new javax.swing.JTable()
+        {
+            public Component prepareRenderer(TableCellRenderer renderer, int rowIndex, int vColIndex) {
+                Component c = super.prepareRenderer(renderer, rowIndex, vColIndex);
+                //---Pinto de rosado si el cliente no tiene propiedad asignada---//
+                c.setBackground(Color.WHITE);
+                if(tablaMinuta.getValueAt(rowIndex, 9).equals("1")){
+                    c.setBackground(Color.PINK);
+                }
+                return c;
+            }
+        };
         jScrollPane2 = new javax.swing.JScrollPane();
         tablaFechaMinuta = new javax.swing.JTable();
         generarMinuta = new javax.swing.JButton();
@@ -63,7 +76,7 @@ public class Minuta extends javax.swing.JPanel {
 
             },
             new String [] {
-                "Fecha", "Rbo. Nro.", "Apellido/s", "Nombre/s", "Mz. Pc.", "Cobrado", "Gastos Admin.", "Rendido", "Cuota cobrada", "Observaciones"
+                "Fecha", "Apellido/s", "Nombre/s", "Mz. Pc.", "Cobrado", "Gastos Admin.", "Rendido", "Cuota cobrada", "Observaciones", "baja"
             }
         ) {
             boolean[] canEdit = new boolean [] {
@@ -83,6 +96,9 @@ public class Minuta extends javax.swing.JPanel {
             tablaMinuta.getColumnModel().getColumn(6).setPreferredWidth(1);
             tablaMinuta.getColumnModel().getColumn(7).setPreferredWidth(1);
             tablaMinuta.getColumnModel().getColumn(8).setPreferredWidth(1);
+            tablaMinuta.getColumnModel().getColumn(9).setMinWidth(0);
+            tablaMinuta.getColumnModel().getColumn(9).setPreferredWidth(0);
+            tablaMinuta.getColumnModel().getColumn(9).setMaxWidth(0);
         }
 
         JTableHeader headerMinuta = tablaFechaMinuta.getTableHeader();
@@ -158,16 +174,18 @@ public class Minuta extends javax.swing.JPanel {
                 .addGap(13, 13, 13))
         );
 
+        totalCobrado.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         totalCobrado.setForeground(new java.awt.Color(51, 51, 255));
         totalCobrado.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
+        totalRendido.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         totalRendido.setForeground(new java.awt.Color(51, 51, 255));
         totalRendido.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
-        jLabel3.setFont(new java.awt.Font("Century Gothic", 1, 12)); // NOI18N
+        jLabel3.setFont(new java.awt.Font("Century Gothic", 1, 14)); // NOI18N
         jLabel3.setText("Total cobrado:");
 
-        jLabel4.setFont(new java.awt.Font("Century Gothic", 1, 12)); // NOI18N
+        jLabel4.setFont(new java.awt.Font("Century Gothic", 1, 14)); // NOI18N
         jLabel4.setText("Total rendido:");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);

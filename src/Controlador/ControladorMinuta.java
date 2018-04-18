@@ -105,8 +105,8 @@ public class ControladorMinuta implements MouseListener, ActionListener {
                 String rendido = rs.getString(8);     
                 String nro_cuota = rs.getString(9);
                 String observaciones = rs.getString(10);
-                String nro_recibo = rs.getString(12);
-                minuta = new Object[] {fecha_minuta,nro_recibo, apellidos, nombres, mzpc, cobrado, gastos, rendido, nro_cuota, observaciones};
+                String baja = rs.getString(13);
+                minuta = new Object[] {fecha_minuta,apellidos, nombres, mzpc, cobrado, gastos, rendido, nro_cuota, observaciones, baja};
                 model.addRow(minuta);   
             } 
             resultset.beforeFirst();

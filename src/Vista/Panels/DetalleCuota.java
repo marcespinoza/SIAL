@@ -91,11 +91,11 @@ public class DetalleCuota extends javax.swing.JPanel {
 
             },
             new String [] {
-                "Nro Cuota", "Fecha", "Detalle ", "Cuota pura", "Gastos admin.", "Debe", "Haber", "Saldo", "Cemento debe", "Cemento haber", "Cemento saldo", "Observaciones", "Nro recibo", "Tipo pago"
+                "Nro Cuota", "Fecha", "Detalle ", "Cuota pura", "Gastos admin.", "Debe", "Haber", "Saldo", "Cemento debe", "Cemento haber", "Cemento saldo", "Observaciones", "Nro recibo", "Id_recibo", "Tipo pago"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false, false, false, false, false, false, true, false, false
+                false, false, false, false, false, false, false, false, false, false, false, true, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -103,6 +103,11 @@ public class DetalleCuota extends javax.swing.JPanel {
             }
         });
         jScrollPane1.setViewportView(tablaDetallePago);
+        if (tablaDetallePago.getColumnModel().getColumnCount() > 0) {
+            tablaDetallePago.getColumnModel().getColumn(13).setMinWidth(0);
+            tablaDetallePago.getColumnModel().getColumn(13).setPreferredWidth(0);
+            tablaDetallePago.getColumnModel().getColumn(13).setMaxWidth(0);
+        }
 
         volverBtn.setText("Volver");
 
