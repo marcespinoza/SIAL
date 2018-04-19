@@ -144,7 +144,7 @@
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
                   <Component id="panelBotones1" max="32767" attributes="0"/>
-                  <Component id="panelPrincipal" pref="0" max="32767" attributes="0"/>
+                  <Component id="panelPrincipal" pref="1354" max="32767" attributes="0"/>
               </Group>
           </Group>
       </Group>
@@ -155,7 +155,7 @@
               <EmptySpace max="-2" attributes="0"/>
               <Component id="panelBotones1" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
-              <Component id="panelPrincipal" pref="621" max="32767" attributes="0"/>
+              <Component id="panelPrincipal" pref="653" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -214,7 +214,7 @@
             </DimensionLayout>
             <DimensionLayout dim="1">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <EmptySpace min="0" pref="617" max="32767" attributes="0"/>
+                  <EmptySpace min="0" pref="649" max="32767" attributes="0"/>
               </Group>
             </DimensionLayout>
           </Layout>
@@ -240,7 +240,9 @@
                   <Component id="btnMinuta" min="-2" pref="93" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="btnCumpleaños" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace pref="626" max="32767" attributes="0"/>
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Component id="btnAyuda" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace max="32767" attributes="0"/>
                   <Component id="nombreUsuario" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="apellidoUsuario" min="-2" max="-2" attributes="0"/>
@@ -257,10 +259,11 @@
         </DimensionLayout>
         <DimensionLayout dim="1">
           <Group type="103" groupAlignment="0" attributes="0">
-              <Group type="102" alignment="0" attributes="0">
+              <Group type="102" alignment="1" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="0" attributes="0">
-                      <Group type="102" attributes="0">
+                  <Group type="103" groupAlignment="1" attributes="0">
+                      <Component id="btnAyuda" alignment="1" max="32767" attributes="0"/>
+                      <Group type="102" alignment="0" attributes="0">
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Component id="labelUsuario" alignment="0" min="-2" pref="23" max="-2" attributes="0"/>
                               <Group type="103" alignment="0" groupAlignment="3" attributes="0">
@@ -273,11 +276,11 @@
                           <Component id="labelTipoUsuario" min="-2" pref="23" max="-2" attributes="0"/>
                           <EmptySpace pref="13" max="32767" attributes="0"/>
                       </Group>
-                      <Group type="103" groupAlignment="3" attributes="0">
+                      <Group type="103" alignment="0" groupAlignment="3" attributes="0">
                           <Component id="btnClientes" alignment="3" pref="66" max="32767" attributes="0"/>
                           <Component id="btnResumen" alignment="3" pref="66" max="32767" attributes="0"/>
                           <Component id="btnMinuta" alignment="3" pref="66" max="32767" attributes="0"/>
-                          <Component id="btnCumpleaños" alignment="3" pref="66" max="32767" attributes="0"/>
+                          <Component id="btnCumpleaños" alignment="3" min="-2" pref="65" max="-2" attributes="0"/>
                       </Group>
                   </Group>
                   <EmptySpace min="-2" pref="22" max="-2" attributes="0"/>
@@ -419,6 +422,16 @@
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnCumplea&#xf1;osActionPerformed"/>
           </Events>
+          <AuxValues>
+            <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="9"/>
+          </AuxValues>
+        </Component>
+        <Component class="javax.swing.JButton" name="btnAyuda">
+          <Properties>
+            <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+              <Image iconType="3" name="/Imagenes/iconos/help.png"/>
+            </Property>
+          </Properties>
           <AuxValues>
             <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="9"/>
           </AuxValues>

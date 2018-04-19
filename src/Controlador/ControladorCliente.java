@@ -25,6 +25,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.net.URL;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.ParseException;
@@ -33,7 +34,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
@@ -48,6 +48,8 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
+import org.apache.log4j.Logger;
+import org.apache.log4j.PropertyConfigurator;
 import org.joda.time.LocalDate;
 import org.joda.time.Years;
 
@@ -75,8 +77,11 @@ public class ControladorCliente implements ActionListener, MouseListener, TableM
     private List<Object> referencia = new ArrayList<Object>();
     public static final DefaultTableCellRenderer DEFAULT_RENDERER = new DefaultTableCellRenderer();
     private String nombres, apellidos;
+    static Logger log = Logger.getLogger(ControladorCliente.class.getName());
+    URL url = getClass().getResource("log4j.properties");
     
     public ControladorCliente(Ventana ventana, Clientes vistaClientes){
+        PropertyConfigurator.configure(url);
         this.vistaClientes=vistaClientes;
         this.ventana=ventana;
         this.vistaClientes.agregarBtn.addActionListener(this);
@@ -330,7 +335,7 @@ public class ControladorCliente implements ActionListener, MouseListener, TableM
             while (rs.next()) {
                 vistaClientes.comboApellido.addItem(rs.getString(1));                
             } } } catch (SQLException ex) {
-            Logger.getLogger(ControladorPropiedades.class.getName()).log(Level.SEVERE, null, ex);
+            log.debug("Cliente"+ex);
         }   
  }   
   public void llenarComboNombres(String apellidos){
@@ -341,7 +346,7 @@ public class ControladorCliente implements ActionListener, MouseListener, TableM
             while (rs.next()) {
                 vistaClientes.comboNombre.addItem(rs.getString(1));
             }  } catch (SQLException ex) {
-            Logger.getLogger(ControladorPropiedades.class.getName()).log(Level.SEVERE, null, ex);
+            log.debug("Cliente"+ex);
         }   
  }
     
@@ -429,7 +434,7 @@ public class ControladorCliente implements ActionListener, MouseListener, TableM
                  detalleCumpleaños = new String[] {nombre, apellido, fch_nacimiento, edad, telefono};
                  modeloCumpleaños.addRow(detalleCumpleaños);
              } catch (ParseException ex) {
-                 Logger.getLogger(ControladorCliente.class.getName()).log(Level.SEVERE, null, ex);
+                 log.debug("Cliente"+ex);
              }
          }
         }  

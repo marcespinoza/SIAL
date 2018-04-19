@@ -12,18 +12,13 @@ import Controlador.ControladorLogin;
 import Controlador.ControladorMinuta;
 import Controlador.ControladorRegistro;
 import Controlador.ControladorResumen;
-import Modelo.RoundButton;
 import Vista.Panels.Minuta;
 import Vista.Panels.Resumen;
-import java.awt.GraphicsConfiguration;
-import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
-import sun.java2d.SunGraphicsEnvironment;
-
 
 /**
  *
@@ -93,6 +88,7 @@ public class Ventana extends javax.swing.JFrame implements ActionListener{
         apellidoUsuario = new javax.swing.JLabel();
         nombreUsuario = new javax.swing.JLabel();
         btnCumpleaños = new javax.swing.JButton();
+        btnAyuda = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         MenuInicio = new javax.swing.JMenu();
         cerrarSesion = new javax.swing.JMenuItem();
@@ -137,7 +133,7 @@ public class Ventana extends javax.swing.JFrame implements ActionListener{
         );
         minutaLayout.setVerticalGroup(
             minutaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 617, Short.MAX_VALUE)
+            .addGap(0, 649, Short.MAX_VALUE)
         );
 
         panelPrincipal.add(minuta, "card5");
@@ -196,6 +192,8 @@ public class Ventana extends javax.swing.JFrame implements ActionListener{
             }
         });
 
+        btnAyuda.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/iconos/help.png"))); // NOI18N
+
         javax.swing.GroupLayout panelBotones1Layout = new javax.swing.GroupLayout(panelBotones1);
         panelBotones1.setLayout(panelBotones1Layout);
         panelBotones1Layout.setHorizontalGroup(
@@ -209,7 +207,9 @@ public class Ventana extends javax.swing.JFrame implements ActionListener{
                 .addComponent(btnMinuta, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnCumpleaños, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 626, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnAyuda)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(nombreUsuario)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(apellidoUsuario)
@@ -223,10 +223,11 @@ public class Ventana extends javax.swing.JFrame implements ActionListener{
         );
         panelBotones1Layout.setVerticalGroup(
             panelBotones1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panelBotones1Layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelBotones1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(panelBotones1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(panelBotones1Layout.createSequentialGroup()
+                .addGroup(panelBotones1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(btnAyuda, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, panelBotones1Layout.createSequentialGroup()
                         .addGroup(panelBotones1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(labelUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(panelBotones1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -236,11 +237,11 @@ public class Ventana extends javax.swing.JFrame implements ActionListener{
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(labelTipoUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 13, Short.MAX_VALUE))
-                    .addGroup(panelBotones1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, panelBotones1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(btnClientes, javax.swing.GroupLayout.DEFAULT_SIZE, 66, Short.MAX_VALUE)
                         .addComponent(btnResumen, javax.swing.GroupLayout.DEFAULT_SIZE, 66, Short.MAX_VALUE)
                         .addComponent(btnMinuta, javax.swing.GroupLayout.DEFAULT_SIZE, 66, Short.MAX_VALUE)
-                        .addComponent(btnCumpleaños, javax.swing.GroupLayout.DEFAULT_SIZE, 66, Short.MAX_VALUE)))
+                        .addComponent(btnCumpleaños, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(22, 22, 22))
         );
 
@@ -288,7 +289,7 @@ public class Ventana extends javax.swing.JFrame implements ActionListener{
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(panelBotones1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(panelPrincipal, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)))
+                    .addComponent(panelPrincipal, javax.swing.GroupLayout.DEFAULT_SIZE, 1354, Short.MAX_VALUE)))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -296,7 +297,7 @@ public class Ventana extends javax.swing.JFrame implements ActionListener{
                 .addContainerGap()
                 .addComponent(panelBotones1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(panelPrincipal, javax.swing.GroupLayout.PREFERRED_SIZE, 621, Short.MAX_VALUE))
+                .addComponent(panelPrincipal, javax.swing.GroupLayout.PREFERRED_SIZE, 653, Short.MAX_VALUE))
         );
 
         pack();
@@ -334,6 +335,7 @@ public class Ventana extends javax.swing.JFrame implements ActionListener{
     public javax.swing.JMenuItem about;
     public static javax.swing.JLabel apellidoUsuario;
     public javax.swing.JMenuItem baseDeDatos;
+    public static javax.swing.JButton btnAyuda;
     public static javax.swing.JButton btnClientes;
     public static javax.swing.JButton btnCumpleaños;
     public static javax.swing.JButton btnMinuta;

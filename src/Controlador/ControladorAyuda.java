@@ -28,8 +28,8 @@ public class ControladorAyuda {
     }
     
     private void init() {
- Help help = new Help();
- help.setVisible(true);
+    Help help = new Help();
+    help.setVisible(true);
 }
     
 }

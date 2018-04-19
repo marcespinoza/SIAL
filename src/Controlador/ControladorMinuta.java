@@ -70,6 +70,8 @@ public class ControladorMinuta implements MouseListener, ActionListener {
         this.vistaMinuta.generarMinuta.addActionListener(this);
         this.vistaMinuta.guardar_en.addActionListener(this);
         this.vistaMinuta.buscar.addActionListener(this);
+        vistaMinuta.totalCobrado.setText("0");
+        vistaMinuta.totalRendido.setText("0");
         cargarPathMinuta();
         llenarTablaFecha();
     }
@@ -353,14 +355,20 @@ public class ControladorMinuta implements MouseListener, ActionListener {
     private void totalCobrado(){
         BigDecimal total=new BigDecimal(0);
         for (int i = 0; i < vistaMinuta.tablaMinuta.getRowCount(); i++) {
-            total=total.add(new BigDecimal(vistaMinuta.tablaMinuta.getValueAt(i, 5).toString()));
+         //----Las minutas que estan dadas de baja no las sumo----//   
+          if(Integer.parseInt(vistaMinuta.tablaMinuta.getValueAt(i, 9).toString())==0){   
+            total=total.add(new BigDecimal(vistaMinuta.tablaMinuta.getValueAt(i, 4).toString()));
+          }
         }
         vistaMinuta.totalCobrado.setText("$ " + String.valueOf(total));
     }
     private void totalRendido(){
           BigDecimal total=new BigDecimal(0);
         for (int i = 0; i < vistaMinuta.tablaMinuta.getRowCount(); i++) {
-            total=total.add(new BigDecimal(vistaMinuta.tablaMinuta.getValueAt(i, 7).toString()));
+           //----Las minutas que estan dadas de baja no las sumo----//     
+           if(Integer.parseInt(vistaMinuta.tablaMinuta.getValueAt(i, 9).toString())==0){ 
+            total=total.add(new BigDecimal(vistaMinuta.tablaMinuta.getValueAt(i, 6).toString()));
+           }
         }
         vistaMinuta.totalRendido.setText("$ " + String.valueOf(total));
     }
