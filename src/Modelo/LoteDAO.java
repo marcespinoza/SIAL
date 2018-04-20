@@ -166,5 +166,23 @@ public class LoteDAO {
         }
         return flag;
  }
+     
+        
+   public void actualizarObservacion(String observaciones, String barrio, int manzana, int parcela){
+        try {
+            Connection con = conexion.getConexion();
+            PreparedStatement ps = con.prepareStatement(
+                    "UPDATE lote SET observaciones = ? WHERE barrio = ? and manzana = ? and parcela = ?");
+            ps.setString(1,observaciones);
+            ps.setString(2,barrio);
+            ps.setInt(3, manzana);
+            ps.setInt(4, parcela);
+            ps.executeUpdate();            
+            ps.close();
+            con.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(CuotaDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+  }
     
 }

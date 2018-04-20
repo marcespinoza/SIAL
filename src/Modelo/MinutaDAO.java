@@ -146,8 +146,8 @@ public class MinutaDAO {
             con.close();
         } catch (SQLException ex) {
             Logger.getLogger(MinutaDAO.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
+        }        
  } 
+   
     
 }

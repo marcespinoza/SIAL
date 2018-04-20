@@ -34,7 +34,7 @@ public class Conexion {
     public String user = "root";
     public String root = "";        
     public DataSource dataSource;       
-    static org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(ControladorCliente.class.getName());
+    static org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(Conexion.class.getName());
     URL url2 = getClass().getResource("log4j.properties");    
     
     public Conexion(){
@@ -42,7 +42,7 @@ public class Conexion {
     }
     
     public Connection getConexion(){    
-     PropertyConfigurator.configure(url2);      
+//     PropertyConfigurator.configure(url2);      
      BasicDataSource basicDataSource = new BasicDataSource();
      basicDataSource.setDriverClassName("com.mysql.jdbc.Driver");
      basicDataSource.setUsername(user);

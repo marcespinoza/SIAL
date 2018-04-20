@@ -110,17 +110,18 @@ public class CuotaDAO {
   }
   
   //------Actualiza las observaciones------//
-  public void actualizarCuota(String obersaciones, int nro_cuota, int id_control){
+  public void actualizarCuota(String observaciones, int nro_cuota, int id_control){
         try {
             Connection con = conexion.getConexion();
             PreparedStatement ps = con.prepareStatement(
                     "UPDATE linea_control_lote SET observaciones = ? WHERE nro_cuota = ? AND id_control = ?");
-            ps.setString(1,obersaciones);
+            ps.setString(1,observaciones);
             ps.setInt(2,nro_cuota);
             ps.setInt(3,id_control);
             // call executeUpdate to execute our sql update statement
             ps.executeUpdate();
             ps.close();
+            con.close();
         } catch (SQLException ex) {
             Logger.getLogger(CuotaDAO.class.getName()).log(Level.SEVERE, null, ex);
         }

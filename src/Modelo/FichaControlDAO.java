@@ -142,5 +142,7 @@ public class FichaControlDAO {
             System.out.println(ex.getMessage());
         }
   }
+   
+   
     
 }

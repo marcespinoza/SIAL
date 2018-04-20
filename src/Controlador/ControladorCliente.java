@@ -78,10 +78,9 @@ public class ControladorCliente implements ActionListener, MouseListener, TableM
     public static final DefaultTableCellRenderer DEFAULT_RENDERER = new DefaultTableCellRenderer();
     private String nombres, apellidos;
     static Logger log = Logger.getLogger(ControladorCliente.class.getName());
-    URL url = getClass().getResource("log4j.properties");
+    
     
     public ControladorCliente(Ventana ventana, Clientes vistaClientes){
-        PropertyConfigurator.configure(url);
         this.vistaClientes=vistaClientes;
         this.ventana=ventana;
         this.vistaClientes.agregarBtn.addActionListener(this);
@@ -552,10 +551,15 @@ public class ControladorCliente implements ActionListener, MouseListener, TableM
 
     @Override
     public void tableChanged(TableModelEvent e) {
+        int row = vistaClientes.tablaCliente.getSelectedRow();
+        if(row!=-1){
           if (e.getType() == TableModelEvent.UPDATE) {
-              System.out.println("se actualiza");
+              String barrio = vistaClientes.tablaCliente.getValueAt(row,16).toString();
+              int manzana = Integer.parseInt(vistaClientes.tablaCliente.getValueAt(row, 17).toString());
+              int parcela = Integer.parseInt(vistaClientes.tablaCliente.getValueAt(row, 18).toString());
+              ld.actualizarObservacion(vistaClientes.tablaCliente.getValueAt(row, 19).toString() , barrio, manzana, parcela);
           } 
-          
+        }  
     }
     
 }

@@ -83,6 +83,7 @@ public class ControladorRecibo implements ActionListener{
     String cons_final=""; 
     String monotributo=""; 
     String exento="";
+    static org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(ControladorCliente.class.getName());
 
     public ControladorRecibo(ControladorDetalleCuota cdc, Frame parent, int id_control, DetalleCuota dc, int nro_cuota, int row, int tipoPago) {
         ar = new AltaRecibo(parent, true);
@@ -354,12 +355,15 @@ public class ControladorRecibo implements ActionListener{
             document.add(linea_punteada);}
             }
             document.close();
-            }catch (DocumentException ex) {
+        }catch (DocumentException ex) {
             Logger.getLogger(DetalleCuota.class.getName()).log(Level.SEVERE, null, ex);
+            log.error(ex);
         } catch (FileNotFoundException ex) {
             Logger.getLogger(DetalleCuota.class.getName()).log(Level.SEVERE, null, ex);
+            log.error(ex);
         } catch (IOException ex) {
             Logger.getLogger(DetalleCuota.class.getName()).log(Level.SEVERE, null, ex);
+            log.error(ex);
         }
     }
 

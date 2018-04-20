@@ -295,9 +295,12 @@ public class ControladorDetalleCuota implements ActionListener, TableModelListen
     @Override
     public void tableChanged(TableModelEvent e) {
         //------Solo trata cuando cambia el valor de una celda--------//
+        int row = dc.tablaDetallePago.getSelectedRow();
+        if(row!=1){
          if (e.getType() == TableModelEvent.UPDATE) {
-             System.out.println("se actualiza");
+             cd.actualizarCuota(dc.tablaDetallePago.getModel().getValueAt(row, 11).toString(), Integer.parseInt(dc.tablaDetallePago.getModel().getValueAt(row, 0).toString()), id_control);
          }
+        }
     }
     
     private void generarResumenPdf(){
