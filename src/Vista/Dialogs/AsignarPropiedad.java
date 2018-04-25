@@ -79,7 +79,7 @@ public class AsignarPropiedad extends javax.swing.JDialog {
 
         jLabel9.setText("Tipo propiedad");
 
-        tipo_propiedad.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Terreno", "Departamento", "Campo", "Casa" }));
+        tipo_propiedad.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Terreno", "Departamento" }));
 
         jLabel10.setText("Cuota total");
 
@@ -158,7 +158,7 @@ public class AsignarPropiedad extends javax.swing.JDialog {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(apellido_propietario, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel11))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 7, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(nombre_propietario, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel12))

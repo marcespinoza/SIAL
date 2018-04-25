@@ -8,7 +8,7 @@ package Controlador;
 import Modelo.CuotaDAO;
 import Modelo.DchoPosesionDAO;
 import Modelo.FichaControlDAO;
-import Modelo.LimitadorCaracteres;
+import Clases.LimitadorCaracteres;
 import Vista.Dialogs.AltaCuota;
 import java.awt.Color;
 import java.awt.Frame;

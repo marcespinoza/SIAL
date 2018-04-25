@@ -7,7 +7,7 @@ package Controlador;
 
 import Modelo.ClienteDAO;
 import Modelo.FichaControlDAO;
-import Modelo.LimitadorCaracteres;
+import Clases.LimitadorCaracteres;
 import Modelo.ReferenciaDAO;
 import Vista.Dialogs.AltaCliente;
 import Vista.Frame.Ventana;

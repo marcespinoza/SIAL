@@ -6,7 +6,8 @@
 package Controlador;
 
 import Modelo.DepartamentoDAO;
-import Modelo.LimitadorCaracteres;
+import Clases.LimitadorCaracteres;
+import Clases.Propietario;
 import Modelo.LoteDAO;
 import Modelo.PropiedadesDAO;
 import Modelo.PropietarioDAO;
@@ -20,6 +21,7 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.BorderFactory;
@@ -97,16 +99,15 @@ public class ControladorPropiedades implements ActionListener{
          }
     
  public void llenarComboApellidos(){
-        try {
-            ResultSet rs = null;
-            rs = pd.obtenerApellidos();
-            vista.propiedades.comboApellido.removeAllItems();
-            vista.propiedades.comboApellido.addItem("Seleccione");
-            if(rs!=null){
-            while (rs.next()) {
-                vista.propiedades.comboApellido.addItem(rs.getString(1));                
-            } } } catch (SQLException ex) {
-            Logger.getLogger(ControladorPropiedades.class.getName()).log(Level.SEVERE, null, ex);
+        List<Propietario> propietarios = null;
+        ResultSet rs = null;
+        propietarios = pd.obtenerApellidos();
+        vista.propiedades.comboApellido.removeAllItems();
+        vista.propiedades.comboApellido.addItem("Seleccione");
+        if(propietarios!=null){
+            for (int i = 0; i < propietarios.size(); i++) {
+                vista.propiedades.comboApellido.addItem(propietarios.get(i).getApellidos());
+            }
         }   
  }   
   public void llenarComboNombres(String apellidos){

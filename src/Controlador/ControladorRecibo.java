@@ -8,10 +8,10 @@ package Controlador;
 import Modelo.ClienteDAO;
 import Modelo.CuotaDAO;
 import Modelo.FichaControlDAO;
-import Modelo.LimitadorCaracteres;
+import Clases.LimitadorCaracteres;
 import Modelo.LoteDAO;
 import Modelo.MinutaDAO;
-import Modelo.Propietario;
+import Clases.Propietario;
 import Modelo.PropietarioDAO;
 import Modelo.ReciboDAO;
 import Vista.Dialogs.AltaRecibo;
@@ -73,8 +73,8 @@ public class ControladorRecibo implements ActionListener{
     int cant_cuotas, manzana, parcela, row;
     BigDecimal cobrado, cuota_total, gastos_administrativos;
     int id_control, nro_cuota;    
-    public static final String IMG = "src/Imagenes/logo_reporte.png";
-    public static final String IMG2 = "src/Imagenes/logo_recibo.png";
+    public static final String IMG = "/Imagenes/logo_reporte.png";
+    public static final String IMG2 = "/Imagenes/logo_recibo.png";
     Random random = new Random();
     int tipoPago;
     BigDecimal categoria;
@@ -227,8 +227,8 @@ public class ControladorRecibo implements ActionListener{
             document.open();
             for (int i = 1; i < 4; i++) {               
             Font f=new Font(Font.FontFamily.TIMES_ROMAN,10.0f,0,null);
-            Image image = Image.getInstance(IMG); 
-            Image image2 = Image.getInstance(IMG2);
+            Image image = Image.getInstance(getClass().getResource(IMG)); 
+            Image image2 = Image.getInstance(getClass().getResource(IMG2));
             image.scaleAbsolute(70, 70);
             image2.scaleAbsolute(25, 38);
             PdfPTable table = new PdfPTable(1); 
@@ -419,10 +419,11 @@ public class ControladorRecibo implements ActionListener{
             Date date = new Date();
             BigDecimal rendido = cobrado.subtract(gastos_administrativos);
             Ventana.cm.llenarTablaFecha();
-             if(tipoPago==1){
+            if(tipoPago==1){
+                System.out.println("observa"+dc.tablaDetallePago.getModel().getValueAt(row, 11).toString());
               md.altaMinuta(new java.sql.Date(date.getTime()), apellido_comprador, nombre_comprador, manzana, parcela, cobrado, gastos_administrativos, rendido, 
                       Integer.parseInt(dc.tablaDetallePago.getModel().getValueAt(row, 0).toString()), 
-                      dc.tablaDetallePago.getModel().getValueAt(row, 13).toString(), 
+                      dc.tablaDetallePago.getModel().getValueAt(row, 11).toString(), 
                       categoria.toString(), 
                       id_recibo);
             }else if(tipoPago==0){

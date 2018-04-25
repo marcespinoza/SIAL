@@ -5,6 +5,7 @@
  */
 package Modelo;
 
+import Clases.Minuta;
 import conexion.Conexion;
 import java.math.BigDecimal;
 import java.sql.Connection;
@@ -13,6 +14,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -31,7 +35,7 @@ public class MinutaDAO {
     public int altaMinuta(Date fecha, String apellidos, String nombres, int manzana, int parcela, BigDecimal cobrado, BigDecimal gastos, BigDecimal rendido, int nro_cuota, String observaciones, String categoria, int id_recibo){
     int filasAfectadas=0;
      try {
-         Connection con = conexion.getConexion();
+         Connection con = conexion.dataSource.getConnection();
          String insertar = "Insert into minuta(fecha_minuta, apellidos, nombres, manzana, parcela, cobrado, gastos, rendido, nro_cuota, observaciones, categoria, id_Recibo) values ('"+fecha+"','"+apellidos+"','"+nombres+"','"+manzana+"','"+parcela+"','"+cobrado+"','"+gastos+"','"+rendido+"','"+nro_cuota+"','"+observaciones+"','"+categoria+"','"+id_recibo+"') ";
          PreparedStatement ps = con.prepareStatement(insertar);
          filasAfectadas = ps.executeUpdate();         
@@ -44,7 +48,7 @@ public class MinutaDAO {
     public ResultSet obtenerMinutas(){
      ResultSet rs = null;
      try {
-          Connection con = conexion.getConexion();
+          Connection con = conexion.dataSource.getConnection();
           String listar = "SELECT * FROM Minuta";
           Statement st = con.createStatement();
           rs = st.executeQuery(listar);
@@ -57,7 +61,7 @@ public class MinutaDAO {
     public ResultSet obtenerMinutasXCategoria(int añoDesde, int mesDesde, int añoHasta, int mesHasta){
      ResultSet rs = null;
      try {
-          Connection con = conexion.getConexion();
+          Connection con = conexion.dataSource.getConnection();
           String listar = "SELECT Categoria, SUM(Cobrado), MONTH(Fecha_minuta) FROM minuta WHERE (YEAR(Fecha_minuta) BETWEEN '"+añoDesde+"' and '"+añoHasta+"') AND (MONTH(Fecha_minuta) BETWEEN '"+mesDesde+"' and '"+mesHasta+"') GROUP BY Categoria";
           Statement st = con.createStatement();
           rs = st.executeQuery(listar);
@@ -70,7 +74,7 @@ public class MinutaDAO {
     public ResultSet obtenerMinutasXMes(int añoDesde, int mesDesde, int añoHasta, int mesHasta){
      ResultSet rs = null;
      try {
-          Connection con = conexion.getConexion();
+          Connection con = conexion.dataSource.getConnection();
           String listar = "SELECT DISTINCT(MONTH(Fecha_minuta)),SUM(Cobrado), SUM(Rendido) FROM minuta WHERE (YEAR(Fecha_minuta) BETWEEN '"+añoDesde+"' and '"+añoHasta+"') AND (MONTH(Fecha_minuta) BETWEEN '"+mesDesde+"' and '"+mesHasta+"') GROUP BY MONTH(Fecha_minuta)";
           Statement st = con.createStatement();
           rs = st.executeQuery(listar);
@@ -80,23 +84,36 @@ public class MinutaDAO {
      return rs;
  }
     
-    public ResultSet obtenerFecha(){
+    public List obtenerFecha(){
      ResultSet rs = null;
+     List<Minuta> minutas = new ArrayList<Minuta>();
+     Connection con = null;
      try {
-          Connection con = conexion.getConexion();
+          con = conexion.dataSource.getConnection();
           String listar = "SELECT DISTINCT fecha_minuta FROM Minuta";
           Statement st = con.createStatement();
           rs = st.executeQuery(listar);
+          while(rs.next()){              
+               Minuta minuta = new Minuta();
+               minuta.setFechaMinuta(rs.getDate(1));   
+               minutas.add(minuta);
+            }  
         } catch (Exception e) {
             System.out.println(e.getMessage());
+        }finally{
+         try {
+             con.close();
+         } catch (SQLException ex) {
+             Logger.getLogger(MinutaDAO.class.getName()).log(Level.SEVERE, null, ex);
+         }
         }
-     return rs;
+     return minutas;
  }
     
     public ResultSet minutasPorFecha(String fecha){
      ResultSet rs = null;
      try {
-          Connection con = conexion.getConexion();
+          Connection con = conexion.dataSource.getConnection();
           String listar = "SELECT * FROM Minuta where fecha_minuta = '"+fecha+"'";
           Statement st = con.createStatement();
           rs = st.executeQuery(listar);
@@ -109,7 +126,7 @@ public class MinutaDAO {
     public ResultSet minutasPorMes(int añoDesde, int mesDesde, int añoHasta, int mesHasta){
      ResultSet rs = null;
      try {
-          Connection con = conexion.getConexion();
+          Connection con = conexion.dataSource.getConnection();
           String listar = "SELECT SUM(Cobrado), MONTH(Fecha_minuta), observaciones from minuta WHERE (YEAR(Fecha_minuta) BETWEEN '"+añoDesde+"' and '"+añoHasta+"') AND (MONTH(Fecha_minuta) BETWEEN '"+mesDesde+"' and '"+mesHasta+"')  group by Observaciones, MONTH(Fecha_minuta)";
           Statement st = con.createStatement();
           rs = st.executeQuery(listar);
@@ -122,7 +139,7 @@ public class MinutaDAO {
      public ResultSet minutasPorRango(Date desde, Date hasta){
      ResultSet rs = null;
      try {
-          Connection con = conexion.getConexion();
+          Connection con = conexion.dataSource.getConnection();
           PreparedStatement statement =
           con.prepareStatement("SELECT * FROM minuta WHERE fecha_minuta between ? and ?");
           statement.setDate(1, desde);
@@ -137,8 +154,8 @@ public class MinutaDAO {
    public void eliminarMinuta(int idRecibo){
        
         try {
-            Connection con = conexion.getConexion();
-            String query = "UPDATE minuta SET baja = 1 where id_recibo = ?";
+            Connection con = conexion.dataSource.getConnection();
+            String query = "UPDATE minuta SET baja = 1, observaciones = 'Anulado' where id_recibo = ?";
             PreparedStatement preparedStmt = con.prepareStatement(query);
             preparedStmt.setInt   (1, idRecibo);
             preparedStmt.executeUpdate();      

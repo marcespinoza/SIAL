@@ -3,12 +3,14 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Modelo;
+package Clases;
 
 /**
  *
- * @author Marcelo
+ * @author Marceloi7
  */
-public class Cuota {
+public class Recibo {
+    
+    
     
 }

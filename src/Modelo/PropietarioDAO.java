@@ -5,6 +5,7 @@
  */
 package Modelo;
 
+import Clases.Propietario;
 import conexion.Conexion;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -12,6 +13,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -33,7 +35,7 @@ public class PropietarioDAO {
          ResultSet rs = null;
          Connection con = null;
      try {
-          con = conexion.getConexion();         
+          con = conexion.dataSource.getConnection();         
           String listar = "SELECT nro_recibo from propietario where apellidos = '"+apellidos+"' and nombres = '"+nombres+"' and cuit= '"+cuit+"'"; 
           Statement st = con.createStatement();
           rs = st.executeQuery(listar);
@@ -52,7 +54,7 @@ public class PropietarioDAO {
      public ResultSet validarPropietarios(String usuario, String contraseña, String tipo_usuario){
      ResultSet rs = null;
      try {
-          Connection con = conexion.getConexion();         
+          Connection con = conexion.dataSource.getConnection();         
           String listar = "SELECT usuario, tipo_usuario, nombres, apellidos from usuario where usuario = '"+usuario+"' and contraseña = '"+contraseña+"' and tipo_usuario = '"+tipo_usuario+"'"; 
           Statement st = con.createStatement();
           rs = st.executeQuery(listar);
@@ -64,7 +66,7 @@ public class PropietarioDAO {
      
      public void editarPropietario(String apellidos, String nombres, String cuit, int nro_recibo, String backup_cuit){
          try {
-             Connection con = conexion.getConexion();
+             Connection con = conexion.dataSource.getConnection();
              PreparedStatement pstm = con.prepareStatement("UPDATE propietario set apellidos= ? , nombres= ? , cuit= ? , nro_recibo= ? where cuit= ? ");             
              pstm.setString(1,apellidos);
              pstm.setString(2,nombres);
@@ -80,7 +82,7 @@ public class PropietarioDAO {
      
      public void editarNroRecibo(String apellidos, String nombres, String cuit, int nro_recibo){
          try {
-             Connection con = conexion.getConexion();
+             Connection con = conexion.dataSource.getConnection();
              PreparedStatement pstm = con.prepareStatement("update propietario set nro_recibo= ? where apellidos= ? and nombres=? and cuit=? ");             
              pstm.setInt(1,nro_recibo);
              pstm.setString(2,apellidos);
@@ -95,7 +97,7 @@ public class PropietarioDAO {
      public ResultSet obtenerPropietarios(){
           ResultSet rs = null;
      try {
-          Connection con = conexion.getConexion();         
+          Connection con = conexion.dataSource.getConnection();         
           String listar = "SELECT apellidos, nombres, cuit, nro_recibo from propietario"; 
           Statement st = con.createStatement();
           rs = st.executeQuery(listar);
@@ -108,7 +110,7 @@ public class PropietarioDAO {
       public ResultSet obtenerApellidosXLote(){
           ResultSet rs = null;
      try {
-          Connection con = conexion.getConexion();         
+          Connection con = conexion.dataSource.getConnection();         
           String listar = "SELECT DISTINCT propietario_apellidos from lote"; 
           Statement st = con.createStatement();
           rs = st.executeQuery(listar);
@@ -121,7 +123,7 @@ public class PropietarioDAO {
       public ResultSet obtenerApellidosXDepartamento(){
           ResultSet rs = null;
      try {
-          Connection con = conexion.getConexion();         
+          Connection con = conexion.dataSource.getConnection();         
           String listar = "SELECT DISTINCT propietario_apellidos from departamento"; 
           Statement st = con.createStatement();
           rs = st.executeQuery(listar);
@@ -134,7 +136,7 @@ public class PropietarioDAO {
         public ResultSet obtenerNombresXLote(String apellido){
           ResultSet rs = null;
      try {
-          Connection con = conexion.getConexion();         
+          Connection con = conexion.dataSource.getConnection();         
           String listar = "SELECT DISTINCT propietario_nombres from lote where propietario_apellidos='"+apellido+"'"; 
           Statement st = con.createStatement();
           rs = st.executeQuery(listar);
@@ -147,7 +149,7 @@ public class PropietarioDAO {
       public ResultSet obtenerNombresXDepartamento(String apellido){
           ResultSet rs = null;
      try {
-          Connection con = conexion.getConexion();         
+          Connection con = conexion.dataSource.getConnection();         
           String listar = "SELECT DISTINCT propietario_nombres from departamento where propietario_apellidos='"+apellido+"'"; 
           Statement st = con.createStatement();
           rs = st.executeQuery(listar);
@@ -157,23 +159,36 @@ public class PropietarioDAO {
      return rs;
      }
       
-       public ResultSet obtenerApellidos(){
+       public List<Propietario> obtenerApellidos(){
           ResultSet rs = null;
+          Connection con = null; 
+          List<Propietario> propietarios = new ArrayList<>();
      try {
-          Connection con = conexion.getConexion();         
+          con = conexion.dataSource.getConnection();         
           String listar = "SELECT apellidos from propietario"; 
           Statement st = con.createStatement();
-          rs = st.executeQuery(listar);
+          rs = st.executeQuery(listar);          
+            while (rs.next()) {
+                Propietario p = new Propietario();
+                p.setApellidos(rs.getString(1));
+                propietarios.add(p);
+            }            
         } catch (Exception e) {
             System.out.println(e.getMessage());
+        }finally{
+              try {
+                  con.close();
+              } catch (SQLException ex) {
+                  Logger.getLogger(PropietarioDAO.class.getName()).log(Level.SEVERE, null, ex);
+              }
         }
-     return rs;
+     return propietarios;
      }
      
        public ResultSet obtenerNombres(String apellidos){
           ResultSet rs = null;
      try {
-          Connection con = conexion.getConexion();         
+          Connection con = conexion.dataSource.getConnection();         
           String listar = "SELECT nombres, cuit from propietario where apellidos='"+apellidos+"'"; 
           Statement st = con.createStatement();
           rs = st.executeQuery(listar);
@@ -186,7 +201,7 @@ public class PropietarioDAO {
         public ResultSet obtenerCuit(String apellidos, String nombres){
           ResultSet rs = null;
      try {
-          Connection con = conexion.getConexion();  
+          Connection con = conexion.dataSource.getConnection();  
           String listar = "SELECT cuit, nro_recibo from propietario where apellidos='"+apellidos+"' and nombres = '"+nombres+"'"; 
           Statement st = con.createStatement();
           rs = st.executeQuery(listar);
@@ -198,7 +213,7 @@ public class PropietarioDAO {
        
      public void eliminarPropietarios(String cuit){
          try {
-         Connection con = conexion.getConexion();
+         Connection con = conexion.dataSource.getConnection();
          String eliminar = "delete from propietario where cuit='"+cuit+"'";
          PreparedStatement ps = con.prepareStatement(eliminar);
          ps.executeUpdate();
@@ -209,7 +224,7 @@ public class PropietarioDAO {
      public int agregarPropietarios(String apellidos, String nombres, String cuit, String nroRecibo){
           int filasAfectadas=0;
      try {
-         Connection con = conexion.getConexion();
+         Connection con = conexion.dataSource.getConnection();
          String insertar = "Insert into propietario(apellidos, nombres, cuit, nro_recibo) values ('"+apellidos+"','"+nombres+"','"+cuit+"','"+nroRecibo+"') ";
          PreparedStatement ps = con.prepareStatement(insertar);
          filasAfectadas = ps.executeUpdate();         

@@ -25,10 +25,6 @@ import org.apache.log4j.PropertyConfigurator;
  */
 public class Conexion {
     
-    public Connection con = null;
-    public Statement st;
-    public ResultSet rs;
-    public String consulta;
     public String db = "miprimercasa";
     public String url = "jdbc:mysql://localhost:3306/miprimercasa?zeroDateTimeBehavior=convertToNull";
     public String user = "root";
@@ -41,32 +37,13 @@ public class Conexion {
         getConexion();
     }
     
-    public Connection getConexion(){    
-//     PropertyConfigurator.configure(url2);      
+    public void getConexion(){      
      BasicDataSource basicDataSource = new BasicDataSource();
      basicDataSource.setDriverClassName("com.mysql.jdbc.Driver");
      basicDataSource.setUsername(user);
      basicDataSource.setPassword(root);
      basicDataSource.setUrl(url); 
-     try{
-        Class.forName("com.mysql.jdbc.Driver");
-        con = basicDataSource.getConnection();
-        //con = DriverManager.getConnection("jdbc:mysql://localhost:3306/miprimercasa?zeroDateTimeBehavior=convertToNull","root","");
-        st =(Statement) con.createStatement();
-        log.info("Conexion exitosa");
-     }catch (Exception e){
-        JOptionPane.showMessageDialog(null, "Error de conexion");
-        System.out.println(e.getMessage());
-     }
-     return con; 
+     dataSource = basicDataSource;
 }
-    
-    public void cerrarConexion(){
-        try {
-            con.close();
-        } catch (SQLException ex) {
-            Logger.getLogger(Conexion.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
     
 }

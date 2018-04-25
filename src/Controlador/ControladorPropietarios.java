@@ -5,7 +5,7 @@
  */
 package Controlador;
 
-import Modelo.LimitadorCaracteres;
+import Clases.LimitadorCaracteres;
 import Modelo.PropietarioDAO;
 import Vista.Dialogs.Configuracion;
 import java.awt.Color;

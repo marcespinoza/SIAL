@@ -31,8 +31,8 @@ public class FichaControlDAO {
     public int altaFichaControl(String tipo_compra, String dimension, int cantidad_cuotas, BigDecimal cuota_pura, BigDecimal gastos, BigDecimal bolsa_cemento, Date fch_actualizacion, String barrio, int manzana, int parcela){
          int id_control = 1;
      try {
-          Connection con = conexion.getConexion();
-          String insertar = "Insert into ficha_control_lote(tipo_compra, dimension, cantidad_cuotas, cuota_pura, gastos, bolsa_cemento, fecha_actualizacion, lote_barrio, lote_manzana, lote_parcela, lote_observaciones) values ('"+tipo_compra+"','"+dimension+"','"+cantidad_cuotas+"','"+cuota_pura+"','"+gastos+"','"+bolsa_cemento+"', '"+fch_actualizacion+"','"+barrio+"','"+manzana+"','"+parcela+"', '"+"-"+"')";
+          Connection con = conexion.dataSource.getConnection();
+          String insertar = "Insert into ficha_control_lote(tipo_compra, dimension, cantidad_cuotas, cuota_pura, gastos, bolsa_cemento, fecha_actualizacion, lote_barrio, lote_manzana, lote_parcela) values ('"+tipo_compra+"','"+dimension+"','"+cantidad_cuotas+"','"+cuota_pura+"','"+gastos+"','"+bolsa_cemento+"', '"+fch_actualizacion+"','"+barrio+"','"+manzana+"','"+parcela+"')";
           PreparedStatement ps = con.prepareStatement(insertar, Statement.RETURN_GENERATED_KEYS);
           ps.executeUpdate();  
           ResultSet rs = ps.getGeneratedKeys();  
@@ -47,7 +47,7 @@ public class FichaControlDAO {
     public ResultSet obtenerFichaControl(){
      ResultSet rs = null;
      try {
-          Connection con = conexion.getConexion();
+          Connection con = conexion.dataSource.getConnection();
           String listar = "SELECT precio, gastos, bolsa_cemento FROM cliente c LEFT JOIN ficha_control_lote f ON c.Dni = f.Dni"; 
           Statement st = con.createStatement();
           rs = st.executeQuery(listar);
@@ -59,7 +59,7 @@ public class FichaControlDAO {
      public ResultSet obtenerMontoCuotas(){
      ResultSet rs = null;
      try {
-          Connection con = conexion.getConexion();
+          Connection con = conexion.dataSource.getConnection();
           String listar = "SELECT cuota_pura FROM ficha_control_lote"; 
           Statement st = con.createStatement();
           rs = st.executeQuery(listar);
@@ -71,7 +71,7 @@ public class FichaControlDAO {
     public ResultSet obtenerFichaControl(int id_control){
      ResultSet rs = null;
      try {
-          Connection con = conexion.getConexion();
+          Connection con = conexion.dataSource.getConnection();
           String listar = "SELECT dimension, cantidad_cuotas, cuota_pura, gastos, bolsa_cemento, lote_barrio, lote_manzana, lote_parcela,dimension , gastos, cuota_pura FROM ficha_control_lote where id_control = '"+id_control+"'"; 
           Statement st = con.createStatement();
           rs = st.executeQuery(listar);
@@ -93,7 +93,7 @@ public class FichaControlDAO {
     
   public void cambiarPropietario(int nuevo_dni, int viejo_dni, int id_ficha_control){
         try {
-            Connection con = conexion.getConexion();
+            Connection con = conexion.dataSource.getConnection();
             PreparedStatement ps = con.prepareStatement(
                     "UPDATE cliente_tiene_lote SET cliente_dni = ? WHERE cliente_dni = ? AND id_control = ?");
             ps.setInt(1,nuevo_dni);
@@ -111,7 +111,7 @@ public class FichaControlDAO {
   //---------Baja logica de un cliente----------//
   public void bajaPropietario(int dni, int id_ficha_control){
         try {
-            Connection con = conexion.getConexion();
+            Connection con = conexion.dataSource.getConnection();
             PreparedStatement ps = con.prepareStatement(
                     "UPDATE cliente_tiene_lote SET baja = 1 WHERE cliente_dni = ? AND id_control = ?");
             ps.setInt(1,dni);
@@ -127,7 +127,7 @@ public class FichaControlDAO {
   
    public void actualizarBolsaCemento( BigDecimal precio, Date fecha_actualizacion, String id_control, BigDecimal gastos, BigDecimal nueva_cuota_pura){
         try {
-            Connection con = conexion.getConexion();
+            Connection con = conexion.dataSource.getConnection();
             PreparedStatement ps = con.prepareStatement(
                     "UPDATE ficha_control_lote SET bolsa_cemento = ?, fecha_actualizacion = ?, gastos = ?, cuota_pura = ? WHERE id_control = ?");
             ps.setBigDecimal(1, precio);
@@ -143,6 +143,18 @@ public class FichaControlDAO {
         }
   }
    
-   
+    public void actualizarObservacion(String observacion, int id_control){
+        try {
+            Connection con = conexion.dataSource.getConnection();
+            PreparedStatement ps = con.prepareStatement("UPDATE ficha_control_lote SET observacion = ? WHERE id_control = ?");
+            ps.setString(1,observacion);
+            ps.setInt(2,id_control);
+            ps.executeUpdate();            
+            ps.close();
+            con.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(CuotaDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+  }
     
 }

@@ -31,7 +31,7 @@ public class DchoPosesionDAO {
     public ResultSet listarCuenta(int id_control){
         ResultSet rs = null;
      try {
-          Connection con = conexion.getConexion();
+          Connection con = conexion.dataSource.getConnection();
           String listar = "SELECT fecha, monto,gastos,cemento_debe, cemento_haber, cemento_saldo, detalle from derecho_posesion where id_control='"+id_control+"'"; 
           Statement st = con.createStatement();
           rs = st.executeQuery(listar);
@@ -42,7 +42,7 @@ public class DchoPosesionDAO {
     
     public void altaDchoPosesion(Date date, BigDecimal monto, BigDecimal gastos, BigDecimal cementoDebe, BigDecimal cementoHaber, BigDecimal cementoSaldo, String detalle, int id_control){
         try {
-            Connection con = conexion.getConexion();
+            Connection con = conexion.dataSource.getConnection();
             String query = " insert into derecho_posesion (fecha, monto,gastos,cemento_debe, cemento_haber, cemento_saldo, detalle, id_control)"
                     + " values (?, ?, ?, ?, ?, ?, ?, ?)";
             PreparedStatement preparedStmt = con.prepareStatement(query);

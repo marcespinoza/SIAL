@@ -26,7 +26,7 @@ public class ReciboDAO {
      public int altaRecibo(int nro_recibo, String apellido_propietario, String nombre_propietario){
          int id_control = 1;
      try {
-          Connection con = conexion.getConexion();
+          Connection con = conexion.dataSource.getConnection();
           String insertar = "Insert into recibo(nro_recibo, apellido_propietario, nombre_propietario) values ('"+nro_recibo+"','"+apellido_propietario+"','"+nombre_propietario+"')";
           PreparedStatement ps = con.prepareStatement(insertar, Statement.RETURN_GENERATED_KEYS);
           ps.executeUpdate();  

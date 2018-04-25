@@ -32,7 +32,7 @@ public class ReferenciaDAO {
  public void altaReferencia(String telefono, String apellidos, String nombres, String parentesco, int dni){
      String rptaRegistro = null;
      try {
-         Connection con = conexion.getConexion();
+         Connection con = conexion.dataSource.getConnection();
          String insertar = "Insert into referencia (telefono, apellidos, nombres, parentesco, cliente_dni) values ('"+telefono+"','"+apellidos+"','"+nombres+"','"+parentesco+"','"+dni+"') ";
          PreparedStatement ps = con.prepareStatement(insertar);
          ps.execute();
@@ -42,7 +42,7 @@ public class ReferenciaDAO {
  }
  public void editarReferencia(int dni, String telefono,String apellidos, String nombres,  String parentesco, String clave_referencia){
         try {
-            Connection con = conexion.getConexion();
+            Connection con = conexion.dataSource.getConnection();
             String query = "UPDATE referencia SET cliente_dni = ?, "
                     + " apellidos = ?, "
                     + " nombres = ?, "
@@ -64,7 +64,7 @@ public class ReferenciaDAO {
  public ResultSet obtenerReferencia(int dni){
      ResultSet rs = null;
      try {
-          Connection con = conexion.getConexion();
+          Connection con = conexion.dataSource.getConnection();
           String listar = "SELECT apellidos, nombres, telefono, parentesco from referencia where cliente_dni = '"+dni+"' "; 
           Statement st = con.createStatement();
           rs = st.executeQuery(listar);

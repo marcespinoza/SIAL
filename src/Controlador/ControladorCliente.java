@@ -5,6 +5,7 @@
  */
 package Controlador;
 
+import Clases.Propietario;
 import Modelo.ClienteDAO;
 import Modelo.FichaControlDAO;
 import Modelo.LoteDAO;
@@ -138,7 +139,6 @@ public class ControladorCliente implements ActionListener, MouseListener, TableM
                     BigDecimal nueva_cuota = ((gastos_.add(cuota_)).divide(bolsa_cemento_, 2, RoundingMode.DOWN)).multiply(nuevo_bolsa_cemento);
                     BigDecimal nuevo_gasto = nueva_cuota.subtract(nueva_cuota.divide(new BigDecimal("1.1"), 2, BigDecimal.ROUND_HALF_UP));
                     BigDecimal nueva_cuota_pura = nueva_cuota.subtract(nuevo_gasto);
-                    System.out.println(nuevo_gasto+" "+nueva_cuota_pura+" "+ nueva_cuota);
                     fd.actualizarBolsaCemento( new BigDecimal(vistaClientes.bolsa_cemento.getText()), new java.sql.Date(date.getTime()), vistaClientes.tablaCliente.getModel().getValueAt(i, 11).toString(), nuevo_gasto, nueva_cuota_pura);
                     llenarTabla();
                     vistaClientes.tablaCliente.getSelectionModel().clearSelection();
@@ -210,9 +210,11 @@ public class ControladorCliente implements ActionListener, MouseListener, TableM
                   if(seleccion==0){
                     new ControladorAltaCliente((Ventana) SwingUtilities.getWindowAncestor(vistaClientes), Integer.parseInt(vistaClientes.tablaCliente.getModel().getValueAt(row, 11).toString()),  Integer.parseInt(vistaClientes.tablaCliente.getModel().getValueAt(row, 2).toString()), true);
                     llenarTabla();}
-                  else{
+                  if(seleccion==1){
                      new ControladorPanelClientes((Ventana) SwingUtilities.getWindowAncestor(vistaClientes), Integer.parseInt(vistaClientes.tablaCliente.getModel().getValueAt(row, 2).toString()), Integer.parseInt(vistaClientes.tablaCliente.getModel().getValueAt(row, 11).toString()));
-                      llenarTabla();
+                     llenarTabla();}
+                  if(seleccion==-1){
+                     JOptionPane.getRootFrame().dispose(); 
                   }
                  }else{
                 JOptionPane.showMessageDialog(null, "Debe seleccionar un cliente con una propiedad asignada", "Atención", JOptionPane.INFORMATION_MESSAGE, null);    
@@ -325,16 +327,13 @@ public class ControladorCliente implements ActionListener, MouseListener, TableM
     }
     
     public void llenarComboApellidos(){
-        try {
-            ResultSet rs = null;
-            rs = pd.obtenerApellidos();
-            vistaClientes.comboApellido.removeAllItems();
-            vistaClientes.comboApellido.addItem("Seleccione");
-            if(rs!=null){
-            while (rs.next()) {
-                vistaClientes.comboApellido.addItem(rs.getString(1));                
-            } } } catch (SQLException ex) {
-            log.debug("Cliente"+ex);
+        ResultSet rs = null;
+        List<Propietario> propietarios;
+        propietarios = pd.obtenerApellidos();
+        vistaClientes.comboApellido.removeAllItems();
+        vistaClientes.comboApellido.addItem("Seleccione");
+        for (int i = 0; i < propietarios.size(); i++) {
+            vistaClientes.comboApellido.addItem(propietarios.get(i).getApellidos());
         }   
  }   
   public void llenarComboNombres(String apellidos){
@@ -554,10 +553,7 @@ public class ControladorCliente implements ActionListener, MouseListener, TableM
         int row = vistaClientes.tablaCliente.getSelectedRow();
         if(row!=-1){
           if (e.getType() == TableModelEvent.UPDATE) {
-              String barrio = vistaClientes.tablaCliente.getValueAt(row,16).toString();
-              int manzana = Integer.parseInt(vistaClientes.tablaCliente.getValueAt(row, 17).toString());
-              int parcela = Integer.parseInt(vistaClientes.tablaCliente.getValueAt(row, 18).toString());
-              ld.actualizarObservacion(vistaClientes.tablaCliente.getValueAt(row, 19).toString() , barrio, manzana, parcela);
+              fd.actualizarObservacion(vistaClientes.tablaCliente.getValueAt(row, 19).toString() , Integer.parseInt(vistaClientes.tablaCliente.getValueAt(row, 11).toString()));
           } 
         }  
     }

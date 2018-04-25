@@ -12,7 +12,7 @@ import Controlador.ControladorLogin;
 import Controlador.ControladorMinuta;
 import Controlador.ControladorRegistro;
 import Controlador.ControladorResumen;
-import Vista.Panels.Minuta;
+import Vista.Panels.MinutaVista;
 import Vista.Panels.Resumen;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -27,17 +27,13 @@ import javax.swing.SwingConstants;
 public class Ventana extends javax.swing.JFrame implements ActionListener{
     
     ControladorLogin cl;
-    Minuta vistaMinuta = Minuta.getInstance();
+    MinutaVista vistaMinuta = MinutaVista.getInstance();
     Resumen vistaResumen = Resumen.getInstance();
     public static ControladorMinuta cm;
     ControladorResumen cr;
 
     public Ventana() {
-        initComponents();
-//        GraphicsConfiguration config = this.getGraphicsConfiguration();
-//        Rectangle usableBounds = SunGraphicsEnvironment.getUsableBounds(config.getDevice());
-//        setMaximizedBounds(usableBounds);
-//        setExtendedState(MAXIMIZED_BOTH);        
+        initComponents();      
         this.setSize(1366, 768);
         ImageIcon icon = new ImageIcon("src/Imagenes/logo.png_32x32.png");
         this.setIconImage(icon.getImage());         
@@ -77,7 +73,7 @@ public class Ventana extends javax.swing.JFrame implements ActionListener{
         clientes = new Vista.Panels.Clientes();
         detallePago = new Vista.Panels.DetalleCuota();
         resumen = new Vista.Panels.Resumen();
-        minuta = new Vista.Panels.Minuta();
+        minuta = new Vista.Panels.MinutaVista();
         panelBotones1 = new Vista.Panels.PanelBotones();
         btnClientes = new javax.swing.JButton();
         btnResumen = new javax.swing.JButton();
@@ -355,7 +351,7 @@ public class Ventana extends javax.swing.JFrame implements ActionListener{
     private javax.swing.JMenuBar jMenuBar3;
     public static javax.swing.JLabel labelTipoUsuario;
     public static javax.swing.JLabel labelUsuario;
-    private Vista.Panels.Minuta minuta;
+    private Vista.Panels.MinutaVista minuta;
     public static javax.swing.JLabel nombreUsuario;
     private Vista.Panels.PanelBotones panelBotones1;
     public static javax.swing.JPanel panelPrincipal;

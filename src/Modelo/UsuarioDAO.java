@@ -5,6 +5,7 @@
  */
 package Modelo;
 
+import Clases.Usuario;
 import conexion.Conexion;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -26,22 +27,36 @@ public class UsuarioDAO {
         conexion = new Conexion();
     }
     
-     public ResultSet validarUsuario(String usuario, String contraseña, String tipo_usuario){
+     public Usuario validarUsuario(String usuario, String contraseña, String tipo_usuario){
      ResultSet rs = null;
-     try {
-          Connection con = conexion.getConexion();         
+     Usuario user = new Usuario();
+     Connection con = null;
+     try {          
+           con = conexion.dataSource.getConnection();         
           String listar = "SELECT usuario, tipo_usuario, nombres, apellidos from usuario where usuario = '"+usuario+"' and contraseña = '"+contraseña+"' and tipo_usuario = '"+tipo_usuario+"'"; 
           Statement st = con.createStatement();
           rs = st.executeQuery(listar);
+          if (rs.next()){
+              user.setUsuario(rs.getString(1));
+              user.setTipoUsuario(rs.getString(2));
+              user.setNombres(rs.getString(3));
+              user.setApellidos(rs.getString(4)); 
+          }
         } catch (Exception e) {
             System.out.println(e.getMessage());
+        }finally{
+         try {
+             con.close();
+         } catch (SQLException ex) {
+             Logger.getLogger(UsuarioDAO.class.getName()).log(Level.SEVERE, null, ex);
+         }
         }
-     return rs;
+     return user;
  }
      
      public void actualizarUsuario(String usuario, String contraseña, String apellidos, String nombres, String tipo_operador){
          try {
-             Connection con = conexion.getConexion();
+             Connection con = conexion.dataSource.getConnection();
              PreparedStatement pstm = con.prepareStatement("update usuario " +
                      "set usuario= ?  ,  " +
                      "contraseña= ? , " +
@@ -64,7 +79,7 @@ public class UsuarioDAO {
      public ResultSet obtenerUsuarios(){
           ResultSet rs = null;
      try {
-          Connection con = conexion.getConexion();         
+          Connection con = conexion.dataSource.getConnection();         
           String listar = "SELECT *from usuario"; 
           Statement st = con.createStatement();
           rs = st.executeQuery(listar);
@@ -75,7 +90,7 @@ public class UsuarioDAO {
      }
      public void eliminarUsuario(String usuario){
           try {
-         Connection con = conexion.getConexion();
+         Connection con = conexion.dataSource.getConnection();
          String eliminar = "delete from usuario where usuario='"+usuario+"'";
          PreparedStatement ps = con.prepareStatement(eliminar);
          ps.executeUpdate();
@@ -86,7 +101,7 @@ public class UsuarioDAO {
      public int agregarUsuario(String usuario, String contraseña, String apellidos, String nombres, String tipo_usuario){
           int filasAfectadas=0;
      try {
-         Connection con = conexion.getConexion();
+         Connection con = conexion.dataSource.getConnection();
          String insertar = "Insert into usuario(usuario, contraseña, apellidos, nombres, tipo_usuario) values ('"+usuario+"','"+contraseña+"','"+apellidos+"','"+nombres+"','"+tipo_usuario+"') ";
          PreparedStatement ps = con.prepareStatement(insertar);
          filasAfectadas = ps.executeUpdate();         

@@ -5,10 +5,11 @@
  */
 package Controlador;
 
+import Clases.Minuta;
 import Modelo.MinutaDAO;
 import Vista.Dialogs.ProgressDialog;
 import Vista.Panels.DetalleCuota;
-import Vista.Panels.Minuta;
+import Vista.Panels.MinutaVista;
 import com.itextpdf.text.Chunk;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
@@ -38,6 +39,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -53,7 +55,7 @@ import javax.swing.table.DefaultTableModel;
 public class ControladorMinuta implements MouseListener, ActionListener {
     
     MinutaDAO md = new MinutaDAO();
-    Minuta vistaMinuta;
+    MinutaVista vistaMinuta;
     private Object [] minuta;
     private Object [] fechaMinuta;
     ResultSet resultset = null;
@@ -62,9 +64,10 @@ public class ControladorMinuta implements MouseListener, ActionListener {
     FileInputStream fileIn = null;
     FileOutputStream fileOut = null;
     File configFile = new File("config.properties");
-    public static final String IMG = "src/Imagenes/logo_reporte.png";
+    public static final String IMG = "/Imagenes/logo_reporte.png";
+    static org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(ControladorCliente.class.getName());
 
-    public ControladorMinuta(Minuta vistaMinuta) {
+    public ControladorMinuta(MinutaVista vistaMinuta) {
         this.vistaMinuta=vistaMinuta;
         this.vistaMinuta.tablaFechaMinuta.addMouseListener(this);
         this.vistaMinuta.generarMinuta.addActionListener(this);
@@ -119,25 +122,23 @@ public class ControladorMinuta implements MouseListener, ActionListener {
         }}
     
     public void llenarTablaFecha(){
-        ResultSet rs = md.obtenerFecha();
+        List<Minuta> minutas = null;
+        minutas = md.obtenerFecha();
         DefaultTableModel model = (DefaultTableModel) vistaMinuta.tablaFechaMinuta.getModel();
         DefaultTableModel model2 = (DefaultTableModel) vistaMinuta.tablaMinuta.getModel();
         model2.setRowCount(0);
         model.setRowCount(0);
         SimpleDateFormat df = new SimpleDateFormat("dd-MM-yyyy");
         int nro = 1;
-        try {
-            while(rs.next()){
-                Date fecha= rs.getDate(1);
-                fechaMinuta = new Object[] {nro,df.format(fecha)};
-                model.addRow(fechaMinuta); 
-                nro ++;
-            }  
-         vistaMinuta.tablaFechaMinuta.getColumnModel().getColumn(0).setPreferredWidth(1);   
-        }catch (SQLException e) {
-            System.out.println(e.getMessage());
+        for (int i = 0; i < minutas.size(); i++) {
+            Date fecha= minutas.get(i).getFechaMinuta();
+            fechaMinuta = new Object[] {nro,df.format(fecha)};
+            model.addRow(fechaMinuta);
+            nro ++;
+        }
+            
         
-        } 
+        vistaMinuta.tablaFechaMinuta.getColumnModel().getColumn(0).setPreferredWidth(1); 
     }
 
     @Override
@@ -196,7 +197,7 @@ public class ControladorMinuta implements MouseListener, ActionListener {
             
             PdfWriter.getInstance(document, new FileOutputStream(new File(vistaMinuta.path.getText(), "Minuta - "+dateFormat2.format(date)+".pdf")));
             document.open();
-            Image image = Image.getInstance(IMG); 
+            Image image = Image.getInstance(getClass().getResource(IMG)); 
             image.scaleAbsolute(70, 70);
             Font f=new Font(Font.FontFamily.TIMES_ROMAN,10.0f,0,null); 
             document.add(new Chunk(image, 0, -55f));
@@ -324,10 +325,13 @@ public class ControladorMinuta implements MouseListener, ActionListener {
             document.close();
             }catch (DocumentException ex) {
             Logger.getLogger(DetalleCuota.class.getName()).log(Level.SEVERE, null, ex);
+            log.error(ex.getMessage());
         } catch (FileNotFoundException ex) {
             Logger.getLogger(DetalleCuota.class.getName()).log(Level.SEVERE, null, ex);
+            log.error(ex.getMessage());
         } catch (IOException ex) {
             Logger.getLogger(DetalleCuota.class.getName()).log(Level.SEVERE, null, ex);
+            log.error(ex.getMessage());
         }
     }  
         

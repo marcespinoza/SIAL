@@ -14,17 +14,17 @@ import javax.swing.table.TableCellRenderer;
  *
  * @author Marcelo Espinoza
  */
-public class Minuta extends javax.swing.JPanel {
+public class MinutaVista extends javax.swing.JPanel {
 
-   private static Minuta minuta = null;
+   private static MinutaVista minuta = null;
     
-    public Minuta() {
+    public MinutaVista() {
         initComponents();
     }
     
-    public static Minuta getInstance(){
+    public static MinutaVista getInstance(){
         if( minuta==null){
-        minuta= new Minuta();
+        minuta= new MinutaVista();
         }
         return minuta;
     }

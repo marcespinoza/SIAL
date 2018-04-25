@@ -5,6 +5,7 @@
  */
 package Controlador;
 
+import Clases.Usuario;
 import Modelo.UsuarioDAO;
 import Vista.Dialogs.Login;
 import Vista.Frame.Ventana;
@@ -62,19 +63,19 @@ public class ControladorLogin implements ActionListener, KeyListener, WindowList
 
     @Override
     public void actionPerformed(ActionEvent e) {
+        Usuario usuario = null;
             if(e.getSource() == login.iniciar_sesion){
                 String contraseña= new String(login.contraseña.getPassword());
               if(login.usuario.getText().equals("") || contraseña.equals("")){
                   login.aviso.setText("* Ingrese todos los campos");
               }else{
-                  ResultSet rs = null;
-                rs = ud.validarUsuario(login.usuario.getText(), contraseña, login.tipo_operador.getSelection().getActionCommand());
+                usuario = ud.validarUsuario(login.usuario.getText(), contraseña, login.tipo_operador.getSelection().getActionCommand());
                     try {
-                        if (rs.next()){
-                            Ventana.labelUsuario.setText(rs.getString(1));
-                            Ventana.labelTipoUsuario.setText(rs.getString(2));
-                            Ventana.nombreUsuario.setText(rs.getString(3));
-                            Ventana.apellidoUsuario.setText(rs.getString(4));    
+                        if (usuario!=null){
+                            Ventana.labelUsuario.setText(usuario.getUsuario());
+                            Ventana.labelTipoUsuario.setText(usuario.getTipoUsuario());
+                            Ventana.nombreUsuario.setText(usuario.getNombres());
+                            Ventana.apellidoUsuario.setText(usuario.getApellidos());    
                             //--------Escribo en el archivo de log quien inició sesion, dia y hora---------//
                             File file = new File("log.txt");
                             if(!file.exists()){
@@ -83,7 +84,7 @@ public class ControladorLogin implements ActionListener, KeyListener, WindowList
                             BufferedWriter bw = new BufferedWriter( writer );
                             DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
                             Calendar cal = Calendar.getInstance();
-                            bw.write(rs.getString(3)+" "+rs.getString(4)+" - "+login.tipo_operador.getSelection().getActionCommand()+" - "+dateFormat.format(cal.getTime()));
+                            bw.write(usuario.getNombres()+" "+usuario.getApellidos()+" - "+login.tipo_operador.getSelection().getActionCommand()+" - "+dateFormat.format(cal.getTime()));
                             bw.newLine();
                             bw.close();
                             //-------Oculto ventana login y muestro el frame----------//
@@ -92,9 +93,7 @@ public class ControladorLogin implements ActionListener, KeyListener, WindowList
                         }else{
                             login.aviso.setText("* Usuario y/o contraseña incorrectos");              
                         }  
-                     } catch (SQLException ex) {
-                        Logger.getLogger(ControladorLogin.class.getName()).log(Level.SEVERE, null, ex);
-                    } catch (IOException ex) {
+                     } catch (IOException ex) {
                         Logger.getLogger(ControladorLogin.class.getName()).log(Level.SEVERE, null, ex);
                     } 
               }

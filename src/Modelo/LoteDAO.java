@@ -28,7 +28,7 @@ public class LoteDAO {
     
     public void editarPropiedad(int vendido, String barrio,int manzana, int parcela){
         try {
-            Connection con = conexion.getConexion();
+            Connection con = conexion.dataSource.getConnection();
             String query = "UPDATE lote SET vendido = ? where barrio = ? and manzana =? and parcela=?";
             PreparedStatement preparedStmt = con.prepareStatement(query);
             preparedStmt.setInt   (1, vendido);
@@ -46,7 +46,7 @@ public class LoteDAO {
      public ResultSet obtenerPropietarioxLote(int id_control){
      ResultSet rs = null;
      try {
-          Connection con = conexion.getConexion();
+          Connection con = conexion.dataSource.getConnection();
           String listar = "SELECT l.propietario_Apellidos, l.propietario_Nombres, l.propietario_cuit, l.propietario_nro_recibo FROM lote l inner JOIN ficha_control_lote f where f.Lote_Manzana=l.Manzana and f.Id_control='"+id_control+"'";
           Statement st = con.createStatement();
           rs = st.executeQuery(listar);
@@ -59,7 +59,7 @@ public class LoteDAO {
      public ResultSet obtenerBarrios(String apellidos, String nombres){
      ResultSet rs = null;
      try {
-          Connection con = conexion.getConexion();
+          Connection con = conexion.dataSource.getConnection();
           String listar = "SELECT DISTINCT barrio from lote where vendido=0 and propietario_Apellidos='"+apellidos+"' and propietario_nombres='"+nombres+"' "; 
           Statement st = con.createStatement();
           rs = st.executeQuery(listar);
@@ -73,7 +73,7 @@ public class LoteDAO {
       public ResultSet manzanasPorBarrio(String barrio){
      ResultSet rs = null;
      try {
-          Connection con = conexion.getConexion();
+          Connection con = conexion.dataSource.getConnection();
           String listar = "SELECT DISTINCT manzana from lote where barrio = '"+barrio+"' and vendido=0"; 
           Statement st = con.createStatement();
           rs = st.executeQuery(listar);
@@ -86,7 +86,7 @@ public class LoteDAO {
       public ResultSet parcelasPorManzana(String barrio, int manzana){
      ResultSet rs = null;
      try {
-          Connection con = conexion.getConexion();
+          Connection con = conexion.dataSource.getConnection();
           String listar = "SELECT parcela from lote where barrio = '"+barrio+"' and manzana = '"+manzana+"' and vendido=0"; 
           Statement st = con.createStatement();
           rs = st.executeQuery(listar);
@@ -98,7 +98,7 @@ public class LoteDAO {
       
       public void eliminarLote(String barrio, int manzana, int parcela){
      try {
-         Connection con = conexion.getConexion();
+         Connection con = conexion.dataSource.getConnection();
          System.out.println(barrio+manzana+parcela);
          String eliminar = "delete from lote where barrio = ? and manzana = ? and parcela = ?";
          PreparedStatement ps = con.prepareStatement(eliminar);
@@ -114,8 +114,8 @@ public class LoteDAO {
       public ResultSet obtenerLotes(String apellidos, String nombres){
           ResultSet rs = null;
      try {
-          Connection con = conexion.getConexion();   
-          String sql = "SELECT barrio, manzana, parcela, observaciones, vendido, propietario_cuit from lote where propietario_apellidos =? AND propietario_nombres =? "; 
+          Connection con = conexion.dataSource.getConnection();  
+          String sql = "SELECT barrio, manzana, parcela, observacion, vendido, propietario_cuit from lote where propietario_apellidos =? AND propietario_nombres =? "; 
           PreparedStatement preparedStatement = con.prepareStatement(sql);
           preparedStatement.setString(1, apellidos);
           preparedStatement.setString(2, nombres);
@@ -128,7 +128,7 @@ public class LoteDAO {
 
     public void agregarLote(String barrio, String manzana, String parcela, String propietario_apellidos, String propietario_nombres, String propietario_cuit, String propietario_nro_recibo){
        try {
-           Connection con = conexion.getConexion();
+           Connection con = conexion.dataSource.getConnection();
            String query="INSERT INTO lote (barrio, manzana, parcela, propietario_apellidos, propietario_nombres, propietario_cuit, propietario_nro_recibo)VALUES(?,?,?,?,?,?,?)  ON DUPLICATE KEY UPDATE barrio = VALUES(barrio), manzana = VALUES(manzana), parcela = VALUES(parcela),  propietario_apellidos=VALUES(propietario_apellidos), propietario_nombres = VALUES(propietario_nombres), propietario_cuit = VALUES(propietario_cuit), propietario_nro_recibo = VALUES(propietario_nro_recibo)";
            PreparedStatement stmt = con.prepareStatement(query);
            stmt.setString(1, barrio);
@@ -148,8 +148,8 @@ public class LoteDAO {
          int flag = 0;
         try {
             System.out.println(backup_barrio+backup_manzana+backup_parcela);
-            Connection con = conexion.getConexion();
-            String query = "UPDATE lote SET barrio = ?, manzana = ?, parcela = ?, observaciones = ? where barrio = ? and manzana =? and parcela=?";
+            Connection con = conexion.dataSource.getConnection();
+            String query = "UPDATE lote SET barrio = ?, manzana = ?, parcela = ?, observacion = ? where barrio = ? and manzana =? and parcela=?";
             PreparedStatement preparedStmt = con.prepareStatement(query);
             preparedStmt.setString(1, barrio);
             preparedStmt.setInt(2, manzana);
@@ -170,9 +170,9 @@ public class LoteDAO {
         
    public void actualizarObservacion(String observaciones, String barrio, int manzana, int parcela){
         try {
-            Connection con = conexion.getConexion();
+            Connection con = conexion.dataSource.getConnection();
             PreparedStatement ps = con.prepareStatement(
-                    "UPDATE lote SET observaciones = ? WHERE barrio = ? and manzana = ? and parcela = ?");
+                    "UPDATE lote SET observacion = ? WHERE barrio = ? and manzana = ? and parcela = ?");
             ps.setString(1,observaciones);
             ps.setString(2,barrio);
             ps.setInt(3, manzana);

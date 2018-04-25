@@ -5,7 +5,7 @@
  */
 package Vista.Dialogs;
 
-import Vista.Panels.Minuta;
+import Vista.Panels.MinutaVista;
 
 /**
  *

@@ -331,7 +331,7 @@ public class Clientes extends javax.swing.JPanel {
                 }
             ) {
                 boolean[] canEdit = new boolean [] {
-                    true, false, false, false, false, false, false, false, false, false, false, false, false, false, true, true, true, true, true, true, false, false, false
+                    true, false, false, false, false, false, false, false, false, false, false, false, false, false, true, true, false, false, false, true, false, false, false
                 };
 
                 public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -340,6 +340,8 @@ public class Clientes extends javax.swing.JPanel {
             });
             jScrollPane2.setViewportView(tablaCliente);
             if (tablaCliente.getColumnModel().getColumnCount() > 0) {
+                tablaCliente.getColumnModel().getColumn(0).setResizable(false);
+                tablaCliente.getColumnModel().getColumn(1).setResizable(false);
                 tablaCliente.getColumnModel().getColumn(2).setResizable(false);
                 tablaCliente.getColumnModel().getColumn(2).setPreferredWidth(1);
                 tablaCliente.getColumnModel().getColumn(3).setMinWidth(0);

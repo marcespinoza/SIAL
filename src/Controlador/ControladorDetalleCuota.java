@@ -41,6 +41,8 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -93,6 +95,8 @@ public class ControladorDetalleCuota implements ActionListener, TableModelListen
         this.nro_cuotas=nro_cuotas;
         if(baja_logica==1){
            dc.agregarPagoBtn.setEnabled(false);
+           dc.eliminarPagoBtn.setEnabled(false);
+           dc.generarReciboBtn.setEnabled(false);
         }
         dc.tablaDetallePago.getModel().addTableModelListener(this);
         dc.tablaDchoPosesion.addMouseListener(new MouseAdapter() {
@@ -171,10 +175,11 @@ public class ControladorDetalleCuota implements ActionListener, TableModelListen
         detalleCuota = cd.listaDetalleCuota(idControl);
         DefaultTableModel model = (DefaultTableModel) dc.tablaDetallePago.getModel();
         model.setRowCount(0);
+        SimpleDateFormat input = new SimpleDateFormat("dd-MM-YYYY");
         try {
             while(detalleCuota.next()){
                 String nro_cuota = detalleCuota.getString(1);
-                String fecha = detalleCuota.getString(2);
+                String fecha = input.format(detalleCuota.getDate(2));
                 String detalle = detalleCuota.getString(3);
                 String cuota_pura = detalleCuota.getString(4);
                 String gastos_admin = detalleCuota.getString(5);                
@@ -214,11 +219,15 @@ public class ControladorDetalleCuota implements ActionListener, TableModelListen
             llearTablaDchoPosesion(id_control);
         }
         if(e.getSource()==dc.eliminarPagoBtn){
-             int row = dc.tablaDetallePago.getSelectedRow();
-             int nro_cuota = Integer.parseInt(dc.tablaDetallePago.getModel().getValueAt(row, 0).toString());
-             int id_recibo = Integer.parseInt(dc.tablaDetallePago.getModel().getValueAt(row, 13).toString());
-             if(row!=-1){
-                 ImageIcon icon = new ImageIcon("src/Imagenes/Iconos/warning.png"); 
+             int row = dc.tablaDetallePago.getSelectedRow();             
+             if(row==-1){
+                JOptionPane.showMessageDialog(null, "Seleccione una cuota", "Atención", JOptionPane.INFORMATION_MESSAGE, null);
+             }else if(row==0){
+                 JOptionPane.showMessageDialog(null, "Cuota no valida", "Atención", JOptionPane.INFORMATION_MESSAGE, null);
+             }else if(row!=-1){
+                 int nro_cuota = Integer.parseInt(dc.tablaDetallePago.getModel().getValueAt(row, 0).toString());
+                 int id_recibo = Integer.parseInt(dc.tablaDetallePago.getModel().getValueAt(row, 13).toString());
+                 ImageIcon icon = new ImageIcon("/Imagenes/Iconos/warning.png"); 
                  int reply = JOptionPane.showConfirmDialog(null, "Eliminar cuota numero "+dc.tablaDetallePago.getModel().getValueAt(row, 0)+"?",
                      "Advertencia",JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, icon);
               if (reply == JOptionPane.YES_OPTION) {
@@ -227,9 +236,7 @@ public class ControladorDetalleCuota implements ActionListener, TableModelListen
                   llenarTabla(id_control);
                } 
             }
-             else{
-                JOptionPane.showMessageDialog(null, "Seleccione un pago", "Atención", JOptionPane.INFORMATION_MESSAGE, null);
-             }
+             
         }
         if(e.getSource() == dc.resumenCliente){
             if(dc.tablaDetallePago.getRowCount()==1 && dc.tablaDchoPosesion.getRowCount()==0){
@@ -344,7 +351,7 @@ public class ControladorDetalleCuota implements ActionListener, TableModelListen
             table.setTotalWidth(new float[]{ 1,1,2,2,2});
             table.setWidthPercentage(100);
             PdfPCell nro_cuota = new PdfPCell(new Paragraph("Nro. cuota",f));
-            PdfPCell fecha_pago = new PdfPCell(new Paragraph("Fch. pago",f));
+            PdfPCell fecha_pago = new PdfPCell(new Paragraph("Fecha pago",f));
             PdfPCell monto_cuota = new PdfPCell(new Paragraph("Monto",f));
             PdfPCell saldo = new PdfPCell(new Paragraph("Saldo",f));
             PdfPCell cemento_saldo = new PdfPCell(new Paragraph("Cemento Saldo",f));
@@ -422,8 +429,9 @@ public class ControladorDetalleCuota implements ActionListener, TableModelListen
             document.close();
         }            
             catch (DocumentException ex) {
-            Logger.getLogger(DetalleCuota.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(DetalleCuota.class.getName()).log(Level.SEVERE, null, ex.getMessage());
         } catch (IOException ex) {
+            JOptionPane.showMessageDialog(null, "No se pudo generar. Compruebe que no tiene abierto actualmente el archivo");
             Logger.getLogger(ControladorDetalleCuota.class.getName()).log(Level.SEVERE, null, ex);
         } catch (SQLException ex) {
             Logger.getLogger(ControladorDetalleCuota.class.getName()).log(Level.SEVERE, null, ex);

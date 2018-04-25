@@ -31,13 +31,13 @@ public class ClienteDAO {
      Statement st = null;
      Connection con = null;
      try {
-          con = conexion.getConexion();
-          String listar = "SELECT c.Dni, c.Apellidos, c.Nombres,c.fecha_nacimiento, c.barrio, c.calle, c.numero, c.Telefono1, c.telefono2, c.trabajo, h.baja, f.Id_control, f.cantidad_cuotas, f.gastos, f.bolsa_cemento, f.fecha_actualizacion, f.lote_Barrio, f.lote_Manzana, f.lote_Parcela, f.lote_observaciones, f.cuota_pura FROM (cliente c LEFT JOIN cliente_tiene_lote h ON c.Dni = h.cliente_Dni) left join ficha_control_lote f on f.Id_control=h.Id_control GROUP BY f.Id_control, c.dni, ifnull(f.Id_control, c.Dni) order by c.apellidos"; 
+          con = conexion.dataSource.getConnection();
+          String listar = "SELECT c.Dni, c.Apellidos, c.Nombres,c.fecha_nacimiento, c.barrio, c.calle, c.numero, c.Telefono1, c.telefono2, c.trabajo, h.baja, f.Id_control, f.cantidad_cuotas, f.gastos, f.bolsa_cemento, f.fecha_actualizacion, f.lote_Barrio, f.lote_Manzana, f.lote_Parcela,f.observacion, f.cuota_pura FROM (cliente c LEFT JOIN cliente_tiene_lote h ON c.Dni = h.cliente_Dni) left join ficha_control_lote f on f.Id_control=h.Id_control GROUP BY f.Id_control, c.dni, ifnull(f.Id_control, c.Dni) order by c.apellidos"; 
           st = con.createStatement();
           rs = st.executeQuery(listar);
         } catch (SQLException ex) {
           System.out.println(ex.getMessage());
-        } 
+        }
      return rs;
  }
  
@@ -46,7 +46,7 @@ public class ClienteDAO {
      Statement st = null;
      Connection con = null;
      try {
-          con = conexion.getConexion();
+          con = conexion.dataSource.getConnection();
           String listar = "SELECT c.Dni, c.Apellidos, c.Nombres FROM (cliente c left OUTER JOIN cliente_tiene_lote h on c.Dni=h.cliente_Dni) WHERE h.cliente_Dni is null GROUP BY c.dni order by c.apellidos"; 
           st = con.createStatement();
           rs = st.executeQuery(listar);
@@ -60,7 +60,7 @@ public class ClienteDAO {
   public ResultSet clientePorLote(int id_control){
      ResultSet rs = null;
      try {
-          Connection con = conexion.getConexion();
+          Connection con = conexion.dataSource.getConnection();
           String listar = "SELECT c.Apellidos, c.Nombres,c.barrio, c.calle, c.numero FROM cliente c LEFT JOIN cliente_tiene_lote f ON c.Dni = f.cliente_Dni where f.id_control = '"+id_control+"'"; 
           Statement st = con.createStatement();
           rs = st.executeQuery(listar);
@@ -72,8 +72,9 @@ public class ClienteDAO {
   
      public void altaClientesXLotes(int dni, int id_control) throws SQLException{
          PreparedStatement stmt = null;
+         Connection con = null;
         try {
-            Connection con = conexion.getConexion();
+            con = conexion.dataSource.getConnection();
             String insertar = "insert into cliente_tiene_lote (cliente_dni, id_control) values (?,?)";
             stmt = con.prepareStatement(insertar);
             stmt.setInt(1, dni);
@@ -83,7 +84,7 @@ public class ClienteDAO {
             Logger.getLogger(ClienteDAO.class.getName()).log(Level.SEVERE, null, ex);
             System.out.println(ex.getMessage());
         }finally{
-            conexion.cerrarConexion();
+            con.close();
             if(stmt!=null){
                stmt.close();
             }
@@ -92,7 +93,7 @@ public class ClienteDAO {
      
      public void altaClientesXDpto(int dni, int id_control){
         try {
-            Connection con = conexion.getConexion();
+            Connection con = conexion.dataSource.getConnection();
             String insertar = "insert into cliente_tiene_dpto (cliente_dni, id_control) values (?,?)";
             PreparedStatement stmt = con.prepareStatement(insertar);
             stmt.setInt(1, dni);
@@ -107,8 +108,9 @@ public class ClienteDAO {
  public int altaCliente(int dni, String apellidos, String nombres, Date fecha_nacimiento, String barrio, String calle, int numero, String telefono1, String telefono2, String trabajo) throws SQLException{
      int filasAfectadas=0;
      PreparedStatement ps = null;
+     Connection con = null;
      try {
-         Connection con = conexion.getConexion();
+         con = conexion.dataSource.getConnection();
          String insertar = "Insert into cliente(dni, apellidos, nombres, fecha_nacimiento, barrio, calle, numero, telefono1, telefono2, trabajo) values ('"+dni+"','"+apellidos+"','"+nombres+"','"+fecha_nacimiento+"','"+barrio+"','"+calle+"','"+numero+"','"+telefono1+"','"+telefono2+"','"+trabajo+"')";
          ps = con.prepareStatement(insertar);
          filasAfectadas = ps.executeUpdate();         
@@ -118,7 +120,7 @@ public class ClienteDAO {
            filasAfectadas = 0; 
     }         
      }finally{
-         conexion.cerrarConexion();
+         con.close();
          if(ps!=null){
                ps.close();
             }
@@ -127,7 +129,7 @@ public class ClienteDAO {
  }
  public void eliminarCliente(int dni){
      try {
-         Connection con = conexion.getConexion();
+         Connection con = conexion.dataSource.getConnection();
          String eliminar = "delete from cliente where dni = '"+dni+"'";
          PreparedStatement ps = con.prepareStatement(eliminar);
          ps.executeUpdate();
@@ -137,7 +139,7 @@ public class ClienteDAO {
  }
  public void editarCliente(int dni, String apellidos, String nombres, Date fecha_nacimiento, String barrio, String calle, int numero, String telefono1, String telefono2, String trabajo, int clave_cliente){
         try {
-            Connection con = conexion.getConexion();
+            Connection con = conexion.dataSource.getConnection();
             String query = "UPDATE cliente SET dni = ?, nombres = ?, apellidos = ?, fecha_nacimiento = ?, barrio = ?, calle = ?, numero = ?, telefono1 = ?, telefono2 = ?, trabajo = ? where dni = ?";
             PreparedStatement preparedStmt = con.prepareStatement(query);
             preparedStmt.setInt   (1, dni);
@@ -161,7 +163,7 @@ public class ClienteDAO {
  public ResultSet buscarCliente(int dni){
      ResultSet rs = null;
      try {
-          Connection con = conexion.getConexion();
+          Connection con = conexion.dataSource.getConnection();
           String listar = "SELECT  c.apellidos, c.nombres, c.fecha_nacimiento, c.dni, c.barrio, c.calle, c.numero, c.telefono1, c.telefono2, c.trabajo, r.apellidos, r.nombres, r.telefono, r.parentesco from cliente c inner join referencia r on c.dni=r.cliente_dni where dni = '"+dni+"'"; 
           Statement st = con.createStatement();
           rs = st.executeQuery(listar);
@@ -174,7 +176,7 @@ public class ClienteDAO {
    public ResultSet clientesPorPropietarios(String apellido, String nombre){
      ResultSet rs = null;
      try {
-          Connection con = conexion.getConexion();
+          Connection con = conexion.dataSource.getConnection();
           String listar = "SELECT DISTINCT c.Dni, c.Apellidos, c.Nombres,c.fecha_nacimiento, c.barrio, c.calle, c.numero, c.Telefono1, c.telefono2, c.trabajo, cl.baja, f.Id_control, f.cantidad_cuotas, f.gastos, f.bolsa_cemento, f.fecha_actualizacion, f.lote_Barrio, f.lote_Manzana, f.lote_Parcela, f.lote_observaciones from ((((cliente c INNER join cliente_tiene_lote cl on c.dni=cl.cliente_dni) INNER join ficha_control_lote f on cl.id_control=f.id_control) INNER join lote l on f.lote_barrio=l.barrio) INNER join lote l2 on l2.manzana=f.lote_manzana) INNER join lote l3 on l3.parcela=f.lote_parcela where l3.propietario_Apellidos='"+apellido+"' and l3.propietario_Nombres='"+nombre+"'"; 
           Statement st = con.createStatement();
           rs = st.executeQuery(listar);
