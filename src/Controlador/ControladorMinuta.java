@@ -10,6 +10,7 @@ import Modelo.MinutaDAO;
 import Vista.Dialogs.ProgressDialog;
 import Vista.Panels.DetalleCuota;
 import Vista.Panels.MinutaVista;
+import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.Chunk;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
@@ -22,6 +23,7 @@ import com.itextpdf.text.Rectangle;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
+import java.awt.Desktop;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
@@ -65,6 +67,7 @@ public class ControladorMinuta implements MouseListener, ActionListener {
     FileOutputStream fileOut = null;
     File configFile = new File("config.properties");
     public static final String IMG = "/Imagenes/logo_reporte.png";
+    File pathMinuta;
     static org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(ControladorCliente.class.getName());
 
     public ControladorMinuta(MinutaVista vistaMinuta) {
@@ -110,7 +113,7 @@ public class ControladorMinuta implements MouseListener, ActionListener {
                 String rendido = rs.getString(8);     
                 String nro_cuota = rs.getString(9);
                 String observaciones = rs.getString(10);
-                String baja = rs.getString(13);
+                String baja = rs.getString(11);
                 minuta = new Object[] {fecha_minuta,apellidos, nombres, mzpc, cobrado, gastos, rendido, nro_cuota, observaciones, baja};
                 model.addRow(minuta);   
             } 
@@ -182,7 +185,7 @@ public class ControladorMinuta implements MouseListener, ActionListener {
                 SimpleDateFormat dcn = new SimpleDateFormat("dd-MM-yyyy");
                  String desde = dcn.format(vistaMinuta.minutaDesde.getDate() );
                  String date = dcn.format(vistaMinuta.minutaHasta.getDate() );
-                ResultSet rs = md.minutasPorRango(new java.sql.Date(vistaMinuta.minutaDesde.getDate().getTime()) , new java.sql.Date(vistaMinuta.minutaHasta.getDate().getTime()));
+                ResultSet rs = md.minutasPorRango2(new java.sql.Date(vistaMinuta.minutaDesde.getDate().getTime()) , new java.sql.Date(vistaMinuta.minutaHasta.getDate().getTime()));
                 llenarTabla(rs);
             }
     }
@@ -194,12 +197,13 @@ public class ControladorMinuta implements MouseListener, ActionListener {
       DateFormat dateFormat2 = new SimpleDateFormat("dd.MM.yyyy");
       java.util.Date date = new java.util.Date();
         try {
-            
-            PdfWriter.getInstance(document, new FileOutputStream(new File(vistaMinuta.path.getText(), "Minuta - "+dateFormat2.format(date)+".pdf")));
+            pathMinuta = new File(vistaMinuta.path.getText(), "Minuta - "+dateFormat2.format(date)+".pdf");
+            PdfWriter.getInstance(document, new FileOutputStream(pathMinuta));
             document.open();
             Image image = Image.getInstance(getClass().getResource(IMG)); 
             image.scaleAbsolute(70, 70);
             Font f=new Font(Font.FontFamily.TIMES_ROMAN,10.0f,0,null); 
+            Font f2=new Font(Font.FontFamily.TIMES_ROMAN,9.0f,0,null); 
             document.add(new Chunk(image, 0, -55f));
             Paragraph titulo = new Paragraph("Minuta diaria");  
             titulo.setAlignment(Element.ALIGN_CENTER);
@@ -212,7 +216,7 @@ public class ControladorMinuta implements MouseListener, ActionListener {
             PdfPTable table = new PdfPTable(9);            
             table.setTotalWidth(new float[]{ 1,2,4,2,2,2,2,2,4});
             table.setWidthPercentage(100);
-            PdfPCell orden = new PdfPCell(new Paragraph("ORD",f));
+            PdfPCell orden = new PdfPCell(new Paragraph("ORD",f2));
             PdfPCell rbo_nro = new PdfPCell(new Paragraph("Rbo. Nro",f));
             PdfPCell apynom = new PdfPCell(new Paragraph("Apellido y nombre",f));
             PdfPCell mzpc = new PdfPCell(new Paragraph("Mz./Pc.",f));
@@ -242,7 +246,9 @@ public class ControladorMinuta implements MouseListener, ActionListener {
              document.add(table);  
           try {
               int conta = 1;
-              double acumulador_rendido = 0;
+              double acumulador_cobrado = 0;
+              double acumulador_gastos = 0;
+              double acumulador_rendido = 0;              
               double deposito = 0;
               double t_debito = 0;
               double t_credito = 0;
@@ -251,32 +257,66 @@ public class ControladorMinuta implements MouseListener, ActionListener {
                   PdfPTable table2 = new PdfPTable(9);            
                   table2.setTotalWidth(new float[]{ 1,2,4,2,2,2,2,2,4});
                   table2.setWidthPercentage(100);
-                  table2.addCell(new PdfPCell(new Paragraph(String.valueOf(conta),f)));    
-                  PdfPCell detalle_nro_cuota = new PdfPCell(new Paragraph(resultset.getString(12),f));
-                  detalle_nro_cuota.setHorizontalAlignment(Element.ALIGN_CENTER);
-                  table2.addCell(detalle_nro_cuota);
-                  table2.addCell(new PdfPCell(new Paragraph(resultset.getString(2)+" "+resultset.getString(3),f)));
-                  table2.addCell(new PdfPCell(new Paragraph("Mz."+resultset.getString(4)+"-"+resultset.getString(5),f)));
-                  table2.addCell(new PdfPCell(new Paragraph(resultset.getString(6),f)));
-                  table2.addCell(new PdfPCell(new Paragraph(resultset.getString(7),f)));
-                  table2.addCell(new PdfPCell(new Paragraph(resultset.getString(8),f)));
-                  table2.addCell(new PdfPCell(new Paragraph(resultset.getString(9),f)));
+                  PdfPCell nro_orden = new PdfPCell(new Paragraph(String.valueOf(conta),f));
+                  nro_orden.setHorizontalAlignment(Element.ALIGN_CENTER);
+                  table2.addCell(new PdfPCell(nro_orden));    
+                  PdfPCell nro_recibo = new PdfPCell(new Paragraph(resultset.getString(12),f));
+                  nro_recibo.setHorizontalAlignment(Element.ALIGN_CENTER);
+                  table2.addCell(nro_recibo);      
+                  PdfPCell nyap = new PdfPCell(new Paragraph(resultset.getString(2)+" "+resultset.getString(3),f));
+                  nyap.setHorizontalAlignment(Element.ALIGN_CENTER);
+                  table2.addCell(nyap);
+                  PdfPCell mz_pc = new PdfPCell(new Paragraph(resultset.getString(4)+"/"+resultset.getString(5),f));
+                  mz_pc.setHorizontalAlignment(Element.ALIGN_CENTER);
+                  table2.addCell(mz_pc);
+                  table2.addCell(new PdfPCell(new Paragraph("$ "+resultset.getString(6),f)));
+                  table2.addCell(new PdfPCell(new Paragraph("$ "+resultset.getString(7),f)));
+                  table2.addCell(new PdfPCell(new Paragraph("$ "+resultset.getString(8),f)));
+                  PdfPCell nrocuota = new PdfPCell(new Paragraph(resultset.getString(9),f));
+                  nrocuota.setHorizontalAlignment(Element.ALIGN_CENTER);
+                  table2.addCell(nrocuota);
                   table2.addCell(new PdfPCell(new Paragraph(resultset.getString(10),f)));
                   document.add(table2);
-                  acumulador_rendido = acumulador_rendido + Double.parseDouble(resultset.getString(8));
+                  if(Integer.parseInt(resultset.getString(11))!=1){
+                   acumulador_cobrado = acumulador_cobrado + resultset.getDouble(6);
+                   acumulador_gastos = acumulador_gastos + resultset.getDouble(7);
+                   acumulador_rendido = acumulador_rendido + resultset.getDouble(8);
                   switch(resultset.getString(9)){
-                      case "Dpto. Bancario":deposito = deposito + Double.parseDouble(resultset.getString(7));break; 
-                      case "Tarjeta credito":t_debito = t_debito + Double.parseDouble(resultset.getString(7));break;
-                      case "Tarjeta debito":t_credito = t_credito + Double.parseDouble(resultset.getString(7));break;
-                  }
+                      case "Dpto. Bancario":deposito = deposito + resultset.getDouble(7);break; 
+                      case "Tarjeta credito":t_debito = t_debito + resultset.getDouble(7);break;
+                      case "Tarjeta debito":t_credito = t_credito + resultset.getDouble(7);break;
+                  }}
                   conta ++;
               }
+            //------Linea Totales------//
+            PdfPTable tableTotales = new PdfPTable(9);            
+            tableTotales.setTotalWidth(new float[]{ 1,2,4,2,2,2,2,2,4});
+            tableTotales.setWidthPercentage(100);  
+            PdfPCell cellcobrado = new PdfPCell(new Paragraph("$ "+String.format ("%.2f",acumulador_cobrado), f));
+            PdfPCell cellgastos = new PdfPCell(new Paragraph("$ "+String.format ("%.2f",acumulador_gastos), f));
+            PdfPCell cellrendido = new PdfPCell(new Paragraph("$ "+String.format ("%.2f",acumulador_rendido), f));
+            PdfPCell cellEmpty = new PdfPCell(new Paragraph("",f));
+            cellEmpty.setUseVariableBorders(true);
+            cellEmpty.setBorderColorBottom(BaseColor.WHITE);
+            cellEmpty.setBorderColorLeft(BaseColor.WHITE);
+            cellEmpty.setBorderColorRight(BaseColor.WHITE);
+            tableTotales.addCell(cellEmpty);
+            tableTotales.addCell(cellEmpty);
+            tableTotales.addCell(cellEmpty);
+            tableTotales.addCell(cellEmpty);
+            tableTotales.addCell(cellcobrado);
+            tableTotales.addCell(cellgastos);
+            tableTotales.addCell(cellrendido);
+            tableTotales.addCell(cellEmpty);
+            tableTotales.addCell(cellEmpty);
+            document.add(tableTotales);
+            //-------------//
             total = acumulador_rendido - (deposito + t_credito + t_debito);
             PdfPTable tablaa = new PdfPTable(2);
             tablaa.setWidthPercentage(50);
             tablaa.setSpacingBefore(10f);
             PdfPCell nuevo = new PdfPCell(new Paragraph("Total rendido $", f));
-            PdfPCell nuevo2 = new PdfPCell(new Paragraph(String.valueOf(acumulador_rendido), f));
+            PdfPCell nuevo2 = new PdfPCell(new Paragraph(String.format ("%.2f",acumulador_rendido), f));
             nuevo2.setHorizontalAlignment(Element.ALIGN_RIGHT);
             tablaa.addCell(nuevo);
             tablaa.addCell(nuevo2);
@@ -285,7 +325,7 @@ public class ControladorMinuta implements MouseListener, ActionListener {
                  PdfPTable dpto_bancario = new PdfPTable(2);
                  dpto_bancario.setWidthPercentage(50);
                  PdfPCell dpto1 = new PdfPCell(new Paragraph("Depósito bancario $", f));
-                 PdfPCell dpto2 = new PdfPCell(new Paragraph("- "+String.valueOf(deposito), f));
+                 PdfPCell dpto2 = new PdfPCell(new Paragraph("- "+String.format ("%.2f",deposito), f));
                  dpto2.setHorizontalAlignment(Element.ALIGN_RIGHT);
                  dpto_bancario.addCell(dpto1);
                  dpto_bancario.addCell(dpto2);
@@ -295,7 +335,7 @@ public class ControladorMinuta implements MouseListener, ActionListener {
             PdfPTable total_final = new PdfPTable(2);
             total_final.setWidthPercentage(50);
             PdfPCell total1 = new PdfPCell(new Paragraph("Total $", f));
-            PdfPCell total2 = new PdfPCell(new Paragraph(String.valueOf(total), f));
+            PdfPCell total2 = new PdfPCell(new Paragraph(String.format ("%.2f",total), f));
             total1.setBorder(Rectangle.NO_BORDER);
             total2.setBorder(Rectangle.NO_BORDER);
             total2.setHorizontalAlignment(Element.ALIGN_RIGHT);
@@ -319,6 +359,41 @@ public class ControladorMinuta implements MouseListener, ActionListener {
             pie.addCell(confecciono);
             pie.addCell(conformidad);
             document.add(pie);
+            //---------Tabla de billetes-----------//
+            PdfPTable tablaBilletes = new PdfPTable(3);
+            tablaBilletes.setWidthPercentage(50);
+            tablaBilletes.setSpacingBefore(10f);
+            PdfPCell billetes1 = new PdfPCell(new Paragraph("Cant.", f));
+            PdfPCell billetes2 = new PdfPCell(new Paragraph("Valor unitario", f));
+            PdfPCell billetes3 = new PdfPCell(new Paragraph("Valor total", f));
+            tablaBilletes.addCell(billetes1);
+            tablaBilletes.addCell(billetes2);
+            tablaBilletes.addCell(billetes3);            
+            document.add(tablaBilletes);
+            for (int i = 1; i < 11; i++) {
+                //---Agrego celdas vacias----//
+                PdfPTable tablaBilletes2 = new PdfPTable(3);
+                tablaBilletes2.setWidthPercentage(50);
+                PdfPCell empty1 = new PdfPCell(new Paragraph("\n", f));
+                PdfPCell empty2 = null;
+                switch (i) {
+                case 1:  empty2 = new PdfPCell(new Paragraph("1000", f));  break;
+                case 2:  empty2 = new PdfPCell(new Paragraph("500", f));  break;
+                case 3:  empty2 = new PdfPCell(new Paragraph("200", f));  break;
+                case 4:  empty2 = new PdfPCell(new Paragraph("100", f));  break;
+                case 5:  empty2 = new PdfPCell(new Paragraph("50", f));  break;
+                case 6:  empty2 = new PdfPCell(new Paragraph("20", f));  break;
+                case 7:  empty2 = new PdfPCell(new Paragraph("10", f));  break;
+                case 8:  empty2 = new PdfPCell(new Paragraph("5", f));  break;
+                case 9:  empty2 = new PdfPCell(new Paragraph("2", f));  break;
+                case 10: empty2 = new PdfPCell(new Paragraph("TOTAL", f));  break;
+                  }
+                PdfPCell empty3 = new PdfPCell(new Paragraph("\n", f));
+                tablaBilletes2.addCell(empty1);
+                tablaBilletes2.addCell(empty2);
+                tablaBilletes2.addCell(empty3);            
+                document.add(tablaBilletes2);  
+             }
           } catch (SQLException ex) {
               Logger.getLogger(ControladorMinuta.class.getName()).log(Level.SEVERE, null, ex);
           }   
@@ -412,6 +487,14 @@ public class ControladorMinuta implements MouseListener, ActionListener {
         @Override
         public void done(){
            pd.dispose();
+            try {
+            //--------Abro el pdf de la minuta creada----//
+              Desktop.getDesktop().open(pathMinuta);
+            } catch (IOException ex) {
+                log.error(ex.getMessage());
+                Logger.getLogger(ControladorMinuta.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
         }
 }
     

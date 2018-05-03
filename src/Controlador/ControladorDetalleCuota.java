@@ -118,6 +118,7 @@ public class ControladorDetalleCuota implements ActionListener, TableModelListen
         dc.guardar.addActionListener(this);
         dc.volverBtn.addActionListener(this);
         dc.agregarPagoBtn.addActionListener(this);
+        dc.modificarPagoBtn.addActionListener(this);
         dc.eliminarPagoBtn.addActionListener(this);
         dc.generarReciboBtn.addActionListener(this);
         dc.resumenCliente.addActionListener(this);
@@ -217,6 +218,17 @@ public class ControladorDetalleCuota implements ActionListener, TableModelListen
             new ControladorAltaPago((Frame) SwingUtilities.getWindowAncestor(dc), id_control, dc.tablaDetallePago.getRowCount(), nro_cuotas);
             llenarTabla(id_control);
             llearTablaDchoPosesion(id_control);
+        }
+        if(e.getSource() == dc.modificarPagoBtn){
+            int row = dc.tablaDetallePago.getSelectedRow();             
+             if(row==-1){
+                JOptionPane.showMessageDialog(null, "Seleccione una cuota", "Atención", JOptionPane.INFORMATION_MESSAGE, null);
+             }else if(row==0){
+                 JOptionPane.showMessageDialog(null, "Cuota no valida", "Atención", JOptionPane.INFORMATION_MESSAGE, null);
+             }else if(row!=-1){
+            new ControladorActualizarCuota((Ventana) SwingUtilities.getWindowAncestor(dc), id_control, Integer.parseInt(dc.tablaDetallePago.getModel().getValueAt(row, 0).toString()));
+            llenarTabla(id_control);
+            llearTablaDchoPosesion(id_control);}
         }
         if(e.getSource()==dc.eliminarPagoBtn){
              int row = dc.tablaDetallePago.getSelectedRow();             

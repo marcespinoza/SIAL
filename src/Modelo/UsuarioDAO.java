@@ -29,7 +29,7 @@ public class UsuarioDAO {
     
      public Usuario validarUsuario(String usuario, String contraseña, String tipo_usuario){
      ResultSet rs = null;
-     Usuario user = new Usuario();
+     Usuario user = null;
      Connection con = null;
      try {          
            con = conexion.dataSource.getConnection();         
@@ -37,14 +37,15 @@ public class UsuarioDAO {
           Statement st = con.createStatement();
           rs = st.executeQuery(listar);
           if (rs.next()){
+              user = new Usuario();
               user.setUsuario(rs.getString(1));
               user.setTipoUsuario(rs.getString(2));
               user.setNombres(rs.getString(3));
               user.setApellidos(rs.getString(4)); 
           }
-        } catch (Exception e) {
+     } catch (Exception e) {
             System.out.println(e.getMessage());
-        }finally{
+     }finally{
          try {
              con.close();
          } catch (SQLException ex) {

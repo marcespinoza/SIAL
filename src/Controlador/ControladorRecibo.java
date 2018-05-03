@@ -12,6 +12,7 @@ import Clases.LimitadorCaracteres;
 import Modelo.LoteDAO;
 import Modelo.MinutaDAO;
 import Clases.Propietario;
+import Modelo.LimitLinesDocumentListener;
 import Modelo.PropietarioDAO;
 import Modelo.ReciboDAO;
 import Vista.Dialogs.AltaRecibo;
@@ -31,6 +32,7 @@ import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 import java.awt.Color;
+import java.awt.Desktop;
 import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -50,6 +52,9 @@ import java.util.logging.Logger;
 import javax.swing.BorderFactory;
 import javax.swing.JOptionPane;
 import javax.swing.border.EtchedBorder;
+import javax.swing.text.AttributeSet;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.PlainDocument;
 
 /**
  *
@@ -83,6 +88,7 @@ public class ControladorRecibo implements ActionListener{
     String cons_final=""; 
     String monotributo=""; 
     String exento="";
+    File pathRecibo;
     static org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(ControladorCliente.class.getName());
 
     public ControladorRecibo(ControladorDetalleCuota cdc, Frame parent, int id_control, DetalleCuota dc, int nro_cuota, int row, int tipoPago) {
@@ -104,6 +110,17 @@ public class ControladorRecibo implements ActionListener{
         ar.cons_final.setActionCommand("cons_final");
         ar.monotributo.setActionCommand("monotributo");
         ar.exento.setActionCommand("exento");
+        ar.detalle.getDocument().addDocumentListener(
+        new LimitLinesDocumentListener(2));
+        ar.detalle.setDocument(new PlainDocument() {
+        @Override
+        public void insertString(int offs, String str, AttributeSet a) throws BadLocationException {
+        if (str == null || ar.detalle.getText().length() >= 120) {
+            return;
+        } 
+        super.insertString(offs, str, a);
+         }
+        });
         ar.apellido_propietario.setDocument(new LimitadorCaracteres(30));
         ar.nombre_propietario.setDocument(new LimitadorCaracteres(30));
         ar.cuit_propietario.setDocument(new LimitadorCaracteres(14));
@@ -204,7 +221,7 @@ public class ControladorRecibo implements ActionListener{
              cobrado = cuota_total.add(gastos_administrativos) ;
              ar.importe.setText(String.valueOf(cobrado));
              ar.total_pagado.setText(String.valueOf(cobrado));            
-             ar.detalle.setText("Paga cuota "+dc.tablaDetallePago.getModel().getValueAt(row, 0).toString()+"/"+cant_cuotas+ " - "+ "Saldo cemento "+dc.tablaDetallePago.getModel().getValueAt(row, 10).toString()+ " u." +"\r\n"+ barrio +" "+ " Mz. "+manzana +" Pc. "+ parcela+    " - Dimensión "+dimension +    "\r\n"+dc.tablaDetallePago.getModel().getValueAt(row, 2).toString());
+             ar.detalle.setText("Paga cuota "+dc.tablaDetallePago.getModel().getValueAt(row, 0).toString()+"/"+cant_cuotas+ " - "+ "Saldo cemento "+dc.tablaDetallePago.getModel().getValueAt(row, 10).toString()+ " Bolsas" +"\r\n"+ barrio +" "+ " Mz. "+manzana +" Pc. "+ parcela+    " - Dimensión "+dimension +" - "+dc.tablaDetallePago.getModel().getValueAt(row, 11).toString());
             //-----Si es 0 es derecho de posesion-------//
             }else if (tipoPago==0){
               ar.detalle.setText("Cta. derecho posesión "+    "\r\nDimension "+dimension +     "\r\n"+ barrio +" "+ " Mz. "+manzana +" Pc. "+ parcela+   "\r\n");
@@ -223,7 +240,8 @@ public class ControladorRecibo implements ActionListener{
             DateFormat fecha1 = new SimpleDateFormat("dd/MM/yyyy");
             java.util.Date date = new java.util.Date();
         try {
-            PdfWriter.getInstance(document, new FileOutputStream(new File(dc.path.getText(), "Recibo-"+ar.nro_recibo.getText()+".pdf")));
+            pathRecibo = new File(dc.path.getText(), "Recibo-"+ar.nro_recibo.getText()+".pdf");
+            PdfWriter.getInstance(document, new FileOutputStream(pathRecibo));
             document.open();
             for (int i = 1; i < 4; i++) {               
             Font f=new Font(Font.FontFamily.TIMES_ROMAN,10.0f,0,null);
@@ -433,6 +451,12 @@ public class ControladorRecibo implements ActionListener{
             cuod.actualizarNroRecibo(Integer.parseInt(ar.nro_recibo.getText()), id_recibo, nro_cuota, id_control);
             progress.dispose();
             ar.dispose();
+           try {
+            //-------Abro pdf del recibo-------//   
+               Desktop.getDesktop().open(pathRecibo);
+           } catch (IOException ex) {
+               Logger.getLogger(ControladorRecibo.class.getName()).log(Level.SEVERE, null, ex);
+           }
             cdc.llearTablaDchoPosesion(id_control);
             cdc.llenarTabla(id_control);
          }    

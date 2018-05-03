@@ -17,7 +17,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.math.RoundingMode;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -47,6 +46,8 @@ public class ControladorAltaPago implements ActionListener, KeyListener{
     BigDecimal cuota_total;
     BigDecimal gastos;
     private int filas_insertadas=0;
+    static org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(ControladorCliente.class.getName());
+
     public ControladorAltaPago(Frame parent, int id_control, int row_count, int nro_cuotas) {
         this.parent = parent;
         this.id_control=id_control;
@@ -61,6 +62,7 @@ public class ControladorAltaPago implements ActionListener, KeyListener{
         ac.chk_dcho_posesion.addActionListener(this);
         ac.chk_adelanto_cuota.addActionListener(this);
         ac.chk_cuota.setSelected(true);
+        ac.nro_cuota.setDocument(new LimitadorCaracteres(8));
         ac.detallePago.setDocument(new LimitadorCaracteres(40));
         ac.observacionesPago.setDocument(new LimitadorCaracteres(40));
         ac.cuota_total.getDocument().addDocumentListener(new DocumentListener() {
@@ -75,6 +77,21 @@ public class ControladorAltaPago implements ActionListener, KeyListener{
             public void changedUpdate(DocumentEvent e) {
             }
          });
+        ac.porcentaje_gastos.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                nuevoGasto();
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                nuevoGasto();
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+            }
+        });
         ac.interes.addKeyListener(this);
         ac.nro_cuota.addKeyListener(this);
         ac.aceptarBtn.addActionListener(this);
@@ -83,14 +100,19 @@ public class ControladorAltaPago implements ActionListener, KeyListener{
     }
     
     public void nuevoGasto(){
-        if(!ac.cuota_total.getText().equals("")){   
+        if(!ac.cuota_total.getText().equals("")){
+            if(!ac.porcentaje_gastos.getText().equals("")){
                 BigDecimal gasto;
                 BigDecimal cuota_total = new BigDecimal(ac.cuota_total.getText());
                  if(ac.chk_cuota.isSelected()){
-                 gasto = cuota_total.subtract(cuota_total.divide(new BigDecimal("1.1"), 2, BigDecimal.ROUND_HALF_UP));
+                     gasto = (cuota_total.multiply(new BigDecimal(ac.porcentaje_gastos.getText()))).divide(new BigDecimal("100"),2, BigDecimal.ROUND_HALF_UP);
+//                    gasto = cuota_total.subtract(cuota_total.divide((new BigDecimal(ac.porcentaje_gastos.getText()).divide(new BigDecimal(100))), 2, BigDecimal.ROUND_HALF_UP));
                  }else{
-                 gasto = (cuota_total.multiply(new BigDecimal("10"))).divide(new BigDecimal("100"),2, BigDecimal.ROUND_HALF_UP);
+                   gasto = (cuota_total.multiply(new BigDecimal("10"))).divide(new BigDecimal("100"),2, BigDecimal.ROUND_HALF_UP);
                  }ac.gastos.setText(gasto.toString());
+            }else{
+                ac.gastos.setText("");
+            }
             }else{
                 ac.gastos.setText("");
              }
@@ -104,6 +126,16 @@ public class ControladorAltaPago implements ActionListener, KeyListener{
             cuota_total = new BigDecimal (rs.getString(3)).add(new BigDecimal(rs.getString(4)));
             ac.cuota_total.setText(cuota_total.toString());
             nuevoGasto();
+            //------Calculo el nro de cuota--------//
+            int cuota=0;
+            ResultSet rscuota = cd.getNrosCuotas(id_control);
+            rscuota.next();
+            cuota = rscuota.getInt(1);                     
+               while(rscuota.next()&& rscuota.getInt(1)-1==cuota){
+                  cuota=rscuota.getInt(1);                           
+                  }
+            ac.nro_cuota.setText(String.valueOf(cuota+1));
+            //---------------------//
             ac.setVisible(true);
             
         } catch (SQLException ex) {
@@ -158,26 +190,24 @@ public class ControladorAltaPago implements ActionListener, KeyListener{
                        }
                        filas_insertadas = cd.altaCuotaLote(new java.sql.Date(date.getTime()),rs.getInt(1)-1, detalle, cuota_pura, gastos, new BigDecimal(0), haber, saldo_actual, new BigDecimal(0), cemento_haber, cemento_saldo, observaciones, tipoPago, id_control);  
                        
-                   } catch (SQLException ex) {
+                   } catch (SQLException ex) {                       
+                      log.equals(ex.getMessage());
                        Logger.getLogger(ControladorAltaPago.class.getName()).log(Level.SEVERE, null, ex);
                    }
                   }else{
                      filas_insertadas = cd.altaCuotaLote(new java.sql.Date(date.getTime()),nro_cuotas, detalle, cuota_pura, gastos, new BigDecimal(0), haber, saldo_actual, new BigDecimal(0), cemento_haber, cemento_saldo, observaciones, tipoPago, id_control);                    
                   }
                }else{
-                 try {int cuota=0;
-                       ResultSet rs = cd.getNrosCuotas(id_control);
-                       rs.next();
-                       cuota = rs.getInt(1);
-                       //-----Verifico que sea la primer cuota-------//                       
-                         while(rs.next()&& rs.getInt(1)-1==cuota){
-                           cuota=rs.getInt(1);                           
-                         }
-                       filas_insertadas = cd.altaCuotaLote(new java.sql.Date(date.getTime()),Integer.parseInt(ac.nro_cuota.getText()), detalle, cuota_pura, gastos, new BigDecimal(0), haber, saldo_actual, new BigDecimal(0), cemento_haber, cemento_saldo, observaciones, tipoPago, id_control);  
-                      
-                   } catch (SQLException ex) {
-                       Logger.getLogger(ControladorAltaPago.class.getName()).log(Level.SEVERE, null, ex);
-                   }  
+                   //                       int cuota=0;
+//                       ResultSet rs = cd.getNrosCuotas(id_control);
+//                       rs.next();
+//                       cuota = rs.getInt(1);
+//                       //-----Verifico que sea la primer cuota-------//                       
+//                         while(rs.next()&& rs.getInt(1)-1==cuota){
+//                           cuota=rs.getInt(1);                           
+//                         }
+//                         ac.nro_cuota.setText(String.valueOf(cuota)+1);
+                    filas_insertadas = cd.altaCuotaLote(new java.sql.Date(date.getTime()),Integer.parseInt(ac.nro_cuota.getText()), detalle, cuota_pura, gastos, new BigDecimal(0), haber, saldo_actual, new BigDecimal(0), cemento_haber, cemento_saldo, observaciones, tipoPago, id_control);  
                }
                if (filas_insertadas==1) {
                    ac.dispose();
@@ -188,7 +218,7 @@ public class ControladorAltaPago implements ActionListener, KeyListener{
               
     }
     
-    void altaPago(){
+    public void altaPago(){
       if(ac.chk_dcho_posesion.isSelected()){ 
                 if(validarCampos()){
                   Date date = new Date();     
