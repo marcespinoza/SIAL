@@ -44,25 +44,36 @@ public class ActualizarCuota extends java.awt.Dialog {
             }
         });
 
-        jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-        jPanel1.add(cuota_total, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 50, 90, -1));
-        jPanel1.add(porcentaje_gastos, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 90, 90, -1));
-        jPanel1.add(gastos, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 140, 90, -1));
+        jPanel1.setLayout(null);
+        jPanel1.add(cuota_total);
+        cuota_total.setBounds(120, 50, 90, 22);
+        jPanel1.add(porcentaje_gastos);
+        porcentaje_gastos.setBounds(120, 90, 90, 22);
+        jPanel1.add(gastos);
+        gastos.setBounds(120, 130, 90, 22);
 
+        jLabel1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel1.setText("Gastos $");
-        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 140, -1, -1));
+        jPanel1.add(jLabel1);
+        jLabel1.setBounds(50, 130, 60, 17);
 
+        jLabel2.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel2.setText("% Gastos");
-        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 90, -1, -1));
+        jPanel1.add(jLabel2);
+        jLabel2.setBounds(40, 90, 70, 17);
 
+        jLabel3.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel3.setText("Cuota total $");
-        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 50, -1, -1));
+        jPanel1.add(jLabel3);
+        jLabel3.setBounds(30, 50, 80, 17);
 
         cancelarBtn.setText("Cancelar");
-        jPanel1.add(cancelarBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 200, -1, -1));
+        jPanel1.add(cancelarBtn);
+        cancelarBtn.setBounds(140, 200, 90, 25);
 
         aceptarBtn.setText("Aceptar");
-        jPanel1.add(aceptarBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 200, -1, -1));
+        jPanel1.add(aceptarBtn);
+        aceptarBtn.setBounds(40, 200, 90, 25);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);

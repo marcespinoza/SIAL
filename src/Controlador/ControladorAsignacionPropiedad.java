@@ -300,7 +300,7 @@ public class ControladorAsignacionPropiedad implements ActionListener, KeyListen
                     Logger.getLogger(ControladorAsignacionPropiedad.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
-break;
+            break;
                case "Departamento":dd.editarDepartamento(vistaAsignarPropiedad.barrio.getSelectedItem().toString(), Integer.parseInt(vistaAsignarPropiedad.manzana.getSelectedItem().toString()), Integer.parseInt(vistaAsignarPropiedad.parcela.getSelectedItem().toString()));cd.altaClientesXDpto(dni, id_control); break;
            }           
            vistaAsignarPropiedad.dispose();

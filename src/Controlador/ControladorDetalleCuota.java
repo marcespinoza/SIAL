@@ -226,7 +226,7 @@ public class ControladorDetalleCuota implements ActionListener, TableModelListen
              }else if(row==0){
                  JOptionPane.showMessageDialog(null, "Cuota no valida", "Atención", JOptionPane.INFORMATION_MESSAGE, null);
              }else if(row!=-1){
-            new ControladorActualizarCuota((Ventana) SwingUtilities.getWindowAncestor(dc), id_control, Integer.parseInt(dc.tablaDetallePago.getModel().getValueAt(row, 0).toString()));
+            new ControladorActualizarCuota((Ventana) SwingUtilities.getWindowAncestor(dc), id_control, Integer.parseInt(dc.tablaDetallePago.getModel().getValueAt(row, 0).toString()), new BigDecimal(dc.tablaDetallePago.getModel().getValueAt(row, 3).toString()),new BigDecimal(dc.tablaDetallePago.getModel().getValueAt(row, 4).toString()));
             llenarTabla(id_control);
             llearTablaDchoPosesion(id_control);}
         }

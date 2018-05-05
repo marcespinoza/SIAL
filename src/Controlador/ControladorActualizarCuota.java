@@ -8,6 +8,8 @@ import Vista.Frame.Ventana;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.sql.ResultSet;
@@ -27,13 +29,75 @@ public class ControladorActualizarCuota implements ActionListener{
     ActualizarCuota ac;
     FichaControlDAO fc = new FichaControlDAO();
     CuotaDAO cd = new CuotaDAO();
+    BigDecimal cuota_pura, gastos;
 
-    public ControladorActualizarCuota(Ventana ventana, int id_control, int nro_cuota) {
+    public ControladorActualizarCuota(Ventana ventana, int id_control, int nro_cuota, BigDecimal cuota_pura, BigDecimal gastos) {
         this.ventana=ventana;
         this.id_control=id_control;
         ac = new ActualizarCuota(ventana, true);
+        ac.aceptarBtn.addActionListener(this);
+        ac.cancelarBtn.addActionListener(this);
+        this.id_control=id_control;
+        this.nro_cuota=nro_cuota;
+        this.cuota_pura=cuota_pura;
+        this.gastos=gastos;      
+        ac.porcentaje_gastos.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyTyped(KeyEvent e) {
+                char vchar = e.getKeyChar();
+                 if(!Character.isDigit(vchar)&&vchar!='.' ){
+                  e.consume();
+                 } 
+            }
+            @Override
+            public void keyReleased(KeyEvent e) {
+                calcularGastos(); //To change body of generated methods, choose Tools | Templates.
+            }            
+         });
+        //-------Evito que ingresen letras------------//
+        ac.cuota_total.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyTyped(KeyEvent e) {
+                char vchar = e.getKeyChar();
+                 if(!Character.isDigit(vchar)&&vchar!='.' ){
+                  e.consume();
+                 } 
+            }
+            @Override
+            public void keyReleased(KeyEvent e) {
+                calcularGastos(); //To change body of generated methods, choose Tools | Templates.
+            }               
+        });
+        ac.gastos.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyTyped(KeyEvent e) {
+                char vchar = e.getKeyChar();
+                 if(!Character.isDigit(vchar)&&vchar!='.' ){
+                  e.consume();
+                 } 
+            }
+            @Override
+            public void keyReleased(KeyEvent e) {
+                calcularGastos(); //To change body of generated methods, choose Tools | Templates.
+            }   
+        });
+        //-------------------------//
+        asignarValores();
         ac.setLocationRelativeTo(null);
         ac.setVisible(true);
+    }
+    
+    private void calcularGastos(){
+      if(!ac.cuota_total.getText().equals("")){
+       if(!ac.porcentaje_gastos.getText().equals("")){   
+         BigDecimal cuota_total = new BigDecimal(ac.cuota_total.getText());
+         System.out.println(cuota_total.multiply(new BigDecimal(ac.porcentaje_gastos.getText()))+"llama");
+         BigDecimal gasto = (cuota_total.multiply(new BigDecimal(ac.porcentaje_gastos.getText()))).divide(new BigDecimal("100"),2, BigDecimal.ROUND_HALF_UP);
+         ac.gastos.setText(String.valueOf(gasto));
+      }else{
+         ac.gastos.setText("");
+       }
+      }
     }
 
     @Override
@@ -86,5 +150,10 @@ public class ControladorActualizarCuota implements ActionListener{
         }
         return bandera;
      }
+
+    private void asignarValores() {
+       ac.cuota_total.setText(String.valueOf(cuota_pura.add(gastos)));
+       ac.gastos.setText(String.valueOf(gastos));
+    }
     
 }

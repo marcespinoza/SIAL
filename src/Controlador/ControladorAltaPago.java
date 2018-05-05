@@ -67,7 +67,7 @@ public class ControladorAltaPago implements ActionListener, KeyListener{
         ac.observacionesPago.setDocument(new LimitadorCaracteres(40));
         ac.cuota_total.getDocument().addDocumentListener(new DocumentListener() {
             @Override
-            public void insertUpdate(DocumentEvent e) {    
+            public void insertUpdate(DocumentEvent e) {   
              nuevoGasto();}
             @Override
             public void removeUpdate(DocumentEvent e) {

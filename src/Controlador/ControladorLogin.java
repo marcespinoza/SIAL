@@ -5,6 +5,7 @@
  */
 package Controlador;
 
+import Clases.LimitadorCaracteres;
 import Clases.Usuario;
 import Modelo.UsuarioDAO;
 import Vista.Dialogs.Login;
@@ -13,8 +14,11 @@ import java.awt.Color;
 import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.io.BufferedWriter;
@@ -45,7 +49,9 @@ public class ControladorLogin implements ActionListener, KeyListener, WindowList
         this.frame = frame;
         login = new Login(frame, true);
         login.usuario.addKeyListener(this);
+        login.usuario.setDocument(new LimitadorCaracteres(15));
         login.contraseña.addKeyListener(this);
+        login.contraseña.setDocument(new LimitadorCaracteres(15));
         login.cancelar.addActionListener(this);
         login.iniciar_sesion.addActionListener(this);
         login.tipo_operador.add(login.administradorChk);
@@ -58,6 +64,17 @@ public class ControladorLogin implements ActionListener, KeyListener, WindowList
         login.usuario.setCaretColor(Color.WHITE);
         login.contraseña.setCaretColor(Color.WHITE);
         login.operadorChk.setSelected(true);
+        login.eyePass.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                login.contraseña.setEchoChar((char)0);
+            }
+            
+    @Override
+    public void mouseReleased(MouseEvent e) {
+         login.contraseña.setEchoChar('*');
+    }
+         });
         login.setVisible(true);
     }
 
