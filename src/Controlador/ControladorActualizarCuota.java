@@ -29,9 +29,10 @@ public class ControladorActualizarCuota implements ActionListener{
     ActualizarCuota ac;
     FichaControlDAO fc = new FichaControlDAO();
     CuotaDAO cd = new CuotaDAO();
-    BigDecimal cuota_pura, gastos;
+    BigDecimal cuotapuraActual, gastosActual;
+    private int filas_insertadas=0;
 
-    public ControladorActualizarCuota(Ventana ventana, int id_control, int nro_cuota, BigDecimal cuota_pura, BigDecimal gastos) {
+    public ControladorActualizarCuota(Ventana ventana, int id_control, int nro_cuota, BigDecimal cuotapuraActual, BigDecimal gastosActual) {
         this.ventana=ventana;
         this.id_control=id_control;
         ac = new ActualizarCuota(ventana, true);
@@ -39,8 +40,8 @@ public class ControladorActualizarCuota implements ActionListener{
         ac.cancelarBtn.addActionListener(this);
         this.id_control=id_control;
         this.nro_cuota=nro_cuota;
-        this.cuota_pura=cuota_pura;
-        this.gastos=gastos;      
+        this.cuotapuraActual=cuotapuraActual;
+        this.gastosActual=gastosActual;      
         ac.porcentaje_gastos.addKeyListener(new KeyAdapter() {
             @Override
             public void keyTyped(KeyEvent e) {
@@ -51,7 +52,7 @@ public class ControladorActualizarCuota implements ActionListener{
             }
             @Override
             public void keyReleased(KeyEvent e) {
-                calcularGastos(); //To change body of generated methods, choose Tools | Templates.
+                calcularGastos(); 
             }            
          });
         //-------Evito que ingresen letras------------//
@@ -78,7 +79,7 @@ public class ControladorActualizarCuota implements ActionListener{
             }
             @Override
             public void keyReleased(KeyEvent e) {
-                calcularGastos(); //To change body of generated methods, choose Tools | Templates.
+                calcularGastos(); 
             }   
         });
         //-------------------------//
@@ -87,6 +88,11 @@ public class ControladorActualizarCuota implements ActionListener{
         ac.setVisible(true);
     }
     
+    private void asignarValores() {
+       ac.cuota_total.setText(String.valueOf(cuotapuraActual.add(gastosActual)));
+       ac.gastos.setText(String.valueOf(gastosActual));
+    }
+        
     private void calcularGastos(){
       if(!ac.cuota_total.getText().equals("")){
        if(!ac.porcentaje_gastos.getText().equals("")){   
@@ -102,36 +108,45 @@ public class ControladorActualizarCuota implements ActionListener{
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        if(e.getSource()==ac.aceptarBtn){}
+        if(e.getSource()==ac.aceptarBtn){
+            actualizarPago();
+        }
         if(e.getSource()==ac.cancelarBtn){
             ac.dispose();
         }
     }
     
     public void actualizarPago(){
-        if(validarCampos()){
+        if(validarCampos()){           
                ResultSet rs = fc.obtenerFichaControl(id_control);
                ResultSet rs_cuota = cd.listaDetalleCuotaXsaldo(id_control);
                try {
                    rs.next();
                    rs_cuota.last();
-                   BigDecimal ultimo_saldo = new BigDecimal(rs_cuota.getString(8));
+                   rs_cuota.previous();
+                   BigDecimal ultimo_saldo = new BigDecimal(rs_cuota.getString(8));                   
                    BigDecimal cuota_pura = new BigDecimal(ac.cuota_total.getText()).subtract(new BigDecimal(ac.gastos.getText()));
                    BigDecimal gastos = new BigDecimal(ac.gastos.getText());
                    BigDecimal bolsa_cemento = new BigDecimal(rs.getString(5));
-                   BigDecimal ultimo_saldo_bolsa_cemento = new BigDecimal(rs_cuota.getString(11));
+                   BigDecimal ultimo_saldo_bolsa_cemento = new BigDecimal(rs_cuota.getString(11));            
                    calcularValores(ultimo_saldo, cuota_pura, gastos, bolsa_cemento, ultimo_saldo_bolsa_cemento);             
                 } catch (SQLException ex) {
+                    System.out.println(ex.getMessage());
                }
-               }  
+           }  
     }
     
+    //------Calculo nuevos valores de haber y saldo en pesos, y haber y saldo en bolsa de cemento---------//
          public void calcularValores(BigDecimal ultimo_saldo, BigDecimal cuota_pura, BigDecimal gastos, BigDecimal bolsa_cemento, BigDecimal saldo_bolsa_cemento){  
-               Date date = new Date();
                BigDecimal haber = cuota_pura.add(gastos);
                BigDecimal saldo_actual = ultimo_saldo.subtract(haber);
                BigDecimal cemento_haber = haber.divide(bolsa_cemento, 2, RoundingMode.DOWN);
                BigDecimal cemento_saldo = saldo_bolsa_cemento.subtract(cemento_haber);
+               cd.actualizarMontoCuota(cuota_pura, gastos, haber, saldo_actual, cemento_haber, cemento_saldo, nro_cuota, id_control);
+               if (filas_insertadas==1) {
+                   ac.dispose();
+                   filas_insertadas=0;
+               }
     }
     
     public boolean validarCampos(){
@@ -151,9 +166,20 @@ public class ControladorActualizarCuota implements ActionListener{
         return bandera;
      }
 
-    private void asignarValores() {
-       ac.cuota_total.setText(String.valueOf(cuota_pura.add(gastos)));
-       ac.gastos.setText(String.valueOf(gastos));
+    public class Actualizar extends javax.swing.SwingWorker<Void, Void>{
+
+        @Override
+        protected Void doInBackground() throws Exception {
+            actualizarPago();
+            return null;
+        }
+
+        @Override
+        protected void done() {
+            ac.dispose();
+        }
+        
+        
     }
     
 }

@@ -252,8 +252,8 @@ public class ControladorAltaPago implements ActionListener, KeyListener{
                    calcularValores(ultimo_saldo, cuota_pura, gastos, bolsa_cemento, ultimo_saldo_bolsa_cemento);             
                 } catch (SQLException ex) {
                }
-               }             
-              }
+             }             
+          }
     }
     
      public boolean validarCampos(){

@@ -113,8 +113,7 @@ public class CuotaDAO {
   public void actualizarCuota(String observaciones, int nro_cuota, int id_control){
         try {
             Connection con = conexion.dataSource.getConnection();
-            PreparedStatement ps = con.prepareStatement(
-                    "UPDATE linea_control_lote SET observaciones = ? WHERE nro_cuota = ? AND id_control = ?");
+            PreparedStatement ps = con.prepareStatement("UPDATE linea_control_lote SET observaciones = ? WHERE nro_cuota = ? AND id_control = ?");
             ps.setString(1,observaciones);
             ps.setInt(2,nro_cuota);
             ps.setInt(3,id_control);
@@ -128,14 +127,18 @@ public class CuotaDAO {
   }
   
   //------Actualiza monto cuota------//
-  public void actualizarMontoCuota(String observaciones, int nro_cuota, int id_control){
+  public void actualizarMontoCuota(BigDecimal cuota_pura, BigDecimal gastos_administrativos, BigDecimal haber, BigDecimal saldo, BigDecimal cemento_haber, BigDecimal cemento_saldo, int nro_cuota, int id_control){
         try {
             Connection con = conexion.dataSource.getConnection();
-            PreparedStatement ps = con.prepareStatement(
-                    "UPDATE linea_control_lote SET observaciones = ? WHERE nro_cuota = ? AND id_control = ?");
-            ps.setString(1,observaciones);
-            ps.setInt(2,nro_cuota);
-            ps.setInt(3,id_control);
+            PreparedStatement ps = con.prepareStatement("UPDATE linea_control_lote SET cuota_pura = ?, gastos_administrativos = ?, haber = ?, saldo = ?, cemento_haber = ?, cemento_saldo = ?  WHERE nro_cuota = ? AND id_control = ?");
+            ps.setBigDecimal(1,cuota_pura);
+            ps.setBigDecimal(2, gastos_administrativos);
+            ps.setBigDecimal(3, haber);
+            ps.setBigDecimal(4, saldo);
+            ps.setBigDecimal(5, cemento_haber);
+            ps.setBigDecimal(6, cemento_saldo);
+            ps.setInt(7,nro_cuota);
+            ps.setInt(8,id_control);
             // call executeUpdate to execute our sql update statement
             ps.executeUpdate();
             ps.close();
