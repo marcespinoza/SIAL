@@ -9,7 +9,9 @@ import Modelo.CuotaDAO;
 import Modelo.DchoPosesionDAO;
 import Modelo.FichaControlDAO;
 import Clases.LimitadorCaracteres;
+import static Controlador.ControladorLogin.log;
 import Vista.Dialogs.AltaCuota;
+import Vista.Frame.Ventana;
 import java.awt.Color;
 import java.awt.Frame;
 import java.awt.event.ActionEvent;
@@ -47,7 +49,6 @@ public class ControladorAltaPago implements ActionListener, KeyListener{
     BigDecimal gastos;
     private int filas_insertadas=0;
     static org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(ControladorCliente.class.getName());
-
     public ControladorAltaPago(Frame parent, int id_control, int row_count, int nro_cuotas) {
         this.parent = parent;
         this.id_control=id_control;
@@ -177,7 +178,7 @@ public class ControladorAltaPago implements ActionListener, KeyListener{
                BigDecimal cemento_saldo = saldo_bolsa_cemento.subtract(cemento_haber);
                if(ac.chk_adelanto_cuota.isSelected()){
                //-------Miro si la ultima cuota ya existe, si el lote es de 180 cuotas, miro si ya hizo adelanto de cuotas entonces puede tener la cuota 180------//  
-                  if(cd.getUltimaCuota(nro_cuotas)){
+                  if(cd.getUltimaCuota(id_control, nro_cuotas)){
                    try {
                        ResultSet rs = cd.getNrosCuotas(id_control);
                        //========Avanzo la cuota cero========//
@@ -212,6 +213,7 @@ public class ControladorAltaPago implements ActionListener, KeyListener{
                if (filas_insertadas==1) {
                    ac.dispose();
                    filas_insertadas=0;
+                   log.info(Ventana.nombreUsuario.getText() + " - Alta pago");
                }else{
                    ac.aviso.setVisible(true);
                }

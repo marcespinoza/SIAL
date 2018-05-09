@@ -30,8 +30,7 @@ public class Conexion {
     public String user = "root";
     public String root = "";        
     public DataSource dataSource;       
-    static org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(Conexion.class.getName());
-    URL url2 = getClass().getResource("log4j.properties");    
+    static org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(Conexion.class.getName());  
     
     public Conexion(){
         getConexion();

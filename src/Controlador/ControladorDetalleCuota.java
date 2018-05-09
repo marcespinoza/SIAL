@@ -131,6 +131,14 @@ public class ControladorDetalleCuota implements ActionListener, TableModelListen
         llenarTabla(id_control);
         llearTablaDchoPosesion(id_control);
         cargarPathMinuta();
+        desactivarBotones();
+    }
+    
+    public void desactivarBotones(){
+      if(Ventana.labelTipoUsuario.getText().equals("operador")){
+            dc.eliminarPagoBtn.setEnabled(false);
+            dc.modificarPagoBtn.setEnabled(false);
+        }
     }
     
     public void cargarPathMinuta() {

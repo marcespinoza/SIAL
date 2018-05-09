@@ -281,7 +281,7 @@ public class ControladorMinuta implements MouseListener, ActionListener {
                    acumulador_cobrado = acumulador_cobrado + resultset.getDouble(6);
                    acumulador_gastos = acumulador_gastos + resultset.getDouble(7);
                    acumulador_rendido = acumulador_rendido + resultset.getDouble(8);
-                  switch(resultset.getString(9)){
+                  switch(resultset.getString(10).toString()){                     
                       case "Dpto. Bancario":deposito = deposito + resultset.getDouble(7);break; 
                       case "Tarjeta credito":t_debito = t_debito + resultset.getDouble(7);break;
                       case "Tarjeta debito":t_credito = t_credito + resultset.getDouble(7);break;

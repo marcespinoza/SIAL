@@ -10,6 +10,7 @@ import Clases.Usuario;
 import Modelo.UsuarioDAO;
 import Vista.Dialogs.Login;
 import Vista.Frame.Ventana;
+import conexion.Conexion;
 import java.awt.Color;
 import java.awt.Frame;
 import java.awt.event.ActionEvent;
@@ -44,7 +45,9 @@ public class ControladorLogin implements ActionListener, KeyListener, WindowList
    Ventana frame;
    UsuarioDAO ud = new UsuarioDAO();
    FileWriter writer;
-
+   static org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(Conexion.class.getName());  
+   
+    Logger extAppLogger= Logger.getLogger("errorAppender"); 
     public ControladorLogin(Ventana frame) {        
         this.frame = frame;
         login = new Login(frame, true);
@@ -89,6 +92,8 @@ public class ControladorLogin implements ActionListener, KeyListener, WindowList
                 usuario = ud.validarUsuario(login.usuario.getText(), contraseña, login.tipo_operador.getSelection().getActionCommand());
                     try {
                         if (usuario!=null){
+                            log.info(usuario.getNombres()+" "+usuario.getApellidos()+ " - Inicio sesión");
+                            extAppLogger.info("fresr");
                             Ventana.labelUsuario.setText(usuario.getUsuario());
                             Ventana.labelTipoUsuario.setText(usuario.getTipoUsuario());
                             Ventana.nombreUsuario.setText(usuario.getNombres());

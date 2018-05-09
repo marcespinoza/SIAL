@@ -38,7 +38,7 @@ public class ControladorRegistro implements ActionListener{
     private void cargarLog() {
         try {
            String storeAllString = null;
-           FileReader read = new FileReader("log.txt");
+           FileReader read = new FileReader("registro.log");
            Scanner scan = new Scanner(read);
            while(scan.hasNextLine()){
               String temp=scan.nextLine()+"\n";

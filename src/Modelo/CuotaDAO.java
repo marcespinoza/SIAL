@@ -94,12 +94,12 @@ public class CuotaDAO {
   }
   
      //-------Consulta si existe la ultima cuota para adelantar-----//   
-  public boolean getUltimaCuota(int nroCuotas){
+  public boolean getUltimaCuota(int id_control, int nroCuotas){
        boolean flag = false;       
        ResultSet rs = null;
         try {           
             Connection con = conexion.dataSource.getConnection();
-            String bandera = "select * from linea_control_lote where nro_cuota='"+nroCuotas+"'";
+            String bandera = "select * from linea_control_lote where nro_cuota='"+nroCuotas+"' and id_control='"+id_control+"'";
             Statement st = con.createStatement();
             rs = st.executeQuery(bandera);
             flag = rs.next();
@@ -127,8 +127,9 @@ public class CuotaDAO {
   }
   
   //------Actualiza monto cuota------//
-  public void actualizarMontoCuota(BigDecimal cuota_pura, BigDecimal gastos_administrativos, BigDecimal haber, BigDecimal saldo, BigDecimal cemento_haber, BigDecimal cemento_saldo, int nro_cuota, int id_control){
-        try {
+  public int actualizarMontoCuota(BigDecimal cuota_pura, BigDecimal gastos_administrativos, BigDecimal haber, BigDecimal saldo, BigDecimal cemento_haber, BigDecimal cemento_saldo, int nro_cuota, int id_control){
+           int filas = 0;  
+      try {
             Connection con = conexion.dataSource.getConnection();
             PreparedStatement ps = con.prepareStatement("UPDATE linea_control_lote SET cuota_pura = ?, gastos_administrativos = ?, haber = ?, saldo = ?, cemento_haber = ?, cemento_saldo = ?  WHERE nro_cuota = ? AND id_control = ?");
             ps.setBigDecimal(1,cuota_pura);
@@ -140,12 +141,14 @@ public class CuotaDAO {
             ps.setInt(7,nro_cuota);
             ps.setInt(8,id_control);
             // call executeUpdate to execute our sql update statement
-            ps.executeUpdate();
+            filas = ps.executeUpdate();
             ps.close();
             con.close();
         } catch (SQLException ex) {
             Logger.getLogger(CuotaDAO.class.getName()).log(Level.SEVERE, null, ex);
+            return filas;
         }
+      return filas;
   }
   
   public void actualizarNroRecibo(int nro_recibo, int id_recibo, int nro_cuota, int id_control){

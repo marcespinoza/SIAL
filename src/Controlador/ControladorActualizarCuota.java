@@ -1,6 +1,7 @@
 
 package Controlador;
 
+import static Controlador.ControladorAltaPago.log;
 import Modelo.CuotaDAO;
 import Modelo.FichaControlDAO;
 import Vista.Dialogs.ActualizarCuota;
@@ -31,6 +32,7 @@ public class ControladorActualizarCuota implements ActionListener{
     CuotaDAO cd = new CuotaDAO();
     BigDecimal cuotapuraActual, gastosActual;
     private int filas_insertadas=0;
+    static org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(ControladorCliente.class.getName());
 
     public ControladorActualizarCuota(Ventana ventana, int id_control, int nro_cuota, BigDecimal cuotapuraActual, BigDecimal gastosActual) {
         this.ventana=ventana;
@@ -38,6 +40,7 @@ public class ControladorActualizarCuota implements ActionListener{
         ac = new ActualizarCuota(ventana, true);
         ac.aceptarBtn.addActionListener(this);
         ac.cancelarBtn.addActionListener(this);
+        ac.aviso.setVisible(false);
         this.id_control=id_control;
         this.nro_cuota=nro_cuota;
         this.cuotapuraActual=cuotapuraActual;
@@ -97,7 +100,6 @@ public class ControladorActualizarCuota implements ActionListener{
       if(!ac.cuota_total.getText().equals("")){
        if(!ac.porcentaje_gastos.getText().equals("")){   
          BigDecimal cuota_total = new BigDecimal(ac.cuota_total.getText());
-         System.out.println(cuota_total.multiply(new BigDecimal(ac.porcentaje_gastos.getText()))+"llama");
          BigDecimal gasto = (cuota_total.multiply(new BigDecimal(ac.porcentaje_gastos.getText()))).divide(new BigDecimal("100"),2, BigDecimal.ROUND_HALF_UP);
          ac.gastos.setText(String.valueOf(gasto));
       }else{
@@ -109,7 +111,7 @@ public class ControladorActualizarCuota implements ActionListener{
     @Override
     public void actionPerformed(ActionEvent e) {
         if(e.getSource()==ac.aceptarBtn){
-            actualizarPago();
+            new Actualizar().execute();
         }
         if(e.getSource()==ac.cancelarBtn){
             ac.dispose();
@@ -142,11 +144,7 @@ public class ControladorActualizarCuota implements ActionListener{
                BigDecimal saldo_actual = ultimo_saldo.subtract(haber);
                BigDecimal cemento_haber = haber.divide(bolsa_cemento, 2, RoundingMode.DOWN);
                BigDecimal cemento_saldo = saldo_bolsa_cemento.subtract(cemento_haber);
-               cd.actualizarMontoCuota(cuota_pura, gastos, haber, saldo_actual, cemento_haber, cemento_saldo, nro_cuota, id_control);
-               if (filas_insertadas==1) {
-                   ac.dispose();
-                   filas_insertadas=0;
-               }
+               filas_insertadas = cd.actualizarMontoCuota(cuota_pura, gastos, haber, saldo_actual, cemento_haber, cemento_saldo, nro_cuota, id_control);
     }
     
     public boolean validarCampos(){
@@ -176,9 +174,13 @@ public class ControladorActualizarCuota implements ActionListener{
 
         @Override
         protected void done() {
-            ac.dispose();
-        }
-        
+            if(filas_insertadas == 1){
+                ac.dispose();
+               log.info(Ventana.nombreUsuario.getText() + " - Modifica pago");}
+            else{
+               ac.setVisible(true);
+            }
+        }        
         
     }
     

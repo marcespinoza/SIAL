@@ -36,6 +36,7 @@ public class ActualizarCuota extends java.awt.Dialog {
         jLabel3 = new javax.swing.JLabel();
         cancelarBtn = new javax.swing.JButton();
         aceptarBtn = new javax.swing.JButton();
+        aviso = new javax.swing.JLabel();
 
         setTitle("Actualizar cuota");
         addWindowListener(new java.awt.event.WindowAdapter() {
@@ -69,11 +70,17 @@ public class ActualizarCuota extends java.awt.Dialog {
 
         cancelarBtn.setText("Cancelar");
         jPanel1.add(cancelarBtn);
-        cancelarBtn.setBounds(140, 200, 90, 25);
+        cancelarBtn.setBounds(140, 190, 90, 25);
 
         aceptarBtn.setText("Aceptar");
         jPanel1.add(aceptarBtn);
-        aceptarBtn.setBounds(40, 200, 90, 25);
+        aceptarBtn.setBounds(40, 190, 90, 25);
+
+        aviso.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        aviso.setForeground(new java.awt.Color(255, 0, 0));
+        aviso.setText("No se pudo actualizar");
+        jPanel1.add(aviso);
+        aviso.setBounds(70, 230, 150, 17);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -117,6 +124,7 @@ public class ActualizarCuota extends java.awt.Dialog {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     public javax.swing.JButton aceptarBtn;
+    public javax.swing.JLabel aviso;
     public javax.swing.JButton cancelarBtn;
     public javax.swing.JTextField cuota_total;
     public javax.swing.JTextField gastos;
