@@ -438,7 +438,6 @@ public class ControladorRecibo implements ActionListener{
             BigDecimal rendido = cobrado.subtract(gastos_administrativos);
             Ventana.cm.llenarTablaFecha();
             if(tipoPago==1){
-                System.out.println("observa"+dc.tablaDetallePago.getModel().getValueAt(row, 11).toString());
               md.altaMinuta(new java.sql.Date(date.getTime()), apellido_comprador, nombre_comprador, manzana, parcela, cobrado, gastos_administrativos, rendido, 
                       Integer.parseInt(dc.tablaDetallePago.getModel().getValueAt(row, 0).toString()), 
                       dc.tablaDetallePago.getModel().getValueAt(row, 14).toString(), 

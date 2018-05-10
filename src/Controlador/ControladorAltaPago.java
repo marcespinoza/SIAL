@@ -110,7 +110,8 @@ public class ControladorAltaPago implements ActionListener, KeyListener{
 //                    gasto = cuota_total.subtract(cuota_total.divide((new BigDecimal(ac.porcentaje_gastos.getText()).divide(new BigDecimal(100))), 2, BigDecimal.ROUND_HALF_UP));
                  }else{
                    gasto = (cuota_total.multiply(new BigDecimal("10"))).divide(new BigDecimal("100"),2, BigDecimal.ROUND_HALF_UP);
-                 }ac.gastos.setText(gasto.toString());
+                 }
+                 ac.gastos.setText(gasto.toString());
             }else{
                 ac.gastos.setText("");
             }
@@ -176,6 +177,8 @@ public class ControladorAltaPago implements ActionListener, KeyListener{
                BigDecimal saldo_actual = ultimo_saldo.subtract(haber);
                BigDecimal cemento_haber = haber.divide(bolsa_cemento, 2, RoundingMode.DOWN);
                BigDecimal cemento_saldo = saldo_bolsa_cemento.subtract(cemento_haber);
+               //-------Comparo si el saldo es negativo. Puede suceder cuando paga la ultima cuota--////
+               if(saldo_actual.compareTo(BigDecimal.ZERO)>=0){
                if(ac.chk_adelanto_cuota.isSelected()){
                //-------Miro si la ultima cuota ya existe, si el lote es de 180 cuotas, miro si ya hizo adelanto de cuotas entonces puede tener la cuota 180------//  
                   if(cd.getUltimaCuota(id_control, nro_cuotas)){
@@ -216,8 +219,12 @@ public class ControladorAltaPago implements ActionListener, KeyListener{
                    log.info(Ventana.nombreUsuario.getText() + " - Alta pago");
                }else{
                    ac.aviso.setVisible(true);
+                   ac.aviso.setText("No se puedo cargar el pago");
                }
-              
+               }else{
+                   ac.aviso.setVisible(true);
+                   ac.aviso.setText("Saldo negativo. Revise el monto de la cuota.");
+               }
     }
     
     public void altaPago(){
@@ -249,6 +256,7 @@ public class ControladorAltaPago implements ActionListener, KeyListener{
                    BigDecimal ultimo_saldo = new BigDecimal(rs_cuota.getString(8));
                    BigDecimal cuota_pura = new BigDecimal(ac.cuota_total.getText()).subtract(new BigDecimal(ac.gastos.getText()));
                    BigDecimal gastos = new BigDecimal(ac.gastos.getText());
+                   System.out.println(ac.gastos.getText().toString());
                    BigDecimal bolsa_cemento = new BigDecimal(rs.getString(5));
                    BigDecimal ultimo_saldo_bolsa_cemento = new BigDecimal(rs_cuota.getString(11));
                    calcularValores(ultimo_saldo, cuota_pura, gastos, bolsa_cemento, ultimo_saldo_bolsa_cemento);             

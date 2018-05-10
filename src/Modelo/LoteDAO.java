@@ -99,7 +99,6 @@ public class LoteDAO {
       public void eliminarLote(String barrio, int manzana, int parcela){
      try {
          Connection con = conexion.dataSource.getConnection();
-         System.out.println(barrio+manzana+parcela);
          String eliminar = "delete from lote where barrio = ? and manzana = ? and parcela = ?";
          PreparedStatement ps = con.prepareStatement(eliminar);
          ps.setString(1, barrio);

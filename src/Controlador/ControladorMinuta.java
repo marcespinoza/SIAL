@@ -280,11 +280,12 @@ public class ControladorMinuta implements MouseListener, ActionListener {
                   if(Integer.parseInt(resultset.getString(11))!=1){
                    acumulador_cobrado = acumulador_cobrado + resultset.getDouble(6);
                    acumulador_gastos = acumulador_gastos + resultset.getDouble(7);
-                   acumulador_rendido = acumulador_rendido + resultset.getDouble(8);
+                   
                   switch(resultset.getString(10).toString()){                     
-                      case "Dpto. Bancario":deposito = deposito + resultset.getDouble(7);break; 
-                      case "Tarjeta credito":t_debito = t_debito + resultset.getDouble(7);break;
-                      case "Tarjeta debito":t_credito = t_credito + resultset.getDouble(7);break;
+                      case "Dpto. Bancario":deposito = deposito + resultset.getDouble(8);break; 
+                      case "Tarjeta credito":t_debito = t_debito + resultset.getDouble(8);break;
+                      case "Tarjeta debito":t_credito = t_credito + resultset.getDouble(8);break;
+                      case "Efectivo":acumulador_rendido = acumulador_rendido + resultset.getDouble(8);break;
                   }}
                   conta ++;
               }
@@ -311,7 +312,7 @@ public class ControladorMinuta implements MouseListener, ActionListener {
             tableTotales.addCell(cellEmpty);
             document.add(tableTotales);
             //-------------//
-            total = acumulador_rendido - (deposito + t_credito + t_debito);
+            total = acumulador_rendido +deposito + t_credito + t_debito;
             PdfPTable tablaa = new PdfPTable(2);
             tablaa.setWidthPercentage(50);
             tablaa.setSpacingBefore(10f);
@@ -325,7 +326,7 @@ public class ControladorMinuta implements MouseListener, ActionListener {
                  PdfPTable dpto_bancario = new PdfPTable(2);
                  dpto_bancario.setWidthPercentage(50);
                  PdfPCell dpto1 = new PdfPCell(new Paragraph("Depósito bancario $", f));
-                 PdfPCell dpto2 = new PdfPCell(new Paragraph("- "+String.format ("%.2f",deposito), f));
+                 PdfPCell dpto2 = new PdfPCell(new Paragraph(String.format ("%.2f",deposito), f));
                  dpto2.setHorizontalAlignment(Element.ALIGN_RIGHT);
                  dpto_bancario.addCell(dpto1);
                  dpto_bancario.addCell(dpto2);
@@ -400,13 +401,11 @@ public class ControladorMinuta implements MouseListener, ActionListener {
             document.close();
             }catch (DocumentException ex) {
             Logger.getLogger(DetalleCuota.class.getName()).log(Level.SEVERE, null, ex);
-            log.error(ex.getMessage());
         } catch (FileNotFoundException ex) {
             Logger.getLogger(DetalleCuota.class.getName()).log(Level.SEVERE, null, ex);
-            log.error(ex.getMessage());
+            JOptionPane.showMessageDialog(null, "No se puedo generar el documento."+"\r\n"+ "Verifique no lo tiene abierto actualmente.", "Atención", JOptionPane.INFORMATION_MESSAGE, null);
         } catch (IOException ex) {
             Logger.getLogger(DetalleCuota.class.getName()).log(Level.SEVERE, null, ex);
-            log.error(ex.getMessage());
         }
     }  
         
