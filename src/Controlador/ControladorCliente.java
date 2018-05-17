@@ -11,7 +11,7 @@ import Modelo.FichaControlDAO;
 import Modelo.LoteDAO;
 import Modelo.PropietarioDAO;
 import Modelo.ReferenciaDAO;
-import Modelo.RendererTablaCliente;
+import Utils.RendererTablaCliente;
 import Vista.Dialogs.Cumpleaños;
 import Vista.Frame.Ventana;
 import Vista.Panels.Clientes;
@@ -52,6 +52,7 @@ import javax.swing.table.TableRowSorter;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
 import org.joda.time.LocalDate;
+import org.joda.time.Months;
 import org.joda.time.Years;
 
 /**
@@ -360,9 +361,11 @@ public class ControladorCliente implements ActionListener, MouseListener, TableM
         SimpleDateFormat sdf=new SimpleDateFormat("dd-MM-YYYY");
         String fch_actualizacion = "";
         String actualizar_cemento = "";
+        String aviso = "";
         String cumpleaños;
         try {
             while(rs.next()){
+                aviso = "";
                 cumpleaños = "0";
                 String dni = rs.getString(1);
                 String apellidos = rs.getString(2);
@@ -391,6 +394,13 @@ public class ControladorCliente implements ActionListener, MouseListener, TableM
                      }else{
                           actualizar_cemento = "0";
                      }
+                     //-------------------------------------//
+                     //------Controla 6 meses para calcular amortizacion--------------//
+                     System.out.println((Months.monthsBetween(new LocalDate(rs.getDate(16)), LocalDate.now())).getMonths());
+                     if((Months.monthsBetween(new LocalDate(rs.getDate(16)), LocalDate.now())).getMonths()==6 ){
+                         aviso = "AVISO";
+                     }
+                     //----------------------------//
                 }else{
                     fch_actualizacion = "";
                     actualizar_cemento = "0";
@@ -400,7 +410,7 @@ public class ControladorCliente implements ActionListener, MouseListener, TableM
                 String parcela_prop = rs.getString(19);  
                 String observaciones = rs.getString(20);
                 String cuota_pura = rs.getString(21);
-                clientes = new Object[] {apellidos, nombres, dni, telefono1, telefono2, barrio, calle, numero, fecha_nacimiento, trabajo, baja, idControl, cantidad_cuotas, gastos, bolsa_cemento, fch_actualizacion, barrio_prop, manzana_prop, parcela_prop, observaciones, actualizar_cemento, cumpleaños, cuota_pura};
+                clientes = new Object[] {apellidos, nombres, dni, telefono1, telefono2, barrio, calle, numero, fecha_nacimiento, trabajo, baja, idControl, cantidad_cuotas, gastos, bolsa_cemento, fch_actualizacion, barrio_prop, manzana_prop, parcela_prop, observaciones, actualizar_cemento, cumpleaños, cuota_pura, aviso};
                 model.addRow(clientes);   
              }
             controlCumpleaños();
@@ -504,22 +514,7 @@ public class ControladorCliente implements ActionListener, MouseListener, TableM
     public void mouseExited(MouseEvent e) {
         //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-
-    
-    public void pintarFila(){
-         vistaClientes.tablaCliente.setDefaultRenderer(Object.class, new TableCellRenderer() {
-             @Override
-             public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-                 Component component = (JLabel) DEFAULT_RENDERER.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-                 Color c = Color.PINK;
-                 if(table.getValueAt(row, 10) == null){
-                     component.setBackground(c);
-                 }
-                 //vistaClientes.tablaCliente.setSelectionBackground(Color.orange);
-                 return component;
-             }
-         });
-    }
+  
     
     private void filter(String query){
          DefaultTableModel table = (DefaultTableModel) vistaClientes.tablaCliente.getModel();

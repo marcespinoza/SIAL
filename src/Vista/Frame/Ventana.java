@@ -14,11 +14,13 @@ import Controlador.ControladorRegistro;
 import Controlador.ControladorResumen;
 import Vista.Panels.MinutaVista;
 import Vista.Panels.Resumen;
+import com.itextpdf.text.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
+import sun.java2d.SunGraphicsEnvironment;
 
 /**
  *
@@ -48,7 +50,7 @@ public class Ventana extends javax.swing.JFrame implements ActionListener{
         registroEventos.addActionListener(this);
         about.addActionListener(this);
         baseDeDatos.addActionListener(this);
-        this.setResizable(false);
+        this.setResizable(true);
     }
     
     public void inicializarPaneles(){

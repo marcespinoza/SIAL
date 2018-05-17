@@ -93,7 +93,6 @@ public class ControladorLogin implements ActionListener, KeyListener, WindowList
                     try {
                         if (usuario!=null){
                             log.info(usuario.getNombres()+" "+usuario.getApellidos()+ " - Inicio sesión");
-                            extAppLogger.info("fresr");
                             Ventana.labelUsuario.setText(usuario.getUsuario());
                             Ventana.labelTipoUsuario.setText(usuario.getTipoUsuario());
                             Ventana.nombreUsuario.setText(usuario.getNombres());

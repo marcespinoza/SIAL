@@ -44,13 +44,13 @@
                   <Group type="102" attributes="0">
                       <Group type="103" groupAlignment="0" max="-2" attributes="0">
                           <Component id="cancelar" max="32767" attributes="0"/>
-                          <Component id="contraseña" max="32767" attributes="0"/>
                           <Component id="jSeparator2" alignment="0" max="32767" attributes="0"/>
                           <Component id="jSeparator1" alignment="0" max="32767" attributes="0"/>
-                          <Component id="operadorChk" alignment="0" max="32767" attributes="0"/>
                           <Component id="administradorChk" alignment="0" max="32767" attributes="0"/>
-                          <Component id="iniciar_sesion" alignment="1" max="32767" attributes="0"/>
-                          <Component id="usuario" alignment="1" max="32767" attributes="0"/>
+                          <Component id="iniciar_sesion" alignment="1" pref="120" max="32767" attributes="0"/>
+                          <Component id="contraseña" max="32767" attributes="0"/>
+                          <Component id="usuario" alignment="0" max="32767" attributes="0"/>
+                          <Component id="operadorChk" alignment="0" max="32767" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="eyePass" min="-2" max="-2" attributes="0"/>
@@ -76,7 +76,7 @@
                   <Component id="jLabel2" min="-2" max="-2" attributes="0"/>
                   <Group type="103" alignment="1" groupAlignment="3" attributes="0">
                       <Component id="contraseña" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="eyePass" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="eyePass" alignment="0" min="-2" max="-2" attributes="0"/>
                   </Group>
               </Group>
               <EmptySpace max="-2" attributes="0"/>

@@ -5,6 +5,7 @@
  */
 package Vista.Panels;
 
+import Utils.RendererAviso;
 import conexion.Conexion;
 import java.awt.Color;
 import java.awt.Component;
@@ -71,6 +72,7 @@ public class Clientes extends javax.swing.JPanel {
             public Component prepareRenderer(TableCellRenderer renderer, int rowIndex, int vColIndex) {
                 Component c = super.prepareRenderer(renderer, rowIndex, vColIndex);
                 //---Pinto de rosado si el cliente no tiene propiedad asignada---//
+
                 if(tablaCliente.getValueAt(rowIndex, 11) == null){
                     c.setBackground(Color.PINK);
                 }
@@ -327,17 +329,18 @@ public class Clientes extends javax.swing.JPanel {
 
                 },
                 new String [] {
-                    "Apellido/s", "Nombre/s", "Documento", "Title 4", "Title 5", "Title 6", "Title 7", "Title 8", "Title 9", "Title 10", "Title 11", "Title 12", "Title 13", "Title 14", "Title 15", "Title 16", "Barrio", "Manzana", "Parcela", "Observacion", "actualizar_cto", "cumpleaños", "Title 23"
+                    "Apellido/s", "Nombre/s", "Documento", "Title 4", "Title 5", "Title 6", "Title 7", "Title 8", "Title 9", "Title 10", "Title 11", "Title 12", "Title 13", "Title 14", "Title 15", "Title 16", "Barrio", "Manzana", "Parcela", "Observacion", "actualizar_cto", "cumpleaños", "Title 23", "Aviso"
                 }
             ) {
                 boolean[] canEdit = new boolean [] {
-                    true, false, false, false, false, false, false, false, false, false, false, false, false, false, true, true, false, false, false, true, false, false, false
+                    true, false, false, false, false, false, false, false, false, false, false, false, false, false, true, true, false, false, false, true, false, false, true, false
                 };
 
                 public boolean isCellEditable(int rowIndex, int columnIndex) {
                     return canEdit [columnIndex];
                 }
             });
+            tablaCliente.getTableHeader().setReorderingAllowed(false);
             jScrollPane2.setViewportView(tablaCliente);
             if (tablaCliente.getColumnModel().getColumnCount() > 0) {
                 tablaCliente.getColumnModel().getColumn(0).setResizable(false);
@@ -395,6 +398,10 @@ public class Clientes extends javax.swing.JPanel {
                 tablaCliente.getColumnModel().getColumn(22).setMinWidth(0);
                 tablaCliente.getColumnModel().getColumn(22).setPreferredWidth(0);
                 tablaCliente.getColumnModel().getColumn(22).setMaxWidth(0);
+                tablaCliente.getColumnModel().getColumn(23).setResizable(false);
+                tablaCliente.getColumnModel().getColumn(23).setPreferredWidth(1);
+                tablaCliente.getColumnModel().getColumn(23).setCellRenderer(new RendererAviso()
+                );
             }
 
             jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Bolsa de cemento", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Dialog", 3, 12))); // NOI18N

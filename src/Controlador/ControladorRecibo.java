@@ -221,7 +221,7 @@ public class ControladorRecibo implements ActionListener{
              cobrado = cuota_total.add(gastos_administrativos) ;
              ar.importe.setText(String.valueOf(cobrado));
              ar.total_pagado.setText(String.valueOf(cobrado));            
-             ar.detalle.setText("Paga cuota "+dc.tablaDetallePago.getModel().getValueAt(row, 0).toString()+"/"+cant_cuotas+ " - "+ "Saldo cemento "+dc.tablaDetallePago.getModel().getValueAt(row, 10).toString()+ " Bolsas" +"\r\n"+ barrio +" "+ " Mz. "+manzana +" Pc. "+ parcela+    " - Dimensión "+dimension +" - "+dc.tablaDetallePago.getModel().getValueAt(row, 11).toString());
+             ar.detalle.setText("Paga cuota "+dc.tablaDetallePago.getModel().getValueAt(row, 0).toString()+"/"+cant_cuotas+ " - "+ "Saldo cemento "+dc.tablaDetallePago.getModel().getValueAt(row, 10).toString()+ " Bolsas" +"\r\n"+ barrio +" "+ " Mz. "+manzana +" Pc. "+ parcela+    " - Dimensión "+dimension +dc.tablaDetallePago.getModel().getValueAt(row, 11).toString());
             //-----Si es 0 es derecho de posesion-------//
             }else if (tipoPago==0){
               ar.detalle.setText("Cta. derecho posesión "+    "\r\nDimension "+dimension +     "\r\n"+ barrio +" "+ " Mz. "+manzana +" Pc. "+ parcela+   "\r\n");
