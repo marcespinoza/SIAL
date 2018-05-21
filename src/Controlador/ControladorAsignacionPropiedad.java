@@ -5,6 +5,8 @@
  */
 package Controlador;
 
+import Clases.Lote;
+import Clases.Propietario;
 import Modelo.ClienteDAO;
 import Modelo.CuotaDAO;
 import Modelo.DchoPosesionDAO;
@@ -27,6 +29,7 @@ import java.math.RoundingMode;
 import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.BorderFactory;
@@ -137,55 +140,62 @@ public class ControladorAsignacionPropiedad implements ActionListener, KeyListen
         }   
  } 
      
-      public void llenarComboNombres(String propiedad, String apellido){
-        try {
-            ResultSet rs = null;
+      public void llenarComboNombres(String propiedad, String apellido){        
+            List<Propietario>propietarios = null;
             switch (propiedad){
-                case "Terreno": rs = pd.obtenerNombresXLote(apellido); break;
-                case "Departamento": rs = pd.obtenerNombresXDepartamento(apellido);break;
-            }
+                case "Terreno": propietarios = pd.obtenerNombresXLote(apellido); break;
+                case "Departamento": propietarios = pd.obtenerNombresXDepartamento(apellido);break;
+            }            
             vistaAsignarPropiedad.nombre_propietario.removeAllItems();
             vistaAsignarPropiedad.nombre_propietario.addItem("Seleccione");
-            if(rs!=null){
-            while (rs.next()) {
-                vistaAsignarPropiedad.nombre_propietario.addItem(rs.getString(1));                
-            }  
-            rs.close();}
-        } catch (SQLException ex) {
-            Logger.getLogger(ControladorPropiedades.class.getName()).log(Level.SEVERE, null, ex);
-        }   
+            if(propietarios!=null){
+              for(int i=0;i< propietarios.size();i++){
+                vistaAsignarPropiedad.nombre_propietario.addItem(propietarios.get(i).getNombres());                
+              } 
+            }
  } 
     
     public void cargarBarrios(String apellidos, String nombres){
-     ResultSet rs = ld.obtenerBarrios(apellidos, nombres);
+     List<Lote>lotes=null;
+     lotes = ld.obtenerBarrios(apellidos, nombres);
       vistaAsignarPropiedad.barrio.removeAllItems();
         try {
-            if(rs.next()){
-                vistaAsignarPropiedad.barrio.addItem(rs.getString(1));
-            while(rs.next()){
-                vistaAsignarPropiedad.barrio.addItem(rs.getString(1));
-            }}else{
+            if(lotes!=null){
+                for(int i = 0; i < lotes.size(); i++){
+                  vistaAsignarPropiedad.barrio.addItem(lotes.get(i).getBarrio());
+             }
+            }else{
                vistaAsignarPropiedad.barrio.addItem("Sin propiedades");
             }
         } catch (Exception e) {
         }
     }
     public void cargarManzanas(String barrio){
-        ResultSet rs = ld.manzanasPorBarrio(barrio);        
+        List<Lote>lotes=null;
+        lotes = ld.manzanasPorBarrio(barrio);        
         vistaAsignarPropiedad.manzana.removeAllItems();
         try {
-            while(rs.next()){
-                vistaAsignarPropiedad.manzana.addItem(rs.getString(1));
+            if(lotes!=null){
+                for(int i = 0; i < lotes.size(); i++){
+                  vistaAsignarPropiedad.manzana.addItem(String.valueOf(lotes.get(i).getManzana()));
+             }
+            }else{
+               vistaAsignarPropiedad.manzana.addItem("Sin propiedades");
             }
         } catch (Exception e) {
         }
     }
     public void cargarParcelas(String barrio, int manzana){
-         ResultSet rs = ld.parcelasPorManzana(barrio, manzana);
+        List<Lote>lotes=null;
+        lotes = ld.parcelasPorManzana(barrio, manzana);
         vistaAsignarPropiedad.parcela.removeAllItems();
         try {
-            while(rs.next()){
-                vistaAsignarPropiedad.parcela.addItem(rs.getString(1));
+            if(lotes!=null){
+                for(int i = 0; i < lotes.size(); i++){
+                  vistaAsignarPropiedad.parcela.addItem(String.valueOf(lotes.get(i).getParcela()));
+             }
+            }else{
+               vistaAsignarPropiedad.parcela.addItem("Sin propiedades");
             }
         } catch (Exception e) {
         }

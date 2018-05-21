@@ -5,12 +5,16 @@
  */
 package Modelo;
 
+import Clases.Lote;
+import Clases.Propietario;
 import conexion.Conexion;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -56,44 +60,83 @@ public class LoteDAO {
      return rs;
  }
      
-     public ResultSet obtenerBarrios(String apellidos, String nombres){
-     ResultSet rs = null;
+     public List<Lote> obtenerBarrios(String apellidos, String nombres){
+          ResultSet rs = null;
+          Connection connection = null;
+          List<Lote> lotes = new ArrayList<>();
      try {
-          Connection con = conexion.dataSource.getConnection();
+          connection = conexion.dataSource.getConnection();
           String listar = "SELECT DISTINCT barrio from lote where vendido=0 and propietario_Apellidos='"+apellidos+"' and propietario_nombres='"+nombres+"' "; 
-          Statement st = con.createStatement();
+          Statement st = connection.createStatement();
           rs = st.executeQuery(listar);
+            while (rs.next()) {
+                Lote l = new Lote();
+                l.setBarrio(rs.getString(1));
+                lotes.add(l);
+            }  
         } catch (Exception e) {
             System.out.println(e.getMessage().toString());
+        }finally{
+              try {
+                  connection.close();
+              } catch (SQLException ex) {
+                  Logger.getLogger(PropietarioDAO.class.getName()).log(Level.SEVERE, null, ex);
+              }
         }
-     return rs;
+     return lotes;
  }    
     
             
-      public ResultSet manzanasPorBarrio(String barrio){
-     ResultSet rs = null;
+     public List<Lote> manzanasPorBarrio(String barrio){
+       ResultSet rs = null;
+       Connection connection = null;
+       List<Lote> lotes = new ArrayList<>();
      try {
-          Connection con = conexion.dataSource.getConnection();
+          connection = conexion.dataSource.getConnection();
           String listar = "SELECT DISTINCT manzana from lote where barrio = '"+barrio+"' and vendido=0"; 
-          Statement st = con.createStatement();
+          Statement st = connection.createStatement();
           rs = st.executeQuery(listar);
+          while (rs.next()) {
+                Lote l = new Lote();
+                l.setManzana(rs.getInt(1));
+                lotes.add(l);
+            }  
         } catch (Exception e) {
             System.out.println(e.getMessage().toString());
+        }finally{
+              try {
+                  connection.close();
+              } catch (SQLException ex) {
+                  Logger.getLogger(PropietarioDAO.class.getName()).log(Level.SEVERE, null, ex);
+              }
         }
-     return rs;
- }
+     return lotes;
+   }
       
-      public ResultSet parcelasPorManzana(String barrio, int manzana){
-     ResultSet rs = null;
+    public List<Lote> parcelasPorManzana(String barrio, int manzana){
+       ResultSet rs = null;
+       Connection connection = null;
+       List<Lote> lotes = new ArrayList<>();
      try {
-          Connection con = conexion.dataSource.getConnection();
+          connection = conexion.dataSource.getConnection();
           String listar = "SELECT parcela from lote where barrio = '"+barrio+"' and manzana = '"+manzana+"' and vendido=0"; 
-          Statement st = con.createStatement();
+          Statement st = connection.createStatement();
           rs = st.executeQuery(listar);
+          while (rs.next()) {
+                Lote l = new Lote();
+                l.setParcela(rs.getInt(1));
+                lotes.add(l);
+            }  
         } catch (Exception e) {
             System.out.println(e.getMessage().toString());
+        }finally{
+              try {
+                  connection.close();
+              } catch (SQLException ex) {
+                  Logger.getLogger(PropietarioDAO.class.getName()).log(Level.SEVERE, null, ex);
+              }
         }
-     return rs;
+     return lotes;
  }
       
       public void eliminarLote(String barrio, int manzana, int parcela){
@@ -110,7 +153,7 @@ public class LoteDAO {
      }
  }
       
-      public ResultSet obtenerLotes(String apellidos, String nombres){
+   public ResultSet obtenerLotes(String apellidos, String nombres){
           ResultSet rs = null;
      try {
           Connection con = conexion.dataSource.getConnection();  
@@ -146,7 +189,6 @@ public class LoteDAO {
      public int editarLote(String backup_barrio, int backup_manzana, int backup_parcela, String barrio,int manzana, int parcela, String observaciones){
          int flag = 0;
         try {
-            System.out.println(backup_barrio+backup_manzana+backup_parcela);
             Connection con = conexion.dataSource.getConnection();
             String query = "UPDATE lote SET barrio = ?, manzana = ?, parcela = ?, observacion = ? where barrio = ? and manzana =? and parcela=?";
             PreparedStatement preparedStmt = con.prepareStatement(query);

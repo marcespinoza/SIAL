@@ -105,28 +105,29 @@ public class ClienteDAO {
         }
     }
  
- public int altaCliente(int dni, String apellidos, String nombres, Date fecha_nacimiento, String barrio, String calle, int numero, String telefono1, String telefono2, String trabajo) throws SQLException{
-     int filasAfectadas=0;
-     PreparedStatement ps = null;
-     Connection con = null;
-     try {
+    public int altaCliente(int dni, String apellidos, String nombres, Date fecha_nacimiento, String barrio, String calle, int numero, String telefono1, String telefono2, String trabajo) throws SQLException{
+       int filasAfectadas=0;
+       PreparedStatement ps = null;
+       Connection con = null;
+       try {
          con = conexion.dataSource.getConnection();
          String insertar = "Insert into cliente(dni, apellidos, nombres, fecha_nacimiento, barrio, calle, numero, telefono1, telefono2, trabajo) values ('"+dni+"','"+apellidos+"','"+nombres+"','"+fecha_nacimiento+"','"+barrio+"','"+calle+"','"+numero+"','"+telefono1+"','"+telefono2+"','"+trabajo+"')";
          ps = con.prepareStatement(insertar);
          filasAfectadas = ps.executeUpdate();         
-     } catch (SQLException e) { 
-         //--------1062 es el codigo de error para claves duplicadas------//
+       } catch (SQLException e) { 
+          //--------1062 es el codigo de error para claves duplicadas------//
          if(e.getErrorCode() == 1062){
            filasAfectadas = 0; 
-    }         
-     }finally{
+       }         
+       }finally{
          con.close();
          if(ps!=null){
                ps.close();
-            }
+         }
      }
      return filasAfectadas;
  }
+ 
  public void eliminarCliente(int dni){
      try {
          Connection con = conexion.dataSource.getConnection();
@@ -177,7 +178,7 @@ public class ClienteDAO {
      ResultSet rs = null;
      try {
           Connection con = conexion.dataSource.getConnection();
-          String listar = "SELECT DISTINCT c.Dni, c.Apellidos, c.Nombres,c.fecha_nacimiento, c.barrio, c.calle, c.numero, c.Telefono1, c.telefono2, c.trabajo, cl.baja, f.Id_control, f.cantidad_cuotas, f.gastos, f.bolsa_cemento, f.fecha_actualizacion, f.lote_Barrio, f.lote_Manzana, f.lote_Parcela, f.lote_observaciones from ((((cliente c INNER join cliente_tiene_lote cl on c.dni=cl.cliente_dni) INNER join ficha_control_lote f on cl.id_control=f.id_control) INNER join lote l on f.lote_barrio=l.barrio) INNER join lote l2 on l2.manzana=f.lote_manzana) INNER join lote l3 on l3.parcela=f.lote_parcela where l3.propietario_Apellidos='"+apellido+"' and l3.propietario_Nombres='"+nombre+"'"; 
+          String listar = "SELECT DISTINCT c.Dni, c.Apellidos, c.Nombres,c.fecha_nacimiento, c.barrio, c.calle, c.numero, c.Telefono1, c.telefono2, c.trabajo, cl.baja, f.Id_control, f.cantidad_cuotas, f.gastos, f.bolsa_cemento, f.fecha_actualizacion, f.lote_Barrio, f.lote_Manzana, f.lote_Parcela from ((((cliente c INNER join cliente_tiene_lote cl on c.dni=cl.cliente_dni) INNER join ficha_control_lote f on cl.id_control=f.id_control) INNER join lote l on f.lote_barrio=l.barrio) INNER join lote l2 on l2.manzana=f.lote_manzana) INNER join lote l3 on l3.parcela=f.lote_parcela where l3.propietario_Apellidos='"+apellido+"' and l3.propietario_Nombres='"+nombre+"'"; 
           Statement st = con.createStatement();
           rs = st.executeQuery(listar);
         } catch (Exception e) {

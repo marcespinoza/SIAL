@@ -19,10 +19,8 @@ public class RendererAviso extends DefaultTableCellRenderer{
 //private JLabel component;
     @Override
     public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-//               component = (JLabel) super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column); //To change body of generated methods, choose Tools | Templates.
-          
+        
          if (table.getValueAt(row, 23) != "" && column==23) {
-             System.out.println("entra");
             setBackground(Color.YELLOW);
         }else{
              setBackground(null);}

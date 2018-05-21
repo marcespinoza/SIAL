@@ -12,7 +12,7 @@ import Clases.LimitadorCaracteres;
 import Modelo.LoteDAO;
 import Modelo.MinutaDAO;
 import Clases.Propietario;
-import Modelo.LimitLinesDocumentListener;
+import Utils.LimitLinesDocumentListener;
 import Modelo.PropietarioDAO;
 import Modelo.ReciboDAO;
 import Vista.Dialogs.AltaRecibo;

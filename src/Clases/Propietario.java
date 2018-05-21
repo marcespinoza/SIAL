@@ -14,7 +14,7 @@ public class Propietario {
 String nombres;
 String apellidos;
 int nro_recibo;
-int cuit;
+String cuit;
 
 
     public Propietario() {
@@ -45,11 +45,11 @@ int cuit;
         this.nro_recibo = nro_recibo;
     }
 
-    public int getCuit() {
+    public String getCuit() {
         return cuit;
     }
 
-    public void setCuit(int cuit) {
+    public void setCuit(String cuit) {
         this.cuit = cuit;
     }
 

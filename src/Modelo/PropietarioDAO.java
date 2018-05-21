@@ -6,7 +6,9 @@
 package Modelo;
 
 import Clases.Propietario;
+import Clases.Usuario;
 import conexion.Conexion;
+import java.sql.Array;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -133,30 +135,58 @@ public class PropietarioDAO {
      return rs;
      }
       
-        public ResultSet obtenerNombresXLote(String apellido){
+     public List<Propietario> obtenerNombresXLote(String apellido){
+          List<Propietario> propietarios = new ArrayList<Propietario>();
           ResultSet rs = null;
+          Propietario propietario = null;
+          Connection connection = null;
      try {
-          Connection con = conexion.dataSource.getConnection();         
+          connection = conexion.dataSource.getConnection();         
           String listar = "SELECT DISTINCT propietario_nombres from lote where propietario_apellidos='"+apellido+"'"; 
-          Statement st = con.createStatement();
+          Statement st = connection.createStatement();
           rs = st.executeQuery(listar);
+          if (rs.next()){
+              propietario = new Propietario();
+              propietario.setNombres(rs.getString(1));
+              propietarios.add(propietario);
+          }
         } catch (Exception e) {
             System.out.println(e.getMessage());
+        }finally{
+         try {
+             connection.close();
+         } catch (SQLException ex) {
+             Logger.getLogger(UsuarioDAO.class.getName()).log(Level.SEVERE, null, ex);
+         }
         }
-     return rs;
+     return propietarios;
      }      
      
-      public ResultSet obtenerNombresXDepartamento(String apellido){
+      public List<Propietario> obtenerNombresXDepartamento(String apellido){
+          List<Propietario> propietarios = new ArrayList<Propietario>();
           ResultSet rs = null;
+          Propietario propietario = null;
+          Connection connection = null;
      try {
-          Connection con = conexion.dataSource.getConnection();         
+         connection = conexion.dataSource.getConnection();         
           String listar = "SELECT DISTINCT propietario_nombres from departamento where propietario_apellidos='"+apellido+"'"; 
-          Statement st = con.createStatement();
+          Statement st = connection.createStatement();
           rs = st.executeQuery(listar);
+          if (rs.next()){
+              propietario = new Propietario();
+              propietario.setNombres(rs.getString(1));
+              propietarios.add(propietario);
+          }
         } catch (Exception e) {
             System.out.println(e.getMessage());
+        }finally{
+         try {
+             connection.close();
+         } catch (SQLException ex) {
+             Logger.getLogger(UsuarioDAO.class.getName()).log(Level.SEVERE, null, ex);
+         }
         }
-     return rs;
+     return propietarios;
      }
       
        public List<Propietario> obtenerApellidos(){
@@ -168,7 +198,7 @@ public class PropietarioDAO {
           String listar = "SELECT apellidos from propietario"; 
           Statement st = con.createStatement();
           rs = st.executeQuery(listar);          
-            while (rs.next()) {
+           while (rs.next()) {
                 Propietario p = new Propietario();
                 p.setApellidos(rs.getString(1));
                 propietarios.add(p);
@@ -185,31 +215,45 @@ public class PropietarioDAO {
      return propietarios;
      }
      
-       public ResultSet obtenerNombres(String apellidos){
+       public List<Propietario> obtenerNombres(String apellidos){
           ResultSet rs = null;
-     try {
-          Connection con = conexion.dataSource.getConnection();         
+          Connection connection = null;
+          List<Propietario> propietarios = new ArrayList<>();
+         try {
+          connection = conexion.dataSource.getConnection();         
           String listar = "SELECT nombres, cuit from propietario where apellidos='"+apellidos+"'"; 
-          Statement st = con.createStatement();
+          Statement st = connection.createStatement();
           rs = st.executeQuery(listar);
+            while (rs.next()) {
+                Propietario p = new Propietario();
+                p.setNombres(rs.getString(1));
+                p.setCuit(rs.getString(2));
+                propietarios.add(p);
+            }  
         } catch (Exception e) {
             System.out.println(e.getMessage());
+        }finally{
+              try {
+                  connection.close();
+              } catch (SQLException ex) {
+                  Logger.getLogger(PropietarioDAO.class.getName()).log(Level.SEVERE, null, ex);
+              }
         }
-     return rs;
+        return propietarios;
      }  
        
         public ResultSet obtenerCuit(String apellidos, String nombres){
           ResultSet rs = null;
-     try {
-          Connection con = conexion.dataSource.getConnection();  
-          String listar = "SELECT cuit, nro_recibo from propietario where apellidos='"+apellidos+"' and nombres = '"+nombres+"'"; 
-          Statement st = con.createStatement();
-          rs = st.executeQuery(listar);
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
-     return rs;
-     }  
+           try {
+              Connection con = conexion.dataSource.getConnection();  
+              String listar = "SELECT cuit, nro_recibo from propietario where apellidos='"+apellidos+"' and nombres = '"+nombres+"'"; 
+              Statement st = con.createStatement();
+              rs = st.executeQuery(listar);
+         } catch (Exception e) {
+                System.out.println(e.getMessage());
+         }
+        return rs;
+      }  
        
      public void eliminarPropietarios(String cuit){
          try {

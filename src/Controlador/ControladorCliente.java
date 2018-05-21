@@ -338,15 +338,13 @@ public class ControladorCliente implements ActionListener, MouseListener, TableM
         }   
  }   
   public void llenarComboNombres(String apellidos){
-        try {
-            ResultSet rs = pd.obtenerNombres(apellidos);
+        List<Propietario>propietarios = null;        
+            propietarios = pd.obtenerNombres(apellidos);
             vistaClientes.comboNombre.removeAllItems();
             vistaClientes.comboNombre.addItem("Seleccione");
-            while (rs.next()) {
-                vistaClientes.comboNombre.addItem(rs.getString(1));
-            }  } catch (SQLException ex) {
-            log.debug("Cliente"+ex);
-        }   
+            for(int i=0; i< propietarios.size();i++) {
+                vistaClientes.comboNombre.addItem(propietarios.get(i).getNombres());
+            }
  }
     
     public void llenarTabla(){
@@ -396,7 +394,6 @@ public class ControladorCliente implements ActionListener, MouseListener, TableM
                      }
                      //-------------------------------------//
                      //------Controla 6 meses para calcular amortizacion--------------//
-                     System.out.println((Months.monthsBetween(new LocalDate(rs.getDate(16)), LocalDate.now())).getMonths());
                      if((Months.monthsBetween(new LocalDate(rs.getDate(16)), LocalDate.now())).getMonths()==6 ){
                          aviso = "AVISO";
                      }

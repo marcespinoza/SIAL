@@ -111,15 +111,13 @@ public class ControladorPropiedades implements ActionListener{
         }   
  }   
   public void llenarComboNombres(String apellidos){
-        try {
-            ResultSet rs = pd.obtenerNombres(apellidos);
+           List<Propietario>propietarios = null;
+            propietarios= pd.obtenerNombres(apellidos);
             vista.propiedades.comboNombres.removeAllItems();
             vista.propiedades.comboNombres.addItem("Seleccione");
-            while (rs.next()) {
-                vista.propiedades.comboNombres.addItem(rs.getString(1));
-            }  } catch (SQLException ex) {
-            Logger.getLogger(ControladorPropiedades.class.getName()).log(Level.SEVERE, null, ex);
-        }   
+            for(int i = 0; i < propietarios.size(); i++) {
+                vista.propiedades.comboNombres.addItem(propietarios.get(i).getNombres());
+            }   
  }
  
   public void llenarTabla(){
