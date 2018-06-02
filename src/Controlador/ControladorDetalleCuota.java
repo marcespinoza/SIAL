@@ -5,6 +5,7 @@
  */
 package Controlador;
 
+import Clases.Cuota;
 import Modelo.CuotaDAO;
 import Modelo.DchoPosesionDAO;
 import Modelo.FichaControlDAO;
@@ -27,6 +28,7 @@ import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 import java.awt.CardLayout;
+import java.awt.Desktop;
 import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -43,6 +45,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -82,7 +86,8 @@ public class ControladorDetalleCuota implements ActionListener, TableModelListen
     Boolean cuota = false;
     Boolean posesion = false;
     public static final String IMG = "src/Imagenes/logo_reporte.png";
-    ResultSet detalleCuota, derechoPosesion;
+    ResultSet derechoPosesion;
+    List<Cuota> detalleCuota = null;
     int baja_logica;
     
     public ControladorDetalleCuota() {
@@ -185,34 +190,31 @@ public class ControladorDetalleCuota implements ActionListener, TableModelListen
         DefaultTableModel model = (DefaultTableModel) dc.tablaDetallePago.getModel();
         model.setRowCount(0);
         SimpleDateFormat input = new SimpleDateFormat("dd-MM-YYYY");
-        try {
-            while(detalleCuota.next()){
-                String nro_cuota = detalleCuota.getString(1);
-                String fecha = input.format(detalleCuota.getDate(2));
-                String detalle = detalleCuota.getString(3);
-                String cuota_pura = detalleCuota.getString(4);
-                String gastos_admin = detalleCuota.getString(5);                
-                String debe = detalleCuota.getString(6);
-                String haber = detalleCuota.getString(7);                
-                String saldo = detalleCuota.getString(8);
-                String cemento_debe = detalleCuota.getString(9);
-                String cemento_haber = detalleCuota.getString(10);
-                String cemento_saldo = detalleCuota.getString(11);
-                String observaciones = detalleCuota.getString(12);
-                String nro_recibo = detalleCuota.getString(13);
-                String id_recibo = detalleCuota.getString(14);
-                String tipo_pago = detalleCuota.getString(15);
+        if(detalleCuota!=null){
+            for(int i = 0; i < detalleCuota.size(); i++){
+                int nro_cuota = detalleCuota.get(i).getNro_cuota();
+                String fecha = input.format(detalleCuota.get(i).getFecha());
+                String detalle = detalleCuota.get(i).getDetalle();
+                BigDecimal cuota_pura = detalleCuota.get(i).getCuota_pura();
+                BigDecimal gastos_admin = detalleCuota.get(i).getGastos_administrativos();
+                BigDecimal debe = detalleCuota.get(i).getDebe();
+                BigDecimal haber = detalleCuota.get(i).getHaber();
+                BigDecimal saldo = detalleCuota.get(i).getSaldo();
+                BigDecimal cemento_debe = detalleCuota.get(i).getCemente_debe();
+                BigDecimal cemento_haber = detalleCuota.get(i).getCemento_haber();
+                BigDecimal cemento_saldo = detalleCuota.get(i).getCemento_saldo();
+                String observaciones = detalleCuota.get(i).getObservaciones();
+                int nro_recibo = detalleCuota.get(i).getNro_recibo();
+                int id_recibo = detalleCuota.get(i).getId_recibo();
+                String tipo_pago = detalleCuota.get(i).getTipo_pago();
                 detallePago= new Object[] {nro_cuota, fecha, detalle, cuota_pura, gastos_admin, debe, haber, saldo, cemento_debe, cemento_haber,cemento_saldo, observaciones, nro_recibo, id_recibo, tipo_pago};                    
                 model.addRow(detallePago); 
             }
             //---------Reseteo resultset para recorrerlo nuevamente cuando quiero---------//
             //---------crear resumen de cliente--------------------------------------------//
-            detalleCuota.beforeFirst();
             CardLayout cl = (CardLayout)(Ventana.panelPrincipal.getLayout());
             Ventana.panelPrincipal.add(dc, "Detalle_pago");
             cl.show(Ventana.panelPrincipal, "Detalle_pago");
-        }catch(Exception e){
-            System.out.println(e.getMessage().toString());
         } 
    }
 
@@ -386,28 +388,26 @@ public class ControladorDetalleCuota implements ActionListener, TableModelListen
             table.addCell(saldo);
             table.addCell(cemento_saldo);
             document.add(table); 
-            detalleCuota.next();
             PdfPTable primerLinea = new PdfPTable(5);            
             primerLinea.setTotalWidth(new float[]{ 1,1,2,2,2});
             primerLinea.setWidthPercentage(100);
             primerLinea.addCell(new PdfPCell(new Paragraph("-",f))).setHorizontalAlignment(Element.ALIGN_CENTER);
-            primerLinea.addCell(new PdfPCell(new Paragraph(detalleCuota.getString(2),f))).setHorizontalAlignment(Element.ALIGN_CENTER);
+            primerLinea.addCell(new PdfPCell(new Paragraph(String.valueOf(detalleCuota.get(1).getFecha()),f))).setHorizontalAlignment(Element.ALIGN_CENTER);
             primerLinea.addCell(new PdfPCell(new Paragraph("Saldo inicial",f))).setHorizontalAlignment(Element.ALIGN_CENTER);
-            primerLinea.addCell(new PdfPCell(new Paragraph(detalleCuota.getString(8),f))).setHorizontalAlignment(Element.ALIGN_CENTER);
-            primerLinea.addCell(new PdfPCell(new Paragraph(detalleCuota.getString(11),f))).setHorizontalAlignment(Element.ALIGN_CENTER);
+            primerLinea.addCell(new PdfPCell(new Paragraph(String.valueOf(detalleCuota.get(7).getSaldo()),f))).setHorizontalAlignment(Element.ALIGN_CENTER);
+            primerLinea.addCell(new PdfPCell(new Paragraph(String.valueOf(detalleCuota.get(10).getCemento_saldo()),f))).setHorizontalAlignment(Element.ALIGN_CENTER);
             document.add(primerLinea);            
-            while(detalleCuota.next()){
+            for(int i = 0; i < detalleCuota.size(); i++){
                   PdfPTable table2 = new PdfPTable(5);            
                   table2.setTotalWidth(new float[]{ 1,1,2,2,2});
                   table2.setWidthPercentage(100);
-                  table2.addCell(new PdfPCell(new Paragraph(detalleCuota.getString(1),f))).setHorizontalAlignment(Element.ALIGN_CENTER);
-                  table2.addCell(new PdfPCell(new Paragraph(detalleCuota.getString(2),f))).setHorizontalAlignment(Element.ALIGN_CENTER);
-                  table2.addCell(new PdfPCell(new Paragraph(String.valueOf(new BigDecimal(detalleCuota.getString(4)).add(new BigDecimal(detalleCuota.getString(5)))),f))).setHorizontalAlignment(Element.ALIGN_CENTER);
-                  table2.addCell(new PdfPCell(new Paragraph(detalleCuota.getString(8),f))).setHorizontalAlignment(Element.ALIGN_CENTER);
-                  table2.addCell(new PdfPCell(new Paragraph(detalleCuota.getString(11),f))).setHorizontalAlignment(Element.ALIGN_CENTER);
+                  table2.addCell(new PdfPCell(new Paragraph(String.valueOf(detalleCuota.get(i).getNro_cuota()),f))).setHorizontalAlignment(Element.ALIGN_CENTER);
+                  table2.addCell(new PdfPCell(new Paragraph(String.valueOf(detalleCuota.get(i).getFecha()),f))).setHorizontalAlignment(Element.ALIGN_CENTER);
+                  table2.addCell(new PdfPCell(new Paragraph(String.valueOf(detalleCuota.get(i).getCuota_pura().add(detalleCuota.get(i).getGastos_administrativos())),f))).setHorizontalAlignment(Element.ALIGN_CENTER);
+                  table2.addCell(new PdfPCell(new Paragraph(String.valueOf(detalleCuota.get(i).getSaldo()),f))).setHorizontalAlignment(Element.ALIGN_CENTER);
+                  table2.addCell(new PdfPCell(new Paragraph(String.valueOf(detalleCuota.get(i).getCemento_saldo()),f))).setHorizontalAlignment(Element.ALIGN_CENTER);
                   document.add(table2);
               }
-            detalleCuota.beforeFirst();
             }
             //------------Cabecera de las columnas de derecho de posesion------------//
             if(dc.tablaDchoPosesion.getRowCount()!=0){//---Veo si la tabla derecho de posesion tiene algun elemento-----//
@@ -472,6 +472,12 @@ public class ControladorDetalleCuota implements ActionListener, TableModelListen
         @Override
         public void done(){
            pd.dispose();
+           try {
+            //-------Abro pdf del recibo-------//   
+               Desktop.getDesktop().open(new File(dc.path.getText(), "Resumen "+dc.nombreLabel.getText()+" "+ dc.apellidoLabel.getText()+".pdf"));
+           } catch (IOException ex) {
+               Logger.getLogger(ControladorRecibo.class.getName()).log(Level.SEVERE, null, ex);
+           }
         }
 }
 }

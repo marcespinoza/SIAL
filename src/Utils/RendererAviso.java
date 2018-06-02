@@ -7,6 +7,7 @@ package Utils;
 
 import java.awt.Color;
 import java.awt.Component;
+import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -16,14 +17,16 @@ import javax.swing.table.DefaultTableCellRenderer;
  * @author Marcelo Espinoza
  */
 public class RendererAviso extends DefaultTableCellRenderer{
+    
+    ImageIcon icon = new ImageIcon(getClass().getResource("/Imagenes/iconos/warning.png"));
+    JLabel jLabel = new JLabel();
 //private JLabel component;
     @Override
     public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-        
-         if (table.getValueAt(row, 23) != "" && column==23) {
-            setBackground(Color.YELLOW);
-        }else{
-             setBackground(null);}
-         return this;
+//        
+//         if (table.getValueAt(row, 23) != "" && column==23) {
+//            jLabel.setIcon(icon);
+//        }
+         return (Component) value;
     }   
   }

@@ -11,6 +11,7 @@ import Modelo.FichaControlDAO;
 import Modelo.LoteDAO;
 import Modelo.PropietarioDAO;
 import Modelo.ReferenciaDAO;
+import Utils.RendererAviso;
 import Utils.RendererTablaCliente;
 import Vista.Dialogs.Cumpleaños;
 import Vista.Frame.Ventana;
@@ -167,6 +168,7 @@ public class ControladorCliente implements ActionListener, MouseListener, TableM
         vistaClientes.datosReferencia.setBorder(BorderFactory.createTitledBorder(
 				BorderFactory.createLineBorder(Color.BLACK), "Datos referencia"));
         this.vistaClientes.tablaCliente.setDefaultRenderer(Object.class, r);
+        this.vistaClientes.tablaCliente.getColumn("Aviso").setCellRenderer(new RendererAviso());
         llenarComboApellidos();
     }
 
@@ -357,6 +359,8 @@ public class ControladorCliente implements ActionListener, MouseListener, TableM
         DefaultTableModel model = (DefaultTableModel) vistaClientes.tablaCliente.getModel();
         model.setRowCount(0);
         SimpleDateFormat sdf=new SimpleDateFormat("dd-MM-YYYY");
+        ImageIcon icon = new ImageIcon(getClass().getResource("/Imagenes/iconos/alerta.png"));
+        JLabel jLabel;
         String fch_actualizacion = "";
         String actualizar_cemento = "";
         String aviso = "";
@@ -364,6 +368,7 @@ public class ControladorCliente implements ActionListener, MouseListener, TableM
         try {
             while(rs.next()){
                 aviso = "";
+                jLabel = new JLabel();
                 cumpleaños = "0";
                 String dni = rs.getString(1);
                 String apellidos = rs.getString(2);
@@ -383,7 +388,7 @@ public class ControladorCliente implements ActionListener, MouseListener, TableM
                 String idControl = rs.getString(12);
                 String cantidad_cuotas = rs.getString(13);
                 String gastos = rs.getString(14);
-                String bolsa_cemento = rs.getString(15);
+                String bolsa_cemento = rs.getString(15);                           
                 if(rs.getDate(16)!=null){
                     fch_actualizacion = sdf.format(rs.getDate(16));
                     //----Controlo si ya paso un año de la ultima fecha de actualizacion de la bolsa de cemento----//
@@ -395,7 +400,9 @@ public class ControladorCliente implements ActionListener, MouseListener, TableM
                      //-------------------------------------//
                      //------Controla 6 meses para calcular amortizacion--------------//
                      if((Months.monthsBetween(new LocalDate(rs.getDate(16)), LocalDate.now())).getMonths()==6 ){
-                         aviso = "AVISO";
+                         jLabel.setIcon(icon);
+                     }else{
+                         jLabel.setIcon(null);
                      }
                      //----------------------------//
                 }else{
@@ -407,7 +414,7 @@ public class ControladorCliente implements ActionListener, MouseListener, TableM
                 String parcela_prop = rs.getString(19);  
                 String observaciones = rs.getString(20);
                 String cuota_pura = rs.getString(21);
-                clientes = new Object[] {apellidos, nombres, dni, telefono1, telefono2, barrio, calle, numero, fecha_nacimiento, trabajo, baja, idControl, cantidad_cuotas, gastos, bolsa_cemento, fch_actualizacion, barrio_prop, manzana_prop, parcela_prop, observaciones, actualizar_cemento, cumpleaños, cuota_pura, aviso};
+                clientes = new Object[] {apellidos, nombres, dni, telefono1, telefono2, barrio, calle, numero, fecha_nacimiento, trabajo, baja, idControl, cantidad_cuotas, gastos, bolsa_cemento, fch_actualizacion, barrio_prop, manzana_prop, parcela_prop, observaciones, actualizar_cemento, cumpleaños, cuota_pura, jLabel};
                 model.addRow(clientes);   
              }
             controlCumpleaños();

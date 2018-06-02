@@ -400,8 +400,7 @@ public class Clientes extends javax.swing.JPanel {
                 tablaCliente.getColumnModel().getColumn(22).setMaxWidth(0);
                 tablaCliente.getColumnModel().getColumn(23).setResizable(false);
                 tablaCliente.getColumnModel().getColumn(23).setPreferredWidth(1);
-                tablaCliente.getColumnModel().getColumn(23).setCellRenderer(new RendererAviso()
-                );
+                tablaCliente.getColumnModel().getColumn(23).setCellRenderer(null);
             }
 
             jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Bolsa de cemento", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Dialog", 3, 12))); // NOI18N

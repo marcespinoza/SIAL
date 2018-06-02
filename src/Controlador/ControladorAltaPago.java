@@ -65,7 +65,9 @@ public class ControladorAltaPago implements ActionListener, KeyListener{
         ac.chk_cuota.setSelected(true);
         ac.nro_cuota.setDocument(new LimitadorCaracteres(8));
         ac.detallePago.setDocument(new LimitadorCaracteres(40));
+        ac.detallePago.setLineWrap(true);
         ac.observacionesPago.setDocument(new LimitadorCaracteres(40));
+        ac.observacionesPago.setLineWrap(true);
         ac.cuota_total.getDocument().addDocumentListener(new DocumentListener() {
             @Override
             public void insertUpdate(DocumentEvent e) {   
@@ -280,11 +282,11 @@ public class ControladorAltaPago implements ActionListener, KeyListener{
         }else{
          ac.cuota_total.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
         }
-        if(ac.gastos.getText().isEmpty()){
+        if(ac.porcentaje_gastos.getText().isEmpty()){
          ac.gastos.setBorder(BorderFactory.createLineBorder(Color.RED, 1));
          bandera=false;
         }else{
-         ac.gastos.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
+         ac.porcentaje_gastos.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
         }
         if(ac.chk_cuota.isSelected()){
          if(ac.nro_cuota.getText().isEmpty()){

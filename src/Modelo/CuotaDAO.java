@@ -5,6 +5,7 @@
  */
 package Modelo;
 
+import Clases.Cuota;
 import conexion.Conexion;
 import java.math.BigDecimal;
 import java.sql.Connection;
@@ -13,6 +14,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -40,16 +43,44 @@ public class CuotaDAO {
      return rs;
     }
     
-    public ResultSet listaDetalleCuota(int idControl){
-         ResultSet rs = null;
+    public List<Cuota> listaDetalleCuota(int idControl){
+          ResultSet rs = null;
+          Connection connection = null;
+          List<Cuota> cuotas = new ArrayList<>();
      try {
-          Connection con = conexion.dataSource.getConnection();
+          connection = conexion.dataSource.getConnection();
           String listar = "SELECT nro_cuota, fecha, detalle, cuota_pura, gastos_administrativos, debe, haber, saldo, cemento_debe, cemento_haber, cemento_saldo, observaciones, nro_recibo, id_recibo, tipo_pago from linea_control_lote where id_Control = '"+idControl+"'"; 
-          Statement st = con.createStatement();
+          Statement st = connection.createStatement();
           rs = st.executeQuery(listar);
+          while (rs.next()) {
+                Cuota c = new Cuota();
+                c.setNro_cuota(rs.getInt(1));
+                c.setFecha(rs.getDate(2));
+                c.setDetalle(rs.getString(3));
+                c.setCuota_pura(rs.getBigDecimal(4));
+                c.setGastos_administrativos(rs.getBigDecimal(5));
+                c.setDebe(rs.getBigDecimal(6));
+                c.setHaber(rs.getBigDecimal(7));
+                c.setSaldo(rs.getBigDecimal(8));
+                c.setCemente_debe(rs.getBigDecimal(9));
+                c.setCemento_haber(rs.getBigDecimal(10));
+                c.setCemento_saldo(rs.getBigDecimal(11));
+                c.setObservaciones(rs.getString(12));
+                c.setNro_recibo(rs.getInt(13));
+                c.setId_recibo(rs.getInt(14));
+                c.setTipo_pago(rs.getString(15));
+                cuotas.add(c);
+            }  
         } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }finally{
+              try {
+                  connection.close();
+              } catch (SQLException ex) {
+                  Logger.getLogger(PropietarioDAO.class.getName()).log(Level.SEVERE, null, ex);
+              }
         }
-     return rs;
+     return cuotas;
     }
     
     public int altaCuotaLote(Date fecha_pago,int nro_cuota, String detalle, BigDecimal cuota_pura, BigDecimal gastos, BigDecimal debe, BigDecimal haber, BigDecimal saldo, BigDecimal cemento_debe, BigDecimal cemento_haber, BigDecimal cemento_saldo, String observaciones, String tipo_pago, int id_control){
