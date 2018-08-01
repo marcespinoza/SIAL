@@ -110,7 +110,7 @@ public class AltaCuota extends javax.swing.JDialog {
 
         jLabel8.setText("Gastos $");
 
-        porcentaje_gastos.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat(""))));
+        porcentaje_gastos.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("##,####"))));
 
         jLabel10.setText("% Gastos");
 

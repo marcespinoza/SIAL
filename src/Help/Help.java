@@ -62,7 +62,7 @@ public class Help extends javax.swing.JFrame {
         }); 
         //iconos del jtree
         DefaultTreeCellRenderer render= (DefaultTreeCellRenderer)jTree1.getCellRenderer();
-        render.setLeafIcon(new ImageIcon(getClass().getResource("sheet.jpg")));        
+        render.setLeafIcon(new ImageIcon(getClass().getResource("success.png")));        
         render.setOpenIcon(new ImageIcon(getClass().getResource("open.jpg")));
         render.setClosedIcon(new ImageIcon(getClass().getResource("close.jpg")));
     }

@@ -22,8 +22,6 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -182,8 +180,7 @@ public class ControladorAltaPago implements ActionListener, KeyListener{
                //---Calculo nuevo saldo, en caso que haya cambiado el valor de la bolsa de cemento---//
                BigDecimal saldo_actualizado = haber.multiply(bolsa_cemento);
                if(saldo_actualizado.compareTo(ultimo_saldo)>1){
-                                cd.actualizarCuota("nuevo saldo", nro_cuota, id_control);
-
+                     cd.actualizarCuota("nuevo saldo", nro_cuota, id_control);
                }
                //--------------------------------//
                //-------Comparo si el saldo es negativo. Puede suceder cuando paga la ultima cuota--////
@@ -257,6 +254,7 @@ public class ControladorAltaPago implements ActionListener, KeyListener{
              //--------Es cuota comun----------/     
        }else{
            if(validarCampos()){
+               System.out.println(id_control);
                ResultSet rs = fc.obtenerFichaControl(id_control);
                ResultSet rs_cuota = cd.listaDetalleCuotaXsaldo(id_control);
                try {
@@ -264,8 +262,8 @@ public class ControladorAltaPago implements ActionListener, KeyListener{
                    rs_cuota.last();
                    BigDecimal ultimo_saldo = new BigDecimal(rs_cuota.getString(8));
                    BigDecimal cuota_pura = new BigDecimal(ac.cuota_total.getText()).subtract(new BigDecimal(ac.gastos.getText()));
-                   BigDecimal gastos = new BigDecimal(ac.gastos.getText());
-                   BigDecimal bolsa_cemento = new BigDecimal(rs.getString(5));
+                   BigDecimal gastos = new BigDecimal(ac.gastos.getText());                   
+                   BigDecimal bolsa_cemento = new BigDecimal(rs.getString(5));                   
                    BigDecimal ultimo_saldo_bolsa_cemento = new BigDecimal(rs_cuota.getString(11));
                    calcularValores(ultimo_saldo, cuota_pura, gastos, bolsa_cemento, ultimo_saldo_bolsa_cemento);             
                 } catch (SQLException ex) {
@@ -283,7 +281,7 @@ public class ControladorAltaPago implements ActionListener, KeyListener{
          ac.cuota_total.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
         }
         if(ac.porcentaje_gastos.getText().isEmpty()){
-         ac.gastos.setBorder(BorderFactory.createLineBorder(Color.RED, 1));
+         ac.porcentaje_gastos.setBorder(BorderFactory.createLineBorder(Color.RED, 1));
          bandera=false;
         }else{
          ac.porcentaje_gastos.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
@@ -301,6 +299,12 @@ public class ControladorAltaPago implements ActionListener, KeyListener{
 
     @Override
     public void keyTyped(KeyEvent e) {
+        if(e.getSource()==ac.nro_cuota){
+             char vchar = e.getKeyChar();
+             if(!(Character.isDigit(vchar))){
+              e.consume();             
+            }
+        }
     }
 
     @Override

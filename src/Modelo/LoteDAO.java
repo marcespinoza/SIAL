@@ -25,6 +25,7 @@ import java.util.logging.Logger;
 public class LoteDAO {
     
       Conexion conexion;
+      
 
     public LoteDAO() {
         conexion = new Conexion();
@@ -139,7 +140,7 @@ public class LoteDAO {
      return lotes;
  }
       
-      public void eliminarLote(String barrio, int manzana, int parcela){
+    public void eliminarLote(String barrio, int manzana, int parcela){
      try {
          Connection con = conexion.dataSource.getConnection();
          String eliminar = "delete from lote where barrio = ? and manzana = ? and parcela = ?";
@@ -153,26 +154,45 @@ public class LoteDAO {
      }
  }
       
-   public ResultSet obtenerLotes(String apellidos, String nombres){
+   public List<Lote> obtenerLotes(String apellidos, String nombres){
           ResultSet rs = null;
+          List<Lote> lotes = new ArrayList<>();
+          Connection connection = null;
      try {
-          Connection con = conexion.dataSource.getConnection();  
+          connection = conexion.dataSource.getConnection();  
           String sql = "SELECT barrio, manzana, parcela, observacion, vendido, propietario_cuit from lote where propietario_apellidos =? AND propietario_nombres =? "; 
-          PreparedStatement preparedStatement = con.prepareStatement(sql);
+          PreparedStatement preparedStatement = connection.prepareStatement(sql);
           preparedStatement.setString(1, apellidos);
           preparedStatement.setString(2, nombres);
          rs = preparedStatement.executeQuery();
+          while (rs.next()) {
+                Lote l = new Lote();
+                l.setBarrio(rs.getString(1));
+                l.setManzana(rs.getInt(2));
+                l.setParcela(rs.getInt(3));
+                l.setObservaciones(rs.getString(4));
+                l.setVendido(rs.getInt(5));
+                l.setPropietario_cuit(rs.getString(6));
+                lotes.add(l);
+            } 
         } catch (Exception e) {
             System.out.println(e.getMessage());
+        }finally{
+              try {
+                  connection.close();
+              } catch (SQLException ex) {
+                  Logger.getLogger(PropietarioDAO.class.getName()).log(Level.SEVERE, null, ex);
+              }
         }
-     return rs;
+     return lotes;
      }  
 
     public void agregarLote(String barrio, String manzana, String parcela, String propietario_apellidos, String propietario_nombres, String propietario_cuit, String propietario_nro_recibo){
-       try {
-           Connection con = conexion.dataSource.getConnection();
+        Connection connection = null;
+        try {
+           connection = conexion.dataSource.getConnection();
            String query="INSERT INTO lote (barrio, manzana, parcela, propietario_apellidos, propietario_nombres, propietario_cuit, propietario_nro_recibo)VALUES(?,?,?,?,?,?,?)  ON DUPLICATE KEY UPDATE barrio = VALUES(barrio), manzana = VALUES(manzana), parcela = VALUES(parcela),  propietario_apellidos=VALUES(propietario_apellidos), propietario_nombres = VALUES(propietario_nombres), propietario_cuit = VALUES(propietario_cuit), propietario_nro_recibo = VALUES(propietario_nro_recibo)";
-           PreparedStatement stmt = con.prepareStatement(query);
+           PreparedStatement stmt = connection.prepareStatement(query);
            stmt.setString(1, barrio);
            stmt.setString(2, manzana);
            stmt.setString(3, parcela);
@@ -183,7 +203,14 @@ public class LoteDAO {
            stmt.executeUpdate();
        } catch (SQLException ex) {
            System.out.println(ex.getMessage().toString());
-       }
+       }finally{
+            try {
+                connection.close();
+            } catch (SQLException ex) {
+                 System.out.println(ex.getMessage().toString());
+                Logger.getLogger(LoteDAO.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
 } 
     
      public int editarLote(String backup_barrio, int backup_manzana, int backup_parcela, String barrio,int manzana, int parcela, String observaciones){

@@ -5,12 +5,14 @@
  */
 package Modelo;
 
+import Clases.Lote;
 import conexion.Conexion;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -111,7 +113,8 @@ public class DepartamentoDAO {
      }
  }
       
-      public ResultSet obtenerDepartamentos(String apellidos, String nombres){
+      public List<Lote> obtenerDepartamentos(String apellidos, String nombres){
+          List<Lote>lotes = null;
           ResultSet rs = null;
      try {
           Connection con = conexion.dataSource.getConnection();   
@@ -123,12 +126,11 @@ public class DepartamentoDAO {
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
-     return rs;
+     return lotes;
      }  
 
     public void agregarDepartamento(String torre, String piso, String dpto, String propietario_apellidos, String propietario_nombres, String propietario_cuit, String propietario_nro_recibo){
        try {
-           System.out.println("propi");
            Connection con = conexion.dataSource.getConnection();
            String query="INSERT INTO departamento (torre, piso, dpto, propietario_apellidos, propietario_nombres, propietario_cuit, propietario_nro_recibo)VALUES(?,?,?,?,?,?,?)  ON DUPLICATE KEY UPDATE torre = VALUES(torre), piso = VALUES(piso), dpto = VALUES(dpto),  propietario_apellidos=VALUES(propietario_apellidos), propietario_nombres = VALUES(propietario_nombres), propietario_cuit = VALUES(propietario_cuit), propietario_nro_recibo = VALUES(propietario_nro_recibo)";
            PreparedStatement stmt = con.prepareStatement(query);

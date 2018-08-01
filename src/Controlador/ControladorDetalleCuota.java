@@ -392,12 +392,12 @@ public class ControladorDetalleCuota implements ActionListener, TableModelListen
             primerLinea.setTotalWidth(new float[]{ 1,1,2,2,2});
             primerLinea.setWidthPercentage(100);
             primerLinea.addCell(new PdfPCell(new Paragraph("-",f))).setHorizontalAlignment(Element.ALIGN_CENTER);
-            primerLinea.addCell(new PdfPCell(new Paragraph(String.valueOf(detalleCuota.get(1).getFecha()),f))).setHorizontalAlignment(Element.ALIGN_CENTER);
+            primerLinea.addCell(new PdfPCell(new Paragraph(String.valueOf(detalleCuota.get(0).getFecha()),f))).setHorizontalAlignment(Element.ALIGN_CENTER);
             primerLinea.addCell(new PdfPCell(new Paragraph("Saldo inicial",f))).setHorizontalAlignment(Element.ALIGN_CENTER);
-            primerLinea.addCell(new PdfPCell(new Paragraph(String.valueOf(detalleCuota.get(7).getSaldo()),f))).setHorizontalAlignment(Element.ALIGN_CENTER);
-            primerLinea.addCell(new PdfPCell(new Paragraph(String.valueOf(detalleCuota.get(10).getCemento_saldo()),f))).setHorizontalAlignment(Element.ALIGN_CENTER);
+            primerLinea.addCell(new PdfPCell(new Paragraph(String.valueOf(detalleCuota.get(0).getSaldo()),f))).setHorizontalAlignment(Element.ALIGN_CENTER);
+            primerLinea.addCell(new PdfPCell(new Paragraph(String.valueOf(detalleCuota.get(0).getCemento_saldo()),f))).setHorizontalAlignment(Element.ALIGN_CENTER);
             document.add(primerLinea);            
-            for(int i = 0; i < detalleCuota.size(); i++){
+            for(int i = 1; i < detalleCuota.size(); i++){
                   PdfPTable table2 = new PdfPTable(5);            
                   table2.setTotalWidth(new float[]{ 1,1,2,2,2});
                   table2.setWidthPercentage(100);

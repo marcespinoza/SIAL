@@ -9,6 +9,7 @@ import java.awt.Color;
 import java.awt.Component;
 import javax.swing.JLabel;
 import javax.swing.JTable;
+import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableCellRenderer;
 
 /**
@@ -23,7 +24,12 @@ private JLabel component;
           
         if(table.getValueAt(row, 9) == null && !isSelected){
            component.setBackground(Color.cyan);
-        }else{component.setBackground(null);}
+        }else{
+            component.setBackground(null);
+        }
+        if(table.getValueAt(row, 23) != null){
+           component.setHorizontalAlignment(SwingConstants.CENTER);
+        }
          return component;
     }
     

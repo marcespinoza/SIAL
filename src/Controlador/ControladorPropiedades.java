@@ -7,6 +7,7 @@ package Controlador;
 
 import Modelo.DepartamentoDAO;
 import Clases.LimitadorCaracteres;
+import Clases.Lote;
 import Clases.Propietario;
 import Modelo.LoteDAO;
 import Modelo.PropiedadesDAO;
@@ -72,8 +73,8 @@ public class ControladorPropiedades implements ActionListener{
                  if(!vista.propiedades.comboApellido.getSelectedItem().equals("Seleccione")){  
                   if(!vista.propiedades.comboNombres.getSelectedItem().equals("Seleccione")){  
                     switch(vista.propiedades.comboPropiedad.getSelectedItem().toString()){   
-                        case "Terreno": ld.agregarLote(vista.propiedades.barrio.getText(), vista.propiedades.mz.getText(), vista.propiedades.pc.getText(), vista.propiedades.comboApellido.getSelectedItem().toString(), vista.propiedades.comboNombres.getSelectedItem().toString(), vista.propiedades.cuit.getText(),vista.propiedades.nroRecibo.getText());
-                        case "Departamento":dd.agregarDepartamento(vista.propiedades.barrio.getText(), vista.propiedades.mz.getText(), vista.propiedades.pc.getText(), vista.propiedades.comboApellido.getSelectedItem().toString(), vista.propiedades.comboNombres.getSelectedItem().toString(), vista.propiedades.cuit.getText(),vista.propiedades.nroRecibo.getText());    
+                        case "Terreno": ld.agregarLote(vista.propiedades.barrio.getText(), vista.propiedades.mz.getText(), vista.propiedades.pc.getText(), vista.propiedades.comboApellido.getSelectedItem().toString(), vista.propiedades.comboNombres.getSelectedItem().toString(), vista.propiedades.cuit.getText(),vista.propiedades.nroRecibo.getText()); break;
+                        case "Departamento":dd.agregarDepartamento(vista.propiedades.barrio.getText(), vista.propiedades.mz.getText(), vista.propiedades.pc.getText(), vista.propiedades.comboApellido.getSelectedItem().toString(), vista.propiedades.comboNombres.getSelectedItem().toString(), vista.propiedades.cuit.getText(),vista.propiedades.nroRecibo.getText()); break;    
                 }
              }
             }
@@ -98,7 +99,7 @@ public class ControladorPropiedades implements ActionListener{
            llenarComboApellidos();
          }
     
- public void llenarComboApellidos(){
+     public void llenarComboApellidos(){
         List<Propietario> propietarios = null;
         ResultSet rs = null;
         propietarios = pd.obtenerApellidos();
@@ -109,8 +110,8 @@ public class ControladorPropiedades implements ActionListener{
                 vista.propiedades.comboApellido.addItem(propietarios.get(i).getApellidos());
             }
         }   
- }   
-  public void llenarComboNombres(String apellidos){
+      }   
+      public void llenarComboNombres(String apellidos){
            List<Propietario>propietarios = null;
             propietarios= pd.obtenerNombres(apellidos);
             vista.propiedades.comboNombres.removeAllItems();
@@ -118,33 +119,34 @@ public class ControladorPropiedades implements ActionListener{
             for(int i = 0; i < propietarios.size(); i++) {
                 vista.propiedades.comboNombres.addItem(propietarios.get(i).getNombres());
             }   
- }
+      }
  
-  public void llenarTabla(){
-      ResultSet rs = null;
+    public void llenarTabla(){
+      List<Lote>lotes = null;
+      List<Propietario>propietarios = null;
       try {
-        ResultSet cuit = pd.obtenerCuit(apellidos, nombres);
-        cuit.next();
-        vista.propiedades.cuit.setText(cuit.getString(1));
-        vista.propiedades.nroRecibo.setText(cuit.getString(2));
+        propietarios = pd.obtenerCuit(apellidos, nombres);
+        vista.propiedades.cuit.setText(propietarios.get(0).getCuit());
+        vista.propiedades.nroRecibo.setText(String.valueOf(propietarios.get(0).getNro_recibo()));
         switch(vista.propiedades.comboPropiedad.getSelectedItem().toString()){
-            case"Terreno":rs = ld.obtenerLotes(apellidos, nombres);break;
-            case"Departamento":rs = dd.obtenerDepartamentos(apellidos, nombres);break;}
+            case"Terreno":lotes = ld.obtenerLotes(apellidos, nombres);break;
+            case"Departamento":lotes = dd.obtenerDepartamentos(apellidos, nombres);break;}
         DefaultTableModel model = (DefaultTableModel) vista.propiedades.tablaPropiedades.getModel();
         model.setRowCount(0);        
-            while(rs.next()){
-                String barrio = rs.getString(1);  
-                String manzana = rs.getString(2);
-                String parcela = rs.getString(3);
-                String observaciones = rs.getString(4);
-                if(rs.getString(5).equals("0")){
+            if(lotes!=null){
+                for (int i = 0; i < lotes.size(); i++) {
+                     String barrio = lotes.get(i).getBarrio();
+                     int manzana = lotes.get(i).getManzana();
+                     int parcela = lotes.get(i).getParcela();
+                     String observaciones = lotes.get(i).getObservaciones();                  
+                               
+                if(lotes.get(i).getVendido()==0){
                   propiedades = new Object[] {barrio, manzana, parcela, observaciones, "Libre"};}
                 else{
                    propiedades = new Object[] {barrio, manzana, parcela, observaciones, "Vendido"};  
                 }
-                model.addRow(propiedades);
+                model.addRow(propiedades);}
             }
-         rs.previous();
         } 
         catch (Exception e) {
             System.out.println(e.getMessage());
@@ -186,8 +188,8 @@ public class ControladorPropiedades implements ActionListener{
             if(!vista.propiedades.comboApellido.getSelectedItem().equals("Seleccione")){  
                if(!vista.propiedades.comboNombres.getSelectedItem().equals("Seleccione")){  
                 switch(vista.propiedades.comboPropiedad.getSelectedItem().toString()){   
-                        case "Terreno": ld.agregarLote(vista.propiedades.barrio.getText(), vista.propiedades.mz.getText(), vista.propiedades.pc.getText(), vista.propiedades.comboApellido.getSelectedItem().toString(), vista.propiedades.comboNombres.getSelectedItem().toString(), vista.propiedades.cuit.getText(),vista.propiedades.nroRecibo.getText());
-                        case "Departamento":dd.agregarDepartamento(vista.propiedades.barrio.getText(), vista.propiedades.mz.getText(), vista.propiedades.pc.getText(), vista.propiedades.comboApellido.getSelectedItem().toString(), vista.propiedades.comboNombres.getSelectedItem().toString(), vista.propiedades.cuit.getText(),vista.propiedades.nroRecibo.getText());    
+                        case "Terreno": ld.agregarLote(vista.propiedades.barrio.getText(), vista.propiedades.mz.getText(), vista.propiedades.pc.getText(), vista.propiedades.comboApellido.getSelectedItem().toString(), vista.propiedades.comboNombres.getSelectedItem().toString(), vista.propiedades.cuit.getText(),vista.propiedades.nroRecibo.getText()); break;
+                        case "Departamento":dd.agregarDepartamento(vista.propiedades.barrio.getText(), vista.propiedades.mz.getText(), vista.propiedades.pc.getText(), vista.propiedades.comboApellido.getSelectedItem().toString(), vista.propiedades.comboNombres.getSelectedItem().toString(), vista.propiedades.cuit.getText(),vista.propiedades.nroRecibo.getText()); break;    
                 }
              }
             }

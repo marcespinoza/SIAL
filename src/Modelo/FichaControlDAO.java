@@ -125,16 +125,14 @@ public class FichaControlDAO {
         }
   }
   
-   public void actualizarBolsaCemento( BigDecimal precio, Date fecha_actualizacion, String id_control, BigDecimal gastos, BigDecimal nueva_cuota_pura){
+   public void actualizarBolsaCemento( BigDecimal precio_cemento, Date fecha_actualizacion, String id_control){
         try {
             Connection con = conexion.dataSource.getConnection();
             PreparedStatement ps = con.prepareStatement(
-                    "UPDATE ficha_control_lote SET bolsa_cemento = ?, fecha_actualizacion = ?, gastos = ?, cuota_pura = ? WHERE id_control = ?");
-            ps.setBigDecimal(1, precio);
+                    "UPDATE ficha_control_lote SET bolsa_cemento = ?, fecha_actualizacion = ? WHERE id_control = ?");
+            ps.setBigDecimal(1, precio_cemento);
             ps.setDate(2, fecha_actualizacion);
-            ps.setBigDecimal(3, gastos);
-            ps.setBigDecimal(4, nueva_cuota_pura);
-            ps.setString(5, id_control);
+            ps.setString(3, id_control);
             ps.executeUpdate();
             ps.close();
         } catch (SQLException ex) {

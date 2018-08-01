@@ -5,6 +5,7 @@
  */
 package Modelo;
 
+import Clases.Lote;
 import Clases.Propietario;
 import Clases.Usuario;
 import conexion.Conexion;
@@ -242,17 +243,31 @@ public class PropietarioDAO {
         return propietarios;
      }  
        
-        public ResultSet obtenerCuit(String apellidos, String nombres){
+        public List<Propietario> obtenerCuit(String apellidos, String nombres){
+          List<Propietario> propietarios = new ArrayList<>();
+          Connection connection = null;
           ResultSet rs = null;
            try {
-              Connection con = conexion.dataSource.getConnection();  
+              connection = conexion.dataSource.getConnection();  
               String listar = "SELECT cuit, nro_recibo from propietario where apellidos='"+apellidos+"' and nombres = '"+nombres+"'"; 
-              Statement st = con.createStatement();
+              Statement st = connection.createStatement();
               rs = st.executeQuery(listar);
+              while (rs.next()) {
+                Propietario p = new Propietario();
+                p.setCuit(rs.getString(1));
+                p.setNro_recibo(rs.getInt(2));
+                propietarios.add(p);
+            } 
          } catch (Exception e) {
                 System.out.println(e.getMessage());
-         }
-        return rs;
+         }finally{
+              try {
+                  connection.close();
+              } catch (SQLException ex) {
+                  Logger.getLogger(PropietarioDAO.class.getName()).log(Level.SEVERE, null, ex);
+              }
+        }
+        return propietarios;
       }  
        
      public void eliminarPropietarios(String cuit){

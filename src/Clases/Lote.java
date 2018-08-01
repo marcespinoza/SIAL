@@ -14,11 +14,41 @@ public class Lote {
 String barrio;
 int manzana;
 int parcela;
+int vendido;
+String observaciones;
+String propietario_cuit;
+
+  
 
     public Lote(String barrio, int manzana, int parcela) {
         this.barrio = barrio;
         this.manzana = manzana;
         this.parcela = parcela;
+    }
+
+      public int getVendido() {
+        return vendido;
+    }
+
+    public void setVendido(int vendido) {
+        this.vendido = vendido;
+    }
+
+    
+    public String getObservaciones() {
+        return observaciones;
+    }
+
+    public void setObservaciones(String observaciones) {
+        this.observaciones = observaciones;
+    }
+
+    public String getPropietario_cuit() {
+        return propietario_cuit;
+    }
+
+    public void setPropietario_cuit(String propietario_cuit) {
+        this.propietario_cuit = propietario_cuit;
     }
 
     public Lote() {

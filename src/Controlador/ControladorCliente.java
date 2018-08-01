@@ -42,6 +42,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.RowFilter;
+import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
@@ -134,14 +135,15 @@ public class ControladorCliente implements ActionListener, MouseListener, TableM
                     Date date = new Date();
                 if(!vistaClientes.bolsa_cemento.getText().equals("")){                      
                     int i = vistaClientes.tablaCliente.getSelectedRow();
-                    BigDecimal gastos_ = new BigDecimal(vistaClientes.tablaCliente.getModel().getValueAt(i, 13).toString());
-                    BigDecimal cuota_ = new BigDecimal(vistaClientes.tablaCliente.getModel().getValueAt(i, 22).toString());
-                    BigDecimal bolsa_cemento_ = new BigDecimal(vistaClientes.tablaCliente.getModel().getValueAt(i, 14).toString());
-                    BigDecimal nuevo_bolsa_cemento = new BigDecimal(vistaClientes.bolsa_cemento.getText());
-                    BigDecimal nueva_cuota = ((gastos_.add(cuota_)).divide(bolsa_cemento_, 2, RoundingMode.DOWN)).multiply(nuevo_bolsa_cemento);
-                    BigDecimal nuevo_gasto = nueva_cuota.subtract(nueva_cuota.divide(new BigDecimal("1.1"), 2, BigDecimal.ROUND_HALF_UP));
-                    BigDecimal nueva_cuota_pura = nueva_cuota.subtract(nuevo_gasto);
-                    fd.actualizarBolsaCemento( new BigDecimal(vistaClientes.bolsa_cemento.getText()), new java.sql.Date(date.getTime()), vistaClientes.tablaCliente.getModel().getValueAt(i, 11).toString(), nuevo_gasto, nueva_cuota_pura);
+                    //----Aca solo debo actualizar saldo bolsa de cemento -----//
+//                    BigDecimal gastos_ = new BigDecimal(vistaClientes.tablaCliente.getModel().getValueAt(i, 13).toString());
+//                    BigDecimal cuota_ = new BigDecimal(vistaClientes.tablaCliente.getModel().getValueAt(i, 22).toString());
+//                    BigDecimal bolsa_cemento_ = new BigDecimal(vistaClientes.tablaCliente.getModel().getValueAt(i, 14).toString());
+                      BigDecimal nuevo_bolsa_cemento = new BigDecimal(vistaClientes.bolsa_cemento.getText());
+//                    BigDecimal nueva_cuota = ((gastos_.add(cuota_)).divide(bolsa_cemento_, 2, RoundingMode.DOWN)).multiply(nuevo_bolsa_cemento);
+//                    BigDecimal nuevo_gasto = nueva_cuota.subtract(nueva_cuota.divide(new BigDecimal("1.1"), 2, BigDecimal.ROUND_HALF_UP));
+//                    BigDecimal nueva_cuota_pura = nueva_cuota.subtract(nuevo_gasto);
+                    fd.actualizarBolsaCemento( nuevo_bolsa_cemento, new java.sql.Date(date.getTime()), vistaClientes.tablaCliente.getModel().getValueAt(i, 11).toString());
                     llenarTabla();
                     vistaClientes.tablaCliente.getSelectionModel().clearSelection();
                     vistaClientes.fch_actualizacion.setText("");
@@ -360,7 +362,7 @@ public class ControladorCliente implements ActionListener, MouseListener, TableM
         model.setRowCount(0);
         SimpleDateFormat sdf=new SimpleDateFormat("dd-MM-YYYY");
         ImageIcon icon = new ImageIcon(getClass().getResource("/Imagenes/iconos/alerta.png"));
-        JLabel jLabel;
+        JLabel icono;
         String fch_actualizacion = "";
         String actualizar_cemento = "";
         String aviso = "";
@@ -368,7 +370,7 @@ public class ControladorCliente implements ActionListener, MouseListener, TableM
         try {
             while(rs.next()){
                 aviso = "";
-                jLabel = new JLabel();
+                icono = new JLabel();
                 cumpleaños = "0";
                 String dni = rs.getString(1);
                 String apellidos = rs.getString(2);
@@ -398,11 +400,12 @@ public class ControladorCliente implements ActionListener, MouseListener, TableM
                           actualizar_cemento = "0";
                      }
                      //-------------------------------------//
-                     //------Controla 6 meses para calcular amortizacion--------------//
-                     if((Months.monthsBetween(new LocalDate(rs.getDate(16)), LocalDate.now())).getMonths()==6 ){
-                         jLabel.setIcon(icon);
+                     //------Controla si pasaron 6 meses desde la ultima actualizacion del precio de la bolsa de cemento para calcular amortizacion--------------//
+                     if(((Months.monthsBetween(new LocalDate(rs.getDate(16)), LocalDate.now())).getMonths())%5==0 && (Months.monthsBetween(new LocalDate(rs.getDate(16)), LocalDate.now())).getMonths()!=0){
+                         icono.setIcon(icon);
+                         icono.setHorizontalAlignment(SwingConstants.CENTER);
                      }else{
-                         jLabel.setIcon(null);
+                         icono.setIcon(null);
                      }
                      //----------------------------//
                 }else{
@@ -414,7 +417,7 @@ public class ControladorCliente implements ActionListener, MouseListener, TableM
                 String parcela_prop = rs.getString(19);  
                 String observaciones = rs.getString(20);
                 String cuota_pura = rs.getString(21);
-                clientes = new Object[] {apellidos, nombres, dni, telefono1, telefono2, barrio, calle, numero, fecha_nacimiento, trabajo, baja, idControl, cantidad_cuotas, gastos, bolsa_cemento, fch_actualizacion, barrio_prop, manzana_prop, parcela_prop, observaciones, actualizar_cemento, cumpleaños, cuota_pura, jLabel};
+                clientes = new Object[] {apellidos, nombres, dni, telefono1, telefono2, barrio, calle, numero, fecha_nacimiento, trabajo, baja, idControl, cantidad_cuotas, gastos, bolsa_cemento, fch_actualizacion, barrio_prop, manzana_prop, parcela_prop, observaciones, actualizar_cemento, cumpleaños, cuota_pura, icono};
                 model.addRow(clientes);   
              }
             controlCumpleaños();
