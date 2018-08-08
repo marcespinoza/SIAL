@@ -60,8 +60,7 @@ public class ControladorPropiedades implements ActionListener{
         this.vista.propiedades.comboPropiedad.addItemListener(new ItemListener() {
             @Override
             public void itemStateChanged(ItemEvent e) {
-                llenarComboApellidos();
-                vista.propiedades.tablaPropiedades.removeAll();
+                llenarComboApellidos();                
             }
         });
         //======KeyListener sobre el campo parcela========//
@@ -75,13 +74,14 @@ public class ControladorPropiedades implements ActionListener{
                     switch(vista.propiedades.comboPropiedad.getSelectedItem().toString()){   
                         case "Terreno": ld.agregarLote(vista.propiedades.barrio.getText(), vista.propiedades.mz.getText(), vista.propiedades.pc.getText(), vista.propiedades.comboApellido.getSelectedItem().toString(), vista.propiedades.comboNombres.getSelectedItem().toString(), vista.propiedades.cuit.getText(),vista.propiedades.nroRecibo.getText()); break;
                         case "Departamento":dd.agregarDepartamento(vista.propiedades.barrio.getText(), vista.propiedades.mz.getText(), vista.propiedades.pc.getText(), vista.propiedades.comboApellido.getSelectedItem().toString(), vista.propiedades.comboNombres.getSelectedItem().toString(), vista.propiedades.cuit.getText(),vista.propiedades.nroRecibo.getText()); break;    
-                }
+                 }
+               }
              }
-            }
               llenarTabla();}
              }
             }
          });
+        //-------Cuando el usuario clickea sobre una fila, rellena los campos con esos datos---//
          this.vista.propiedades.tablaPropiedades.addMouseListener(new java.awt.event.MouseAdapter() {
          @Override
          public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -96,7 +96,8 @@ public class ControladorPropiedades implements ActionListener{
            observaciones = vista.propiedades.tablaPropiedades.getModel().getValueAt(row,3).toString();
          }
          });
-           llenarComboApellidos();
+         llenarComboApellidos();
+         inhabilitarCampos();
          }
     
      public void llenarComboApellidos(){
@@ -138,7 +139,7 @@ public class ControladorPropiedades implements ActionListener{
                      String barrio = lotes.get(i).getBarrio();
                      int manzana = lotes.get(i).getManzana();
                      int parcela = lotes.get(i).getParcela();
-                     String observaciones = lotes.get(i).getObservaciones();                  
+                     String observaciones = lotes.get(i).getObservaciones();                
                                
                 if(lotes.get(i).getVendido()==0){
                   propiedades = new Object[] {barrio, manzana, parcela, observaciones, "Libre"};}
@@ -154,13 +155,16 @@ public class ControladorPropiedades implements ActionListener{
     }
 
     @Override
-    public void actionPerformed(ActionEvent e) {
-        
+    public void actionPerformed(ActionEvent e) {        
         if(e.getSource()==vista.propiedades.comboApellido){
           if(vista.propiedades.comboApellido.getItemCount()!=0){
             if(!vista.propiedades.comboApellido.getSelectedItem().equals("Seleccione")){  
                 apellidos =vista.propiedades.comboApellido.getSelectedItem().toString();
                 llenarComboNombres(apellidos);
+            }else{
+                vista.propiedades.comboNombres.setSelectedItem("Seleccione");
+                inhabilitarCampos();
+                limpiarCampos();
             }
           } 
         }
@@ -169,9 +173,14 @@ public class ControladorPropiedades implements ActionListener{
             if(!vista.propiedades.comboNombres.getSelectedItem().equals("Seleccione")){ 
                 nombres = vista.propiedades.comboNombres.getSelectedItem().toString();
                 llenarTabla();
+                habilitarCampos();
+            }else{
+                inhabilitarCampos();
+                limpiarCampos();
             }
             }
         }
+       //--------Boton para guardar cambios------//  
         if(e.getSource()==vista.propiedades.guardar){
             int flag = 0;
           if(validarCampos()){
@@ -183,6 +192,7 @@ public class ControladorPropiedades implements ActionListener{
             }
           }
         } 
+        //------Boton agregar propiedades------------//
         if(e.getSource()==vista.propiedades.agregar){
             if(validarCampos()){
             if(!vista.propiedades.comboApellido.getSelectedItem().equals("Seleccione")){  
@@ -195,11 +205,12 @@ public class ControladorPropiedades implements ActionListener{
             }
             llenarTabla();}
         }
+        //------Boton eliminar propiedades--------------//
         if(e.getSource()==vista.propiedades.eliminar){
             int row=vista.propiedades.tablaPropiedades.getSelectedRow();
             if(row != -1){
                ImageIcon icon = new ImageIcon("src/Imagenes/Iconos/warning.png");   
-             int reply = JOptionPane.showConfirmDialog(null, "Eliminar a "+vista.propiedades.tablaPropiedades.getModel().getValueAt(row, 0)+" "+vista.propiedades.tablaPropiedades.getModel().getValueAt(row, 1)+" "+vista.propiedades.tablaPropiedades.getModel().getValueAt(row, 2)+"?",
+               int reply = JOptionPane.showConfirmDialog(null, "Eliminar a "+vista.propiedades.tablaPropiedades.getModel().getValueAt(row, 0)+" "+vista.propiedades.tablaPropiedades.getModel().getValueAt(row, 1)+" "+vista.propiedades.tablaPropiedades.getModel().getValueAt(row, 2)+"?",
                "Advertencia",JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, icon);
               if (reply == JOptionPane.YES_OPTION) {
                ld.eliminarLote(vista.propiedades.tablaPropiedades.getModel().getValueAt(row, 0).toString(), Integer.parseInt(vista.propiedades.tablaPropiedades.getModel().getValueAt(row, 1).toString()), Integer.parseInt(vista.propiedades.tablaPropiedades.getModel().getValueAt(row, 2).toString()));
@@ -209,7 +220,7 @@ public class ControladorPropiedades implements ActionListener{
             }
         }
     }
-    
+    //-----Valida que todos los campos esten rellenos antes de agregar-------------//
     public boolean validarCampos(){
         boolean bandera = true;       
         if(vista.propiedades.barrio.getText().isEmpty()){
@@ -231,6 +242,29 @@ public class ControladorPropiedades implements ActionListener{
          vista.propiedades.pc.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));        
         }
          return bandera;
+    }
+    
+    //-------Limpia los labels y la tabla-----------------//
+    private void limpiarCampos(){
+       ((DefaultTableModel)vista.propiedades.tablaPropiedades.getModel()).setNumRows(0);
+       vista.propiedades.cuit.setText("");
+       vista.propiedades.nroRecibo.setText("");
+    }
+    
+    //------Habilita los edittext-------//
+    private void habilitarCampos(){
+        vista.propiedades.barrio.setEnabled(true);
+        vista.propiedades.pc.setEnabled(true);
+        vista.propiedades.mz.setEnabled(true);
+        vista.propiedades.observaciones.setEnabled(true);
+    }
+    
+    //-----------Inhabilita los edittext----------------//
+    private void inhabilitarCampos(){
+        vista.propiedades.barrio.setEnabled(false);
+        vista.propiedades.pc.setEnabled(false);
+        vista.propiedades.mz.setEnabled(false);
+        vista.propiedades.observaciones.setEnabled(false);
     }
     
 }

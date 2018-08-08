@@ -71,19 +71,18 @@ public class ControladorLogin implements ActionListener, KeyListener, WindowList
             @Override
             public void mousePressed(MouseEvent e) {
                 login.contraseña.setEchoChar((char)0);
-            }
-            
-    @Override
-    public void mouseReleased(MouseEvent e) {
-         login.contraseña.setEchoChar('*');
-    }
-         });
-        login.setVisible(true);
-    }
+            }            
+             @Override
+            public void mouseReleased(MouseEvent e) {
+             login.contraseña.setEchoChar('*');
+             }
+            });
+             login.setVisible(true);
+             }   
 
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        Usuario usuario = null;
+           @Override
+           public void actionPerformed(ActionEvent e) {
+           Usuario usuario = null;
             if(e.getSource() == login.iniciar_sesion){
                 String contraseña= new String(login.contraseña.getPassword());
               if(login.usuario.getText().equals("") || contraseña.equals("")){

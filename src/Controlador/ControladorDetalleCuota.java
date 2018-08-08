@@ -451,7 +451,7 @@ public class ControladorDetalleCuota implements ActionListener, TableModelListen
             catch (DocumentException ex) {
             Logger.getLogger(DetalleCuota.class.getName()).log(Level.SEVERE, null, ex.getMessage());
         } catch (IOException ex) {
-            JOptionPane.showMessageDialog(null, "No se pudo generar. Compruebe que no tiene abierto actualmente el archivo");
+            JOptionPane.showMessageDialog(null, "No se pudo generar. Compruebe que no tiene abierto actualmente el archivo"+ex.getMessage());
             Logger.getLogger(ControladorDetalleCuota.class.getName()).log(Level.SEVERE, null, ex);
         } catch (SQLException ex) {
             Logger.getLogger(ControladorDetalleCuota.class.getName()).log(Level.SEVERE, null, ex);
