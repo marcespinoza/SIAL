@@ -5,9 +5,13 @@
  */
 package Modelo;
 
+import Clases.ClientesPorLotes;
+import Clases.Lote;
 import conexion.Conexion;
 import java.sql.Connection;
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -26,19 +30,50 @@ public class ClienteDAO {
     
  public void obtenerClientes(){}
  
- public ResultSet clientesPorLotes(){
+ public List<ClientesPorLotes> clientesPorLotes(){
      ResultSet rs = null;
-     Statement st = null;
-     Connection con = null;
+     Connection connection = null;
+     List<ClientesPorLotes> clientesPorLotes = new ArrayList<>();
      try {
-          con = conexion.dataSource.getConnection();
+          connection = conexion.dataSource.getConnection();
           String listar = "SELECT c.Dni, c.Apellidos, c.Nombres,c.fecha_nacimiento, c.barrio, c.calle, c.numero, c.Telefono1, c.telefono2, c.trabajo, h.baja, f.Id_control, f.cantidad_cuotas, f.gastos, f.bolsa_cemento, f.fecha_actualizacion, f.lote_Barrio, f.lote_Manzana, f.lote_Parcela,f.observacion, f.cuota_pura FROM (cliente c LEFT JOIN cliente_tiene_lote h ON c.Dni = h.cliente_Dni) left join ficha_control_lote f on f.Id_control=h.Id_control GROUP BY f.Id_control, c.dni, ifnull(f.Id_control, c.Dni) order by c.apellidos"; 
-          st = con.createStatement();
+          Statement st = connection.createStatement();
           rs = st.executeQuery(listar);
+          while (rs.next()) {
+            ClientesPorLotes cpl = new ClientesPorLotes();
+            cpl.setDni(rs.getInt(1));
+            cpl.setApellidos(rs.getString(2));
+            cpl.setNombres(rs.getString(3));
+            cpl.setFecha_nacimiento(rs.getDate(4));
+            cpl.setBarrio_cliente(rs.getString(5));
+            cpl.setCalle_cliente(rs.getString(6));
+            cpl.setNro_cliente(rs.getInt(7));
+            cpl.setTelefono1(rs.getString(8));
+            cpl.setTelefono2(rs.getString(9));
+            cpl.setTrabajo(rs.getString(10));
+            cpl.setBaja(rs.getInt(11));
+            cpl.setIdControl(rs.getInt(12));
+            cpl.setCantidad_cuotas(rs.getInt(13));
+            cpl.setGastos(rs.getBigDecimal(14));
+            cpl.setBolsa_cemento(rs.getBigDecimal(15));
+            cpl.setFecha_actualizacion(rs.getDate(16));
+            cpl.setBarrio(rs.getString(17));
+            cpl.setManzana(rs.getInt(18));
+            cpl.setParcela(rs.getInt(19));
+            cpl.setObservacion(rs.getString(20));
+            cpl.setCuota_pura(rs.getBigDecimal(21));
+            clientesPorLotes.add(cpl);
+         }
         } catch (SQLException ex) {
           System.out.println(ex.getMessage());
+        }finally{
+              try {
+                  connection.close();
+              } catch (SQLException ex) {
+                  Logger.getLogger(PropietarioDAO.class.getName()).log(Level.SEVERE, null, ex);
+              }
         }
-     return rs;
+     return clientesPorLotes;
  }
  
   public ResultSet clientesSinLotes(){

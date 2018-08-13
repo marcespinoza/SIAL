@@ -16,6 +16,7 @@ import java.awt.Color;
 import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.math.BigDecimal;
@@ -97,6 +98,14 @@ public class ControladorAltaPago implements ActionListener, KeyListener{
         ac.nro_cuota.addKeyListener(this);
         ac.aceptarBtn.addActionListener(this);
         ac.cancelarBtn.addActionListener(this);
+        //------Evito que ingrese letras en un campo numerico-----------//
+        ac.porcentaje_gastos.addKeyListener(new KeyAdapter() {
+            public void keyTyped(KeyEvent e) {
+                  char vChar = e.getKeyChar();            
+                 if (!(Character.isDigit(vChar))) {
+                e.consume();}
+            }            
+        });
         rellenarCampos();
     }
     

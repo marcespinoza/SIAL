@@ -20,6 +20,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.io.BufferedWriter;
@@ -39,7 +40,7 @@ import java.util.logging.Logger;
  *
  * @author Marcelo Espinoza
  */
-public class ControladorLogin implements ActionListener, KeyListener, WindowListener{
+public class ControladorLogin implements ActionListener, KeyListener{
     
    Login login;  
    Ventana frame;
@@ -51,6 +52,15 @@ public class ControladorLogin implements ActionListener, KeyListener, WindowList
     public ControladorLogin(Ventana frame) {        
         this.frame = frame;
         login = new Login(frame, true);
+        //----Cuando aprieta boton X de la pantalla de login, cierra el Frame principal------------//
+        login.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                super.windowClosing(e); 
+                frame.dispose();
+            }
+            
+        });
         login.usuario.addKeyListener(this);
         login.usuario.setDocument(new LimitadorCaracteres(15));
         login.contraseña.addKeyListener(this);
@@ -139,35 +149,6 @@ public class ControladorLogin implements ActionListener, KeyListener, WindowList
 
     @Override
     public void keyReleased(KeyEvent e) {
-    }
-
-    @Override
-    public void windowOpened(WindowEvent e) {
-    }
-
-    @Override
-    public void windowClosing(WindowEvent e) {
-        frame.dispose();
-    }
-
-    @Override
-    public void windowClosed(WindowEvent e) {
-    }
-
-    @Override
-    public void windowIconified(WindowEvent e) {
-    }
-
-    @Override
-    public void windowDeiconified(WindowEvent e) {
-    }
-
-    @Override
-    public void windowActivated(WindowEvent e) {
-    }
-
-    @Override
-    public void windowDeactivated(WindowEvent e) {
     }
     
 }

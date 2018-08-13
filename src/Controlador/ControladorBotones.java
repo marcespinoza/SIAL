@@ -53,7 +53,7 @@ public class ControladorBotones implements ActionListener{
         
         if(e.getSource()==Ventana.cerrarSesion){
           ventana.dispose();
-          new Ventana().setVisible(true);
+          new Ventana();
         }
         
         if(e.getSource()==Ventana.btnAyuda){
