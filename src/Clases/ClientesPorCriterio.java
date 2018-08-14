@@ -12,7 +12,7 @@ import java.util.Date;
  *
  * @author Marceloi7
  */
-public class ClientesPorLotes {
+public class ClientesPorCriterio {
     
     int dni;
     String apellidos;
@@ -25,14 +25,14 @@ public class ClientesPorLotes {
     String telefono2;
     String trabajo;
     int baja;
-    int idControl;
+    String idControl;
     int cantidad_cuotas;
     BigDecimal gastos;
     BigDecimal bolsa_cemento;
     Date fecha_actualizacion;
-    int manzana;
+    String manzana;
     String barrio;
-    int parcela;
+    String parcela;
     String observacion;
     BigDecimal cuota_pura;
 
@@ -156,11 +156,11 @@ public class ClientesPorLotes {
         this.fecha_actualizacion = fecha_actualizacion;
     }
 
-    public int getManzana() {
+    public String getManzana() {
         return manzana;
     }
 
-    public void setManzana(int manzana) {
+    public void setManzana(String manzana) {
         this.manzana = manzana;
     }
 
@@ -172,11 +172,11 @@ public class ClientesPorLotes {
         this.barrio = barrio;
     }
 
-    public int getParcela() {
+    public String getParcela() {
         return parcela;
     }
 
-    public void setParcela(int parcela) {
+    public void setParcela(String parcela) {
         this.parcela = parcela;
     }
 
@@ -197,15 +197,15 @@ public class ClientesPorLotes {
     }
     
     
-    public int getIdControl() {
+    public String getIdControl() {
         return idControl;
     }
 
-    public void setIdControl(int idControl) {
+    public void setIdControl(String idControl) {
         this.idControl = idControl;
     }
 
-    public ClientesPorLotes() {
+    public ClientesPorCriterio() {
     }
     
     

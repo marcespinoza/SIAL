@@ -5,7 +5,7 @@
  */
 package Controlador;
 
-import Clases.ClientesPorLotes;
+import Clases.ClientesPorCriterio;
 import Clases.Propietario;
 import Modelo.ClienteDAO;
 import Modelo.FichaControlDAO;
@@ -358,11 +358,11 @@ public class ControladorCliente implements ActionListener, MouseListener, TableM
  }
     
     public void llenarTabla(){
-        List<ClientesPorLotes> clientesPorLotes = new ArrayList<>();
+        List<ClientesPorCriterio> listaClientes = new ArrayList<>();
         if(vistaClientes.comboApellido.getSelectedItem().toString()=="Seleccione"){
-            clientesPorLotes = cd.clientesPorLotes();}
+            listaClientes = cd.clientesPorLotes();}
         else{
-//            clientesPorLotes = cd.clientesPorPropietarios(apellidos, nombres);
+           listaClientes = cd.clientesPorPropietarios(apellidos, nombres);
         }        
         DefaultTableModel model = (DefaultTableModel) vistaClientes.tablaCliente.getModel();
         model.setRowCount(0);
@@ -374,41 +374,41 @@ public class ControladorCliente implements ActionListener, MouseListener, TableM
         String aviso = "";
         String cumpleaños;
         try {
-            if(clientesPorLotes.size()>0){
-                for (int i = 0; i < clientesPorLotes.size(); i++) {
+            if(listaClientes.size()>0){
+                for (int i = 0; i < listaClientes.size(); i++) {
                    aviso = "";
                    icono = new JLabel();
                    cumpleaños = "0";
-                   int dni = clientesPorLotes.get(i).getDni();
-                   String apellidos = clientesPorLotes.get(i).getApellidos();
-                   String nombres = clientesPorLotes.get(i).getNombres();
-                   Date fecha_nacimiento = clientesPorLotes.get(i).getFecha_nacimiento();
+                   int dni = listaClientes.get(i).getDni();
+                   String apellidos = listaClientes.get(i).getApellidos();
+                   String nombres = listaClientes.get(i).getNombres();
+                   Date fecha_nacimiento = listaClientes.get(i).getFecha_nacimiento();
                     //------Controlo dia y mes para saber si es el cumpleaños--------//
-                   if(LocalDate.now().getMonthOfYear()==new LocalDate(clientesPorLotes.get(i).getFecha_nacimiento()).getMonthOfYear() && LocalDate.now().getDayOfMonth()==new LocalDate(clientesPorLotes.get(i).getFecha_nacimiento()).getDayOfMonth()){
+                   if(LocalDate.now().getMonthOfYear()==new LocalDate(listaClientes.get(i).getFecha_nacimiento()).getMonthOfYear() && LocalDate.now().getDayOfMonth()==new LocalDate(listaClientes.get(i).getFecha_nacimiento()).getDayOfMonth()){
                     cumpleaños = "1";
                    }
-                   String barrio = clientesPorLotes.get(i).getBarrio_cliente();
-                   String calle = clientesPorLotes.get(i).getCalle_cliente();
-                   int numero = clientesPorLotes.get(i).getNro_cliente();
-                   String telefono1 = clientesPorLotes.get(i).getTelefono1();
-                   String telefono2 = clientesPorLotes.get(i).getTelefono2();
-                   String trabajo = clientesPorLotes.get(i).getTrabajo();
-                   int baja = clientesPorLotes.get(i).getBaja();
-                   int idControl = clientesPorLotes.get(i).getIdControl();
-                   int cantidad_cuotas = clientesPorLotes.get(i).getCantidad_cuotas();
-                   BigDecimal gastos = clientesPorLotes.get(i).getGastos();
-                   BigDecimal bolsa_cemento = clientesPorLotes.get(i).getBolsa_cemento();
-                   if(clientesPorLotes.get(i).getFecha_actualizacion()!=null){
-                    fch_actualizacion = sdf.format(clientesPorLotes.get(i).getFecha_actualizacion());
+                   String barrio = listaClientes.get(i).getBarrio_cliente();
+                   String calle = listaClientes.get(i).getCalle_cliente();
+                   int numero = listaClientes.get(i).getNro_cliente();
+                   String telefono1 = listaClientes.get(i).getTelefono1();
+                   String telefono2 = listaClientes.get(i).getTelefono2();
+                   String trabajo = listaClientes.get(i).getTrabajo();
+                   int baja = listaClientes.get(i).getBaja();
+                   String idControl = listaClientes.get(i).getIdControl();
+                   int cantidad_cuotas = listaClientes.get(i).getCantidad_cuotas();
+                   BigDecimal gastos = listaClientes.get(i).getGastos();
+                   BigDecimal bolsa_cemento = listaClientes.get(i).getBolsa_cemento();
+                   if(listaClientes.get(i).getFecha_actualizacion()!=null){
+                    fch_actualizacion = sdf.format(listaClientes.get(i).getFecha_actualizacion());
                     //----Controlo si ya paso un año de la ultima fecha de actualizacion de la bolsa de cemento----//
-                     if((Years.yearsBetween(new LocalDate(clientesPorLotes.get(i).getFecha_actualizacion()), LocalDate.now())).getYears()>=1){
+                     if((Years.yearsBetween(new LocalDate(listaClientes.get(i).getFecha_actualizacion()), LocalDate.now())).getYears()>=1){
                          actualizar_cemento = "1";
                      }else{
                           actualizar_cemento = "0";
                      }
                      //-------------------------------------//
                      //------Controla si pasaron 6 meses desde la ultima actualizacion del precio de la bolsa de cemento para calcular amortizacion--------------//
-                     if(((Months.monthsBetween(new LocalDate(clientesPorLotes.get(i).getFecha_actualizacion()), LocalDate.now())).getMonths())%5==0 && (Months.monthsBetween(new LocalDate(clientesPorLotes.get(i).getFecha_actualizacion()), LocalDate.now())).getMonths()!=0){
+                     if(((Months.monthsBetween(new LocalDate(listaClientes.get(i).getFecha_actualizacion()), LocalDate.now())).getMonths())%5==0 && (Months.monthsBetween(new LocalDate(listaClientes.get(i).getFecha_actualizacion()), LocalDate.now())).getMonths()!=0){
                          icono.setIcon(icon);
                          icono.setHorizontalAlignment(SwingConstants.CENTER);
                      }else{
@@ -419,11 +419,11 @@ public class ControladorCliente implements ActionListener, MouseListener, TableM
                     fch_actualizacion = "";
                     actualizar_cemento = "0";
                 } 
-                String barrio_prop = clientesPorLotes.get(i).getBarrio();
-                int manzana_prop = clientesPorLotes.get(i).getManzana();
-                int parcela_prop = clientesPorLotes.get(i).getParcela();
-                String observaciones = clientesPorLotes.get(i).getObservacion();
-                BigDecimal cuota_pura = clientesPorLotes.get(i).getCuota_pura();   
+                String barrio_prop = listaClientes.get(i).getBarrio();
+                String manzana_prop = listaClientes.get(i).getManzana();
+                String parcela_prop = listaClientes.get(i).getParcela();
+                String observaciones = listaClientes.get(i).getObservacion();
+                BigDecimal cuota_pura = listaClientes.get(i).getCuota_pura();   
                 clientes = new Object[] {apellidos, nombres, dni, telefono1, telefono2, barrio, calle, numero, fecha_nacimiento, trabajo, baja, idControl, cantidad_cuotas, gastos, bolsa_cemento, fch_actualizacion, barrio_prop, manzana_prop, parcela_prop, observaciones, actualizar_cemento, cumpleaños, cuota_pura, icono};
                 model.addRow(clientes); 
                 }
@@ -477,8 +477,8 @@ public class ControladorCliente implements ActionListener, MouseListener, TableM
 //                String parcela_prop = rs.getString(19);  
 //                String observaciones = rs.getString(20);
 //                String cuota_pura = rs.getString(21);
-//                clientes = new Object[] {apellidos, nombres, dni, telefono1, telefono2, barrio, calle, numero, fecha_nacimiento, trabajo, baja, idControl, cantidad_cuotas, gastos, bolsa_cemento, fch_actualizacion, barrio_prop, manzana_prop, parcela_prop, observaciones, actualizar_cemento, cumpleaños, cuota_pura, icono};
-//                model.addRow(clientes);   
+//                listaClientes = new Object[] {apellidos, nombres, dni, telefono1, telefono2, barrio, calle, numero, fecha_nacimiento, trabajo, baja, idControl, cantidad_cuotas, gastos, bolsa_cemento, fch_actualizacion, barrio_prop, manzana_prop, parcela_prop, observaciones, actualizar_cemento, cumpleaños, cuota_pura, icono};
+//                model.addRow(listaClientes);   
 //             }
             controlCumpleaños();
                 
@@ -494,7 +494,7 @@ public class ControladorCliente implements ActionListener, MouseListener, TableM
         DefaultTableModel model = (DefaultTableModel) vistaClientes.tablaCliente.getModel();
         DefaultTableModel modeloCumpleaños = (DefaultTableModel) dialogCumpleaños.tablaCumpleaños.getModel();
         modeloCumpleaños.setRowCount(0);
-        //----Verifico que la tabla de clientes tenga al menos una fila--------//
+        //----Verifico que la tabla de listaClientes tenga al menos una fila--------//
         if(model.getRowCount()!=0){            
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
         for (int i = 0; i < model.getRowCount(); i++) {

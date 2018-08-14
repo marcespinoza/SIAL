@@ -73,7 +73,7 @@ public class Clientes extends javax.swing.JPanel {
                 Component c = super.prepareRenderer(renderer, rowIndex, vColIndex);
                 //---Pinto de rosado si el cliente no tiene propiedad asignada---//
 
-                if(tablaCliente.getValueAt(rowIndex, 11).equals(0)){
+                if(tablaCliente.getValueAt(rowIndex, 11)==null){
                     c.setBackground(Color.PINK);
                 }
                 //-----Pinto de rojo si el cliente esta dado de baja--//

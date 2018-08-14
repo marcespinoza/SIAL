@@ -5,7 +5,7 @@
  */
 package Modelo;
 
-import Clases.ClientesPorLotes;
+import Clases.ClientesPorCriterio;
 import Clases.Lote;
 import conexion.Conexion;
 import java.sql.Connection;
@@ -30,39 +30,39 @@ public class ClienteDAO {
     
  public void obtenerClientes(){}
  
- public List<ClientesPorLotes> clientesPorLotes(){
+ public List<ClientesPorCriterio> clientesPorLotes(){
      ResultSet rs = null;
      Connection connection = null;
-     List<ClientesPorLotes> clientesPorLotes = new ArrayList<>();
+     List<ClientesPorCriterio> clientesPorLotes = new ArrayList<>();
      try {
           connection = conexion.dataSource.getConnection();
           String listar = "SELECT c.Dni, c.Apellidos, c.Nombres,c.fecha_nacimiento, c.barrio, c.calle, c.numero, c.Telefono1, c.telefono2, c.trabajo, h.baja, f.Id_control, f.cantidad_cuotas, f.gastos, f.bolsa_cemento, f.fecha_actualizacion, f.lote_Barrio, f.lote_Manzana, f.lote_Parcela,f.observacion, f.cuota_pura FROM (cliente c LEFT JOIN cliente_tiene_lote h ON c.Dni = h.cliente_Dni) left join ficha_control_lote f on f.Id_control=h.Id_control GROUP BY f.Id_control, c.dni, ifnull(f.Id_control, c.Dni) order by c.apellidos"; 
           Statement st = connection.createStatement();
           rs = st.executeQuery(listar);
           while (rs.next()) {
-            ClientesPorLotes cpl = new ClientesPorLotes();
-            cpl.setDni(rs.getInt(1));
-            cpl.setApellidos(rs.getString(2));
-            cpl.setNombres(rs.getString(3));
-            cpl.setFecha_nacimiento(rs.getDate(4));
-            cpl.setBarrio_cliente(rs.getString(5));
-            cpl.setCalle_cliente(rs.getString(6));
-            cpl.setNro_cliente(rs.getInt(7));
-            cpl.setTelefono1(rs.getString(8));
-            cpl.setTelefono2(rs.getString(9));
-            cpl.setTrabajo(rs.getString(10));
-            cpl.setBaja(rs.getInt(11));
-            cpl.setIdControl(rs.getInt(12));
-            cpl.setCantidad_cuotas(rs.getInt(13));
-            cpl.setGastos(rs.getBigDecimal(14));
-            cpl.setBolsa_cemento(rs.getBigDecimal(15));
-            cpl.setFecha_actualizacion(rs.getDate(16));
-            cpl.setBarrio(rs.getString(17));
-            cpl.setManzana(rs.getInt(18));
-            cpl.setParcela(rs.getInt(19));
-            cpl.setObservacion(rs.getString(20));
-            cpl.setCuota_pura(rs.getBigDecimal(21));
-            clientesPorLotes.add(cpl);
+            ClientesPorCriterio cpp = new ClientesPorCriterio();
+            cpp.setDni(rs.getInt(1));
+            cpp.setApellidos(rs.getString(2));
+            cpp.setNombres(rs.getString(3));
+            cpp.setFecha_nacimiento(rs.getDate(4));
+            cpp.setBarrio_cliente(rs.getString(5));
+            cpp.setCalle_cliente(rs.getString(6));
+            cpp.setNro_cliente(rs.getInt(7));
+            cpp.setTelefono1(rs.getString(8));
+            cpp.setTelefono2(rs.getString(9));
+            cpp.setTrabajo(rs.getString(10));
+            cpp.setBaja(rs.getInt(11));
+            cpp.setIdControl(rs.getString(12));
+            cpp.setCantidad_cuotas(rs.getInt(13));
+            cpp.setGastos(rs.getBigDecimal(14));
+            cpp.setBolsa_cemento(rs.getBigDecimal(15));
+            cpp.setFecha_actualizacion(rs.getDate(16));
+            cpp.setBarrio(rs.getString(17));
+            cpp.setManzana(rs.getString(18));
+            cpp.setParcela(rs.getString(19));
+            cpp.setObservacion(rs.getString(20));
+            cpp.setCuota_pura(rs.getBigDecimal(21));
+            clientesPorLotes.add(cpp);
          }
         } catch (SQLException ex) {
           System.out.println(ex.getMessage());
@@ -209,17 +209,48 @@ public class ClienteDAO {
      return rs;
  }
  
-   public ResultSet clientesPorPropietarios(String apellido, String nombre){
+   public List<ClientesPorCriterio> clientesPorPropietarios(String apellido, String nombre){
      ResultSet rs = null;
+     Connection connection = null;
+     List<ClientesPorCriterio> clientesPorPropietario = new ArrayList<>();
      try {
-          Connection con = conexion.dataSource.getConnection();
+          connection = conexion.dataSource.getConnection();
           String listar = "SELECT DISTINCT c.Dni, c.Apellidos, c.Nombres,c.fecha_nacimiento, c.barrio, c.calle, c.numero, c.Telefono1, c.telefono2, c.trabajo, cl.baja, f.Id_control, f.cantidad_cuotas, f.gastos, f.bolsa_cemento, f.fecha_actualizacion, f.lote_Barrio, f.lote_Manzana, f.lote_Parcela from ((((cliente c INNER join cliente_tiene_lote cl on c.dni=cl.cliente_dni) INNER join ficha_control_lote f on cl.id_control=f.id_control) INNER join lote l on f.lote_barrio=l.barrio) INNER join lote l2 on l2.manzana=f.lote_manzana) INNER join lote l3 on l3.parcela=f.lote_parcela where l3.propietario_Apellidos='"+apellido+"' and l3.propietario_Nombres='"+nombre+"'"; 
-          Statement st = con.createStatement();
+          Statement st = connection.createStatement();
           rs = st.executeQuery(listar);
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
+          while (rs.next()) {
+            ClientesPorCriterio cpp = new ClientesPorCriterio();
+            cpp.setDni(rs.getInt(1));
+            cpp.setApellidos(rs.getString(2));
+            cpp.setNombres(rs.getString(3));
+            cpp.setFecha_nacimiento(rs.getDate(4));
+            cpp.setBarrio_cliente(rs.getString(5));
+            cpp.setCalle_cliente(rs.getString(6));
+            cpp.setNro_cliente(rs.getInt(7));
+            cpp.setTelefono1(rs.getString(8));
+            cpp.setTelefono2(rs.getString(9));
+            cpp.setTrabajo(rs.getString(10));
+            cpp.setBaja(rs.getInt(11));
+            cpp.setIdControl(rs.getString(12));
+            cpp.setCantidad_cuotas(rs.getInt(13));
+            cpp.setGastos(rs.getBigDecimal(14));
+            cpp.setBolsa_cemento(rs.getBigDecimal(15));
+            cpp.setFecha_actualizacion(rs.getDate(16));
+            cpp.setBarrio(rs.getString(17));
+            cpp.setManzana(rs.getString(18));
+            cpp.setParcela(rs.getString(19));
+            clientesPorPropietario.add(cpp);
+         }
+        } catch (SQLException ex) {
+          System.out.println(ex.getMessage());
+        }finally{
+              try {
+                  connection.close();
+              } catch (SQLException ex) {
+                  Logger.getLogger(PropietarioDAO.class.getName()).log(Level.SEVERE, null, ex);
+              }
         }
-     return rs;
+     return clientesPorPropietario;
  }
 
     
