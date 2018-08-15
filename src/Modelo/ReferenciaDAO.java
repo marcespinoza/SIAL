@@ -5,6 +5,8 @@
  */
 package Modelo;
 
+import Clases.ClientesPorCriterio;
+import Clases.Referencia;
 import conexion.Conexion;
 import java.sql.Connection;
 import java.sql.Date;
@@ -12,6 +14,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -61,17 +65,33 @@ public class ReferenciaDAO {
             Logger.getLogger(ReferenciaDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
  }
- public ResultSet obtenerReferencia(int dni){
+ public List<Referencia> obtenerReferencia(int dni){
      ResultSet rs = null;
+     Connection connection = null;
+     List<Referencia> listaReferencia = new ArrayList<>();
      try {
-          Connection con = conexion.dataSource.getConnection();
+          connection = conexion.dataSource.getConnection();
           String listar = "SELECT apellidos, nombres, telefono, parentesco from referencia where cliente_dni = '"+dni+"' "; 
-          Statement st = con.createStatement();
+          Statement st = connection.createStatement();
           rs = st.executeQuery(listar);
+          while(rs.next()){
+              Referencia referencia = new Referencia();
+              referencia.setApellidos(rs.getString(1));
+              referencia.setNombres(rs.getString(2));
+              referencia.setTelefono(rs.getString(3));
+              referencia.setParentesco(rs.getString(4));
+              listaReferencia.add(referencia);
+          }
         } catch (Exception e) {
             System.out.println(e.getMessage());
+        }finally{
+          try {
+              connection.close();
+          } catch (SQLException ex) {
+              Logger.getLogger(PropietarioDAO.class.getName()).log(Level.SEVERE, null, ex);
+          }
         }
-     return rs;
+     return listaReferencia;
 
  }  
     

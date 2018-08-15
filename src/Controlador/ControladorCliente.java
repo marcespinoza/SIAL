@@ -7,6 +7,7 @@ package Controlador;
 
 import Clases.ClientesPorCriterio;
 import Clases.Propietario;
+import Clases.Referencia;
 import Modelo.ClienteDAO;
 import Modelo.FichaControlDAO;
 import Modelo.LoteDAO;
@@ -547,17 +548,17 @@ public class ControladorCliente implements ActionListener, MouseListener, TableM
         }else{
             vistaClientes.advertencia.setText("");
         }
-        ResultSet rs = rd.obtenerReferencia(Integer.parseInt(vistaClientes.tablaCliente.getModel().getValueAt(row,2).toString()));
-        try {
-            while(rs.next()){
-                vistaClientes.apellido_referencia.setText(rs.getString(1));
-                vistaClientes.nombre_referencia.setText(rs.getString(2));
-                vistaClientes.telefono_referencia.setText(rs.getString(3));
-                vistaClientes.parentesco.setText(rs.getString(4));                
+         List<Referencia> listaReferencia = new ArrayList<>();
+        listaReferencia = rd.obtenerReferencia(Integer.parseInt(vistaClientes.tablaCliente.getModel().getValueAt(row,2).toString()));
+        if(listaReferencia.size()!=0){
+            for (int i = 0; i < listaReferencia.size(); i++) {
+                vistaClientes.apellido_referencia.setText(listaReferencia.get(i).getApellidos());
+                vistaClientes.nombre_referencia.setText(listaReferencia.get(i).getNombres());
+                vistaClientes.telefono_referencia.setText(listaReferencia.get(i).getTelefono());
+                vistaClientes.parentesco.setText(listaReferencia.get(i).getParentesco()); 
             }
-        } catch (SQLException ex) {
-            System.out.println(ex.getMessage());
         }
+        
     }
     
     

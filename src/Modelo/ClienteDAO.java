@@ -244,11 +244,11 @@ public class ClienteDAO {
         } catch (SQLException ex) {
           System.out.println(ex.getMessage());
         }finally{
-              try {
-                  connection.close();
-              } catch (SQLException ex) {
-                  Logger.getLogger(PropietarioDAO.class.getName()).log(Level.SEVERE, null, ex);
-              }
+          try {
+              connection.close();
+          } catch (SQLException ex) {
+              Logger.getLogger(PropietarioDAO.class.getName()).log(Level.SEVERE, null, ex);
+          }
         }
      return clientesPorPropietario;
  }
