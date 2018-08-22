@@ -304,8 +304,9 @@ public class ControladorCliente implements ActionListener, MouseListener, TableM
         if (e.getSource() == vistaClientes.asignarBtn) {
            int row = vistaClientes.tablaCliente.getSelectedRow();
            if(row != -1){
-               //-----Controlo si ya tiene asignada una propiedad
-               if(vistaClientes.tablaCliente.getModel().getValueAt(vistaClientes.tablaCliente.convertRowIndexToModel(row), 10)== null){
+               //-----Controlo si ya tiene asignada una propiedad-----------//
+               System.out.println(vistaClientes.tablaCliente.getModel().getValueAt(vistaClientes.tablaCliente.convertRowIndexToModel(row),10)+"propiedad");
+               if(vistaClientes.tablaCliente.getModel().getValueAt(vistaClientes.tablaCliente.convertRowIndexToModel(row), 11)== null){
                    //------Paso el dni para crear la ficha de control---------//
                    new ControladorAsignacionPropiedad((Frame) SwingUtilities.getWindowAncestor(vistaClientes), Integer.parseInt(vistaClientes.tablaCliente.getModel().getValueAt(vistaClientes.tablaCliente.convertRowIndexToModel(row), 2).toString()));
                  llenarTabla();
@@ -429,60 +430,7 @@ public class ControladorCliente implements ActionListener, MouseListener, TableM
                 model.addRow(clientes); 
                 }
             }
-//            while(rs.next()){
-//                aviso = "";
-//                icono = new JLabel();
-//                cumpleaños = "0";
-//                String dni = rs.getString(1);
-//                String apellidos = rs.getString(2);
-//                String nombres = rs.getString(3);
-//                String fecha_nacimiento = rs.getString(4);
-//                //------Controlo dia y mes para saber si es el cumpleaños--------//
-//                if(LocalDate.now().getMonthOfYear()==new LocalDate(rs.getDate(4)).getMonthOfYear() && LocalDate.now().getDayOfMonth()==new LocalDate(rs.getDate(4)).getDayOfMonth()){
-//                    cumpleaños = "1";
-//                }
-//                String barrio = rs.getString(5);                
-//                String calle = rs.getString(6);
-//                String numero = rs.getString(7);                
-//                String telefono1 = rs.getString(8);
-//                String telefono2 = rs.getString(9);
-//                String trabajo = rs.getString(10);
-//                String baja = rs.getString(11);
-//                String idControl = rs.getString(12);
-//                String cantidad_cuotas = rs.getString(13);
-//                String gastos = rs.getString(14);
-//                String bolsa_cemento = rs.getString(15);                           
-//                if(rs.getDate(16)!=null){
-//                    fch_actualizacion = sdf.format(rs.getDate(16));
-//                    //----Controlo si ya paso un año de la ultima fecha de actualizacion de la bolsa de cemento----//
-//                     if((Years.yearsBetween(new LocalDate(rs.getDate(16)), LocalDate.now())).getYears()>=1){
-//                         actualizar_cemento = "1";
-//                     }else{
-//                          actualizar_cemento = "0";
-//                     }
-//                     //-------------------------------------//
-//                     //------Controla si pasaron 6 meses desde la ultima actualizacion del precio de la bolsa de cemento para calcular amortizacion--------------//
-//                     if(((Months.monthsBetween(new LocalDate(rs.getDate(16)), LocalDate.now())).getMonths())%5==0 && (Months.monthsBetween(new LocalDate(rs.getDate(16)), LocalDate.now())).getMonths()!=0){
-//                         icono.setIcon(icon);
-//                         icono.setHorizontalAlignment(SwingConstants.CENTER);
-//                     }else{
-//                         icono.setIcon(null);
-//                     }
-//                     //----------------------------//
-//                }else{
-//                    fch_actualizacion = "";
-//                    actualizar_cemento = "0";
-//                }               
-//                String barrio_prop = rs.getString(17);
-//                String manzana_prop = rs.getString(18);
-//                String parcela_prop = rs.getString(19);  
-//                String observaciones = rs.getString(20);
-//                String cuota_pura = rs.getString(21);
-//                listaClientes = new Object[] {apellidos, nombres, dni, telefono1, telefono2, barrio, calle, numero, fecha_nacimiento, trabajo, baja, idControl, cantidad_cuotas, gastos, bolsa_cemento, fch_actualizacion, barrio_prop, manzana_prop, parcela_prop, observaciones, actualizar_cemento, cumpleaños, cuota_pura, icono};
-//                model.addRow(listaClientes);   
-//             }
-            controlCumpleaños();
-                
+            controlCumpleaños();                
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }

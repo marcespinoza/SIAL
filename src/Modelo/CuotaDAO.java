@@ -31,16 +31,42 @@ public class CuotaDAO {
         conexion = new Conexion();
     }
     
-    public ResultSet listaDetalleCuotaXsaldo(int idControl){
-         ResultSet rs = null;
+    public List<Cuota> listaDetalleCuotaXsaldo(int idControl){
+          ResultSet rs = null;
+          Connection connection = null;
+          List<Cuota> cuotas = new ArrayList<>();
      try {
-          Connection con = conexion.dataSource.getConnection();
+          connection = conexion.dataSource.getConnection();
           String listar = "SELECT nro_cuota, fecha, detalle, cuota_pura, gastos_administrativos, debe, haber, saldo, cemento_debe, cemento_haber, cemento_saldo, observaciones, tipo_pago from linea_control_lote where id_Control = '"+idControl+"' order by saldo desc "; 
-          Statement st = con.createStatement();
+          Statement st = connection.createStatement();
           rs = st.executeQuery(listar);
+           while (rs.next()) {
+                Cuota c = new Cuota();
+                c.setNro_cuota(rs.getInt(1));
+                c.setFecha(rs.getDate(2));
+                c.setDetalle(rs.getString(3));
+                c.setCuota_pura(rs.getBigDecimal(4));
+                c.setGastos_administrativos(rs.getBigDecimal(5));
+                c.setDebe(rs.getBigDecimal(6));
+                c.setHaber(rs.getBigDecimal(7));
+                c.setSaldo(rs.getBigDecimal(8));
+                c.setCemente_debe(rs.getBigDecimal(9));
+                c.setCemento_haber(rs.getBigDecimal(10));
+                c.setCemento_saldo(rs.getBigDecimal(11));
+                c.setObservaciones(rs.getString(12));
+                c.setTipo_pago(rs.getString(13));
+                cuotas.add(c);
+            } 
         } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }finally{
+              try {
+                  connection.close();
+              } catch (SQLException ex) {
+                  Logger.getLogger(PropietarioDAO.class.getName()).log(Level.SEVERE, null, ex);
+              }
         }
-     return rs;
+     return cuotas;
     }
     
     public List<Cuota> listaDetalleCuota(int idControl){

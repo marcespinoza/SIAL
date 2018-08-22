@@ -5,6 +5,7 @@
  */
 package Modelo;
 
+import Clases.FichaDeControl;
 import conexion.Conexion;
 import java.math.BigDecimal;
 import java.sql.Connection;
@@ -13,6 +14,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -44,16 +47,31 @@ public class FichaControlDAO {
      return id_control;
     }
     
-    public ResultSet obtenerFichaControl(){
-     ResultSet rs = null;
+    public List<FichaDeControl> obtenerFichaControl(){
+         ResultSet rs = null;
+         Connection connection = null;
+         List<FichaDeControl> listaFichaControl = new ArrayList<>();
      try {
-          Connection con = conexion.dataSource.getConnection();
+          connection = conexion.dataSource.getConnection();
           String listar = "SELECT precio, gastos, bolsa_cemento FROM cliente c LEFT JOIN ficha_control_lote f ON c.Dni = f.Dni"; 
-          Statement st = con.createStatement();
+          Statement st = connection.createStatement();
           rs = st.executeQuery(listar);
+          while(rs.next()){
+              FichaDeControl fc = new FichaDeControl();
+              fc.setPrecio(rs.getBigDecimal(1));
+              fc.setGastos(rs.getBigDecimal(2));
+              fc.setBolsaCemento(rs.getBigDecimal(3));
+              listaFichaControl.add(fc);
+          }
         } catch (Exception e) {
+        }finally{
+          try {
+              connection.close();
+          } catch (SQLException ex) {
+              Logger.getLogger(PropietarioDAO.class.getName()).log(Level.SEVERE, null, ex);
+          }
         }
-     return rs;
+     return listaFichaControl;
  }
     
      public ResultSet obtenerMontoCuotas(){
@@ -68,17 +86,31 @@ public class FichaControlDAO {
      return rs;
  }
     
-    public ResultSet obtenerFichaControl(int id_control){
-     ResultSet rs = null;
+    public List<FichaDeControl> obtenerFichaControl(int id_control){
+         ResultSet rs = null;
+         Connection connection = null;
+         List<FichaDeControl> listaFichaControl = new ArrayList<>();
      try {
-          Connection con = conexion.dataSource.getConnection();
-          String listar = "SELECT dimension, cantidad_cuotas, cuota_pura, gastos, bolsa_cemento, lote_barrio, lote_manzana, lote_parcela,dimension , gastos, cuota_pura FROM ficha_control_lote where id_control = '"+id_control+"'"; 
-          Statement st = con.createStatement();
+          connection = conexion.dataSource.getConnection();
+          String listar = "SELECT dimension, cantidad_cuotas, cuota_pura, gastos, bolsa_cemento, lote_barrio, lote_manzana, lote_parcela FROM ficha_control_lote where id_control = '"+id_control+"'"; 
+          Statement st = connection.createStatement();
           rs = st.executeQuery(listar);
+          while(rs.next()){
+              FichaDeControl fc = new FichaDeControl();
+              fc.setDimension(rs.getString(1));
+              fc.setCantidadCuotas(rs.getInt(2));
+              fc.setCuotaPura(rs.getBigDecimal(3));
+              fc.setGastos(rs.getBigDecimal(4));
+              fc.setBolsaCemento(rs.getBigDecimal(5));
+              fc.setBarrio(rs.getString(6));
+              fc.setManzana(rs.getInt(7));
+              fc.setParcela(rs.getInt(8));
+              listaFichaControl.add(fc);
+          }
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
-     return rs;
+     return listaFichaControl;
  }
     
     public int obtenerIdControl(){

@@ -1,7 +1,9 @@
 
 package Controlador;
 
-import static Controlador.ControladorAltaPago.log;
+import Clases.Cuota;
+import Clases.FichaDeControl;
+import static Controlador.ControladorAltaCuota.log;
 import Modelo.CuotaDAO;
 import Modelo.FichaControlDAO;
 import Vista.Dialogs.ActualizarCuota;
@@ -15,7 +17,9 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import javax.swing.BorderFactory;
 import javax.swing.border.EtchedBorder;
 
@@ -119,22 +123,19 @@ public class ControladorActualizarCuota implements ActionListener{
     }
     
     public void actualizarPago(){
+        List<FichaDeControl> listaFichaControl = new ArrayList<>();
+        List<Cuota> cuotas = new ArrayList<>();
         if(validarCampos()){           
-               ResultSet rs = fc.obtenerFichaControl(id_control);
-               ResultSet rs_cuota = cd.listaDetalleCuotaXsaldo(id_control);
-               try {
-                   rs.next();
-                   rs_cuota.last();
-                   rs_cuota.previous();
-                   BigDecimal ultimo_saldo = new BigDecimal(rs_cuota.getString(8));                   
+               listaFichaControl = fc.obtenerFichaControl(id_control);
+               cuotas = cd.listaDetalleCuotaXsaldo(id_control);
+                                  
+                   BigDecimal ultimo_saldo =cuotas.get(cuotas.size()-1).getSaldo();                   
                    BigDecimal cuota_pura = new BigDecimal(ac.cuota_total.getText()).subtract(new BigDecimal(ac.gastos.getText()));
                    BigDecimal gastos = new BigDecimal(ac.gastos.getText());
-                   BigDecimal bolsa_cemento = new BigDecimal(rs.getString(5));
-                   BigDecimal ultimo_saldo_bolsa_cemento = new BigDecimal(rs_cuota.getString(11));            
+                   BigDecimal bolsa_cemento = listaFichaControl.get(0).getBolsaCemento();
+                   BigDecimal ultimo_saldo_bolsa_cemento =cuotas.get(cuotas.size()-1).getCemento_saldo();            
                    calcularValores(ultimo_saldo, cuota_pura, gastos, bolsa_cemento, ultimo_saldo_bolsa_cemento);             
-                } catch (SQLException ex) {
-                    System.out.println(ex.getMessage());
-               }
+                
            }  
     }
     

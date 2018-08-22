@@ -6,6 +6,7 @@
 package Controlador;
 
 import Clases.Cuota;
+import Clases.FichaDeControl;
 import Modelo.CuotaDAO;
 import Modelo.DchoPosesionDAO;
 import Modelo.FichaControlDAO;
@@ -45,6 +46,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Properties;
@@ -225,7 +227,7 @@ public class ControladorDetalleCuota implements ActionListener, TableModelListen
             cl.next(Ventana.panelPrincipal);
         }
         if(e.getSource() == dc.agregarPagoBtn){
-            new ControladorAltaPago((Frame) SwingUtilities.getWindowAncestor(dc), id_control, dc.tablaDetallePago.getRowCount(), nro_cuotas);
+            new ControladorAltaCuota((Frame) SwingUtilities.getWindowAncestor(dc), id_control, dc.tablaDetallePago.getRowCount(), nro_cuotas);
             llenarTabla(id_control);
             llearTablaDchoPosesion(id_control);
         }
@@ -333,12 +335,12 @@ public class ControladorDetalleCuota implements ActionListener, TableModelListen
     }
     
     private void generarResumenPdf(){
+            List<FichaDeControl> listaFichaControl = new ArrayList<>();
             Document document= new Document(PageSize.A4);
             //DateFormat fecha1 = new SimpleDateFormat("dd/MM/yyyy");
             Font f=new Font(Font.FontFamily.TIMES_ROMAN,10.0f,0,null);
-            ResultSet rs = fcd.obtenerFichaControl(id_control); 
+            listaFichaControl = fcd.obtenerFichaControl(id_control); 
         try {
-            rs.next();
             PdfWriter.getInstance(document, new FileOutputStream(new File(dc.path.getText(), "Resumen "+dc.nombreLabel.getText()+" "+ dc.apellidoLabel.getText()+".pdf")));
             document.open();       
             Image image = Image.getInstance(IMG); 
@@ -356,7 +358,7 @@ public class ControladorDetalleCuota implements ActionListener, TableModelListen
             document.add( Chunk.NEWLINE );
             document.add(new Paragraph("Apellido y nombres: "+dc.nombreLabel.getText()+" "+ dc.apellidoLabel.getText(),f));
             document.add(new Paragraph("Direcciòn: "+dc.direccionLabel.getText(),f));
-            document.add(new Paragraph("Propiedad: "+rs.getString(6)+" - Mz: "+rs.getString(7)+" - Pc: "+rs.getString(8),f));
+            document.add(new Paragraph("Propiedad: "+listaFichaControl.get(0).getBarrio()+" - Mz: "+listaFichaControl.get(0).getManzana()+" - Pc: "+listaFichaControl.get(0).getParcela(),f));
             document.add( Chunk.NEWLINE );
             //------Cabeceras de las columnas de las cuotas---------//
             if(dc.tablaDetallePago.getRowCount()!=1){//---Si la tabla tiene 1 fila no imprimo cabeceras----//

@@ -5,6 +5,7 @@
  */
 package Controlador;
 
+import Clases.FichaDeControl;
 import Modelo.ClienteDAO;
 import Modelo.CuotaDAO;
 import Modelo.FichaControlDAO;
@@ -43,7 +44,9 @@ import java.math.BigDecimal;
 import java.sql.ResultSet;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -203,15 +206,15 @@ public class ControladorRecibo implements ActionListener{
     }
     
     private void datosPropiedad(){
-        ResultSet rs = fcd.obtenerFichaControl(id_control);        
-        try {
-            rs.next();            
-            dimension = rs.getString(1);
-            cant_cuotas = rs.getInt(2);
-            categoria = new BigDecimal(rs.getString(3)).add(new BigDecimal(rs.getString(4)));
-            barrio= rs.getString(6);
-            manzana = rs.getInt(7);
-            parcela = rs.getInt(8);
+        List<FichaDeControl> listaFichaControl = new ArrayList<>();
+        listaFichaControl = fcd.obtenerFichaControl(id_control);        
+        try {            
+            dimension = listaFichaControl.get(0).getDimension();
+            cant_cuotas = listaFichaControl.get(0).getCantidadCuotas();
+            categoria = listaFichaControl.get(0).getCuotaPura().add(listaFichaControl.get(0).getGastos());
+            barrio= listaFichaControl.get(0).getBarrio();
+            manzana = listaFichaControl.get(0).getManzana();
+            parcela = listaFichaControl.get(0).getParcela();
             //------Si es 1 es cuota-------//
             if(tipoPago==1){
              cuota_total = new BigDecimal(dc.tablaDetallePago.getModel().getValueAt(row, 3).toString());

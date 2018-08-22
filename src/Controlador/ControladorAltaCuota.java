@@ -5,6 +5,8 @@
  */
 package Controlador;
 
+import Clases.Cuota;
+import Clases.FichaDeControl;
 import Modelo.CuotaDAO;
 import Modelo.DchoPosesionDAO;
 import Modelo.FichaControlDAO;
@@ -23,7 +25,9 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.BorderFactory;
@@ -35,7 +39,7 @@ import javax.swing.event.DocumentListener;
  *
  * @author Marcelo
  */
-public class ControladorAltaPago implements ActionListener, KeyListener{
+public class ControladorAltaCuota implements ActionListener, KeyListener{
     
     Frame parent;
     CuotaDAO cd = new CuotaDAO();
@@ -48,7 +52,7 @@ public class ControladorAltaPago implements ActionListener, KeyListener{
     BigDecimal gastos;
     private int filas_insertadas=0;
     static org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(ControladorCliente.class.getName());
-    public ControladorAltaPago(Frame parent, int id_control, int row_count, int nro_cuota) {
+    public ControladorAltaCuota(Frame parent, int id_control, int row_count, int nro_cuota) {
         this.parent = parent;
         this.id_control=id_control;
         this.row_count=row_count;
@@ -102,8 +106,9 @@ public class ControladorAltaPago implements ActionListener, KeyListener{
         ac.porcentaje_gastos.addKeyListener(new KeyAdapter() {
             public void keyTyped(KeyEvent e) {
                   char vChar = e.getKeyChar();            
-                 if (!(Character.isDigit(vChar))) {
-                e.consume();}
+                 if (!(Character.isDigit(vChar)) && !(e.getKeyChar() == '.')) {
+                    e.consume();
+                 }
             }            
         });
         rellenarCampos();
@@ -130,11 +135,11 @@ public class ControladorAltaPago implements ActionListener, KeyListener{
     }
     
     public void rellenarCampos(){
+        List<FichaDeControl> listaFichaControl = new ArrayList<>();
         try {
             FichaControlDAO fcd = new FichaControlDAO();
-            ResultSet rs = fcd.obtenerFichaControl(id_control);
-            rs.next();
-            cuota_total = new BigDecimal (rs.getString(3)).add(new BigDecimal(rs.getString(4)));
+            listaFichaControl = fcd.obtenerFichaControl(id_control);
+            cuota_total = listaFichaControl.get(listaFichaControl.size()-1).getCuotaPura().add(listaFichaControl.get(listaFichaControl.size()-1).getGastos());
             ac.cuota_total.setText(cuota_total.toString());
             nuevoGasto();
             //------Calculo el nro de cuota--------//
@@ -150,7 +155,7 @@ public class ControladorAltaPago implements ActionListener, KeyListener{
             ac.setVisible(true);
             
         } catch (SQLException ex) {
-            Logger.getLogger(ControladorAltaPago.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ControladorAltaCuota.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -211,7 +216,7 @@ public class ControladorAltaPago implements ActionListener, KeyListener{
                        
                    } catch (SQLException ex) {                       
                       log.equals(ex.getMessage());
-                       Logger.getLogger(ControladorAltaPago.class.getName()).log(Level.SEVERE, null, ex);
+                       Logger.getLogger(ControladorAltaCuota.class.getName()).log(Level.SEVERE, null, ex);
                    }
                   }else{
                      filas_insertadas = cd.altaCuotaLote(new java.sql.Date(date.getTime()),nro_cuota, detalle, cuota_pura, gastos, new BigDecimal(0), haber, saldo_actual, new BigDecimal(0), cemento_haber, cemento_saldo, observaciones, tipoPago, id_control);                    
@@ -243,40 +248,37 @@ public class ControladorAltaPago implements ActionListener, KeyListener{
     }
     
     public void altaPago(){
+      List<FichaDeControl> listafc = new ArrayList<>();  
       if(ac.chk_dcho_posesion.isSelected()){ 
                 if(validarCampos()){
                   Date date = new Date();     
-                  ResultSet rs = fc.obtenerFichaControl(id_control);
+                  listafc = fc.obtenerFichaControl(id_control);
                   ResultSet dpd = dp.listarCuenta(id_control);
                     try {
-                        rs.next();
                         dpd.last();
-                        BigDecimal bolsa_cemento = new BigDecimal(rs.getString(5));
+                        BigDecimal bolsa_cemento = listafc.get(listafc.size()-1).getBolsaCemento();
                         BigDecimal cemento_saldo = new BigDecimal(dpd.getString(6));
                         BigDecimal cant_bolsa = new BigDecimal(ac.cuota_total.getText()).divide(bolsa_cemento, 2, RoundingMode.DOWN);
                         dp.altaDchoPosesion(new java.sql.Date(date.getTime()), new BigDecimal(ac.cuota_total.getText()),new BigDecimal(ac.gastos.getText()),new BigDecimal(0),cant_bolsa, cemento_saldo.subtract(cant_bolsa),ac.detallePago.getText(), id_control);
                     } catch (SQLException ex) {
-                        Logger.getLogger(ControladorAltaPago.class.getName()).log(Level.SEVERE, null, ex);
+                        Logger.getLogger(ControladorAltaCuota.class.getName()).log(Level.SEVERE, null, ex);
                     }
                 ac.dispose();
                 }
              //--------Es cuota comun----------/     
        }else{
            if(validarCampos()){
-               System.out.println(id_control);
-               ResultSet rs = fc.obtenerFichaControl(id_control);
-               ResultSet rs_cuota = cd.listaDetalleCuotaXsaldo(id_control);
-               try {
-                   rs.next();
-                   rs_cuota.last();
-                   BigDecimal ultimo_saldo = new BigDecimal(rs_cuota.getString(8));
+               List<FichaDeControl> listaFichaControl = new ArrayList<>();
+               List<Cuota> cuotas = new ArrayList<>();
+               listaFichaControl = fc.obtenerFichaControl(id_control);
+               cuotas = cd.listaDetalleCuotaXsaldo(id_control);               
+                   BigDecimal ultimo_saldo = cuotas.get(cuotas.size()-1).getSaldo();
                    BigDecimal cuota_pura = new BigDecimal(ac.cuota_total.getText()).subtract(new BigDecimal(ac.gastos.getText()));
                    BigDecimal gastos = new BigDecimal(ac.gastos.getText());                   
-                   BigDecimal bolsa_cemento = new BigDecimal(rs.getString(5));                   
-                   BigDecimal ultimo_saldo_bolsa_cemento = new BigDecimal(rs_cuota.getString(11));
+                   BigDecimal bolsa_cemento = listaFichaControl.get(0).getBolsaCemento();
+                   BigDecimal ultimo_saldo_bolsa_cemento = cuotas.get(cuotas.size()-1).getCemento_saldo();
                    calcularValores(ultimo_saldo, cuota_pura, gastos, bolsa_cemento, ultimo_saldo_bolsa_cemento);             
-                } catch (SQLException ex) {
-               }
+                
              }             
           }
     }
