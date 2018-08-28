@@ -119,7 +119,7 @@ public class ControladorAltaCuota implements ActionListener, KeyListener{
             if(!ac.porcentaje_gastos.getText().equals("")){
                 BigDecimal gasto;
                 BigDecimal cuota_total = new BigDecimal(ac.cuota_total.getText());
-                 if(ac.chk_cuota.isSelected()){
+                 if(ac.chk_cuota.isSelected() || ac.chk_adelanto_cuota.isSelected()){
                      gasto = (cuota_total.multiply(new BigDecimal(ac.porcentaje_gastos.getText()))).divide(new BigDecimal("100"),2, BigDecimal.ROUND_HALF_UP);
 //                    gasto = cuota_total.subtract(cuota_total.divide((new BigDecimal(ac.porcentaje_gastos.getText()).divide(new BigDecimal(100))), 2, BigDecimal.ROUND_HALF_UP));
                  }else{
@@ -134,29 +134,29 @@ public class ControladorAltaCuota implements ActionListener, KeyListener{
              }
     }
     
-    public void rellenarCampos(){
-        List<FichaDeControl> listaFichaControl = new ArrayList<>();
-        try {
+   public void rellenarCampos(){
+        List<FichaDeControl> listaFc = new ArrayList<>();
+        List<Cuota>listaC = new ArrayList<>();
             FichaControlDAO fcd = new FichaControlDAO();
-            listaFichaControl = fcd.obtenerFichaControl(id_control);
-            cuota_total = listaFichaControl.get(listaFichaControl.size()-1).getCuotaPura().add(listaFichaControl.get(listaFichaControl.size()-1).getGastos());
+            listaFc = fcd.obtenerFichaControl(id_control);
+            cuota_total = listaFc.get(listaFc.size()-1).getCuotaPura().add(listaFc.get(listaFc.size()-1).getGastos());
             ac.cuota_total.setText(cuota_total.toString());
             nuevoGasto();
             //------Calculo el nro de cuota--------//
-            int cuota=0;
-            ResultSet rscuota = cd.getNrosCuotas(id_control);
-            rscuota.next();
-            cuota = rscuota.getInt(1);                     
-               while(rscuota.next()&& rscuota.getInt(1)-1==cuota){
-                  cuota=rscuota.getInt(1);                           
-                  }
+            int cuota = 0;
+            int indice = 0;
+            listaC = cd.getNrosCuotas(id_control);
+            if(!listaC.isEmpty()){
+              cuota = listaC.get(indice).getNro_cuota();
+              indice = indice + 1;
+              while(indice < listaC.size()&& listaC.get(indice).getNro_cuota()-1==cuota){
+               cuota=listaC.get(indice).getNro_cuota();
+               indice = indice + 1;
+              }
+            }
             ac.nro_cuota.setText(String.valueOf(cuota+1));
             //---------------------//
-            ac.setVisible(true);
-            
-        } catch (SQLException ex) {
-            Logger.getLogger(ControladorAltaCuota.class.getName()).log(Level.SEVERE, null, ex);
-        }
+            ac.setVisible(true);        
     }
 
     @Override
@@ -177,6 +177,7 @@ public class ControladorAltaCuota implements ActionListener, KeyListener{
                 ac.nro_cuota.setEnabled(false);
             }
             if(e.getSource()==ac.chk_adelanto_cuota){
+              nuevoGasto();
               ac.nro_cuota.setEnabled(false);
             }            
     }
@@ -184,6 +185,7 @@ public class ControladorAltaCuota implements ActionListener, KeyListener{
     
     public void calcularValores(BigDecimal ultimo_saldo, BigDecimal cuota_pura, BigDecimal gastos, BigDecimal bolsa_cemento, BigDecimal saldo_bolsa_cemento){  
                Date date = new Date();
+               List<Cuota>listaC = new ArrayList<>();
                String detalle = ac.detallePago.getText();
                String observaciones = ac.observacionesPago.getText();
                String tipoPago = ac.tipoPago.getSelectedItem().toString();               
@@ -202,22 +204,17 @@ public class ControladorAltaCuota implements ActionListener, KeyListener{
                if(ac.chk_adelanto_cuota.isSelected()){
                //-------Miro si la ultima cuota ya existe, si el lote es de 180 cuotas, miro si ya hizo adelanto de cuotas entonces puede tener la cuota 180------//  
                   if(cd.getUltimaCuota(id_control, nro_cuota)){
-                   try {
-                       ResultSet rs = cd.getNrosCuotas(id_control);
+                       listaC = cd.getNrosCuotas(id_control);
                        //========Avanzo la cuota cero========//
-                       rs.next();
-                       int cuota = rs.getInt(1);
-                       rs.next();
-                       while(rs.getInt(1)-1==cuota && !rs.isAfterLast()){
-                           cuota=rs.getInt(1);
-                           rs.next();
+                       int indice = 0;
+                       int cuota = listaC.get(indice).getNro_cuota();
+                       indice = indice + 1;
+                       while(listaC.get(indice).getNro_cuota()-1==cuota && indice < listaC.size()){
+                           cuota=listaC.get(indice).getNro_cuota();
+                           indice = indice + 1;
                        }
-                       filas_insertadas = cd.altaCuotaLote(new java.sql.Date(date.getTime()),rs.getInt(1)-1, detalle, cuota_pura, gastos, new BigDecimal(0), haber, saldo_actual, new BigDecimal(0), cemento_haber, cemento_saldo, observaciones, tipoPago, id_control);  
-                       
-                   } catch (SQLException ex) {                       
-                      log.equals(ex.getMessage());
-                       Logger.getLogger(ControladorAltaCuota.class.getName()).log(Level.SEVERE, null, ex);
-                   }
+                       filas_insertadas = cd.altaCuotaLote(new java.sql.Date(date.getTime()),listaC.get(indice).getNro_cuota()-1, detalle, cuota_pura, gastos, new BigDecimal(0), haber, saldo_actual, new BigDecimal(0), cemento_haber, cemento_saldo, observaciones, tipoPago, id_control);  
+                   
                   }else{
                      filas_insertadas = cd.altaCuotaLote(new java.sql.Date(date.getTime()),nro_cuota, detalle, cuota_pura, gastos, new BigDecimal(0), haber, saldo_actual, new BigDecimal(0), cemento_haber, cemento_saldo, observaciones, tipoPago, id_control);                    
                   }

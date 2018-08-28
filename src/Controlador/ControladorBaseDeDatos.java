@@ -98,6 +98,7 @@ public class ControladorBaseDeDatos implements ActionListener{
         }
         }
         if(e.getSource()==bd.crearRespaldo){
+            bd.respaldoOk.setText("");
             if(!bd.pathMysqlTxf.getText().equals("") && !bd.pathGuardarTxf.getText().equals("")){
                 new RespaldoBD().execute();
            }else{
@@ -137,7 +138,7 @@ public class ControladorBaseDeDatos implements ActionListener{
                 java.util.Date date = new java.util.Date();
                 Process p = null;
                 Runtime runtime = Runtime.getRuntime();
-                p = runtime.exec(bd.pathMysqlTxf.getText()+"/mysqldump -uroot --add-drop-database -B miprimercasa -r "+"\""+bd.pathGuardarTxf.getText()+"/Backup Base de datos - "+fecha.format(date)+".sql\"");
+                p = runtime.exec(bd.pathMysqlTxf.getText()+"/mysqldump -u root -pMiPrimerCasa --add-drop-database -B miprimercasa -r "+"\""+bd.pathGuardarTxf.getText()+"/Backup Base de datos - "+fecha.format(date)+".sql\"");
                 completo = p.waitFor();
                 
             } catch (IOException ex) {
@@ -162,6 +163,8 @@ public class ControladorBaseDeDatos implements ActionListener{
             bd.respaldoOk.setText("No se pudo crear el respaldo");
           }       
         }
+        
+        
     }
     
 }

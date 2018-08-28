@@ -110,44 +110,71 @@ public class CuotaDAO {
     }
     
     public int altaCuotaLote(Date fecha_pago,int nro_cuota, String detalle, BigDecimal cuota_pura, BigDecimal gastos, BigDecimal debe, BigDecimal haber, BigDecimal saldo, BigDecimal cemento_debe, BigDecimal cemento_haber, BigDecimal cemento_saldo, String observaciones, String tipo_pago, int id_control){
-    int filasAfectadas=0;
+         int filasAfectadas=0;
+        Connection connection = null;
      try {
-         Connection con = conexion.dataSource.getConnection();
+         connection = conexion.dataSource.getConnection();
          String insertar = "Insert into linea_control_lote (fecha, nro_cuota, detalle, cuota_pura, gastos_administrativos, debe, haber, saldo, cemento_debe, cemento_haber, cemento_saldo, observaciones, tipo_pago, id_Control) values ('"+fecha_pago+"','"+nro_cuota+"','"+detalle+"','"+cuota_pura+"','"+gastos+"','"+debe+"','"+haber+"','"+saldo+"','"+cemento_debe+"','"+cemento_haber+"','"+cemento_saldo+"','"+observaciones+"','"+tipo_pago+"','"+id_control+"') ";
-         PreparedStatement ps = con.prepareStatement(insertar);
-         filasAfectadas = ps.executeUpdate();
-         
+         PreparedStatement ps = connection.prepareStatement(insertar);
+         filasAfectadas = ps.executeUpdate();         
      } catch (Exception e) {  
            System.out.println(e.getMessage());
-     }
+     }finally{
+          try {
+               connection.close();
+           } catch (SQLException ex) {
+               Logger.getLogger(PropietarioDAO.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+     
      return filasAfectadas;
  }  
      
     public int altaCuotaDpto(Date fecha_pago,int nro_cuota, String detalle, BigDecimal cuota_pura, BigDecimal gastos, BigDecimal debe, BigDecimal haber, BigDecimal saldo, BigDecimal cemento_debe, BigDecimal cemento_haber, BigDecimal cemento_saldo, String observaciones, String tipo_pago, int id_control){
-    int filasAfectadas=0;
-     try {
-         Connection con = conexion.dataSource.getConnection();
+         int filasAfectadas=0;
+        Connection connection = null;
+         try {
+         connection = conexion.dataSource.getConnection();
          String insertar = "Insert into linea_control_dpto (fecha, nro_cuota, detalle, cuota_pura, gastos_administrativos, debe, haber, saldo, cemento_debe, cemento_haber, cemento_saldo, observaciones, tipo_pago, id_Control) values ('"+fecha_pago+"','"+nro_cuota+"','"+detalle+"','"+cuota_pura+"','"+gastos+"','"+debe+"','"+haber+"','"+saldo+"','"+cemento_debe+"','"+cemento_haber+"','"+cemento_saldo+"','"+observaciones+"','"+tipo_pago+"','"+id_control+"') ";
-         PreparedStatement ps = con.prepareStatement(insertar);
+         PreparedStatement ps = connection.prepareStatement(insertar);
          filasAfectadas = ps.executeUpdate();
          
-     } catch (Exception e) {  
+         } catch (Exception e) {  
            System.out.println(e.getMessage()+"cuotadao");
-     }
+         }finally{
+          try {
+               connection.close();
+          }catch (SQLException ex) {
+               Logger.getLogger(PropietarioDAO.class.getName()).log(Level.SEVERE, null, ex);
+          }
+        }
      return filasAfectadas;
  }  
     
-  public ResultSet getNrosCuotas(int idControl){     
-       ResultSet rs = null;
+  public List<Cuota> getNrosCuotas(int idControl){     
+          ResultSet rs = null;
+          Connection connection = null;
+          List<Cuota> listaCuota = new ArrayList<>();
         try {           
-            Connection con = conexion.dataSource.getConnection();
+            connection = conexion.dataSource.getConnection();
             String bandera = "select nro_cuota from linea_control_lote where id_control='"+idControl+"'";
-            Statement st = con.createStatement();
+            Statement st = connection.createStatement();
             rs = st.executeQuery(bandera);
+            while (rs.next()) {
+                Cuota c = new Cuota();
+                c.setNro_cuota(rs.getInt(1));
+                listaCuota.add(c);
+            }
         } catch (SQLException ex) {
             Logger.getLogger(CuotaDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }finally{
+          try {
+               connection.close();
+          }catch (SQLException ex) {
+               Logger.getLogger(PropietarioDAO.class.getName()).log(Level.SEVERE, null, ex);
+          }
         }
-        return rs;
+        return listaCuota;
   }
   
      //-------Consulta si existe la ultima cuota para adelantar-----//   
