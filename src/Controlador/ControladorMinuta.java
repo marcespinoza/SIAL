@@ -38,8 +38,8 @@ import java.math.BigDecimal;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.DateFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Properties;
@@ -60,7 +60,7 @@ public class ControladorMinuta implements MouseListener, ActionListener {
     MinutaVista vistaMinuta;
     private Object [] minuta;
     private Object [] fechaMinuta;
-    ResultSet resultset = null;
+    List<Minuta> listaMinutas = null;
     File f;
     JFileChooser chooser;
     FileInputStream fileIn = null;
@@ -98,31 +98,29 @@ public class ControladorMinuta implements MouseListener, ActionListener {
          }
         }   
     
-    public void llenarTabla(ResultSet rs){
-        resultset = rs;
+    public void llenarTabla(List<Minuta> minutas){
+        listaMinutas = minutas;
         DefaultTableModel model = (DefaultTableModel) vistaMinuta.tablaMinuta.getModel();
         model.setRowCount(0);
-        try {
-            while(rs.next()){
-                String fecha_minuta = rs.getString(1);
-                String apellidos = rs.getString(2);
-                String nombres = rs.getString(3);
-                String mzpc = rs.getString(4)+rs.getString(5);  
-                String cobrado = rs.getString(6);
-                String gastos = rs.getString(7);
-                String rendido = rs.getString(8);     
-                String nro_cuota = rs.getString(9);
-                String observaciones = rs.getString(10);
-                String baja = rs.getString(11);
+        if(!minutas.isEmpty()){
+            for (int i = 0; i < listaMinutas.size(); i++) {               
+                Date fecha_minuta = listaMinutas.get(i).getFechaMinuta();
+                String apellidos = listaMinutas.get(i).getApellidos();
+                String nombres = listaMinutas.get(i).getNombres();
+                String mzpc = String.valueOf(listaMinutas.get(i).getManzana()) + String.valueOf(listaMinutas.get(i).getParcela());
+                BigDecimal cobrado = listaMinutas.get(i).getCobrado();
+                BigDecimal gastos = listaMinutas.get(i).getGastos();
+                BigDecimal rendido = listaMinutas.get(i).getRendido();
+                int nro_cuota = listaMinutas.get(i).getNroCuota();
+                String observaciones = listaMinutas.get(i).getObservaciones();
+                int baja = listaMinutas.get(i).getBaja();
                 minuta = new Object[] {fecha_minuta,apellidos, nombres, mzpc, cobrado, gastos, rendido, nro_cuota, observaciones, baja};
                 model.addRow(minuta);   
             } 
-            resultset.beforeFirst();
+        } 
             totalCobrado();
-            totalRendido();
-        }catch (SQLException e) {
-            System.out.println(e.getMessage());
-        }}
+            totalRendido();        
+        }
     
     public void llenarTablaFecha(){
         List<Minuta> minutas = null;
@@ -183,10 +181,8 @@ public class ControladorMinuta implements MouseListener, ActionListener {
             
             if(e.getSource() == vistaMinuta.buscar){
                 SimpleDateFormat dcn = new SimpleDateFormat("dd-MM-yyyy");
-                 String desde = dcn.format(vistaMinuta.minutaDesde.getDate() );
-                 String date = dcn.format(vistaMinuta.minutaHasta.getDate() );
-                ResultSet rs = md.minutasPorRango2(new java.sql.Date(vistaMinuta.minutaDesde.getDate().getTime()) , new java.sql.Date(vistaMinuta.minutaHasta.getDate().getTime()));
-                llenarTabla(rs);
+                List<Minuta> listaMinutas = md.minutasPorRango2(new java.sql.Date(vistaMinuta.minutaDesde.getDate().getTime()) , new java.sql.Date(vistaMinuta.minutaHasta.getDate().getTime()));
+                llenarTabla(listaMinutas);
             }
     }
 
@@ -243,50 +239,51 @@ public class ControladorMinuta implements MouseListener, ActionListener {
             table.addCell(rendido);
             table.addCell(nro_cuota);
             table.addCell(observaciones);
-             document.add(table);  
-          try {
+            document.add(table);  
+          //-------Itero-----------//
               int conta = 1;
-              double acumulador_cobrado = 0;
-              double acumulador_gastos = 0;
-              double acumulador_rendido = 0;              
-              double deposito = 0;
-              double t_debito = 0;
-              double t_credito = 0;
-              double total = 0;
-              while(resultset.next()){
+              BigDecimal acumulador_cobrado = new BigDecimal(0);
+              BigDecimal acumulador_gastos = new BigDecimal(0);
+              BigDecimal acumulador_rendido = new BigDecimal(0);             
+              BigDecimal deposito = new BigDecimal(0);
+              BigDecimal t_debito = new BigDecimal(0);
+              BigDecimal t_credito = new BigDecimal(0);
+              BigDecimal total = new BigDecimal(0);
+              for (int i = 0; i < listaMinutas.size(); i++) {                 
                   PdfPTable table2 = new PdfPTable(9);            
                   table2.setTotalWidth(new float[]{ 1,2,4,2,2,2,2,2,4});
                   table2.setWidthPercentage(100);
                   PdfPCell nro_orden = new PdfPCell(new Paragraph(String.valueOf(conta),f));
                   nro_orden.setHorizontalAlignment(Element.ALIGN_CENTER);
                   table2.addCell(new PdfPCell(nro_orden));    
-                  PdfPCell nro_recibo = new PdfPCell(new Paragraph(resultset.getString(12),f));
+                  PdfPCell nro_recibo = new PdfPCell(new Paragraph(String.valueOf(listaMinutas.get(i).getNroRecibo()),f));
                   nro_recibo.setHorizontalAlignment(Element.ALIGN_CENTER);
                   table2.addCell(nro_recibo);      
-                  PdfPCell nyap = new PdfPCell(new Paragraph(resultset.getString(2)+" "+resultset.getString(3),f));
+                  PdfPCell nyap = new PdfPCell(new Paragraph(listaMinutas.get(i).getApellidos()+" "+listaMinutas.get(i).getNombres(),f));
                   nyap.setHorizontalAlignment(Element.ALIGN_CENTER);
                   table2.addCell(nyap);
-                  PdfPCell mz_pc = new PdfPCell(new Paragraph(resultset.getString(4)+"/"+resultset.getString(5),f));
+                  PdfPCell mz_pc = new PdfPCell(new Paragraph(String.valueOf(listaMinutas.get(i).getManzana())+"/"+String.valueOf(listaMinutas.get(i).getParcela()),f));
                   mz_pc.setHorizontalAlignment(Element.ALIGN_CENTER);
                   table2.addCell(mz_pc);
-                  table2.addCell(new PdfPCell(new Paragraph("$ "+resultset.getString(6),f)));
-                  table2.addCell(new PdfPCell(new Paragraph("$ "+resultset.getString(7),f)));
-                  table2.addCell(new PdfPCell(new Paragraph("$ "+resultset.getString(8),f)));
-                  PdfPCell nrocuota = new PdfPCell(new Paragraph(resultset.getString(9),f));
+                  table2.addCell(new PdfPCell(new Paragraph("$ "+String.valueOf(listaMinutas.get(i).getCobrado()),f)));
+                  table2.addCell(new PdfPCell(new Paragraph("$ "+String.valueOf(listaMinutas.get(i).getGastos()),f)));
+                  table2.addCell(new PdfPCell(new Paragraph("$ "+String.valueOf(listaMinutas.get(i).getRendido()),f)));
+                  PdfPCell nrocuota = new PdfPCell(new Paragraph(String.valueOf(listaMinutas.get(i).getNroCuota()),f));
                   nrocuota.setHorizontalAlignment(Element.ALIGN_CENTER);
                   table2.addCell(nrocuota);
-                  table2.addCell(new PdfPCell(new Paragraph(resultset.getString(10),f)));
+                  table2.addCell(new PdfPCell(new Paragraph(listaMinutas.get(i).getObservaciones(),f)));
                   document.add(table2);
-                  if(Integer.parseInt(resultset.getString(11))!=1){
-                   acumulador_cobrado = acumulador_cobrado + resultset.getDouble(6);
-                   acumulador_gastos = acumulador_gastos + resultset.getDouble(7);
-                   
-                  switch(resultset.getString(10).toString()){                     
-                      case "Dpto. Bancario":deposito = deposito + resultset.getDouble(8);break; 
-                      case "Tarjeta credito":t_debito = t_debito + resultset.getDouble(8);break;
-                      case "Tarjeta debito":t_credito = t_credito + resultset.getDouble(8);break;
-                      case "Efectivo":acumulador_rendido = acumulador_rendido + resultset.getDouble(8);break;
-                  }}
+                  //-------Controlo que el cliente no este dado de baja------//
+                  if(listaMinutas.get(i).getBaja()!=1){
+                     acumulador_cobrado = acumulador_cobrado.add(listaMinutas.get(i).getCobrado());
+                     acumulador_gastos = acumulador_gastos.add(listaMinutas.get(i).getGastos());                   
+                      switch(listaMinutas.get(i).getObservaciones()){                     
+                          case "Dpto. Bancario":deposito = deposito;break; 
+                          case "Tarjeta credito":t_debito = t_debito.add(listaMinutas.get(i).getRendido());break;
+                          case "Tarjeta debito":t_credito = t_credito.add(listaMinutas.get(i).getRendido());break;
+                          case "Efectivo":acumulador_rendido = acumulador_rendido.add(listaMinutas.get(i).getRendido());break;
+                      }
+                  }
                   conta ++;
               }
             //------Linea Totales------//
@@ -312,7 +309,7 @@ public class ControladorMinuta implements MouseListener, ActionListener {
             tableTotales.addCell(cellEmpty);
             document.add(tableTotales);
             //-------------//
-            total = acumulador_rendido +deposito + t_credito + t_debito;
+            total = acumulador_rendido.add(deposito).add(t_credito).add(t_debito);
             PdfPTable tablaa = new PdfPTable(2);
             tablaa.setWidthPercentage(50);
             tablaa.setSpacingBefore(10f);
@@ -322,7 +319,7 @@ public class ControladorMinuta implements MouseListener, ActionListener {
             tablaa.addCell(nuevo);
             tablaa.addCell(nuevo2);
             document.add(tablaa);
-            if(deposito != 0){
+            if(deposito.compareTo(BigDecimal.ZERO) != 0){
                  PdfPTable dpto_bancario = new PdfPTable(2);
                  dpto_bancario.setWidthPercentage(50);
                  PdfPCell dpto1 = new PdfPCell(new Paragraph("Depósito bancario $", f));
@@ -395,9 +392,7 @@ public class ControladorMinuta implements MouseListener, ActionListener {
                 tablaBilletes2.addCell(empty3);            
                 document.add(tablaBilletes2);  
              }
-          } catch (SQLException ex) {
-              Logger.getLogger(ControladorMinuta.class.getName()).log(Level.SEVERE, null, ex);
-          }   
+            
             document.close();
             }catch (DocumentException ex) {
             Logger.getLogger(DetalleCuota.class.getName()).log(Level.SEVERE, null, ex);
@@ -411,7 +406,7 @@ public class ControladorMinuta implements MouseListener, ActionListener {
         
     public class MinutasPorFecha extends javax.swing.SwingWorker<Void, Void>{
          
-         ResultSet rs;
+         List<Minuta> minutas = new ArrayList<>();
          DateFormat sdfr = new SimpleDateFormat("dd-MM-yyyy");
 
         @Override
@@ -419,13 +414,13 @@ public class ControladorMinuta implements MouseListener, ActionListener {
             int row = vistaMinuta.tablaFechaMinuta.getSelectedRow();    
             Date date = sdfr.parse(vistaMinuta.tablaFechaMinuta.getModel().getValueAt(row,1).toString());
             SimpleDateFormat input = new SimpleDateFormat("yyyy-MM-dd");
-            rs = md.minutasPorFecha(input.format(date));
+            minutas = md.minutasPorFecha(input.format(date));
             return null;
         }
 
        @Override
        public void done() { 
-           llenarTabla(rs);
+           llenarTabla(minutas);
        }
     
      }
@@ -486,7 +481,7 @@ public class ControladorMinuta implements MouseListener, ActionListener {
         @Override
         public void done(){
            pd.dispose();
-            try {
+           try {
             //--------Abro el pdf de la minuta creada----//
               Desktop.getDesktop().open(pathMinuta);
             } catch (IOException ex) {

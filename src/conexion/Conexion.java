@@ -5,19 +5,8 @@
  */
 package conexion;
 
-import Controlador.ControladorCliente;
-import java.net.URL;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.sql.DataSource;
-import javax.swing.JOptionPane;
 import org.apache.commons.dbcp.BasicDataSource;
-import org.apache.log4j.PropertyConfigurator;
 
 /**
  *

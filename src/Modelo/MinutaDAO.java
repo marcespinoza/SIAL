@@ -110,17 +110,35 @@ public class MinutaDAO {
      return minutas;
  }
     
-    public ResultSet minutasPorFecha(String fecha){
-     ResultSet rs = null;
+    public List<Minuta> minutasPorFecha(String fecha){
+       ResultSet rs = null;
+       Connection connection = null;
+       List<Minuta> minutas = new ArrayList<>();
      try {
-          Connection con = conexion.dataSource.getConnection();
+          connection = conexion.dataSource.getConnection();
           String listar = "SELECT m.fecha_minuta, m.apellidos, m.nombres, m.manzana, m.parcela, m.cobrado, m.gastos, m.rendido, m.nro_cuota, m.observaciones, m.baja, r.nro_recibo from (minuta m INNER JOIN recibo r ON m.id_recibo=r.idRecibo) where m.fecha_minuta = '"+fecha+"'";
-          Statement st = con.createStatement();
+          Statement st = connection.createStatement();
           rs = st.executeQuery(listar);
+          while (rs.next()) {
+                Minuta m = new Minuta();
+                m.setFechaMinuta(rs.getDate(1));
+                m.setApellidos(rs.getString(2));
+                m.setNombres(rs.getString(3));
+                m.setManzana(rs.getInt(4));
+                m.setParcela(rs.getInt(5));
+                m.setCobrado(rs.getBigDecimal(6));
+                m.setGastos(rs.getBigDecimal(7));
+                m.setRendido(rs.getBigDecimal(8));
+                m.setNroCuota(rs.getInt(9));
+                m.setObservaciones(rs.getString(10));
+                m.setBaja(rs.getInt(11));
+                m.setNroRecibo(rs.getInt(12));
+                minutas.add(m);
+          }
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
-     return rs;
+     return minutas;
     }
     
     public ResultSet minutasPorMes(int añoDesde, int mesDesde, int añoHasta, int mesHasta){
@@ -152,19 +170,37 @@ public class MinutaDAO {
  }
      
      
-     public ResultSet minutasPorRango2(Date desde, Date hasta){
-     ResultSet rs = null;
+     public List<Minuta> minutasPorRango2(Date desde, Date hasta){
+       ResultSet rs = null;
+       Connection connection = null;
+       List<Minuta> minutas = new ArrayList<>();
      try {
-          Connection con = conexion.dataSource.getConnection();
+          connection = conexion.dataSource.getConnection();
           PreparedStatement statement =
-          con.prepareStatement("SELECT m.fecha_minuta, m.apellidos, m.nombres, m.manzana, m.parcela, m.cobrado, m.gastos, m.rendido, m.nro_cuota, m.observaciones, m.baja from minuta m INNER JOIN recibo r ON m.id_recibo=r.idRecibo WHERE fecha_minuta between ? and ?");
+          connection.prepareStatement("SELECT m.fecha_minuta, m.apellidos, m.nombres, m.manzana, m.parcela, m.cobrado, m.gastos, m.rendido, m.nro_cuota, m.observaciones, m.baja from minuta m INNER JOIN recibo r ON m.id_recibo=r.idRecibo WHERE fecha_minuta between ? and ?");
           statement.setDate(1, desde);
           statement.setDate(2, hasta);
           rs = statement.executeQuery();
+          while (rs.next()) {
+                Minuta m = new Minuta();
+                m.setFechaMinuta(rs.getDate(1));
+                m.setApellidos(rs.getString(2));
+                m.setNombres(rs.getString(3));
+                m.setManzana(rs.getInt(4));
+                m.setParcela(rs.getInt(5));
+                m.setCobrado(rs.getBigDecimal(6));
+                m.setGastos(rs.getBigDecimal(7));
+                m.setRendido(rs.getBigDecimal(8));
+                m.setNroCuota(rs.getInt(9));
+                m.setObservaciones(rs.getString(10));
+                m.setBaja(rs.getInt(11));
+                m.setNroRecibo(rs.getInt(12));
+                minutas.add(m);
+          }
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
-     return rs;
+     return minutas;
  }
      
      

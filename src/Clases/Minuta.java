@@ -5,6 +5,7 @@
  */
 package Clases;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 /**
@@ -18,18 +19,27 @@ public class Minuta {
     String Nombres;
     int manzana;
     int parcela;
-    float cobrado;
-    float gastos;
-    float rendido;
+    BigDecimal cobrado;
+    BigDecimal gastos;
+    BigDecimal rendido;
     int nroCuota;
     String observaciones;
     String categoria;
     int baja;
+    int nroRecibo;
+
+    public int getNroRecibo() {
+        return nroRecibo;
+    }
+
+    public void setNroRecibo(int nroRecibo) {
+        this.nroRecibo = nroRecibo;
+    }
 
     public Minuta() {
     }
 
-    public Minuta(Date fechaMinuta, String Apellidos, String Nombres, int manzana, int parcela, float cobrado, float gastos, float rendido, int nroCuota, String observaciones, String categoria, int baja) {
+    public Minuta(Date fechaMinuta, String Apellidos, String Nombres, int manzana, int parcela, BigDecimal cobrado, BigDecimal gastos, BigDecimal rendido, int nroCuota, String observaciones, String categoria, int baja) {
         this.fechaMinuta = fechaMinuta;
         this.Apellidos = Apellidos;
         this.Nombres = Nombres;
@@ -84,27 +94,27 @@ public class Minuta {
         this.parcela = parcela;
     }
 
-    public float getCobrado() {
+    public BigDecimal getCobrado() {
         return cobrado;
     }
 
-    public void setCobrado(float cobrado) {
+    public void setCobrado(BigDecimal cobrado) {
         this.cobrado = cobrado;
     }
 
-    public float getGastos() {
+    public BigDecimal getGastos() {
         return gastos;
     }
 
-    public void setGastos(float gastos) {
+    public void setGastos(BigDecimal gastos) {
         this.gastos = gastos;
     }
 
-    public float getRendido() {
+    public BigDecimal getRendido() {
         return rendido;
     }
 
-    public void setRendido(float rendido) {
+    public void setRendido(BigDecimal rendido) {
         this.rendido = rendido;
     }
 
