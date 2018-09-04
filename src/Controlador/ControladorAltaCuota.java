@@ -104,12 +104,19 @@ public class ControladorAltaCuota implements ActionListener, KeyListener{
         ac.cancelarBtn.addActionListener(this);
         //------Evito que ingrese letras en un campo numerico-----------//
         ac.porcentaje_gastos.addKeyListener(new KeyAdapter() {
+            @Override
             public void keyTyped(KeyEvent e) {
                   char vChar = e.getKeyChar();            
                  if (!(Character.isDigit(vChar)) && !(e.getKeyChar() == '.')) {
                     e.consume();
-                 }
-            }            
+                 }                 
+            }        
+            @Override
+            public void keyPressed(KeyEvent e){
+              if(e.getKeyCode()==KeyEvent.VK_ENTER){
+                   altaPago();
+               }
+            }
         });
         rellenarCampos();
     }

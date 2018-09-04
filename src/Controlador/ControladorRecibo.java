@@ -5,11 +5,13 @@
  */
 package Controlador;
 
+import Clases.Cliente;
 import Clases.FichaDeControl;
 import Modelo.ClienteDAO;
 import Modelo.CuotaDAO;
 import Modelo.FichaControlDAO;
 import Clases.LimitadorCaracteres;
+import Clases.Lote;
 import Modelo.LoteDAO;
 import Modelo.MinutaDAO;
 import Utils.LimitLinesDocumentListener;
@@ -41,7 +43,6 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.sql.ResultSet;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -127,7 +128,7 @@ public class ControladorRecibo implements ActionListener{
         ar.cuit_propietario.setDocument(new LimitadorCaracteres(14));
         ar.apellido_comprador.setDocument(new LimitadorCaracteres(30));
         ar.nombre_comprador.setDocument(new LimitadorCaracteres(30));
-        ar.domicilio_comprador.setDocument(new LimitadorCaracteres(40));
+        ar.domicilio_comprador.setDocument(new LimitadorCaracteres(75));
         ar.importe.setDocument(new LimitadorCaracteres(7));
         ar.total_pagado.setDocument(new LimitadorCaracteres(7));
         ar.son_pesos.setDocument(new LimitadorCaracteres(50));
@@ -174,34 +175,31 @@ public class ControladorRecibo implements ActionListener{
     }
     
     private void datosPropietario(){
-        ResultSet rs = ld.obtenerPropietarioxLote(id_control);
+         List<Lote> lote = ld.obtenerPropietarioxLote(id_control);
          int nroRecibo = 0;
-         try {
-            rs.next();
-            apellido_propietario = rs.getString(1);
-            nombre_propietario = rs.getString(2);
-            cuit_propietario = rs.getString(3);
+         if(!lote.isEmpty())
+          for (int i = 0; i < lote.size(); i++) {               
+            apellido_propietario = lote.get(i).getApellidoPropietario();
+            nombre_propietario = lote.get(i).getNombrePropietario();
+            cuit_propietario = lote.get(i).getPropietario_cuit();
             ar.apellido_propietario.setText(apellido_propietario);
             ar.nombre_propietario.setText(nombre_propietario);    
             ar.cuit_propietario.setText(cuit_propietario);
             nroRecibo = pd.obtenerNroRecibo(apellido_propietario, nombre_propietario, cuit_propietario);
-            ar.nro_recibo.setText(String.valueOf(nroRecibo));
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
+            ar.nro_recibo.setText(String.valueOf(nroRecibo)); 
+          }
     }
     
     private void datosComprador(){
-        ResultSet rs = cd.clientePorLote(id_control);
-        try {
-            rs.next();
-            apellido_comprador = rs.getString(1);
-            nombre_comprador = rs.getString(2);
-            domicilio_comprador = rs.getString(3) +" - "+ rs.getString(4) +" "+rs.getString(5);
+        List<Cliente> cliente = cd.clientePorLote(id_control);
+        if(!cliente.isEmpty())
+            for (int i = 0; i < cliente.size(); i++) {
+            apellido_comprador = cliente.get(i).getApellidos();
+            nombre_comprador = cliente.get(i).getNombres();
+            domicilio_comprador = cliente.get(i).getBarrio() +" - "+ cliente.get(i).getCalle() +" "+String.valueOf(cliente.get(i).getNumero());
             ar.apellido_comprador.setText(apellido_comprador);
             ar.nombre_comprador.setText(nombre_comprador);
             ar.domicilio_comprador.setText(domicilio_comprador);
-        } catch (Exception e) {
         }
     }
     
@@ -258,7 +256,7 @@ public class ControladorRecibo implements ActionListener{
             table.addCell(cell3);
             document.add(table); 
             Paragraph para = new Paragraph("Numero: "+ar.nro_recibo.getText(),f);
-            Paragraph cuit = new Paragraph("CUIT: 23-07431900-9",f);
+            Paragraph cuit = new Paragraph("CUIT: 23-07431900",f);
             Paragraph ingBrutos = new Paragraph("Ing Brutos: 01-23-07431900-9",f);
             Paragraph inicAct = new Paragraph(fecha1.format(date)+"                                                        Inic. Act.: 01-08-2015",f); 
             switch(i){

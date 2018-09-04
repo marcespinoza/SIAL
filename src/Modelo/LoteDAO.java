@@ -48,33 +48,49 @@ public class LoteDAO {
         }
  }
     
-     public ResultSet obtenerPropietarioxLote(int id_control){
-     ResultSet rs = null;
+     public List<Lote> obtenerPropietarioxLote(int id_control){
+       ResultSet rs = null;
+       Connection connection = null;
+       List<Lote> lote = new ArrayList<>();
      try {
-          Connection con = conexion.dataSource.getConnection();
+          connection = conexion.dataSource.getConnection();
           String listar = "SELECT l.propietario_Apellidos, l.propietario_Nombres, l.propietario_cuit, l.propietario_nro_recibo FROM lote l inner JOIN ficha_control_lote f where f.Lote_Manzana=l.Manzana and f.Id_control='"+id_control+"'";
-          Statement st = con.createStatement();
+          Statement st = connection.createStatement();
           rs = st.executeQuery(listar);
+          while (rs.next()) {
+                Lote l = new Lote();
+                l.setApellidoPropietario(rs.getString(1));
+                l.setNombrePropietario(rs.getString(2));
+                l.setPropietario_cuit(rs.getString(3));
+                l.setNroRecibo(rs.getInt(4));
+                lote.add(l);
+           } 
         } catch (Exception e) {
             System.out.println(e.getMessage().toString());
+        }finally{
+              try {
+                  connection.close();
+              } catch (SQLException ex) {
+                  Logger.getLogger(PropietarioDAO.class.getName()).log(Level.SEVERE, null, ex);
+              }
         }
-     return rs;
- }
+       return lote;
+    }
      
      public List<Lote> obtenerBarrios(String apellidos, String nombres){
           ResultSet rs = null;
           Connection connection = null;
           List<Lote> lotes = new ArrayList<>();
-     try {
+          try {
           connection = conexion.dataSource.getConnection();
           String listar = "SELECT DISTINCT barrio from lote where vendido=0 and propietario_Apellidos='"+apellidos+"' and propietario_nombres='"+nombres+"' "; 
           Statement st = connection.createStatement();
           rs = st.executeQuery(listar);
-            while (rs.next()) {
+          while (rs.next()) {
                 Lote l = new Lote();
                 l.setBarrio(rs.getString(1));
                 lotes.add(l);
-            }  
+           }  
         } catch (Exception e) {
             System.out.println(e.getMessage().toString());
         }finally{

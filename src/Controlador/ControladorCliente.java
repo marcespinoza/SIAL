@@ -19,7 +19,6 @@ import Vista.Dialogs.Cumpleaños;
 import Vista.Frame.Ventana;
 import Vista.Panels.Clientes;
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -27,22 +26,24 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.math.BigDecimal;
-import java.math.RoundingMode;
-import java.net.URL;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Properties;
 import java.util.logging.Level;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import javax.swing.JTable;
 import javax.swing.RowFilter;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
@@ -50,11 +51,8 @@ import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableCellRenderer;
-import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 import org.apache.log4j.Logger;
-import org.apache.log4j.PropertyConfigurator;
 import org.joda.time.LocalDate;
 import org.joda.time.Months;
 import org.joda.time.Years;
@@ -77,10 +75,13 @@ public class ControladorCliente implements ActionListener, MouseListener, TableM
     Ventana ventana;
     String barrio;
     int manzana, parcela;
+    FileInputStream fileIn = null;
+    FileOutputStream fileOut = null;
     private Object [] clientes;
     private String [] detalleCumpleaños;
     private List<Object> cliente = new ArrayList<Object>();
     private List<Object> referencia = new ArrayList<Object>();
+    File configFile = new File("config.properties");
     public static final DefaultTableCellRenderer DEFAULT_RENDERER = new DefaultTableCellRenderer();
     private String nombres, apellidos;
     static Logger log = Logger.getLogger(ControladorCliente.class.getName());
@@ -102,6 +103,13 @@ public class ControladorCliente implements ActionListener, MouseListener, TableM
         this.vistaClientes.comboNombre.addActionListener(this);
         this.vistaClientes.mostrarTodos.addActionListener(this);
         this.vistaClientes.tablaCliente.getModel().addTableModelListener(this);
+        this.vistaClientes.checkPropietario.setEnabled(false);
+        this.vistaClientes.checkPropietario.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+               guardarPropietario();
+            }
+        });
         this.vistaClientes.buscarTodos.addKeyListener(new KeyAdapter() {
             @Override
             public void keyReleased(KeyEvent e){
@@ -198,6 +206,9 @@ public class ControladorCliente implements ActionListener, MouseListener, TableM
             if(!vistaClientes.comboApellido.getSelectedItem().equals("Seleccione")){  
                 apellidos =vistaClientes.comboApellido.getSelectedItem().toString();
                 llenarComboNombres(apellidos);
+            }else{
+                 vistaClientes.comboNombre.setSelectedIndex(0);
+                 this.vistaClientes.checkPropietario.setEnabled(false);
             }
           } 
         }
@@ -207,6 +218,7 @@ public class ControladorCliente implements ActionListener, MouseListener, TableM
             if(!vistaClientes.comboNombre.getSelectedItem().equals("Seleccione")){ 
                 nombres = vistaClientes.comboNombre.getSelectedItem().toString();
                 llenarTabla();
+                this.vistaClientes.checkPropietario.setEnabled(true);
             }
             }
         }
@@ -339,8 +351,23 @@ public class ControladorCliente implements ActionListener, MouseListener, TableM
         }
     }
     
+    private void guardarPropietario(){
+         try {
+                    Properties props = new Properties();
+                    fileIn = new FileInputStream(configFile);
+                    props.load(fileIn);
+                    props.setProperty("apellidoPropietario", this.vistaClientes.comboApellido.getSelectedItem().toString());
+                    props.setProperty("nombrePropietario", this.vistaClientes.comboNombre.getSelectedItem().toString());
+                    fileOut = new FileOutputStream(configFile);
+                    props.store(fileOut, "config");
+                } catch (FileNotFoundException ex) {
+                    java.util.logging.Logger.getLogger(ControladorCliente.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (IOException ex) {
+                    java.util.logging.Logger.getLogger(ControladorCliente.class.getName()).log(Level.SEVERE, null, ex);
+                }
+    }
+    
     public void llenarComboApellidos(){
-        ResultSet rs = null;
         List<Propietario> propietarios;
         propietarios = pd.obtenerApellidos();
         vistaClientes.comboApellido.removeAllItems();

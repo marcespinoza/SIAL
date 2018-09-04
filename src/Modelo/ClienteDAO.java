@@ -5,8 +5,10 @@
  */
 package Modelo;
 
+import Clases.Cliente;
 import Clases.ClientesPorCriterio;
 import Clases.Lote;
+import Vista.Panels.Clientes;
 import conexion.Conexion;
 import java.sql.Connection;
 import java.sql.*;
@@ -92,17 +94,34 @@ public class ClienteDAO {
  }
  
  
-  public ResultSet clientePorLote(int id_control){
+  public List<Cliente> clientePorLote(int id_control){
      ResultSet rs = null;
+     Connection connection = null;
+     List<Cliente> cliente = new ArrayList<>();
      try {
-          Connection con = conexion.dataSource.getConnection();
+          connection = conexion.dataSource.getConnection();
           String listar = "SELECT c.Apellidos, c.Nombres,c.barrio, c.calle, c.numero FROM cliente c LEFT JOIN cliente_tiene_lote f ON c.Dni = f.cliente_Dni where f.id_control = '"+id_control+"'"; 
-          Statement st = con.createStatement();
+          Statement st = connection.createStatement();
           rs = st.executeQuery(listar);
+          while(rs.next()){
+              Cliente c = new Cliente();
+              c.setApellidos(rs.getString(1));
+              c.setNombres(rs.getString(2));
+              c.setBarrio(rs.getString(3));
+              c.setCalle(rs.getString(4));
+              c.setNumero(rs.getInt(5));
+              cliente.add(c);
+          }
         } catch (Exception e) {
             System.out.println(e.getMessage());
+        }finally{
+         try {
+             connection.close();
+         } catch (SQLException ex) {
+             Logger.getLogger(ClienteDAO.class.getName()).log(Level.SEVERE, null, ex);
+         }
         }
-     return rs;
+     return cliente;
      }
   
      public void altaClientesXLotes(int dni, int id_control) throws SQLException{

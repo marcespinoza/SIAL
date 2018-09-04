@@ -15,10 +15,11 @@ String barrio;
 int manzana;
 int parcela;
 int vendido;
+String apellidoPropietario;
+String nombrePropietario;
+int nroRecibo;
 String observaciones;
-String propietario_cuit;
-
-  
+String propietario_cuit;  
 
     public Lote(String barrio, int manzana, int parcela) {
         this.barrio = barrio;
@@ -55,6 +56,29 @@ String propietario_cuit;
     }
     
     
+    public String getApellidoPropietario() {
+        return apellidoPropietario;
+    }
+
+    public void setApellidoPropietario(String apellidoPropietario) {
+        this.apellidoPropietario = apellidoPropietario;
+    }
+
+    public String getNombrePropietario() {
+        return nombrePropietario;
+    }
+
+    public void setNombrePropietario(String nombrePropietario) {
+        this.nombrePropietario = nombrePropietario;
+    }
+
+    public int getNroRecibo() {
+        return nroRecibo;
+    }
+
+    public void setNroRecibo(int nroRecibo) {
+        this.nroRecibo = nroRecibo;
+    }
 
     public String getBarrio() {
         return barrio;

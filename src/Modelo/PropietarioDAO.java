@@ -32,24 +32,26 @@ public class PropietarioDAO {
         conexion = new Conexion();
     }
     
-    public int obtenerNroRecibo(String apellidos, String nombres, String cuit) throws SQLException{
+    public int obtenerNroRecibo(String apellidos, String nombres, String cuit){
         int nroRecibo = 0;
-        Propietario propietario;
          ResultSet rs = null;
-         Connection con = null;
+         Connection connection = null;
      try {
-          con = conexion.dataSource.getConnection();         
+          connection = conexion.dataSource.getConnection();         
           String listar = "SELECT nro_recibo from propietario where apellidos = '"+apellidos+"' and nombres = '"+nombres+"' and cuit= '"+cuit+"'"; 
-          Statement st = con.createStatement();
+          Statement st = connection.createStatement();
           rs = st.executeQuery(listar);
           while(rs.next()) { 
                 nroRecibo = Integer.parseInt(rs.getString(1));
             }
         } catch (Exception e) {
             System.out.println(e.getMessage());
-        }
-             if (con != null && con.isClosed()) {
-             con.close();
+        }finally{
+         try {
+             connection.close();
+         } catch (SQLException ex) {
+             Logger.getLogger(UsuarioDAO.class.getName()).log(Level.SEVERE, null, ex);
+         }
         }
         return nroRecibo;
     }
