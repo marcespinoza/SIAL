@@ -58,7 +58,7 @@ public class Ventana extends javax.swing.JFrame implements ActionListener{
         ControladorCliente cc = new ControladorCliente(this, clientes);
         //-------Controlador para manejar botones superiores - Clientes,Minutas---------//
         new ControladorBotones(this);
-        cc.llenarTabla();
+//        cc.llenarTabla();
     }
 
     @SuppressWarnings("unchecked")

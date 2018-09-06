@@ -13,6 +13,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.File;
@@ -20,14 +21,17 @@ import java.sql.ResultSet;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
+import javax.swing.ListSelectionModel;
 import javax.swing.border.EtchedBorder;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
 
 /**
  *
  * @author Marcelo Espinoza
  */
-public class ControladorPropietarios implements MouseListener, ActionListener, KeyListener{
+public class ControladorPropietarios implements  ActionListener, KeyListener{
     
     Configuracion vistaConfiguracion;
     PropietarioDAO pd = new PropietarioDAO();
@@ -37,7 +41,23 @@ public class ControladorPropietarios implements MouseListener, ActionListener, K
 
     public ControladorPropietarios(Configuracion vistaConfiguracion) {
         this.vistaConfiguracion = vistaConfiguracion;
-        vistaConfiguracion.propietarios.tablaPropietarios.addMouseListener(this);
+        vistaConfiguracion.propietarios.tablaPropietarios.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+              super.mouseClicked(e); //To change body of generated methods, choose Tools | Templates.
+              int row = vistaConfiguracion.propietarios.tablaPropietarios.getSelectedRow();
+              //-------Si hizo click dos veces guardo ese propietario para mostrar por defecto------------//
+              if (e.getClickCount() == 2) {
+                System.out.println(vistaConfiguracion.propietarios.tablaPropietarios.getModel().getValueAt(row,1).toString());           
+              }
+              vistaConfiguracion.propietarios.apellidoTxf.setText(vistaConfiguracion.propietarios.tablaPropietarios.getModel().getValueAt(row,0).toString());
+              vistaConfiguracion.propietarios.nombreTxf.setText(vistaConfiguracion.propietarios.tablaPropietarios.getModel().getValueAt(row,1).toString());
+              vistaConfiguracion.propietarios.cuitTxf.setText(vistaConfiguracion.propietarios.tablaPropietarios.getModel().getValueAt(row,2).toString());
+              vistaConfiguracion.propietarios.nroRecibo.setText(vistaConfiguracion.propietarios.tablaPropietarios.getModel().getValueAt(row,3).toString());
+              backup_cuit = vistaConfiguracion.propietarios.tablaPropietarios.getModel().getValueAt(row,2).toString();
+            }
+            
+        });
         vistaConfiguracion.propietarios.agregar.addActionListener(this);
         vistaConfiguracion.propietarios.eliminar.addActionListener(this);
         vistaConfiguracion.propietarios.editar.addActionListener(this);
@@ -56,7 +76,7 @@ public class ControladorPropietarios implements MouseListener, ActionListener, K
     
     public void llenarTabla(){
         ResultSet rs = pd.obtenerPropietarios();
-        DefaultTableModel model = (DefaultTableModel) vistaConfiguracion.propietarios.tablaPropietarios.getModel();
+        DefaultTableModel model = (DefaultTableModel) vistaConfiguracion.propietarios.tablaPropietarios.getModel();        
         model.setRowCount(0);
         try {
             while(rs.next()){
@@ -64,7 +84,7 @@ public class ControladorPropietarios implements MouseListener, ActionListener, K
                 String nombres = rs.getString(2);
                 String cuit = rs.getString(3);
                 String nroRecibo = rs.getString(4);
-                propietarios = new Object[] {apellidos, nombres, cuit, nroRecibo};
+                propietarios = new Object[] {apellidos, nombres, cuit, nroRecibo, false};
                 model.addRow(propietarios);
             }
         } 
@@ -72,33 +92,6 @@ public class ControladorPropietarios implements MouseListener, ActionListener, K
             System.out.println(e.getMessage());
         }
     }
-
-    @Override
-    public void mouseClicked(MouseEvent e) {
-          int row = vistaConfiguracion.propietarios.tablaPropietarios.getSelectedRow();
-          vistaConfiguracion.propietarios.apellidoTxf.setText(vistaConfiguracion.propietarios.tablaPropietarios.getModel().getValueAt(row,0).toString());
-          vistaConfiguracion.propietarios.nombreTxf.setText(vistaConfiguracion.propietarios.tablaPropietarios.getModel().getValueAt(row,1).toString());
-          vistaConfiguracion.propietarios.cuitTxf.setText(vistaConfiguracion.propietarios.tablaPropietarios.getModel().getValueAt(row,2).toString());
-          vistaConfiguracion.propietarios.nroRecibo.setText(vistaConfiguracion.propietarios.tablaPropietarios.getModel().getValueAt(row,3).toString());
-          backup_cuit = vistaConfiguracion.propietarios.tablaPropietarios.getModel().getValueAt(row,2).toString();
-    }
-
-    @Override
-    public void mousePressed(MouseEvent e) {
-    }
-
-    @Override
-    public void mouseReleased(MouseEvent e) {
-    }
-
-    @Override
-    public void mouseEntered(MouseEvent e) {
-    }
-
-    @Override
-    public void mouseExited(MouseEvent e) {
-    }
-
     @Override
     public void actionPerformed(ActionEvent e) {
         if(e.getSource()==vistaConfiguracion.propietarios.limpiar){

@@ -30,6 +30,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.sql.ResultSet;
@@ -170,7 +171,7 @@ public class ControladorCliente implements ActionListener, MouseListener, TableM
                 }
                }
             }
-            //-----Solo permite ingresar numeros
+            //-----Solo permite ingresar numeros en campo bolsa cemento----//
             @Override
             public void keyTyped(KeyEvent e){
              char vchar = e.getKeyChar();
@@ -186,6 +187,7 @@ public class ControladorCliente implements ActionListener, MouseListener, TableM
         this.vistaClientes.tablaCliente.setDefaultRenderer(Object.class, r);
         this.vistaClientes.tablaCliente.getColumn("Aviso").setCellRenderer(new RendererAviso());
         llenarComboApellidos();
+        llenarTabla();
     }
 
     public ControladorCliente() {
@@ -275,7 +277,7 @@ public class ControladorCliente implements ActionListener, MouseListener, TableM
               cd.eliminarCliente(dni);
               llenarTabla();
                } 
-                }
+              }
               else{
                  JOptionPane.showMessageDialog(null, "Seleccione un cliente de la lista", "Atención", JOptionPane.INFORMATION_MESSAGE, null);
                }
@@ -353,28 +355,61 @@ public class ControladorCliente implements ActionListener, MouseListener, TableM
     
     private void guardarPropietario(){
          try {
-                    Properties props = new Properties();
-                    fileIn = new FileInputStream(configFile);
-                    props.load(fileIn);
-                    props.setProperty("apellidoPropietario", this.vistaClientes.comboApellido.getSelectedItem().toString());
-                    props.setProperty("nombrePropietario", this.vistaClientes.comboNombre.getSelectedItem().toString());
-                    fileOut = new FileOutputStream(configFile);
-                    props.store(fileOut, "config");
-                } catch (FileNotFoundException ex) {
-                    java.util.logging.Logger.getLogger(ControladorCliente.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (IOException ex) {
-                    java.util.logging.Logger.getLogger(ControladorCliente.class.getName()).log(Level.SEVERE, null, ex);
-                }
+            Properties props = new Properties();
+            fileIn = new FileInputStream(configFile);
+            props.load(fileIn);
+            //---------Si tilda checkbox guardo el apellido y nombre de propietario------------//
+            if(this.vistaClientes.checkPropietario.isSelected()){
+                props.setProperty("apellidoPropietario", vistaClientes.comboApellido.getSelectedItem().toString());
+                props.setProperty("nombrePropietario", vistaClientes.comboNombre.getSelectedItem().toString());
+            }else{
+                props.setProperty("apellidoPropietario", "");
+                props.setProperty("nombrePropietario", "");
+            }
+            fileOut = new FileOutputStream(configFile);
+            props.store(fileOut, "config");
+        } catch (FileNotFoundException ex) {
+            java.util.logging.Logger.getLogger(ControladorCliente.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            java.util.logging.Logger.getLogger(ControladorCliente.class.getName()).log(Level.SEVERE, null, ex);
+            }
     }
     
     public void llenarComboApellidos(){
-        List<Propietario> propietarios;
-        propietarios = pd.obtenerApellidos();
-        vistaClientes.comboApellido.removeAllItems();
-        vistaClientes.comboApellido.addItem("Seleccione");
-        for (int i = 0; i < propietarios.size(); i++) {
-            vistaClientes.comboApellido.addItem(propietarios.get(i).getApellidos());
-        }   
+            FileReader reader = null;
+        try {
+            //-------Obtengo el propietario seleccionado por default, para mostrar los clientes de ese propietario----//
+            reader = new FileReader(configFile);
+            Properties props = new Properties();
+            props.load(reader);
+            apellidos = props.getProperty("apellidoPropietario");
+            nombres = props.getProperty("nombrePropietario");
+            List<Propietario> propietarios;
+            propietarios = pd.obtenerApellidos();
+            vistaClientes.comboApellido.removeAllItems();
+            vistaClientes.comboApellido.addItem("Seleccione");
+            for (int i = 0; i < propietarios.size(); i++) {   
+                vistaClientes.comboApellido.addItem(propietarios.get(i).getApellidos());
+            }
+            //--------Controlo si tiene seleccionado un propietario por default para cargarlo al principio-------//
+            for (int i = 0; i < vistaClientes.comboApellido.getItemCount(); i++) {
+                if(apellidos.equals(vistaClientes.comboApellido.getItemAt(i))){
+                    vistaClientes.comboApellido.setSelectedIndex(i);
+                    vistaClientes.checkPropietario.setEnabled(true);
+                    vistaClientes.checkPropietario.setSelected(true);
+                }
+            }
+            } catch (FileNotFoundException ex) {
+                java.util.logging.Logger.getLogger(ControladorCliente.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (IOException ex) {
+                java.util.logging.Logger.getLogger(ControladorCliente.class.getName()).log(Level.SEVERE, null, ex);
+            } finally {
+            try {
+                reader.close();
+            } catch (IOException ex) {
+                java.util.logging.Logger.getLogger(ControladorCliente.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
  }   
   public void llenarComboNombres(String apellidos){
         List<Propietario>propietarios = null;        

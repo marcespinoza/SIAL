@@ -51,12 +51,19 @@ public class Propietarios extends javax.swing.JPanel {
 
             },
             new String [] {
-                "Apellido/s", "Nombre/s", "Cuit", "Nro recibo"
+                "Apellido/s", "Nombre/s", "Cuit", "Nro recibo", "Default"
             }
         ) {
-            boolean[] canEdit = new boolean [] {
-                false, false, false, false
+            Class[] types = new Class [] {
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Boolean.class
             };
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, true
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit [columnIndex];
