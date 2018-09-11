@@ -190,7 +190,7 @@ public class ControladorAltaCliente implements ActionListener, KeyListener{
 
        @Override
        public void done() { 
-           //--------Si alta es igual a 1 el cliente ya existe-----------//
+           //--------Si alta es igual a 1 el cliente fue agregado-----------//
            if(alta==1){
            if(bandera_){
              fd.cambiarPropietario(Integer.parseInt(ac.documento.getText()), dni, id_control);

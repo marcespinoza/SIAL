@@ -51,6 +51,7 @@ public class ControladorBaseDeDatos implements ActionListener{
 
     @Override
     public void actionPerformed(ActionEvent e) {
+        
         if(e.getSource()==bd.buscar){
           chooser = new JFileChooser();
           chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);

@@ -256,7 +256,7 @@ public class ControladorRecibo implements ActionListener{
             table.addCell(cell3);
             document.add(table); 
             Paragraph para = new Paragraph("Numero: "+ar.nro_recibo.getText(),f);
-            Paragraph cuit = new Paragraph("CUIT: 23-07431900",f);
+            Paragraph cuit = new Paragraph("CUIT: 23-07431900-9",f);
             Paragraph ingBrutos = new Paragraph("Ing Brutos: 01-23-07431900-9",f);
             Paragraph inicAct = new Paragraph(fecha1.format(date)+"                                                        Inic. Act.: 01-08-2015",f); 
             switch(i){

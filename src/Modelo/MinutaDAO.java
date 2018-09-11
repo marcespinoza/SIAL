@@ -14,7 +14,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -111,7 +110,7 @@ public class MinutaDAO {
  }
     
     public List<Minuta> minutasPorFecha(String fecha){
-       ResultSet rs = null;
+       ResultSet rs;
        Connection connection = null;
        List<Minuta> minutas = new ArrayList<>();
      try {
@@ -135,8 +134,14 @@ public class MinutaDAO {
                 m.setNroRecibo(rs.getInt(12));
                 minutas.add(m);
           }
-        } catch (Exception e) {
+        } catch (SQLException e) {
             System.out.println(e.getMessage());
+        }finally{
+         try {
+             connection.close();
+         } catch (SQLException ex) {
+             Logger.getLogger(MinutaDAO.class.getName()).log(Level.SEVERE, null, ex);
+         }
         }
      return minutas;
     }

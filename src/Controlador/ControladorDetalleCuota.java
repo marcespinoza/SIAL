@@ -316,9 +316,9 @@ public class ControladorDetalleCuota implements ActionListener, TableModelListen
               props.store(fileOut, "config");
                } catch (FileNotFoundException ex) {
                  // file does not exist
-                } catch (IOException ex) {
+               } catch (IOException ex) {
                    // I/O error
-                }
+               }
             }
         }        
     }

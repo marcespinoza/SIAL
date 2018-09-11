@@ -28,8 +28,8 @@ public class ControladorConfiguracion {
     public void desactivarBotones(){        
         if(Ventana.labelTipoUsuario.getText().equals("operador")){
             configuracion.pestañas.setEnabledAt(0, false);
-            configuracion.pestañas.setEnabledAt(2, false);
-            configuracion.pestañas.setSelectedIndex(1);
+//            configuracion.pestañas.setEnabledAt(2, false);
+//            configuracion.pestañas.setSelectedIndex(1);
         }
     }
     

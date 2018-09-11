@@ -234,7 +234,7 @@ public class ClienteDAO {
      List<ClientesPorCriterio> clientesPorPropietario = new ArrayList<>();
      try {
           connection = conexion.dataSource.getConnection();
-          String listar = "SELECT DISTINCT c.Dni, c.Apellidos, c.Nombres,c.fecha_nacimiento, c.barrio, c.calle, c.numero, c.Telefono1, c.telefono2, c.trabajo, cl.baja, f.Id_control, f.cantidad_cuotas, f.gastos, f.bolsa_cemento, f.fecha_actualizacion, f.lote_Barrio, f.lote_Manzana, f.lote_Parcela from ((((cliente c INNER join cliente_tiene_lote cl on c.dni=cl.cliente_dni) INNER join ficha_control_lote f on cl.id_control=f.id_control) INNER join lote l on f.lote_barrio=l.barrio) INNER join lote l2 on l2.manzana=f.lote_manzana) INNER join lote l3 on l3.parcela=f.lote_parcela where l3.propietario_Apellidos='"+apellido+"' and l3.propietario_Nombres='"+nombre+"'"; 
+          String listar = "SELECT DISTINCT c.Dni, c.Apellidos, c.Nombres,c.fecha_nacimiento, c.barrio, c.calle, c.numero, c.Telefono1, c.telefono2, c.trabajo, cl.baja, f.Id_control, f.cantidad_cuotas, f.gastos, f.bolsa_cemento, f.fecha_actualizacion, f.lote_Barrio, f.lote_Manzana, f.lote_Parcela from ((((cliente c INNER join cliente_tiene_lote cl on c.dni=cl.cliente_dni) INNER join ficha_control_lote f on cl.id_control=f.id_control) INNER join lote l on f.lote_barrio=l.barrio) INNER join lote l2 on l2.manzana=f.lote_manzana) INNER join lote l3 on l3.parcela=f.lote_parcela where l3.propietario_Apellidos='"+apellido+"' and l3.propietario_Nombres='"+nombre+"' order by c.apellidos"; 
           Statement st = connection.createStatement();
           rs = st.executeQuery(listar);
           while (rs.next()) {

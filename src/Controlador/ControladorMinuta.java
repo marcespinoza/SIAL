@@ -35,8 +35,6 @@ import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -107,7 +105,7 @@ public class ControladorMinuta implements MouseListener, ActionListener {
                 Date fecha_minuta = listaMinutas.get(i).getFechaMinuta();
                 String apellidos = listaMinutas.get(i).getApellidos();
                 String nombres = listaMinutas.get(i).getNombres();
-                String mzpc = String.valueOf(listaMinutas.get(i).getManzana()) + String.valueOf(listaMinutas.get(i).getParcela());
+                String mzpc = String.valueOf(listaMinutas.get(i).getManzana()) +" - "+ String.valueOf(listaMinutas.get(i).getParcela());
                 BigDecimal cobrado = listaMinutas.get(i).getCobrado();
                 BigDecimal gastos = listaMinutas.get(i).getGastos();
                 BigDecimal rendido = listaMinutas.get(i).getRendido();
@@ -406,7 +404,7 @@ public class ControladorMinuta implements MouseListener, ActionListener {
         
     public class MinutasPorFecha extends javax.swing.SwingWorker<Void, Void>{
          
-         List<Minuta> minutas = new ArrayList<>();
+         List<Minuta> minutas = null;
          DateFormat sdfr = new SimpleDateFormat("dd-MM-yyyy");
 
         @Override

@@ -15,16 +15,19 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.IOException;
 import java.sql.ResultSet;
+import java.util.Properties;
+import java.util.logging.Level;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
-import javax.swing.ListSelectionModel;
 import javax.swing.border.EtchedBorder;
-import javax.swing.event.TableModelEvent;
-import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -38,6 +41,8 @@ public class ControladorPropietarios implements  ActionListener, KeyListener{
     private Object [] propietarios;    
     File configFile = new File("config.properties");
     String backup_cuit=null;
+    FileInputStream fileIn = null;
+    FileOutputStream fileOut = null;
 
     public ControladorPropietarios(Configuracion vistaConfiguracion) {
         this.vistaConfiguracion = vistaConfiguracion;
@@ -48,7 +53,22 @@ public class ControladorPropietarios implements  ActionListener, KeyListener{
               int row = vistaConfiguracion.propietarios.tablaPropietarios.getSelectedRow();
               //-------Si hizo click dos veces guardo ese propietario para mostrar por defecto------------//
               if (e.getClickCount() == 2) {
-                System.out.println(vistaConfiguracion.propietarios.tablaPropietarios.getModel().getValueAt(row,1).toString());           
+                try {
+                    Properties props = new Properties();
+                    fileIn = new FileInputStream(configFile);
+                    props.load(fileIn);  
+                    String ap = vistaConfiguracion.propietarios.tablaPropietarios.getModel().getValueAt(row,0).toString();
+                    String nom = vistaConfiguracion.propietarios.tablaPropietarios.getModel().getValueAt(row,1).toString();
+                    props.setProperty("apellidoPropietario", ap);
+                    props.setProperty("nombrePropietario", nom);
+                    vistaConfiguracion.propietarios.propietarioDefault.setText(ap+" "+nom);                  
+                    fileOut = new FileOutputStream(configFile);
+                    props.store(fileOut, "config");
+                    } catch (FileNotFoundException ex) {
+                        java.util.logging.Logger.getLogger(ControladorCliente.class.getName()).log(Level.SEVERE, null, ex);
+                    } catch (IOException ex) {
+                    java.util.logging.Logger.getLogger(ControladorCliente.class.getName()).log(Level.SEVERE, null, ex);
+                    }  
               }
               vistaConfiguracion.propietarios.apellidoTxf.setText(vistaConfiguracion.propietarios.tablaPropietarios.getModel().getValueAt(row,0).toString());
               vistaConfiguracion.propietarios.nombreTxf.setText(vistaConfiguracion.propietarios.tablaPropietarios.getModel().getValueAt(row,1).toString());
@@ -70,8 +90,10 @@ public class ControladorPropietarios implements  ActionListener, KeyListener{
         vistaConfiguracion.propietarios.cuitTxf.setDocument(new LimitadorCaracteres(14));
         vistaConfiguracion.propietarios.nroRecibo.addKeyListener(this);
         vistaConfiguracion.propietarios.editar.setEnabled(false);
+        vistaConfiguracion.propietarios.borrarDefault.addActionListener(this);
         vistaConfiguracion.setLocationRelativeTo(null);
-        llenarTabla();        
+        llenarTabla();    
+        cargarPropietarioDefecto();
     }
     
     public void llenarTabla(){
@@ -84,7 +106,7 @@ public class ControladorPropietarios implements  ActionListener, KeyListener{
                 String nombres = rs.getString(2);
                 String cuit = rs.getString(3);
                 String nroRecibo = rs.getString(4);
-                propietarios = new Object[] {apellidos, nombres, cuit, nroRecibo, false};
+                propietarios = new Object[] {apellidos, nombres, cuit, nroRecibo};
                 model.addRow(propietarios);
             }
         } 
@@ -92,8 +114,43 @@ public class ControladorPropietarios implements  ActionListener, KeyListener{
             System.out.println(e.getMessage());
         }
     }
+    
+    private void cargarPropietarioDefecto() {
+        try {
+          FileReader reader = new FileReader(configFile);
+          Properties props = new Properties();
+          props.load(reader); 
+          String apellido = props.getProperty("apellidoPropietario");
+          String nombre = props.getProperty("nombrePropietario");
+          vistaConfiguracion.propietarios.propietarioDefault.setText(apellido+" "+nombre);
+         reader.close();
+       } catch (FileNotFoundException ex) {
+      // file does not exist
+       } catch (IOException ex) {
+      // I/O error
+       }
+     } 
+    
     @Override
     public void actionPerformed(ActionEvent e) {
+        
+         if(e.getSource()==vistaConfiguracion.propietarios.borrarDefault){
+           try {
+            Properties props = new Properties();
+            fileIn = new FileInputStream(configFile);
+            props.load(fileIn);  
+            props.setProperty("apellidoPropietario", "");
+            props.setProperty("nombrePropietario", "");
+            vistaConfiguracion.propietarios.propietarioDefault.setText("");                  
+            fileOut = new FileOutputStream(configFile);
+            props.store(fileOut, "config");            
+            } catch (FileNotFoundException ex) {
+                java.util.logging.Logger.getLogger(ControladorCliente.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (IOException ex) {
+            java.util.logging.Logger.getLogger(ControladorCliente.class.getName()).log(Level.SEVERE, null, ex);
+          }  
+        }
+        
         if(e.getSource()==vistaConfiguracion.propietarios.limpiar){
            limpiarCampos();
         }

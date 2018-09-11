@@ -24,15 +24,17 @@
                       <Component id="jPanel1" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="jPanel3" min="-2" max="-2" attributes="0"/>
+                          <Group type="102" attributes="0">
+                              <Component id="jPanel3" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace type="separate" max="-2" attributes="0"/>
+                              <Component id="jLabel18" min="-2" max="-2" attributes="0"/>
+                          </Group>
                           <Component id="jPanel2" min="-2" max="-2" attributes="0"/>
                       </Group>
                   </Group>
                   <Group type="102" attributes="0">
                       <Component id="jPanel5" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace min="-2" pref="186" max="-2" attributes="0"/>
-                      <Component id="jLabel18" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="275" max="-2" attributes="0"/>
                       <Component id="jPanel4" min="-2" max="-2" attributes="0"/>
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
                       <Component id="jLabel19" min="-2" max="-2" attributes="0"/>
@@ -90,7 +92,7 @@
                       <Component id="jScrollPane2" pref="0" max="32767" attributes="0"/>
                   </Group>
               </Group>
-              <EmptySpace pref="18" max="32767" attributes="0"/>
+              <EmptySpace pref="19" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -870,6 +872,9 @@
           </Border>
         </Property>
       </Properties>
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="1"/>
+      </AuxValues>
 
       <Layout>
         <DimensionLayout dim="0">
@@ -880,16 +885,12 @@
                       <Component id="jLabel20" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                      <Group type="102" attributes="0">
-                          <Component id="comboApellido" min="-2" pref="252" max="-2" attributes="0"/>
-                          <EmptySpace type="separate" max="-2" attributes="0"/>
-                          <Component id="checkPropietario" min="-2" max="-2" attributes="0"/>
-                      </Group>
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <Component id="comboApellido" min="-2" pref="252" max="-2" attributes="0"/>
                       <Group type="102" attributes="0">
                           <Component id="comboNombre" min="-2" pref="252" max="-2" attributes="0"/>
                           <EmptySpace type="separate" max="-2" attributes="0"/>
-                          <Component id="mostrarTodos" max="32767" attributes="0"/>
+                          <Component id="mostrarTodos" min="-2" pref="141" max="-2" attributes="0"/>
                       </Group>
                   </Group>
                   <EmptySpace pref="22" max="32767" attributes="0"/>
@@ -902,7 +903,6 @@
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="comboApellido" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="jLabel17" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="checkPropietario" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="1" attributes="0">
@@ -963,14 +963,6 @@
         <Component class="javax.swing.JButton" name="mostrarTodos">
           <Properties>
             <Property name="text" type="java.lang.String" value="Mostrar todos"/>
-          </Properties>
-          <AuxValues>
-            <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="1"/>
-          </AuxValues>
-        </Component>
-        <Component class="javax.swing.JCheckBox" name="checkPropietario">
-          <Properties>
-            <Property name="text" type="java.lang.String" value="Mostrar por defecto"/>
           </Properties>
           <AuxValues>
             <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="1"/>
@@ -1078,7 +1070,7 @@
         </Component>
         <Component class="javax.swing.JButton" name="editarBtn">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Editar propietario"/>
+            <Property name="text" type="java.lang.String" value="Editar cliente"/>
           </Properties>
           <AuxValues>
             <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="1"/>
@@ -1086,7 +1078,7 @@
         </Component>
         <Component class="javax.swing.JButton" name="agregarBtn">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Nuevo propietario"/>
+            <Property name="text" type="java.lang.String" value="Nuevo cliente"/>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="agregarBtnActionPerformed"/>
@@ -1097,7 +1089,7 @@
         </Component>
         <Component class="javax.swing.JButton" name="eliminarBtn">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Eliminar propietario"/>
+            <Property name="text" type="java.lang.String" value="Eliminar cliente"/>
           </Properties>
           <Events>
             <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="eliminarBtnMouseClicked"/>
