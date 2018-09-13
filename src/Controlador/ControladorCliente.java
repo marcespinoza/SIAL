@@ -523,7 +523,7 @@ public class ControladorCliente implements ActionListener, MouseListener, TableM
         }
          List<Referencia> listaReferencia;
         listaReferencia = new ArrayList<>();
-        listaReferencia = rd.obtenerReferencia(Integer.parseInt(vistaClientes.tablaCliente.getModel().getValueAt(row,2).toString()));
+        listaReferencia = rd.obtenerReferencia(Integer.parseInt(vistaClientes.tablaCliente.getModel().getValueAt(vistaClientes.tablaCliente.convertRowIndexToModel(row), 2).toString()));
         if(!listaReferencia.isEmpty()){
             for (int i = 0; i < listaReferencia.size(); i++) {
                 vistaClientes.apellido_referencia.setText(listaReferencia.get(i).getApellidos());

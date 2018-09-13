@@ -376,7 +376,7 @@ public void inicializarBotones(){
 
     public void desactivarBotones(){  
         if(Ventana.labelTipoUsuario.getText().equals("operador")){
-            clientes.editarBtn.setEnabled(false);
+//            clientes.editarBtn.setEnabled(false);
             clientes.eliminarBtn.setEnabled(false);
             registroEventos.setEnabled(false);
         }

@@ -159,7 +159,7 @@ public class ClienteDAO {
         }
     }
  
-    public int altaCliente(int dni, String apellidos, String nombres, Date fecha_nacimiento, String barrio, String calle, int numero, String telefono1, String telefono2, String trabajo) throws SQLException{
+    public int altaCliente(int dni, String apellidos, String nombres, Date fecha_nacimiento, String barrio, String calle, String numero, String telefono1, String telefono2, String trabajo) throws SQLException{
        int filasAfectadas=0;
        PreparedStatement ps = null;
        Connection con = null;
@@ -170,13 +170,14 @@ public class ClienteDAO {
          filasAfectadas = ps.executeUpdate();         
        } catch (SQLException e) { 
           //--------1062 es el codigo de error para claves duplicadas------//
+          System.out.println(e.getMessage());
          if(e.getErrorCode() == 1062){
            filasAfectadas = 0; 
        }         
        }finally{
          con.close();
          if(ps!=null){
-               ps.close();
+            ps.close();
          }
      }
      return filasAfectadas;
