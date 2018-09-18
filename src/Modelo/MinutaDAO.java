@@ -182,7 +182,7 @@ public class MinutaDAO {
      try {
           connection = conexion.dataSource.getConnection();
           PreparedStatement statement =
-          connection.prepareStatement("SELECT m.fecha_minuta, m.apellidos, m.nombres, m.manzana, m.parcela, m.cobrado, m.gastos, m.rendido, m.nro_cuota, m.observaciones, m.baja from minuta m INNER JOIN recibo r ON m.id_recibo=r.idRecibo WHERE fecha_minuta between ? and ?");
+          connection.prepareStatement("SELECT m.fecha_minuta, m.apellidos, m.nombres, m.manzana, m.parcela, m.cobrado, m.gastos, m.rendido, m.nro_cuota, m.observaciones, m.baja, r.nro_recibo from minuta m INNER JOIN recibo r ON m.id_recibo=r.idRecibo WHERE fecha_minuta between ? and ?");
           statement.setDate(1, desde);
           statement.setDate(2, hasta);
           rs = statement.executeQuery();

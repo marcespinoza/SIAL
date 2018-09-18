@@ -91,6 +91,7 @@ public class MinutaVista extends javax.swing.JPanel {
         if (tablaMinuta.getColumnModel().getColumnCount() > 0) {
             tablaMinuta.getColumnModel().getColumn(0).setPreferredWidth(1);
             tablaMinuta.getColumnModel().getColumn(1).setPreferredWidth(1);
+            tablaMinuta.getColumnModel().getColumn(3).setPreferredWidth(1);
             tablaMinuta.getColumnModel().getColumn(4).setPreferredWidth(1);
             tablaMinuta.getColumnModel().getColumn(5).setPreferredWidth(1);
             tablaMinuta.getColumnModel().getColumn(6).setPreferredWidth(1);

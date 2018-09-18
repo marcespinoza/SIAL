@@ -381,15 +381,23 @@ public class ControladorRecibo implements ActionListener{
         } catch (IOException ex) {
             Logger.getLogger(DetalleCuota.class.getName()).log(Level.SEVERE, null, ex);
             log.error(ex);
+        }finally{
+            abrirPdf();
         }
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
         if(e.getSource() == ar.aceptar){
-            if(validarCampos()){                     
+            if(validarCampos()){  
+            //------Controlo si ya se genero recibo de la cuota seleccionada, si es asi, solo genero pdf, sino genero recibo, pdf y mminuta --// 
+              if(dc.tablaDetallePago.getModel().getValueAt(row, 12).toString().equals("0")) { 
                 generarRecibo();
                 new GenerarMinuta().execute();
+              }else{
+                generarRecibo();
+                ar.dispose();
+              }
             }else{
               JOptionPane.showMessageDialog(null, "Rellene todos los campos", "Atención", JOptionPane.INFORMATION_MESSAGE, null);
             }
@@ -416,7 +424,7 @@ public class ControladorRecibo implements ActionListener{
          }    
       }
       
-      //----Hilo para genera pdf de las minutas-----//      
+      //----Hilo para generar recibo y minutas-----//      
        public class GenerarMinuta extends javax.swing.SwingWorker<Void, Void>{
          
        private int id_recibo=0;  
@@ -445,20 +453,25 @@ public class ControladorRecibo implements ActionListener{
             }else if(tipoPago==0){
               md.altaMinuta(new java.sql.Date(date.getTime()), apellido_comprador, nombre_comprador, manzana, parcela, cobrado, gastos_administrativos, rendido, Integer.parseInt(dc.tablaDchoPosesion.getModel().getValueAt(row, 0).toString()), dc.tablaDetallePago.getModel().getValueAt(row, 13).toString()+" Dcho. posesión", "Cta. derecho posesión",id_recibo);
             }
+            //----------Incremento el numero de recibo asociado a ese propietario---------//
             pd.editarNroRecibo(apellido_propietario, nombre_propietario, cuit_propietario, Integer.parseInt(ar.nro_recibo.getText())+1);
             cuod.actualizarNroRecibo(Integer.parseInt(ar.nro_recibo.getText()), id_recibo, nro_cuota, id_control);
             progress.dispose();
-            ar.dispose();
+            ar.dispose();         
+            cdc.llearTablaDchoPosesion(id_control);
+            cdc.llenarTabla(id_control);
+         }    
+        }
+       
+       //---------Funcion que abre el recibo generado---------//
+       private void abrirPdf(){
            try {
             //-------Abro pdf del recibo-------//   
                Desktop.getDesktop().open(pathRecibo);
            } catch (IOException ex) {
                Logger.getLogger(ControladorRecibo.class.getName()).log(Level.SEVERE, null, ex);
            }
-            cdc.llearTablaDchoPosesion(id_control);
-            cdc.llenarTabla(id_control);
-         }    
-        }
+       }
        
       public Boolean validarCampos(){
           boolean bandera = true;

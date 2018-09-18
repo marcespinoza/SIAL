@@ -11,8 +11,8 @@ import Modelo.CuotaDAO;
 import Modelo.DchoPosesionDAO;
 import Modelo.FichaControlDAO;
 import Clases.LimitadorCaracteres;
-import static Controlador.ControladorLogin.log;
 import Vista.Dialogs.AltaCuota;
+import Vista.Dialogs.ProgressDialog;
 import Vista.Frame.Ventana;
 import java.awt.Color;
 import java.awt.Frame;
@@ -31,6 +31,8 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.BorderFactory;
+import javax.swing.JDialog;
+import javax.swing.ProgressMonitorInputStream;
 import javax.swing.border.EtchedBorder;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
@@ -105,12 +107,14 @@ public class ControladorAltaCuota implements ActionListener, KeyListener{
         //------Evito que ingrese letras en un campo numerico-----------//
         ac.porcentaje_gastos.addKeyListener(new KeyAdapter() {
             @Override
-            public void keyTyped(KeyEvent e) {
-                  char vChar = e.getKeyChar();            
-                 if (!(Character.isDigit(vChar)) && !(e.getKeyChar() == '.')) {
-                    e.consume();
-                 }                 
-            }        
+            public void keyReleased(KeyEvent e) {
+                 if(ac.porcentaje_gastos.getText().matches("^[0-9]*\\.?[0-9]*$")){
+                     ac.porcentaje_gastos.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
+                 }else{
+                    ac.porcentaje_gastos.setBorder(BorderFactory.createLineBorder(Color.RED, 1));
+                 }
+            }            
+                   
             @Override
             public void keyPressed(KeyEvent e){
               if(e.getKeyCode()==KeyEvent.VK_ENTER){
@@ -252,6 +256,9 @@ public class ControladorAltaCuota implements ActionListener, KeyListener{
     }
     
     public void altaPago(){
+//        JDialog dlgProgress = new JDialog(parent, "Please wait...", true);
+//dlgProgress.setLocationRelativeTo(ac);
+//dlgProgress.setVisible(true);
       List<FichaDeControl> listafc = new ArrayList<>();  
       if(ac.chk_dcho_posesion.isSelected()){ 
                 if(validarCampos()){

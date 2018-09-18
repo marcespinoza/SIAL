@@ -127,15 +127,13 @@ public class ControladorActualizarCuota implements ActionListener{
         List<Cuota> cuotas = new ArrayList<>();
         if(validarCampos()){           
                listaFichaControl = fc.obtenerFichaControl(id_control);
-               cuotas = cd.listaDetalleCuotaXsaldo(id_control);
-                                  
+               cuotas = cd.listaDetalleCuotaXsaldo(id_control);                                  
                    BigDecimal ultimo_saldo =cuotas.get(cuotas.size()-1).getSaldo();                   
                    BigDecimal cuota_pura = new BigDecimal(ac.cuota_total.getText()).subtract(new BigDecimal(ac.gastos.getText()));
                    BigDecimal gastos = new BigDecimal(ac.gastos.getText());
                    BigDecimal bolsa_cemento = listaFichaControl.get(0).getBolsaCemento();
-                   BigDecimal ultimo_saldo_bolsa_cemento =cuotas.get(cuotas.size()-1).getCemento_saldo();            
-                   calcularValores(ultimo_saldo, cuota_pura, gastos, bolsa_cemento, ultimo_saldo_bolsa_cemento);             
-                
+                   BigDecimal ultimo_saldo_bolsa_cemento = cuotas.get(cuotas.size()-1).getCemento_saldo();            
+                   calcularValores(ultimo_saldo, cuota_pura, gastos, bolsa_cemento, ultimo_saldo_bolsa_cemento);                             
            }  
     }
     

@@ -187,7 +187,7 @@ public class ControladorCliente implements ActionListener, MouseListener, TableM
     
     @Override
     public void actionPerformed(ActionEvent e) {
-        
+        //-----------Boton mostrar todos los clientes----//
         if(e.getSource()==vistaClientes.mostrarTodos){
             vistaClientes.comboApellido.setSelectedIndex(0);
             vistaClientes.comboNombre.setSelectedIndex(0);
@@ -254,10 +254,12 @@ public class ControladorCliente implements ActionListener, MouseListener, TableM
                JOptionPane.showMessageDialog(null, "Seleccione un propietario de la lista", "Atención", JOptionPane.INFORMATION_MESSAGE, null);
            } 
         }
+        //-----Boton agregar propietario--//
         if(e.getSource() == vistaClientes.agregarBtn){  
             new ControladorAltaCliente((Ventana) SwingUtilities.getWindowAncestor(vistaClientes), 0,0, false);
             llenarTabla();
          }
+        //----------Boton eliminar cliente---------//
         if(e.getSource() == vistaClientes.eliminarBtn){
              int row = vistaClientes.tablaCliente.getSelectedRow(); 
              if(row != -1){
@@ -274,6 +276,7 @@ public class ControladorCliente implements ActionListener, MouseListener, TableM
                  JOptionPane.showMessageDialog(null, "Seleccione un cliente de la lista", "Atención", JOptionPane.INFORMATION_MESSAGE, null);
                }
         }
+        //--------Boton editar cliente---------//
         if(e.getSource() == vistaClientes.editarBtn){
             int row = vistaClientes.tablaCliente.getSelectedRow();
             if(row!=-1){
@@ -293,7 +296,7 @@ public class ControladorCliente implements ActionListener, MouseListener, TableM
                  JOptionPane.showMessageDialog(null, "Seleccione un cliente de la lista", "Atención", JOptionPane.INFORMATION_MESSAGE, null);
             }
           }
-        
+        //----------Boton detalle de pago------//
          if(e.getSource() == vistaClientes.detalleBtn){  
            int row = vistaClientes.tablaCliente.getSelectedRow();
            if(row != -1){
@@ -306,25 +309,28 @@ public class ControladorCliente implements ActionListener, MouseListener, TableM
                JOptionPane.showMessageDialog(null, "Seleccione un cliente de la lista", "Atención", JOptionPane.INFORMATION_MESSAGE, null);
            }           
            }
-        
+        //---------Boton asignar lote----------//
         if (e.getSource() == vistaClientes.asignarBtn) {
            int row = vistaClientes.tablaCliente.getSelectedRow();
            if(row != -1){
                //-----Controlo si ya tiene asignada una propiedad-----------//
-               System.out.println(vistaClientes.tablaCliente.getModel().getValueAt(vistaClientes.tablaCliente.convertRowIndexToModel(row),10)+"propiedad");
-               if(vistaClientes.tablaCliente.getModel().getValueAt(vistaClientes.tablaCliente.convertRowIndexToModel(row), 11)== null){
+               if(vistaClientes.tablaCliente.getModel().getValueAt(vistaClientes.tablaCliente.convertRowIndexToModel(row), 11)!=null){
+                   int reply = JOptionPane.showConfirmDialog(null, "Desea agregar un nuevo lote a "+vistaClientes.tablaCliente.getModel().getValueAt(vistaClientes.tablaCliente.convertRowIndexToModel(row), 0)+" "+vistaClientes.tablaCliente.getModel().getValueAt(vistaClientes.tablaCliente.convertRowIndexToModel(row), 1)+"?",
+                 "Advertencia",JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null);
+                  if (reply == JOptionPane.YES_OPTION) {  
                    //------Paso el dni para crear la ficha de control---------//
-                   new ControladorAsignacionPropiedad((Frame) SwingUtilities.getWindowAncestor(vistaClientes), Integer.parseInt(vistaClientes.tablaCliente.getModel().getValueAt(vistaClientes.tablaCliente.convertRowIndexToModel(row), 2).toString()));
+                 new ControladorAsignacionPropiedad((Frame) SwingUtilities.getWindowAncestor(vistaClientes), Integer.parseInt(vistaClientes.tablaCliente.getModel().getValueAt(vistaClientes.tablaCliente.convertRowIndexToModel(row), 2).toString()));
                  llenarTabla();
-                }else{
-                   JOptionPane.showMessageDialog(null, "Cliente con propiedad ya asignada", "Atención", JOptionPane.INFORMATION_MESSAGE, null);
+                }
+               }else{
+                 new ControladorAsignacionPropiedad((Frame) SwingUtilities.getWindowAncestor(vistaClientes), Integer.parseInt(vistaClientes.tablaCliente.getModel().getValueAt(vistaClientes.tablaCliente.convertRowIndexToModel(row), 2).toString()));
+                 llenarTabla(); 
                }
            }else{
                JOptionPane.showMessageDialog(null, "Seleccione un cliente de la lista", "Atención", JOptionPane.INFORMATION_MESSAGE, null);
            }  
-        }
-        
-        
+        }        
+        //----------Boton dar de baja cliente-----//
         if(e.getSource()==vistaClientes.bajaBtn){
             int row = vistaClientes.tablaCliente.getSelectedRow();
            if(row != -1){
@@ -343,8 +349,7 @@ public class ControladorCliente implements ActionListener, MouseListener, TableM
                JOptionPane.showMessageDialog(null, "Seleccione un cliente con propiedad asignada", "Atención", JOptionPane.INFORMATION_MESSAGE, null);
            }
         }
-    }
-    
+    }    
     
     public void llenarComboApellidos(){
             FileReader reader = null;
@@ -385,7 +390,7 @@ public class ControladorCliente implements ActionListener, MouseListener, TableM
  }
     
     public void llenarTabla(){
-        List<ClientesPorCriterio> listaClientes = new ArrayList<>();
+        List<ClientesPorCriterio> listaClientes;
         if(apellidos.equals("")){
             listaClientes = cd.clientesPorLotes();}
         else{
