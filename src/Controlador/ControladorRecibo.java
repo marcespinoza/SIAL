@@ -428,12 +428,11 @@ public class ControladorRecibo implements ActionListener{
        public class GenerarMinuta extends javax.swing.SwingWorker<Void, Void>{
          
        private int id_recibo=0;  
-       ProgressDialog progress = new ProgressDialog();
 
         @Override
         protected Void doInBackground() throws Exception {     
            
-            progress.setVisible(true);
+          
             //-----Devuelve id del recibo creado-----//
             id_recibo = rd.altaRecibo(Integer.parseInt(ar.nro_recibo.getText()), apellido_propietario, nombre_propietario);         
             return null;
@@ -456,7 +455,6 @@ public class ControladorRecibo implements ActionListener{
             //----------Incremento el numero de recibo asociado a ese propietario---------//
             pd.editarNroRecibo(apellido_propietario, nombre_propietario, cuit_propietario, Integer.parseInt(ar.nro_recibo.getText())+1);
             cuod.actualizarNroRecibo(Integer.parseInt(ar.nro_recibo.getText()), id_recibo, nro_cuota, id_control);
-            progress.dispose();
             ar.dispose();         
             cdc.llearTablaDchoPosesion(id_control);
             cdc.llenarTabla(id_control);

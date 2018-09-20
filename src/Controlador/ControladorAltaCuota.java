@@ -12,10 +12,13 @@ import Modelo.DchoPosesionDAO;
 import Modelo.FichaControlDAO;
 import Clases.LimitadorCaracteres;
 import Vista.Dialogs.AltaCuota;
+import Vista.Dialogs.Progress;
 import Vista.Dialogs.ProgressDialog;
 import Vista.Frame.Ventana;
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Frame;
+import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
@@ -32,7 +35,10 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.BorderFactory;
 import javax.swing.JDialog;
+import javax.swing.JLabel;
+import javax.swing.JProgressBar;
 import javax.swing.ProgressMonitorInputStream;
+import javax.swing.SwingUtilities;
 import javax.swing.border.EtchedBorder;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
@@ -256,9 +262,10 @@ public class ControladorAltaCuota implements ActionListener, KeyListener{
     }
     
     public void altaPago(){
-//        JDialog dlgProgress = new JDialog(parent, "Please wait...", true);
-//dlgProgress.setLocationRelativeTo(ac);
-//dlgProgress.setVisible(true);
+         Window parentWindow = SwingUtilities.windowForComponent(ac);
+      final Progress dlg = new Progress(parent, true);
+    
+    dlg.setVisible(true);
       List<FichaDeControl> listafc = new ArrayList<>();  
       if(ac.chk_dcho_posesion.isSelected()){ 
                 if(validarCampos()){
@@ -278,6 +285,7 @@ public class ControladorAltaCuota implements ActionListener, KeyListener{
                 }
              //--------Es cuota comun----------/     
        }else{
+          dlg.setVisible(false);
            if(validarCampos()){
                List<FichaDeControl> listaFichaControl = new ArrayList<>();
                List<Cuota> cuotas = new ArrayList<>();
