@@ -3,7 +3,6 @@ package Controlador;
 
 import Clases.Cuota;
 import Clases.FichaDeControl;
-import static Controlador.ControladorAltaCuota.log;
 import Modelo.CuotaDAO;
 import Modelo.FichaControlDAO;
 import Vista.Dialogs.ActualizarCuota;
@@ -15,10 +14,7 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import javax.swing.BorderFactory;
 import javax.swing.border.EtchedBorder;
@@ -123,27 +119,28 @@ public class ControladorActualizarCuota implements ActionListener{
     }
     
     public void actualizarPago(){
-        List<FichaDeControl> listaFichaControl = new ArrayList<>();
-        List<Cuota> cuotas = new ArrayList<>();
+        List<FichaDeControl> listaFichaControl;
+        List<Cuota> cuotas;
         if(validarCampos()){           
                listaFichaControl = fc.obtenerFichaControl(id_control);
                cuotas = cd.listaDetalleCuotaXsaldo(id_control);                                  
-                   BigDecimal ultimo_saldo =cuotas.get(cuotas.size()-1).getSaldo();                   
-                   BigDecimal cuota_pura = new BigDecimal(ac.cuota_total.getText()).subtract(new BigDecimal(ac.gastos.getText()));
-                   BigDecimal gastos = new BigDecimal(ac.gastos.getText());
-                   BigDecimal bolsa_cemento = listaFichaControl.get(0).getBolsaCemento();
-                   BigDecimal ultimo_saldo_bolsa_cemento = cuotas.get(cuotas.size()-1).getCemento_saldo();            
-                   calcularValores(ultimo_saldo, cuota_pura, gastos, bolsa_cemento, ultimo_saldo_bolsa_cemento);                             
-           }  
-    }
-    
-    //------Calculo nuevos valores de haber y saldo en pesos, y haber y saldo en bolsa de cemento---------//
-         public void calcularValores(BigDecimal ultimo_saldo, BigDecimal cuota_pura, BigDecimal gastos, BigDecimal bolsa_cemento, BigDecimal saldo_bolsa_cemento){  
+               BigDecimal cuota_pura = new BigDecimal(ac.cuota_total.getText()).subtract(new BigDecimal(ac.gastos.getText()));
+               BigDecimal gastos = new BigDecimal(ac.gastos.getText());
                BigDecimal haber = cuota_pura.add(gastos);
-               BigDecimal saldo_actual = ultimo_saldo.subtract(haber);
+               BigDecimal bolsa_cemento = listaFichaControl.get(0).getBolsaCemento();
+               BigDecimal ultimo_saldo =cuotas.get(cuotas.size()-1).getSaldo();                 
+               BigDecimal ultimo_saldo_bolsa_cemento = cuotas.get(cuotas.size()-1).getCemento_saldo();      
+               
+               BigDecimal diferenciaCuotaPura = cuota_pura.subtract(cuotapuraActual);
+               BigDecimal diferenciaGastos = gastos.subtract(gastosActual);           
+               BigDecimal diferenciaHaber = diferenciaCuotaPura.add(diferenciaGastos);
+               BigDecimal diferenciaHaberCemento = (diferenciaHaber).divide(bolsa_cemento,  2, RoundingMode.DOWN);
+               
+               BigDecimal saldo_actual = ultimo_saldo.subtract(diferenciaCuotaPura.add(diferenciaGastos));
                BigDecimal cemento_haber = haber.divide(bolsa_cemento, 2, RoundingMode.DOWN);
-               BigDecimal cemento_saldo = saldo_bolsa_cemento.subtract(cemento_haber);
+               BigDecimal cemento_saldo = ultimo_saldo_bolsa_cemento.subtract(diferenciaHaberCemento);
                filas_insertadas = cd.actualizarMontoCuota(cuota_pura, gastos, haber, saldo_actual, cemento_haber, cemento_saldo, nro_cuota, id_control);
+        }
     }
     
     public boolean validarCampos(){

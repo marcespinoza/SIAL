@@ -5,19 +5,21 @@
  */
 package Vista.Dialogs;
 
+import java.awt.Dialog;
+
 /**
  *
  * @author Marceloi7
  */
 public class Progress extends javax.swing.JDialog {
 
-    /**
-     * Creates new form Progress
-     */
-    public Progress(java.awt.Frame parent, boolean modal) {
-        super(parent, modal);
+   static Dialog owner;
+
+    public Progress(Dialog owner, boolean modal) {
+        super(owner, modal);
+        this.owner=owner;
         initComponents();
-        setLocationRelativeTo(parent);
+        setLocationRelativeTo(owner);
     }
 
     /**
@@ -117,7 +119,7 @@ public class Progress extends javax.swing.JDialog {
         /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                Progress dialog = new Progress(new javax.swing.JFrame(), true);
+                Progress dialog = new Progress(owner, true);
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
                     @Override
                     public void windowClosing(java.awt.event.WindowEvent e) {

@@ -34,7 +34,6 @@ public class ControladorBotones implements ActionListener{
            this.ventana.btnCumpleaños.addActionListener(this);
            this.ventana.btnCumpleaños.setVisible(false);
            this.ventana.cerrarSesion.addActionListener(this);
-           this.ventana.btnAyuda.addActionListener(this);
            this.ventana.ayuda.addMouseListener(new MouseAdapter() {
                @Override
                public void mouseClicked(MouseEvent e) {
@@ -82,11 +81,7 @@ public class ControladorBotones implements ActionListener{
           ventana.dispose();
           new Ventana();
         }
-        
-        if(e.getSource()==ventana.btnAyuda){
-            new ControladorAyuda(ventana);
-        }
-        
+                
         if(e.getSource()==ventana.ayuda){
             try {
                 Desktop.getDesktop().browse(new URI("https://sites.google.com/view/sistema-miprimercasa/p%C3%A1gina-principal"));

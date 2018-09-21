@@ -81,15 +81,15 @@ public class ControladorResumen implements ActionListener{
     }
     
      public void graficoUno(){ 
-      JFreeChart chart = ChartFactory.createBarChart( 
-    "", // El titulo de la gráfica 
-    "Mes", // Etiqueta de categoria 
-    "Valor", // Etiqueta de valores 
-    dataset, // Datos 
-    PlotOrientation.VERTICAL, // orientacion 
-    true, // Incluye Leyenda 
-    true, // Incluye tooltips 
-    false // URLs? 
+        JFreeChart chart = ChartFactory.createBarChart( 
+        "", // El titulo de la gráfica 
+        "Mes", // Etiqueta de categoria 
+        "Valor", // Etiqueta de valores 
+        dataset, // Datos 
+        PlotOrientation.VERTICAL, // orientacion 
+        true, // Incluye Leyenda 
+        true, // Incluye tooltips 
+        false // URLs? 
     ); 
         ChartPanel chartpanel = new ChartPanel(chart);
         //chartpanel.setDomainZoomable(true);  

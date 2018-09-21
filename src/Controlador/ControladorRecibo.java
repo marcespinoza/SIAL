@@ -18,7 +18,7 @@ import Utils.LimitLinesDocumentListener;
 import Modelo.PropietarioDAO;
 import Modelo.ReciboDAO;
 import Vista.Dialogs.AltaRecibo;
-import Vista.Dialogs.ProgressDialog;
+import Vista.Dialogs.Progress;
 import Vista.Frame.Ventana;
 import Vista.Panels.DetalleCuota;
 import com.itextpdf.text.Chunk;
@@ -52,6 +52,7 @@ import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.BorderFactory;
+import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 import javax.swing.border.EtchedBorder;
 import javax.swing.text.AttributeSet;
@@ -409,6 +410,8 @@ public class ControladorRecibo implements ActionListener{
     
     //---------Hilo para rellenar los campos cuando se muestra el formulario-----//    
       public class RellenarCampos extends javax.swing.SwingWorker<Void, Void>{
+          
+      
 
         @Override
         protected Void doInBackground() throws Exception {
@@ -428,18 +431,18 @@ public class ControladorRecibo implements ActionListener{
        public class GenerarMinuta extends javax.swing.SwingWorker<Void, Void>{
          
        private int id_recibo=0;  
+       final Progress progress = new Progress(ar, false);
 
         @Override
         protected Void doInBackground() throws Exception {     
-           
-          
+            progress.setVisible(true);          
             //-----Devuelve id del recibo creado-----//
             id_recibo = rd.altaRecibo(Integer.parseInt(ar.nro_recibo.getText()), apellido_propietario, nombre_propietario);         
             return null;
        }
 
        @Override
-       public void done() { 
+       public void done() {             
             Date date = new Date();
             BigDecimal rendido = cobrado.subtract(gastos_administrativos);
             Ventana.cm.llenarTablaFecha();
@@ -449,6 +452,7 @@ public class ControladorRecibo implements ActionListener{
                       dc.tablaDetallePago.getModel().getValueAt(row, 14).toString(), 
                       categoria.toString(), 
                       id_recibo);
+              //-----------Tipo de pago 0 es derecho de posesion---------------//
             }else if(tipoPago==0){
               md.altaMinuta(new java.sql.Date(date.getTime()), apellido_comprador, nombre_comprador, manzana, parcela, cobrado, gastos_administrativos, rendido, Integer.parseInt(dc.tablaDchoPosesion.getModel().getValueAt(row, 0).toString()), dc.tablaDetallePago.getModel().getValueAt(row, 13).toString()+" Dcho. posesión", "Cta. derecho posesión",id_recibo);
             }
@@ -458,6 +462,7 @@ public class ControladorRecibo implements ActionListener{
             ar.dispose();         
             cdc.llearTablaDchoPosesion(id_control);
             cdc.llenarTabla(id_control);
+            progress.setVisible(false);
          }    
         }
        

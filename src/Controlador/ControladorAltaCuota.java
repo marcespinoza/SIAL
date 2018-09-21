@@ -180,7 +180,7 @@ public class ControladorAltaCuota implements ActionListener, KeyListener{
     public void actionPerformed(ActionEvent e) {
         
            if(e.getSource() == ac.aceptarBtn){
-              altaPago();
+              new AltaCuotaSwing().execute();
            }
             if(e.getSource() == ac.cancelarBtn){
                ac.dispose();
@@ -197,6 +197,41 @@ public class ControladorAltaCuota implements ActionListener, KeyListener{
               nuevoGasto();
               ac.nro_cuota.setEnabled(false);
             }            
+    }
+    
+    public void altaPago(){
+      List<FichaDeControl> listafc = new ArrayList<>();  
+      if(ac.chk_dcho_posesion.isSelected()){ 
+                if(validarCampos()){
+                  Date date = new Date();     
+                  listafc = fc.obtenerFichaControl(id_control);
+                  ResultSet dpd = dp.listarCuenta(id_control);
+                    try {
+                        dpd.last();
+                        BigDecimal bolsa_cemento = listafc.get(listafc.size()-1).getBolsaCemento();
+                        BigDecimal cemento_saldo = new BigDecimal(dpd.getString(6));
+                        BigDecimal cant_bolsa = new BigDecimal(ac.cuota_total.getText()).divide(bolsa_cemento, 2, RoundingMode.DOWN);
+                        dp.altaDchoPosesion(new java.sql.Date(date.getTime()), new BigDecimal(ac.cuota_total.getText()),new BigDecimal(ac.gastos.getText()),new BigDecimal(0),cant_bolsa, cemento_saldo.subtract(cant_bolsa),ac.detallePago.getText(), id_control);
+                    } catch (SQLException ex) {
+                        Logger.getLogger(ControladorAltaCuota.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                ac.dispose();
+                }
+             //--------Es cuota comun----------/     
+       }else{
+           if(validarCampos()){
+               List<FichaDeControl> listaFichaControl = new ArrayList<>();
+               List<Cuota> cuotas = new ArrayList<>();
+               listaFichaControl = fc.obtenerFichaControl(id_control);
+               cuotas = cd.listaDetalleCuotaXsaldo(id_control);               
+               BigDecimal ultimo_saldo = cuotas.get(cuotas.size()-1).getSaldo();
+               BigDecimal cuota_pura = new BigDecimal(ac.cuota_total.getText()).subtract(new BigDecimal(ac.gastos.getText()));
+               BigDecimal gastos = new BigDecimal(ac.gastos.getText());                   
+               BigDecimal bolsa_cemento = listaFichaControl.get(0).getBolsaCemento();
+               BigDecimal ultimo_saldo_bolsa_cemento = cuotas.get(cuotas.size()-1).getCemento_saldo();
+               calcularValores(ultimo_saldo, cuota_pura, gastos, bolsa_cemento, ultimo_saldo_bolsa_cemento);            
+             }             
+          }
     }
     
     
@@ -236,15 +271,6 @@ public class ControladorAltaCuota implements ActionListener, KeyListener{
                      filas_insertadas = cd.altaCuotaLote(new java.sql.Date(date.getTime()),nro_cuota, detalle, cuota_pura, gastos, new BigDecimal(0), haber, saldo_actual, new BigDecimal(0), cemento_haber, cemento_saldo, observaciones, tipoPago, id_control);                    
                   }
                }else{
-                   //                       int cuota=0;
-//                       ResultSet rs = cd.getNrosCuotas(id_control);
-//                       rs.next();
-//                       cuota = rs.getInt(1);
-//                       //-----Verifico que sea la primer cuota-------//                       
-//                         while(rs.next()&& rs.getInt(1)-1==cuota){
-//                           cuota=rs.getInt(1);                           
-//                         }
-//                         ac.nro_cuota.setText(String.valueOf(cuota)+1);
                     filas_insertadas = cd.altaCuotaLote(new java.sql.Date(date.getTime()),Integer.parseInt(ac.nro_cuota.getText()), detalle, cuota_pura, gastos, new BigDecimal(0), haber, saldo_actual, new BigDecimal(0), cemento_haber, cemento_saldo, observaciones, tipoPago, id_control);  
                }
                if (filas_insertadas==1) {
@@ -260,48 +286,7 @@ public class ControladorAltaCuota implements ActionListener, KeyListener{
                    ac.aviso.setText("Saldo negativo. Revise el monto de la cuota.");
                }
     }
-    
-    public void altaPago(){
-         Window parentWindow = SwingUtilities.windowForComponent(ac);
-      final Progress dlg = new Progress(parent, true);
-    
-    dlg.setVisible(true);
-      List<FichaDeControl> listafc = new ArrayList<>();  
-      if(ac.chk_dcho_posesion.isSelected()){ 
-                if(validarCampos()){
-                  Date date = new Date();     
-                  listafc = fc.obtenerFichaControl(id_control);
-                  ResultSet dpd = dp.listarCuenta(id_control);
-                    try {
-                        dpd.last();
-                        BigDecimal bolsa_cemento = listafc.get(listafc.size()-1).getBolsaCemento();
-                        BigDecimal cemento_saldo = new BigDecimal(dpd.getString(6));
-                        BigDecimal cant_bolsa = new BigDecimal(ac.cuota_total.getText()).divide(bolsa_cemento, 2, RoundingMode.DOWN);
-                        dp.altaDchoPosesion(new java.sql.Date(date.getTime()), new BigDecimal(ac.cuota_total.getText()),new BigDecimal(ac.gastos.getText()),new BigDecimal(0),cant_bolsa, cemento_saldo.subtract(cant_bolsa),ac.detallePago.getText(), id_control);
-                    } catch (SQLException ex) {
-                        Logger.getLogger(ControladorAltaCuota.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                ac.dispose();
-                }
-             //--------Es cuota comun----------/     
-       }else{
-          dlg.setVisible(false);
-           if(validarCampos()){
-               List<FichaDeControl> listaFichaControl = new ArrayList<>();
-               List<Cuota> cuotas = new ArrayList<>();
-               listaFichaControl = fc.obtenerFichaControl(id_control);
-               cuotas = cd.listaDetalleCuotaXsaldo(id_control);               
-                   BigDecimal ultimo_saldo = cuotas.get(cuotas.size()-1).getSaldo();
-                   BigDecimal cuota_pura = new BigDecimal(ac.cuota_total.getText()).subtract(new BigDecimal(ac.gastos.getText()));
-                   BigDecimal gastos = new BigDecimal(ac.gastos.getText());                   
-                   BigDecimal bolsa_cemento = listaFichaControl.get(0).getBolsaCemento();
-                   BigDecimal ultimo_saldo_bolsa_cemento = cuotas.get(cuotas.size()-1).getCemento_saldo();
-                   calcularValores(ultimo_saldo, cuota_pura, gastos, bolsa_cemento, ultimo_saldo_bolsa_cemento);             
-                
-             }             
-          }
-    }
-    
+       
      public boolean validarCampos(){
         boolean bandera = true;       
         if(ac.cuota_total.getText().isEmpty()){
@@ -359,4 +344,23 @@ public class ControladorAltaCuota implements ActionListener, KeyListener{
         }
     }
     }     
+    
+    //---------Hilo para rellenar los campos cuando se muestra el formulario-----//    
+      public class AltaCuotaSwing extends javax.swing.SwingWorker<Void, Void>{
+          
+       final Progress progress = new Progress(ac, false);
+
+        @Override
+        protected Void doInBackground() throws Exception {
+            progress.setVisible(true);
+            altaPago();
+            return null;
+        }
+
+       @Override
+       public void done() { 
+           progress.setVisible(false);
+         }    
+      }
+    
 }
