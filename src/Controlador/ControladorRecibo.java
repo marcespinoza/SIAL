@@ -52,7 +52,6 @@ import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.BorderFactory;
-import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 import javax.swing.border.EtchedBorder;
 import javax.swing.text.AttributeSet;
@@ -458,6 +457,7 @@ public class ControladorRecibo implements ActionListener{
             }
             //----------Incremento el numero de recibo asociado a ese propietario---------//
             pd.editarNroRecibo(apellido_propietario, nombre_propietario, cuit_propietario, Integer.parseInt(ar.nro_recibo.getText())+1);
+            //-----------Agrego nro de recibo a la cuota-----------//
             cuod.actualizarNroRecibo(Integer.parseInt(ar.nro_recibo.getText()), id_recibo, nro_cuota, id_control);
             ar.dispose();         
             cdc.llearTablaDchoPosesion(id_control);

@@ -36,7 +36,7 @@ public class Ventana extends javax.swing.JFrame implements ActionListener{
 
     public Ventana() {
         initComponents();      
-        this.setSize(1366, 768);
+//        this.setSize(1366, 768);
         ImageIcon icon = new ImageIcon("src/Imagenes/logo.png_32x32.png");
         this.setIconImage(icon.getImage());         
         inicializarPaneles();
@@ -87,6 +87,7 @@ public class Ventana extends javax.swing.JFrame implements ActionListener{
         nombreUsuario = new javax.swing.JLabel();
         btnCumpleaños = new javax.swing.JButton();
         ayuda = new javax.swing.JLabel();
+        calculadora = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         MenuInicio = new javax.swing.JMenu();
         cerrarSesion = new javax.swing.JMenuItem();
@@ -131,7 +132,7 @@ public class Ventana extends javax.swing.JFrame implements ActionListener{
         );
         minutaLayout.setVerticalGroup(
             minutaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 649, Short.MAX_VALUE)
+            .addGap(0, 682, Short.MAX_VALUE)
         );
 
         panelPrincipal.add(minuta, "card5");
@@ -190,9 +191,20 @@ public class Ventana extends javax.swing.JFrame implements ActionListener{
             }
         });
 
-        ayuda.setFont(new java.awt.Font("Roboto Bk", 1, 18)); // NOI18N
         ayuda.setForeground(new java.awt.Color(51, 255, 255));
-        ayuda.setText("Ayuda");
+
+        calculadora.setIcon(new javax.swing.ImageIcon("F:\\Java\\Mi primer casa\\iconos\\calculator.png")); // NOI18N
+        calculadora.setText("Calculadora");
+        calculadora.setMargin(new java.awt.Insets(2, 2, 2, 2));
+        calculadora.setMaximumSize(new java.awt.Dimension(92, 34));
+        calculadora.setMinimumSize(new java.awt.Dimension(92, 34));
+        calculadora.setName(""); // NOI18N
+        calculadora.setPreferredSize(new java.awt.Dimension(92, 34));
+        calculadora.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                calculadoraActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout panelBotones1Layout = new javax.swing.GroupLayout(panelBotones1);
         panelBotones1.setLayout(panelBotones1Layout);
@@ -205,11 +217,16 @@ public class Ventana extends javax.swing.JFrame implements ActionListener{
                 .addComponent(btnResumen, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnMinuta, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnCumpleaños, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(ayuda)
-                .addGap(53, 53, 53)
+                .addGroup(panelBotones1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(panelBotones1Layout.createSequentialGroup()
+                        .addGap(214, 214, 214)
+                        .addComponent(ayuda))
+                    .addGroup(panelBotones1Layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(calculadora, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnCumpleaños, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 511, Short.MAX_VALUE)
                 .addComponent(nombreUsuario)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(apellidoUsuario)
@@ -232,18 +249,24 @@ public class Ventana extends javax.swing.JFrame implements ActionListener{
                             .addGroup(panelBotones1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                 .addComponent(jLabel1)
                                 .addComponent(apellidoUsuario)
-                                .addComponent(nombreUsuario)
-                                .addComponent(ayuda)))
+                                .addComponent(nombreUsuario)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(labelTipoUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(panelBotones1Layout.createSequentialGroup()
-                        .addGroup(panelBotones1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(btnClientes, javax.swing.GroupLayout.DEFAULT_SIZE, 66, Short.MAX_VALUE)
-                            .addComponent(btnResumen, javax.swing.GroupLayout.DEFAULT_SIZE, 66, Short.MAX_VALUE)
-                            .addComponent(btnMinuta, javax.swing.GroupLayout.DEFAULT_SIZE, 66, Short.MAX_VALUE)
-                            .addComponent(btnCumpleaños, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(22, 22, 22))))
+                        .addComponent(ayuda)
+                        .addGap(12, 12, 12)
+                        .addGroup(panelBotones1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(panelBotones1Layout.createSequentialGroup()
+                                .addComponent(btnCumpleaños, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addGroup(panelBotones1Layout.createSequentialGroup()
+                                .addGroup(panelBotones1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(btnClientes, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(btnResumen, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(btnMinuta, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(calculadora, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addGap(20, 20, 20))))))
         );
 
         MenuInicio.setText("Inicio");
@@ -298,7 +321,7 @@ public class Ventana extends javax.swing.JFrame implements ActionListener{
                 .addContainerGap()
                 .addComponent(panelBotones1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(panelPrincipal, javax.swing.GroupLayout.PREFERRED_SIZE, 653, Short.MAX_VALUE))
+                .addComponent(panelPrincipal, javax.swing.GroupLayout.DEFAULT_SIZE, 686, Short.MAX_VALUE))
         );
 
         pack();
@@ -328,6 +351,10 @@ public class Ventana extends javax.swing.JFrame implements ActionListener{
         // TODO add your handling code here:
     }//GEN-LAST:event_btnCumpleañosActionPerformed
 
+    private void calculadoraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_calculadoraActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_calculadoraActionPerformed
+
     
     
 
@@ -341,6 +368,7 @@ public class Ventana extends javax.swing.JFrame implements ActionListener{
     public static javax.swing.JButton btnCumpleaños;
     public static javax.swing.JButton btnMinuta;
     public static javax.swing.JButton btnResumen;
+    public static javax.swing.JButton calculadora;
     public static javax.swing.JMenuItem cerrarSesion;
     private Vista.Panels.Clientes clientes;
     public javax.swing.JMenuItem configuracion;
@@ -367,14 +395,14 @@ public class Ventana extends javax.swing.JFrame implements ActionListener{
 public void inicializarBotones(){
     if(Ventana.labelTipoUsuario.getText().equals("operador"))
     registroEventos.setEnabled(false);
-    btnClientes.setVerticalTextPosition(SwingConstants.BOTTOM);
-    btnClientes.setHorizontalTextPosition(SwingConstants.CENTER);
-    btnResumen.setVerticalTextPosition(SwingConstants.BOTTOM);
-    btnResumen.setHorizontalTextPosition(SwingConstants.CENTER);    
-    btnMinuta.setVerticalTextPosition(SwingConstants.BOTTOM);
-    btnMinuta.setHorizontalTextPosition(SwingConstants.CENTER);
-    btnCumpleaños.setVerticalTextPosition(SwingConstants.BOTTOM);
-    btnCumpleaños.setHorizontalTextPosition(SwingConstants.CENTER);
+//    btnClientes.setVerticalTextPosition(SwingConstants.BOTTOM);
+//    btnClientes.setHorizontalTextPosition(SwingConstants.CENTER);
+//    btnResumen.setVerticalTextPosition(SwingConstants.BOTTOM);
+//    btnResumen.setHorizontalTextPosition(SwingConstants.CENTER);    
+//    btnMinuta.setVerticalTextPosition(SwingConstants.BOTTOM);
+//    btnMinuta.setHorizontalTextPosition(SwingConstants.CENTER);
+//    btnCumpleaños.setVerticalTextPosition(SwingConstants.BOTTOM);
+//    btnCumpleaños.setHorizontalTextPosition(SwingConstants.CENTER);
 }
 
     public void desactivarBotones(){  

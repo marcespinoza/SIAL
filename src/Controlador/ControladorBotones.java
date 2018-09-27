@@ -5,6 +5,7 @@
  */
 package Controlador;
 
+import Vista.Dialogs.Calculadora;
 import Vista.Frame.Ventana;
 import java.awt.CardLayout;
 import java.awt.Desktop;
@@ -34,6 +35,7 @@ public class ControladorBotones implements ActionListener{
            this.ventana.btnCumpleaños.addActionListener(this);
            this.ventana.btnCumpleaños.setVisible(false);
            this.ventana.cerrarSesion.addActionListener(this);
+           this.ventana.calculadora.addActionListener(this);
            this.ventana.ayuda.addMouseListener(new MouseAdapter() {
                @Override
                public void mouseClicked(MouseEvent e) {
@@ -82,14 +84,9 @@ public class ControladorBotones implements ActionListener{
           new Ventana();
         }
                 
-        if(e.getSource()==ventana.ayuda){
-            try {
-                Desktop.getDesktop().browse(new URI("https://sites.google.com/view/sistema-miprimercasa/p%C3%A1gina-principal"));
-            } catch (URISyntaxException ex) {
-                Logger.getLogger(ControladorBotones.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (IOException ex) {
-                Logger.getLogger(ControladorBotones.class.getName()).log(Level.SEVERE, null, ex);
-            }
+        if(e.getSource()==ventana.calculadora){
+            Calculadora calculadora = new Calculadora(ventana, true);
+            calculadora.setVisible(true);
         }
     }    
     
