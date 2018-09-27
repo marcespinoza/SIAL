@@ -112,8 +112,7 @@ public class ControladorRecibo implements ActionListener{
         ar.cons_final.setActionCommand("cons_final");
         ar.monotributo.setActionCommand("monotributo");
         ar.exento.setActionCommand("exento");
-        ar.detalle.getDocument().addDocumentListener(
-        new LimitLinesDocumentListener(2));
+        ar.detalle.getDocument().addDocumentListener(new LimitLinesDocumentListener(2));
         ar.detalle.setDocument(new PlainDocument() {
         @Override
         public void insertString(int offs, String str, AttributeSet a) throws BadLocationException {
@@ -391,7 +390,7 @@ public class ControladorRecibo implements ActionListener{
         if(e.getSource() == ar.aceptar){
             if(validarCampos()){  
             //------Controlo si ya se genero recibo de la cuota seleccionada, si es asi, solo genero pdf, sino genero recibo, pdf y mminuta --// 
-              if(dc.tablaDetallePago.getModel().getValueAt(row, 12).toString().equals("0")) { 
+            if(!ar.checkRecibo.isSelected()){ 
                 generarRecibo();
                 new GenerarMinuta().execute();
               }else{

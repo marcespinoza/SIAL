@@ -7,6 +7,7 @@ package Controlador;
 
 import Clases.Cuota;
 import Clases.FichaDeControl;
+import Clases.LimitadorCaracteres;
 import Modelo.CuotaDAO;
 import Modelo.DchoPosesionDAO;
 import Modelo.FichaControlDAO;
@@ -50,9 +51,11 @@ import java.util.List;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.DefaultCellEditor;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
+import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
 import javax.swing.event.TableModelEvent;
@@ -132,12 +135,25 @@ public class ControladorDetalleCuota implements ActionListener, TableModelListen
         dc.direccionLabel.setText(barrio +", "+ calle +" "+ numero);
         dc.telefonoLabel.setText(telefono);
         dc.tablaDetallePago.setDefaultRenderer(Object.class, r);
+        //-------Limito la cantidad de caracteres de la celda editable-------//
+        dc.tablaDetallePago.getColumnModel().getColumn(11).setCellEditor(new LimitCaracteres());
+        //-----------------//
+        dc.tablaDetallePago.getColumnModel().getColumn(0).setPreferredWidth(Math.round(0.25f));
         dc.tablaDchoPosesion.setDefaultRenderer(Object.class, rdp);
         llenarTabla(id_control);
         llearTablaDchoPosesion(id_control);
         cargarPathMinuta();
         desactivarBotones();
     }
+    
+    class LimitCaracteres extends DefaultCellEditor {
+
+    public LimitCaracteres() {
+        super(new JTextField());
+        JTextField tf = ((JTextField) getComponent());
+        tf.setDocument(new LimitadorCaracteres(40));
+    }
+}
     
     public void desactivarBotones(){
       if(Ventana.labelTipoUsuario.getText().equals("operador")){
@@ -325,7 +341,7 @@ public class ControladorDetalleCuota implements ActionListener, TableModelListen
     public void tableChanged(TableModelEvent e) {
         //------Solo trata cuando cambia el valor de una celda--------//
         int row = dc.tablaDetallePago.getSelectedRow();
-        if(row!=1){
+        if(row!=-1){
          if (e.getType() == TableModelEvent.UPDATE) {
              cd.actualizarCuota(dc.tablaDetallePago.getModel().getValueAt(row, 11).toString(), Integer.parseInt(dc.tablaDetallePago.getModel().getValueAt(row, 0).toString()), id_control);
          }

@@ -66,6 +66,7 @@ public class AltaRecibo extends javax.swing.JDialog {
         jLabel12 = new javax.swing.JLabel();
         jLabel13 = new javax.swing.JLabel();
         nro_recibo = new javax.swing.JTextField();
+        checkRecibo = new javax.swing.JCheckBox();
 
         jLabel1.setText("jLabel1");
 
@@ -323,6 +324,8 @@ public class AltaRecibo extends javax.swing.JDialog {
             }
         });
 
+        checkRecibo.setText("Mantener nro de recibo");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -337,7 +340,9 @@ public class AltaRecibo extends javax.swing.JDialog {
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel13)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(nro_recibo, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(nro_recibo, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(checkRecibo)))
                 .addGap(0, 21, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -352,7 +357,8 @@ public class AltaRecibo extends javax.swing.JDialog {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(nro_recibo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel13))
+                    .addComponent(jLabel13)
+                    .addComponent(checkRecibo))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -432,6 +438,7 @@ public class AltaRecibo extends javax.swing.JDialog {
     public javax.swing.JTextField apellido_comprador;
     public javax.swing.JTextField apellido_propietario;
     public javax.swing.JButton cancelar;
+    public javax.swing.JCheckBox checkRecibo;
     public javax.swing.JCheckBox cons_final;
     public javax.swing.JTextField cuit;
     public javax.swing.JTextField cuit_propietario;

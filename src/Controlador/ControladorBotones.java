@@ -8,6 +8,7 @@ package Controlador;
 import Vista.Dialogs.Calculadora;
 import Vista.Frame.Ventana;
 import java.awt.CardLayout;
+import java.awt.Cursor;
 import java.awt.Desktop;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -36,6 +37,7 @@ public class ControladorBotones implements ActionListener{
            this.ventana.btnCumpleaños.setVisible(false);
            this.ventana.cerrarSesion.addActionListener(this);
            this.ventana.calculadora.addActionListener(this);
+           this.ventana.ayuda.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
            this.ventana.ayuda.addMouseListener(new MouseAdapter() {
                @Override
                public void mouseClicked(MouseEvent e) {
