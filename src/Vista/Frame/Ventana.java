@@ -16,6 +16,21 @@ import Vista.Panels.MinutaVista;
 import Vista.Panels.Resumen;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.time.LocalTime;
+import java.time.temporal.ChronoUnit;
+import java.util.Calendar;
+import java.util.Properties;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 
@@ -30,6 +45,12 @@ public class Ventana extends javax.swing.JFrame implements ActionListener{
     Resumen vistaResumen = Resumen.getInstance();
     public static ControladorMinuta cm;
     ControladorResumen cr;
+    File configFile = new File("config.properties");
+    String pathRespaldoBD = null;
+    String pathMysqldump = null;
+    DateFormat fecha = new SimpleDateFormat("dd-MM-yyyy");
+    Calendar cal = Calendar.getInstance();
+    java.util.Date date = new java.util.Date();
 
     public Ventana() {
         initComponents();      
@@ -47,6 +68,7 @@ public class Ventana extends javax.swing.JFrame implements ActionListener{
         registroEventos.addActionListener(this);
         about.addActionListener(this);
         baseDeDatos.addActionListener(this);
+        scheduleBackupBD();
         this.setResizable(true);
     }
     
@@ -54,8 +76,7 @@ public class Ventana extends javax.swing.JFrame implements ActionListener{
         inicializarBotones();        
         ControladorCliente cc = new ControladorCliente(this, clientes);
         //-------Controlador para manejar botones superiores - Clientes,Minutas---------//
-        new ControladorBotones(this);
-//        cc.llenarTabla();
+        new ControladorBotones(this);        
     }
 
     @SuppressWarnings("unchecked")
@@ -192,7 +213,7 @@ public class Ventana extends javax.swing.JFrame implements ActionListener{
         ayuda.setForeground(new java.awt.Color(51, 255, 255));
         ayuda.setText("Ayuda");
 
-        calculadora.setIcon(new javax.swing.ImageIcon("F:\\Java\\Mi primer casa\\iconos\\calculator.png")); // NOI18N
+        calculadora.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/iconos/calculator.png"))); // NOI18N
         calculadora.setText("Calculadora");
         calculadora.setMargin(new java.awt.Insets(2, 2, 2, 2));
         calculadora.setMaximumSize(new java.awt.Dimension(92, 34));
@@ -211,13 +232,13 @@ public class Ventana extends javax.swing.JFrame implements ActionListener{
             panelBotones1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelBotones1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(btnClientes, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btnClientes, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnResumen, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btnResumen, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnMinuta, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btnMinuta, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(calculadora, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(calculadora, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnCumpleaños, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -390,7 +411,7 @@ public class Ventana extends javax.swing.JFrame implements ActionListener{
     private Vista.Panels.Resumen resumen;
     // End of variables declaration//GEN-END:variables
 
-public void inicializarBotones(){
+    public void inicializarBotones(){
     if(Ventana.labelTipoUsuario.getText().equals("operador"))
     registroEventos.setEnabled(false);
 //    btnClientes.setVerticalTextPosition(SwingConstants.BOTTOM);
@@ -402,6 +423,52 @@ public void inicializarBotones(){
 //    btnCumpleaños.setVerticalTextPosition(SwingConstants.BOTTOM);
 //    btnCumpleaños.setHorizontalTextPosition(SwingConstants.CENTER);
 }
+
+    private void scheduleBackupBD(){       
+     try {
+      FileReader reader = new FileReader(configFile);
+      Properties props = new Properties();
+      props.load(reader); 
+      pathMysqldump = props.getProperty("pathMysqldump");
+      pathRespaldoBD = props.getProperty("pathRespaldoBD");
+      reader.close();
+     } catch (FileNotFoundException ex) {
+     // file does not exist
+     } catch (IOException ex) {
+     // I/O error
+     }  
+      long delay = ChronoUnit.MILLIS.between(LocalTime.now(), LocalTime.of(12, 00, 00));
+      //------Si delay es negativo significa que ya paso la hora de ejecucio entonces no lo programo----// Ejecuta a las 12
+      if(delay>0){
+      ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
+      scheduler.schedule(new MyRunnable("_12Hs"), delay, TimeUnit.MILLISECONDS);}
+      long delay2 = ChronoUnit.MILLIS.between(LocalTime.now(), LocalTime.of(20, 00, 00));
+      //------Si delay es negativo significa que ya paso la hora de ejecucio entonces no lo programo----// Ejectua a las 20
+      if(delay2>0){
+      ScheduledExecutorService schedulerTarde = Executors.newScheduledThreadPool(1);
+      schedulerTarde.schedule(new MyRunnable("_20Hs"), delay2, TimeUnit.MILLISECONDS);}
+    }
+    
+   public class MyRunnable implements Runnable {
+       
+       String parameter;
+
+       public MyRunnable(String parameter) {
+           this.parameter=parameter;
+       }
+
+       public void run() {
+       // task to run goes here
+         System.out.println("Hello !!");
+         try {
+             System.out.println(fecha.format(cal.getTime()));
+             Runtime.getRuntime().exec(pathMysqldump+"/mysqldump -u root pMiPrimerCasa --add-drop-database -B miprimercasa -r "+"\""+pathRespaldoBD+"/Backup Base de datos - "+fecha.format(cal.getTime())+parameter+".sql\"");
+         } catch (IOException ex) {
+             System.out.println(ex.getMessage());
+             Logger.getLogger(Ventana.class.getName()).log(Level.SEVERE, null, ex);
+         }
+       }
+    }
 
     public void desactivarBotones(){  
         if(Ventana.labelTipoUsuario.getText().equals("operador")){

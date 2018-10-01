@@ -75,7 +75,7 @@ public class CuotaDAO {
           List<Cuota> cuotas = new ArrayList<>();
      try {
           connection = conexion.dataSource.getConnection();
-          String listar = "SELECT nro_cuota, fecha, detalle, cuota_pura, gastos_administrativos, debe, haber, saldo, cemento_debe, cemento_haber, cemento_saldo, observaciones, nro_recibo, id_recibo, tipo_pago from linea_control_lote where id_Control = '"+idControl+"'"; 
+          String listar = "SELECT nro_cuota, fecha, detalle, cuota_pura, gastos_administrativos, debe, haber, saldo, cemento_debe, cemento_haber, cemento_saldo, observaciones, nro_recibo, id_recibo, tipo_pago from linea_control_lote where id_Control = '"+idControl+"' order by nro_cuota, cemento_saldo DESC" ; 
           Statement st = connection.createStatement();
           rs = st.executeQuery(listar);
           while (rs.next()) {
@@ -110,20 +110,23 @@ public class CuotaDAO {
     }
     
     public int altaCuotaLote(Date fecha_pago,int nro_cuota, String detalle, BigDecimal cuota_pura, BigDecimal gastos, BigDecimal debe, BigDecimal haber, BigDecimal saldo, BigDecimal cemento_debe, BigDecimal cemento_haber, BigDecimal cemento_saldo, String observaciones, String tipo_pago, int id_control){
-         int filasAfectadas=0;
+        int filasAfectadas=0;
         Connection connection = null;
+        PreparedStatement ps = null;
      try {
          connection = conexion.dataSource.getConnection();
          String insertar = "Insert into linea_control_lote (fecha, nro_cuota, detalle, cuota_pura, gastos_administrativos, debe, haber, saldo, cemento_debe, cemento_haber, cemento_saldo, observaciones, tipo_pago, id_Control) values ('"+fecha_pago+"','"+nro_cuota+"','"+detalle+"','"+cuota_pura+"','"+gastos+"','"+debe+"','"+haber+"','"+saldo+"','"+cemento_debe+"','"+cemento_haber+"','"+cemento_saldo+"','"+observaciones+"','"+tipo_pago+"','"+id_control+"') ";
-         PreparedStatement ps = connection.prepareStatement(insertar);
+         ps = connection.prepareStatement(insertar);
          filasAfectadas = ps.executeUpdate();         
-     } catch (Exception e) {  
+     } catch (SQLException e) {  
            System.out.println(e.getMessage());
      }finally{
-          try {
-               connection.close();
-           } catch (SQLException ex) {
-               Logger.getLogger(PropietarioDAO.class.getName()).log(Level.SEVERE, null, ex);
+            try {
+                connection.close();
+                if(ps!=null){
+                    ps.close();
+                }  } catch (SQLException ex) {
+                Logger.getLogger(CuotaDAO.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
      
@@ -157,7 +160,7 @@ public class CuotaDAO {
           List<Cuota> listaCuota = new ArrayList<>();
         try {           
             connection = conexion.dataSource.getConnection();
-            String bandera = "select nro_cuota from linea_control_lote where id_control='"+idControl+"'";
+            String bandera = "select nro_cuota from linea_control_lote where id_control='"+idControl+"' order by nro_cuota asc";
             Statement st = connection.createStatement();
             rs = st.executeQuery(bandera);
             while (rs.next()) {

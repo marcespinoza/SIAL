@@ -38,6 +38,8 @@ import java.awt.Desktop;
 import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -112,6 +114,17 @@ public class ControladorRecibo implements ActionListener{
         ar.cons_final.setActionCommand("cons_final");
         ar.monotributo.setActionCommand("monotributo");
         ar.exento.setActionCommand("exento");
+        //----------Permite solo ingreso de numeros en campo nro de recibo-------//
+        ar.nro_recibo.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyTyped(KeyEvent e) {
+               char vchar = e.getKeyChar();
+               if(!(Character.isDigit(vchar))){
+                  e.consume();             
+              }
+            }
+            
+        });
         ar.detalle.getDocument().addDocumentListener(new LimitLinesDocumentListener(2));
         ar.detalle.setDocument(new PlainDocument() {
         @Override
@@ -219,7 +232,7 @@ public class ControladorRecibo implements ActionListener{
              cobrado = cuota_total.add(gastos_administrativos) ;
              ar.importe.setText(String.valueOf(cobrado));
              ar.total_pagado.setText(String.valueOf(cobrado));            
-             ar.detalle.setText("Paga cuota "+dc.tablaDetallePago.getModel().getValueAt(row, 0).toString()+"/"+cant_cuotas+ " - "+ "Saldo cemento "+dc.tablaDetallePago.getModel().getValueAt(row, 10).toString()+ " Bolsas" +"\r\n"+ barrio +" "+ " Mz. "+manzana +" Pc. "+ parcela+    " - Dimensión "+dimension +dc.tablaDetallePago.getModel().getValueAt(row, 11).toString());
+             ar.detalle.setText("Paga cuota "+dc.tablaDetallePago.getModel().getValueAt(row, 0).toString()+"/"+cant_cuotas+ " - "+ "Saldo cemento "+dc.tablaDetallePago.getModel().getValueAt(row, 10).toString()+ " Bolsas" +"\r\n"+ barrio +" "+ " Mz. "+manzana +" Pc. "+ parcela+    " - Dimensión "+dimension +" "+dc.tablaDetallePago.getModel().getValueAt(row, 11).toString());
             //-----Si es 0 es derecho de posesion-------//
             }else if (tipoPago==0){
               ar.detalle.setText("Cta. derecho posesión "+    "\r\nDimension "+dimension +     "\r\n"+ barrio +" "+ " Mz. "+manzana +" Pc. "+ parcela+   "\r\n");
@@ -391,7 +404,6 @@ public class ControladorRecibo implements ActionListener{
             if(validarCampos()){  
             //------Controlo si ya se genero recibo de la cuota seleccionada, si es asi, solo genero pdf, sino genero recibo, pdf y mminuta --// 
             if(!ar.checkRecibo.isSelected()){ 
-                generarRecibo();
                 new GenerarMinuta().execute();
               }else{
                 generarRecibo();
@@ -434,6 +446,7 @@ public class ControladorRecibo implements ActionListener{
         @Override
         protected Void doInBackground() throws Exception {     
             progress.setVisible(true);          
+            generarRecibo();
             //-----Devuelve id del recibo creado-----//
             id_recibo = rd.altaRecibo(Integer.parseInt(ar.nro_recibo.getText()), apellido_propietario, nombre_propietario);         
             return null;

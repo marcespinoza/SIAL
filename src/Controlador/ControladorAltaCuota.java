@@ -13,14 +13,13 @@ import Modelo.FichaControlDAO;
 import Clases.LimitadorCaracteres;
 import Vista.Dialogs.AltaCuota;
 import Vista.Dialogs.Progress;
-import Vista.Dialogs.ProgressDialog;
 import Vista.Frame.Ventana;
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Frame;
-import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -34,11 +33,6 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.BorderFactory;
-import javax.swing.JDialog;
-import javax.swing.JLabel;
-import javax.swing.JProgressBar;
-import javax.swing.ProgressMonitorInputStream;
-import javax.swing.SwingUtilities;
 import javax.swing.border.EtchedBorder;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
@@ -152,28 +146,28 @@ public class ControladorAltaCuota implements ActionListener, KeyListener{
     }
     
    public void rellenarCampos(){
-        List<FichaDeControl> listaFc = new ArrayList<>();
-        List<Cuota>listaC = new ArrayList<>();
-            FichaControlDAO fcd = new FichaControlDAO();
-            listaFc = fcd.obtenerFichaControl(id_control);
-            cuota_total = listaFc.get(listaFc.size()-1).getCuotaPura().add(listaFc.get(listaFc.size()-1).getGastos());
-            ac.cuota_total.setText(cuota_total.toString());
-            nuevoGasto();
-            //------Calculo el nro de cuota--------//
-            int cuota = 0;
-            int indice = 0;
-            listaC = cd.getNrosCuotas(id_control);
-            if(!listaC.isEmpty()){
-              cuota = listaC.get(indice).getNro_cuota();
-              indice = indice + 1;
-              while(indice < listaC.size()&& listaC.get(indice).getNro_cuota()-1==cuota){
-               cuota=listaC.get(indice).getNro_cuota();
-               indice = indice + 1;
-              }
-            }
-            ac.nro_cuota.setText(String.valueOf(cuota+1));
-            //---------------------//
-            ac.setVisible(true);        
+        List<FichaDeControl> listaFc;
+        List<Cuota>listaC;
+        FichaControlDAO fcd = new FichaControlDAO();
+        listaFc = fcd.obtenerFichaControl(id_control);
+        cuota_total = listaFc.get(listaFc.size()-1).getCuotaPura().add(listaFc.get(listaFc.size()-1).getGastos());
+        ac.cuota_total.setText(cuota_total.toString());
+        nuevoGasto();
+        //------Calculo el nro de cuota--------//
+        int cuota = 0;
+        int indice = 0;
+        listaC = cd.getNrosCuotas(id_control);
+        if(!listaC.isEmpty()){
+          cuota = listaC.get(indice).getNro_cuota();
+          indice = indice + 1;
+          while(indice < listaC.size()&& (listaC.get(indice).getNro_cuota()-1==cuota || listaC.get(indice).getNro_cuota()-1 < cuota)){
+           cuota=listaC.get(indice).getNro_cuota();
+           indice = indice + 1;
+          }
+        }
+        ac.nro_cuota.setText(String.valueOf(cuota+1));
+        //---------------------//
+        ac.setVisible(true);        
     }
 
     @Override
@@ -261,7 +255,7 @@ public class ControladorAltaCuota implements ActionListener, KeyListener{
                        int indice = 0;
                        int cuota = listaC.get(indice).getNro_cuota();
                        indice = indice + 1;
-                       while(listaC.get(indice).getNro_cuota()-1==cuota && indice < listaC.size()){
+                       while((listaC.get(indice).getNro_cuota()-1==cuota || listaC.get(indice).getNro_cuota()-1 < cuota) && indice < listaC.size()){
                            cuota=listaC.get(indice).getNro_cuota();
                            indice = indice + 1;
                        }

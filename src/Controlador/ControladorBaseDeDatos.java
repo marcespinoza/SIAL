@@ -134,17 +134,15 @@ public class ControladorBaseDeDatos implements ActionListener{
         protected Object doInBackground() throws Exception {
             bd.progressBar.setVisible(true);
             bd.progressBar.setIndeterminate(true);
-             try {
+            try {
                 DateFormat fecha = new SimpleDateFormat("dd-MM-yyyy");
                 java.util.Date date = new java.util.Date();
-                Process p = null;
+                Process p;
                 Runtime runtime = Runtime.getRuntime();
-                p = runtime.exec(bd.pathMysqlTxf.getText()+"/mysqldump -u root -pMiPrimerCasa --add-drop-database -B miprimercasa -r "+"\""+bd.pathGuardarTxf.getText()+"/Backup Base de datos - "+fecha.format(date)+".sql\"");
-                completo = p.waitFor();
-                
-            } catch (IOException ex) {
-                Logger.getLogger(ControladorBaseDeDatos.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (InterruptedException ex) {
+                p = runtime.exec(bd.pathMysqlTxf.getText()+"/mysqldump -u root pMiPrimerCasa --add-drop-database -B miprimercasa -r "+"\""+bd.pathGuardarTxf.getText()+"/Backup Base de datos - "+fecha.format(date)+".sql\"");
+                completo = p.waitFor();                
+            } catch (IOException | InterruptedException ex) {
+                System.out.println(ex.getMessage());
                 Logger.getLogger(ControladorBaseDeDatos.class.getName()).log(Level.SEVERE, null, ex);
             }
             return null;
@@ -153,16 +151,20 @@ public class ControladorBaseDeDatos implements ActionListener{
         @Override
         public void done(){
           bd.progressBar.setVisible(false);
-          if(completo==0){
-            bd.respaldoOk.setForeground(new Color(0, 102, 0));
-            bd.respaldoOk.setText("Respaldo creado correctamente");
-          }else if(completo==1){
-            bd.respaldoOk.setForeground(Color.RED);
-            bd.respaldoOk.setText("No se pudo crear el respaldo");
-          }else{
-            bd.respaldoOk.setForeground(Color.RED);
-            bd.respaldoOk.setText("No se pudo crear el respaldo");
-          }       
+             switch (completo) {
+                 case 0:
+                     bd.respaldoOk.setForeground(new Color(0, 102, 0));
+                     bd.respaldoOk.setText("Respaldo creado correctamente");
+                     break;
+                 case 1:
+                     bd.respaldoOk.setForeground(Color.RED);
+                     bd.respaldoOk.setText("No se pudo crear el respaldo");
+                     break;
+                 default:       
+                     bd.respaldoOk.setForeground(Color.RED);
+                     bd.respaldoOk.setText("No se pudo crear el respaldo");
+                     break;
+             }
         }
         
         
