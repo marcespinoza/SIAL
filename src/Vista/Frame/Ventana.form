@@ -308,7 +308,7 @@
         <Component class="javax.swing.JButton" name="btnClientes">
           <Properties>
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-              <Image iconType="3" name="/Imagenes/iconos/man-user.png"/>
+              <Image iconType="3" name="/Imagenes/iconos/cliente.png"/>
             </Property>
             <Property name="text" type="java.lang.String" value="Clientes"/>
             <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
@@ -459,7 +459,7 @@
         <Component class="javax.swing.JButton" name="calculadora">
           <Properties>
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-              <Image iconType="3" name="/Imagenes/iconos/calculator.png"/>
+              <Image iconType="3" name="/Imagenes/iconos/calculadora.png"/>
             </Property>
             <Property name="text" type="java.lang.String" value="Calculadora"/>
             <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">

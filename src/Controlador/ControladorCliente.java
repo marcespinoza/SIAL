@@ -264,12 +264,12 @@ public class ControladorCliente implements ActionListener, MouseListener, TableM
              int row = vistaClientes.tablaCliente.getSelectedRow(); 
              if(row != -1){
              ImageIcon icon = new ImageIcon("src/Imagenes/Iconos/warning.png");   
-             int reply = JOptionPane.showConfirmDialog(null, "Eliminar a "+vistaClientes.tablaCliente.getModel().getValueAt(row, 0)+" "+""+" "+vistaClientes.tablaCliente.getModel().getValueAt(row, 1)+"?",
+             int reply = JOptionPane.showConfirmDialog(null, "Eliminar a "+vistaClientes.tablaCliente.getModel().getValueAt(vistaClientes.tablaCliente.convertRowIndexToModel(row), 0)+" "+""+" "+vistaClientes.tablaCliente.getModel().getValueAt(vistaClientes.tablaCliente.convertRowIndexToModel(row), 1)+"?",
                      "Advertencia",JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, icon);
               if (reply == JOptionPane.YES_OPTION) {
-              int dni = Integer.parseInt(vistaClientes.tablaCliente.getModel().getValueAt(row, 2).toString());
-              cd.eliminarCliente(dni);
-              llenarTabla();
+                  int dni = Integer.parseInt(vistaClientes.tablaCliente.getModel().getValueAt(vistaClientes.tablaCliente.convertRowIndexToModel(row), 2).toString());
+                  cd.eliminarCliente(dni);
+                  llenarTabla();
                } 
               }
               else{

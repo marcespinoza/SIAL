@@ -64,6 +64,7 @@ public class FichaControlDAO {
               listaFichaControl.add(fc);
           }
         } catch (Exception e) {
+            Logger.getLogger(PropietarioDAO.class.getName()).log(Level.SEVERE, null, e);
         }finally{
           try {
               connection.close();

@@ -121,13 +121,14 @@ public class CuotaDAO {
      } catch (SQLException e) {  
            System.out.println(e.getMessage());
      }finally{
-            try {
-                connection.close();
-                if(ps!=null){
-                    ps.close();
-                }  } catch (SQLException ex) {
-                Logger.getLogger(CuotaDAO.class.getName()).log(Level.SEVERE, null, ex);
-            }
+        try {
+            connection.close();
+            if(ps!=null){
+                ps.close();
+            } 
+        } catch (SQLException ex) {
+            Logger.getLogger(CuotaDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
         }
      
      return filasAfectadas;

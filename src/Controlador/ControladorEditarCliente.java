@@ -136,30 +136,6 @@ public class ControladorEditarCliente implements ActionListener{
         }else{
          ac.telefono1.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
         }
-        if(ac.apellidosRef.getText().isEmpty()){
-         ac.apellidosRef.setBorder(BorderFactory.createLineBorder(Color.RED, 1));
-         bandera=false;
-        }else{
-         ac.apellidosRef.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
-        }
-        if(ac.nombresRef.getText().isEmpty()){
-         ac.nombresRef.setBorder(BorderFactory.createLineBorder(Color.RED, 1));
-         bandera=false;
-        }else{
-         ac.nombresRef.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
-        }
-        if(ac.telefonoRef.getText().isEmpty()){
-         ac.telefonoRef.setBorder(BorderFactory.createLineBorder(Color.RED, 1));
-         bandera=false;
-        }else{
-         ac.telefonoRef.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
-        }
-        if(ac.parentescoRef.getText().isEmpty()){
-         ac.parentescoRef.setBorder(BorderFactory.createLineBorder(Color.RED, 1));
-         bandera=false;
-        }else{
-         ac.parentescoRef.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
-        }
         return bandera;
     }
     

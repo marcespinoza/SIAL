@@ -194,10 +194,12 @@ public class ClienteDAO {
      }
  }
  public void editarCliente(int dni, String apellidos, String nombres, Date fecha_nacimiento, String barrio, String calle, int numero, String telefono1, String telefono2, String trabajo, int clave_cliente){
+            Connection con = null;
+            PreparedStatement preparedStmt = null;
         try {
-            Connection con = conexion.dataSource.getConnection();
+            con = conexion.dataSource.getConnection();
             String query = "UPDATE cliente SET dni = ?, nombres = ?, apellidos = ?, fecha_nacimiento = ?, barrio = ?, calle = ?, numero = ?, telefono1 = ?, telefono2 = ?, trabajo = ? where dni = ?";
-            PreparedStatement preparedStmt = con.prepareStatement(query);
+            preparedStmt = con.prepareStatement(query);
             preparedStmt.setInt   (1, dni);
             preparedStmt.setString(2, nombres);
             preparedStmt.setString(3, apellidos);
@@ -209,11 +211,17 @@ public class ClienteDAO {
             preparedStmt.setString(9, telefono2);
             preparedStmt.setString(10, trabajo);
             preparedStmt.setInt(11, clave_cliente);
-            preparedStmt.executeUpdate();      
-            preparedStmt.close();
-            con.close();
+            preparedStmt.executeUpdate(); 
+            
         } catch (SQLException ex) {
             Logger.getLogger(ClienteDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }finally{                  
+            try {
+                con.close();
+                preparedStmt.close();
+            } catch (SQLException ex) {
+                Logger.getLogger(ClienteDAO.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
  }
  public ResultSet buscarCliente(int dni){

@@ -6,7 +6,6 @@
 package Modelo;
 
 import Clases.Lote;
-import Clases.Propietario;
 import conexion.Conexion;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -54,7 +53,7 @@ public class LoteDAO {
        List<Lote> lote = new ArrayList<>();
      try {
           connection = conexion.dataSource.getConnection();
-          String listar = "SELECT l.propietario_Apellidos, l.propietario_Nombres, l.propietario_cuit, l.propietario_nro_recibo FROM lote l inner JOIN ficha_control_lote f where f.Lote_Manzana=l.Manzana and f.Id_control='"+id_control+"'";
+          String listar = "SELECT l.propietario_Apellidos, l.propietario_Nombres, l.propietario_cuit, l.propietario_nro_recibo FROM lote l inner JOIN ficha_control_lote f where f.lote_barrio = l.barrio and f.Lote_Manzana=l.Manzana and f.lote_parcela=l.parcela and f.Id_control='"+id_control+"'";
           Statement st = connection.createStatement();
           rs = st.executeQuery(listar);
           while (rs.next()) {

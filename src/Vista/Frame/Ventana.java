@@ -74,7 +74,7 @@ public class Ventana extends javax.swing.JFrame implements ActionListener{
     
     public void inicializarPaneles(){
         inicializarBotones();        
-        ControladorCliente cc = new ControladorCliente(this, clientes);
+        new ControladorCliente(this, clientes);
         //-------Controlador para manejar botones superiores - Clientes,Minutas---------//
         new ControladorBotones(this);        
     }
@@ -157,7 +157,7 @@ public class Ventana extends javax.swing.JFrame implements ActionListener{
 
         panelBotones1.setBackground(new java.awt.Color(36, 47, 65));
 
-        btnClientes.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/iconos/man-user.png"))); // NOI18N
+        btnClientes.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/iconos/cliente.png"))); // NOI18N
         btnClientes.setText("Clientes");
         btnClientes.setMargin(new java.awt.Insets(2, 2, 2, 2));
 
@@ -213,7 +213,7 @@ public class Ventana extends javax.swing.JFrame implements ActionListener{
         ayuda.setForeground(new java.awt.Color(51, 255, 255));
         ayuda.setText("Ayuda");
 
-        calculadora.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/iconos/calculator.png"))); // NOI18N
+        calculadora.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/iconos/calculadora.png"))); // NOI18N
         calculadora.setText("Calculadora");
         calculadora.setMargin(new java.awt.Insets(2, 2, 2, 2));
         calculadora.setMaximumSize(new java.awt.Dimension(92, 34));
@@ -462,7 +462,7 @@ public class Ventana extends javax.swing.JFrame implements ActionListener{
          System.out.println("Hello !!");
          try {
              System.out.println(fecha.format(cal.getTime()));
-             Runtime.getRuntime().exec(pathMysqldump+"/mysqldump -u root pMiPrimerCasa --add-drop-database -B miprimercasa -r "+"\""+pathRespaldoBD+"/Backup Base de datos - "+fecha.format(cal.getTime())+parameter+".sql\"");
+             Runtime.getRuntime().exec(pathMysqldump+"/mysqldump -u root p MiPrimerCasa --add-drop-database -B miprimercasa -r "+"\""+pathRespaldoBD+"/Backup Base de datos - "+fecha.format(cal.getTime())+parameter+".sql\"");
          } catch (IOException ex) {
              System.out.println(ex.getMessage());
              Logger.getLogger(Ventana.class.getName()).log(Level.SEVERE, null, ex);
