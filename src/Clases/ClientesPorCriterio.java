@@ -28,6 +28,15 @@ public class ClientesPorCriterio {
     String idControl;
     int cantidad_cuotas;
     BigDecimal gastos;
+    byte bandera_cemento;
+
+    public byte getBandera_cemento() {
+        return bandera_cemento;
+    }
+
+    public void setBandera_cemento(byte bandera_cemento) {
+        this.bandera_cemento = bandera_cemento;
+    }
     BigDecimal bolsa_cemento;
     Date fecha_actualizacion;
     String manzana;

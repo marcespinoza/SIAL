@@ -462,7 +462,7 @@ public class Ventana extends javax.swing.JFrame implements ActionListener{
          System.out.println("Hello !!");
          try {
              System.out.println(fecha.format(cal.getTime()));
-             Runtime.getRuntime().exec(pathMysqldump+"/mysqldump -u root p MiPrimerCasa --add-drop-database -B miprimercasa -r "+"\""+pathRespaldoBD+"/Backup Base de datos - "+fecha.format(cal.getTime())+parameter+".sql\"");
+             Runtime.getRuntime().exec(pathMysqldump+"/mysqldump -u root -pMiPrimerCasa --add-drop-database -B miprimercasa -r "+"\""+pathRespaldoBD+"/Backup Base de datos - "+fecha.format(cal.getTime())+parameter+".sql\"");
          } catch (IOException ex) {
              System.out.println(ex.getMessage());
              Logger.getLogger(Ventana.class.getName()).log(Level.SEVERE, null, ex);

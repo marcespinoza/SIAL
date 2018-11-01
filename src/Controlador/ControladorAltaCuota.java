@@ -242,7 +242,7 @@ public class ControladorAltaCuota implements ActionListener, KeyListener{
            //---Calculo nuevo saldo, en caso que haya cambiado el valor de la bolsa de cemento---//
            BigDecimal saldo_actualizado = haber.multiply(bolsa_cemento);
            if(saldo_actualizado.compareTo(ultimo_saldo)>1){
-                 cd.actualizarCuota("nuevo saldo", nro_cuota, id_control);
+//                 cd.actualizarCuota("nuevo saldo", nro_cuota, id_control);
            }
            //--------------------------------//
            //-------Comparo si el saldo es negativo. Puede suceder cuando paga la ultima cuota--////

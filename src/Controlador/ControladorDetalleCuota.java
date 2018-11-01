@@ -293,9 +293,9 @@ public class ControladorDetalleCuota implements ActionListener, TableModelListen
                 case 0: JOptionPane.showMessageDialog(null, "Cuota no válida", "Atención", JOptionPane.INFORMATION_MESSAGE, null); break;
                 case -1: JOptionPane.showMessageDialog(null, "Seleccione un pago", "Atención", JOptionPane.INFORMATION_MESSAGE, null); break;
                 default:
-                new ControladorRecibo(this,(Frame) SwingUtilities.getWindowAncestor(dc), id_control, dc ,Integer.parseInt(dc.tablaDetallePago.getModel().getValueAt(row, 0).toString()),row, 1);    
+                new ControladorRecibo(this,(Frame) SwingUtilities.getWindowAncestor(dc), id_control, dc ,new BigDecimal(dc.tablaDetallePago.getModel().getValueAt(row, 10).toString()),row, 1);    
                 break;
-            }
+             }
              }else if(posesion){
                  int row = dc.tablaDchoPosesion.getSelectedRow();
                   switch(row){
@@ -303,7 +303,7 @@ public class ControladorDetalleCuota implements ActionListener, TableModelListen
                 JOptionPane.showMessageDialog(null, "Fila no válida", "Atención", JOptionPane.INFORMATION_MESSAGE, null);
                 break;
                 default:
-                 new ControladorRecibo(this,(Frame) SwingUtilities.getWindowAncestor(dc), id_control, dc , Integer.parseInt(dc.tablaDchoPosesion.getModel().getValueAt(row, 0).toString()),row, 0);  
+                 new ControladorRecibo(this,(Frame) SwingUtilities.getWindowAncestor(dc), id_control, dc , new BigDecimal(dc.tablaDetallePago.getModel().getValueAt(row, 10).toString()),row, 0);  
                 }
                }
               }else{
@@ -343,7 +343,7 @@ public class ControladorDetalleCuota implements ActionListener, TableModelListen
         int row = dc.tablaDetallePago.getSelectedRow();
         if(row!=-1){
          if (e.getType() == TableModelEvent.UPDATE) {
-             cd.actualizarCuota(dc.tablaDetallePago.getModel().getValueAt(row, 11).toString(), Integer.parseInt(dc.tablaDetallePago.getModel().getValueAt(row, 0).toString()), id_control);
+             cd.actualizarCuota(dc.tablaDetallePago.getModel().getValueAt(row, 11).toString(), new BigDecimal(dc.tablaDetallePago.getModel().getValueAt(row, 10).toString()), id_control);
          }
         }
     }

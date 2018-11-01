@@ -80,8 +80,8 @@ public class ControladorRecibo implements ActionListener{
     String nombre_comprador, apellido_comprador, domicilio_comprador;
     String dimension, barrio;
     int cant_cuotas, manzana, parcela, row;
-    BigDecimal cobrado, cuota_total, gastos_administrativos;
-    int id_control, nro_cuota;    
+    BigDecimal cobrado, cuota_total, gastos_administrativos, saldo_cemento;
+    int id_control;    
     public static final String IMG = "/Imagenes/logo_reporte.png";
     public static final String IMG2 = "/Imagenes/logo_recibo.png";
     Random random = new Random();
@@ -95,7 +95,7 @@ public class ControladorRecibo implements ActionListener{
     File pathRecibo;
     static org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(ControladorCliente.class.getName());
 
-    public ControladorRecibo(ControladorDetalleCuota cdc, Frame parent, int id_control, DetalleCuota dc, int nro_cuota, int row, int tipoPago) {
+    public ControladorRecibo(ControladorDetalleCuota cdc, Frame parent, int id_control, DetalleCuota dc, BigDecimal saldo_cemento, int row, int tipoPago) {
         ar = new AltaRecibo(parent, true);
         this.cdc=cdc;
         this.dc=dc;
@@ -182,7 +182,7 @@ public class ControladorRecibo implements ActionListener{
             }
         });
         this.id_control=id_control;
-        this.nro_cuota=nro_cuota;
+        this.saldo_cemento=saldo_cemento;
         new RellenarCampos().execute();
     }
     
@@ -459,10 +459,10 @@ public class ControladorRecibo implements ActionListener{
             Ventana.cm.llenarTablaFecha();
             if(tipoPago==1){
               md.altaMinuta(new java.sql.Date(date.getTime()), apellido_comprador, nombre_comprador, manzana, parcela, cobrado, gastos_administrativos, rendido, 
-                      Integer.parseInt(dc.tablaDetallePago.getModel().getValueAt(row, 0).toString()), 
-                      dc.tablaDetallePago.getModel().getValueAt(row, 14).toString(), 
-                      categoria.toString(), 
-                      id_recibo);
+              Integer.parseInt(dc.tablaDetallePago.getModel().getValueAt(row, 0).toString()), 
+              dc.tablaDetallePago.getModel().getValueAt(row, 14).toString(), 
+              categoria.toString(), 
+              id_recibo);
               //-----------Tipo de pago 0 es derecho de posesion---------------//
             }else if(tipoPago==0){
               md.altaMinuta(new java.sql.Date(date.getTime()), apellido_comprador, nombre_comprador, manzana, parcela, cobrado, gastos_administrativos, rendido, Integer.parseInt(dc.tablaDchoPosesion.getModel().getValueAt(row, 0).toString()), dc.tablaDetallePago.getModel().getValueAt(row, 13).toString()+" Dcho. posesión", "Cta. derecho posesión",id_recibo);
@@ -470,7 +470,7 @@ public class ControladorRecibo implements ActionListener{
             //----------Incremento el numero de recibo asociado a ese propietario---------//
             pd.editarNroRecibo(apellido_propietario, nombre_propietario, cuit_propietario, Integer.parseInt(ar.nro_recibo.getText())+1);
             //-----------Agrego nro de recibo a la cuota-----------//
-            cuod.actualizarNroRecibo(Integer.parseInt(ar.nro_recibo.getText()), id_recibo, nro_cuota, id_control);
+            cuod.actualizarNroRecibo(Integer.parseInt(ar.nro_recibo.getText()), id_recibo, saldo_cemento, id_control);
             ar.dispose();         
             cdc.llearTablaDchoPosesion(id_control);
             cdc.llenarTabla(id_control);

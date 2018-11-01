@@ -13,6 +13,7 @@ import Modelo.FichaControlDAO;
 import Modelo.LoteDAO;
 import Modelo.PropietarioDAO;
 import Modelo.ReferenciaDAO;
+import Utils.RendererActualizacion;
 import Utils.RendererAviso;
 import Utils.RendererTablaCliente;
 import Vista.Dialogs.Cumpleaños;
@@ -178,6 +179,7 @@ public class ControladorCliente implements ActionListener, MouseListener, TableM
 				BorderFactory.createLineBorder(Color.BLACK), "Datos referencia"));
         this.vistaClientes.tablaCliente.setDefaultRenderer(Object.class, r);
         this.vistaClientes.tablaCliente.getColumn("Aviso").setCellRenderer(new RendererAviso());
+        this.vistaClientes.tablaCliente.getColumn("Actualizacion").setCellRenderer(new RendererActualizacion());
         llenarComboApellidos();
         llenarTabla();
     }
@@ -300,7 +302,7 @@ public class ControladorCliente implements ActionListener, MouseListener, TableM
          if(e.getSource() == vistaClientes.detalleBtn){  
            int row = vistaClientes.tablaCliente.getSelectedRow();
            if(row != -1){
-               if(vistaClientes.tablaCliente.getModel().getValueAt(vistaClientes.tablaCliente.convertRowIndexToModel(row), 10) != null){
+               if(vistaClientes.tablaCliente.getModel().getValueAt(vistaClientes.tablaCliente.convertRowIndexToModel(row), 11) != null){
                    new ControladorDetalleCuota(Integer.parseInt(vistaClientes.tablaCliente.getModel().getValueAt(vistaClientes.tablaCliente.convertRowIndexToModel(row), 12).toString()), vistaClientes.tablaCliente.getModel().getValueAt(vistaClientes.tablaCliente.convertRowIndexToModel(row), 0).toString(),vistaClientes.tablaCliente.getModel().getValueAt(vistaClientes.tablaCliente.convertRowIndexToModel(row), 1).toString(), vistaClientes.tablaCliente.getModel().getValueAt(vistaClientes.tablaCliente.convertRowIndexToModel(row), 3).toString(), vistaClientes.tablaCliente.getModel().getValueAt(vistaClientes.tablaCliente.convertRowIndexToModel(row), 5).toString(), vistaClientes.tablaCliente.getModel().getValueAt(vistaClientes.tablaCliente.convertRowIndexToModel(row), 6).toString(), Integer.parseInt(vistaClientes.tablaCliente.getModel().getValueAt(vistaClientes.tablaCliente.convertRowIndexToModel(row), 7).toString()),  Integer.parseInt(vistaClientes.tablaCliente.getModel().getValueAt(vistaClientes.tablaCliente.convertRowIndexToModel(row), 11).toString()),Integer.parseInt(vistaClientes.tablaCliente.getModel().getValueAt(vistaClientes.tablaCliente.convertRowIndexToModel(row), 10).toString()));
                }else{
                   JOptionPane.showMessageDialog(null, "Debe asignar una propiedad para ver los detalles", "Atención", JOptionPane.INFORMATION_MESSAGE, null); 
@@ -405,9 +407,11 @@ public class ControladorCliente implements ActionListener, MouseListener, TableM
         String actualizar_cemento = "";
         String aviso = "";
         String cumpleaños;
+        String tipoActualizacion;
         try {
             if(listaClientes.size()>0){
                 for (int i = 0; i < listaClientes.size(); i++) {
+                   tipoActualizacion = "Cemento" ;
                    aviso = "";
                    icono = new JLabel();
                    cumpleaños = "0";
@@ -454,9 +458,11 @@ public class ControladorCliente implements ActionListener, MouseListener, TableM
                 String barrio_prop = listaClientes.get(i).getBarrio();
                 String manzana_prop = listaClientes.get(i).getManzana();
                 String parcela_prop = listaClientes.get(i).getParcela();
-                String observaciones = listaClientes.get(i).getObservacion();
+                if(listaClientes.get(i).getBandera_cemento()==1){
+                    tipoActualizacion = "Emp. Público";
+                }
                 BigDecimal cuota_pura = listaClientes.get(i).getCuota_pura();   
-                clientes = new Object[] {apellidos, nombres, dni, telefono1, telefono2, barrio, calle, numero, fecha_nacimiento, trabajo, baja, idControl, cantidad_cuotas, gastos, bolsa_cemento, fch_actualizacion, barrio_prop, manzana_prop, parcela_prop, observaciones, actualizar_cemento, cumpleaños, cuota_pura, icono};
+                clientes = new Object[] {apellidos, nombres, dni, telefono1, telefono2, barrio, calle, numero, fecha_nacimiento, trabajo, baja, idControl, cantidad_cuotas, gastos, bolsa_cemento, fch_actualizacion, barrio_prop, manzana_prop, parcela_prop, tipoActualizacion, actualizar_cemento, cumpleaños, cuota_pura, icono};
                 model.addRow(clientes); 
                 }
             }

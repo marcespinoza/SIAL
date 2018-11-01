@@ -65,8 +65,8 @@ public class Clientes extends javax.swing.JPanel {
         {
             public Component prepareRenderer(TableCellRenderer renderer, int rowIndex, int vColIndex) {
                 Component c = super.prepareRenderer(renderer, rowIndex, vColIndex);
-                //---Pinto de rosado si el cliente no tiene propiedad asignada---//
 
+                //---Pinto de rosado si el cliente no tiene propiedad asignada---//
                 if(tablaCliente.getValueAt(rowIndex, 11)==null){
                     c.setBackground(Color.PINK);
                 }
@@ -324,7 +324,7 @@ public class Clientes extends javax.swing.JPanel {
 
             },
             new String [] {
-                "Apellido/s", "Nombre/s", "Documento", "Title 4", "Title 5", "Title 6", "Title 7", "Title 8", "Title 9", "Title 10", "Title 11", "Title 12", "Title 13", "Title 14", "Title 15", "Title 16", "Barrio", "Manzana", "Parcela", "Observacion", "actualizar_cto", "cumpleaños", "Title 23", "Aviso"
+                "Apellido/s", "Nombre/s", "Documento", "Title 4", "Title 5", "Title 6", "Title 7", "Title 8", "Title 9", "Title 10", "Title 11", "Title 12", "Title 13", "Title 14", "Title 15", "Title 16", "Barrio", "Manzana", "Parcela", "Actualizacion", "actualizar_cto", "cumpleaños", "Title 23", "Aviso"
             }
         ) {
             boolean[] canEdit = new boolean [] {
@@ -384,6 +384,7 @@ public class Clientes extends javax.swing.JPanel {
             tablaCliente.getColumnModel().getColumn(16).setPreferredWidth(1);
             tablaCliente.getColumnModel().getColumn(17).setPreferredWidth(1);
             tablaCliente.getColumnModel().getColumn(18).setPreferredWidth(1);
+            tablaCliente.getColumnModel().getColumn(19).setPreferredWidth(1);
             tablaCliente.getColumnModel().getColumn(20).setMinWidth(0);
             tablaCliente.getColumnModel().getColumn(20).setPreferredWidth(0);
             tablaCliente.getColumnModel().getColumn(20).setMaxWidth(0);

@@ -245,11 +245,11 @@
                       <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
                       <Component id="jLabel2" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <EmptySpace pref="57" max="32767" attributes="0"/>
-                  <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="minutaDesde" alignment="1" min="-2" max="-2" attributes="0"/>
-                      <Component id="minutaHasta" alignment="1" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace pref="35" max="32767" attributes="0"/>
+                  <Group type="103" groupAlignment="0" max="-2" attributes="0">
                       <Component id="buscar" alignment="1" min="-2" pref="95" max="-2" attributes="0"/>
+                      <Component id="minutaDesde" alignment="1" pref="127" max="32767" attributes="0"/>
+                      <Component id="minutaHasta" alignment="1" max="32767" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>

@@ -139,7 +139,7 @@ public class ControladorBaseDeDatos implements ActionListener{
                 java.util.Date date = new java.util.Date();
                 Process p;
                 Runtime runtime = Runtime.getRuntime();
-                p = runtime.exec(bd.pathMysqlTxf.getText()+"/mysqldump -u root p MiPrimerCasa --add-drop-database -B miprimercasa -r "+"\""+bd.pathGuardarTxf.getText()+"/Backup Base de datos - "+fecha.format(date)+".sql\"");
+                p = runtime.exec(bd.pathMysqlTxf.getText()+"/mysqldump -u root -pMiPrimerCasa --add-drop-database -B miprimercasa -r "+"\""+bd.pathGuardarTxf.getText()+"/Backup Base de datos - "+fecha.format(date)+".sql\"");
                 completo = p.waitFor();                
             } catch (IOException | InterruptedException ex) {
                 System.out.println(ex.getMessage());

@@ -7,8 +7,6 @@ package Modelo;
 
 import Clases.Cliente;
 import Clases.ClientesPorCriterio;
-import Clases.Lote;
-import Vista.Panels.Clientes;
 import conexion.Conexion;
 import java.sql.Connection;
 import java.sql.*;
@@ -38,7 +36,7 @@ public class ClienteDAO {
      List<ClientesPorCriterio> clientesPorLotes = new ArrayList<>();
      try {
           connection = conexion.dataSource.getConnection();
-          String listar = "SELECT c.Dni, c.Apellidos, c.Nombres,c.fecha_nacimiento, c.barrio, c.calle, c.numero, c.Telefono1, c.telefono2, c.trabajo, h.baja, f.Id_control, f.cantidad_cuotas, f.gastos, f.bolsa_cemento, f.fecha_actualizacion, f.lote_Barrio, f.lote_Manzana, f.lote_Parcela,f.observacion, f.cuota_pura FROM (cliente c LEFT JOIN cliente_tiene_lote h ON c.Dni = h.cliente_Dni) left join ficha_control_lote f on f.Id_control=h.Id_control GROUP BY f.Id_control, c.dni, ifnull(f.Id_control, c.Dni) order by c.apellidos"; 
+          String listar = "SELECT c.Dni, c.Apellidos, c.Nombres,c.fecha_nacimiento, c.barrio, c.calle, c.numero, c.Telefono1, c.telefono2, c.trabajo, h.baja, f.Id_control, f.cantidad_cuotas, f.gastos, f.bolsa_cemento, f.fecha_actualizacion, f.lote_Barrio, f.lote_Manzana, f.lote_Parcela,f.bandera_cemento, f.cuota_pura FROM (cliente c LEFT JOIN cliente_tiene_lote h ON c.Dni = h.cliente_Dni) left join ficha_control_lote f on f.Id_control=h.Id_control GROUP BY f.Id_control, c.dni, ifnull(f.Id_control, c.Dni) order by c.apellidos"; 
           Statement st = connection.createStatement();
           rs = st.executeQuery(listar);
           while (rs.next()) {
@@ -62,7 +60,7 @@ public class ClienteDAO {
             cpp.setBarrio(rs.getString(17));
             cpp.setManzana(rs.getString(18));
             cpp.setParcela(rs.getString(19));
-            cpp.setObservacion(rs.getString(20));
+            cpp.setBandera_cemento(rs.getByte(20));
             cpp.setCuota_pura(rs.getBigDecimal(21));
             clientesPorLotes.add(cpp);
          }
@@ -243,7 +241,7 @@ public class ClienteDAO {
      List<ClientesPorCriterio> clientesPorPropietario = new ArrayList<>();
      try {
           connection = conexion.dataSource.getConnection();
-          String listar = "SELECT DISTINCT c.Dni, c.Apellidos, c.Nombres,c.fecha_nacimiento, c.barrio, c.calle, c.numero, c.Telefono1, c.telefono2, c.trabajo, cl.baja, f.Id_control, f.cantidad_cuotas, f.gastos, f.bolsa_cemento, f.fecha_actualizacion, f.lote_Barrio, f.lote_Manzana, f.lote_Parcela from ((((cliente c INNER join cliente_tiene_lote cl on c.dni=cl.cliente_dni) INNER join ficha_control_lote f on cl.id_control=f.id_control) INNER join lote l on f.lote_barrio=l.barrio) INNER join lote l2 on l2.manzana=f.lote_manzana) INNER join lote l3 on l3.parcela=f.lote_parcela where l3.propietario_Apellidos='"+apellido+"' and l3.propietario_Nombres='"+nombre+"' order by c.apellidos"; 
+          String listar = "SELECT DISTINCT c.Dni, c.Apellidos, c.Nombres,c.fecha_nacimiento, c.barrio, c.calle, c.numero, c.Telefono1, c.telefono2, c.trabajo, cl.baja, f.Id_control, f.cantidad_cuotas, f.gastos, f.bolsa_cemento, f.fecha_actualizacion, f.lote_Barrio, f.lote_Manzana, f.lote_Parcela, f.bandera_cemento, f.cuota_pura from ((((cliente c INNER join cliente_tiene_lote cl on c.dni=cl.cliente_dni) INNER join ficha_control_lote f on cl.id_control=f.id_control) INNER join lote l on f.lote_barrio=l.barrio) INNER join lote l2 on l2.manzana=f.lote_manzana) INNER join lote l3 on l3.parcela=f.lote_parcela where l3.propietario_Apellidos='"+apellido+"' and l3.propietario_Nombres='"+nombre+"' order by c.apellidos"; 
           Statement st = connection.createStatement();
           rs = st.executeQuery(listar);
           while (rs.next()) {
@@ -266,7 +264,9 @@ public class ClienteDAO {
             cpp.setFecha_actualizacion(rs.getDate(16));
             cpp.setBarrio(rs.getString(17));
             cpp.setManzana(rs.getString(18));
-            cpp.setParcela(rs.getString(19));
+            cpp.setParcela(rs.getString(19));            
+            cpp.setBandera_cemento(rs.getByte(20));
+            cpp.setCuota_pura(rs.getBigDecimal(21));
             clientesPorPropietario.add(cpp);
          }
         } catch (SQLException ex) {

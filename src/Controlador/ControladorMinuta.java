@@ -58,7 +58,7 @@ public class ControladorMinuta implements MouseListener, ActionListener {
     MinutaVista vistaMinuta;
     private Object [] minuta;
     private Object [] fechaMinuta;
-    List<Minuta> listaMinutas = null;
+    List<Minuta> listaMinutas = new ArrayList<Minuta>();
     File f;
     JFileChooser chooser;
     FileInputStream fileIn = null;
@@ -144,7 +144,7 @@ public class ControladorMinuta implements MouseListener, ActionListener {
     public void actionPerformed(ActionEvent e) {
             if(e.getSource()==vistaMinuta.generarMinuta){
                 if(!vistaMinuta.path.getText().equals("")){
-                  if(vistaMinuta.tablaFechaMinuta.getSelectedRow()==-1){
+                  if(listaMinutas.isEmpty()){
                        JOptionPane.showMessageDialog(null, "Selecciona una minuta", "Atención", JOptionPane.INFORMATION_MESSAGE, null);
                   }else{
                       new GenerarPdfMinuta().execute();
@@ -208,7 +208,7 @@ public class ControladorMinuta implements MouseListener, ActionListener {
             document.add(subtitulo);
             document.add( Chunk.NEWLINE );
             PdfPTable table = new PdfPTable(9);            
-            table.setTotalWidth(new float[]{ 1,2,4,2,2,2,2,2,4});
+            table.setTotalWidth(new float[]{ 1,2,4,2,2,2,2,2,3});
             table.setWidthPercentage(100);
             PdfPCell orden = new PdfPCell(new Paragraph("ORD",f2));
             PdfPCell rbo_nro = new PdfPCell(new Paragraph("Rbo. Nro",f));
@@ -217,7 +217,7 @@ public class ControladorMinuta implements MouseListener, ActionListener {
             PdfPCell cobrado = new PdfPCell(new Paragraph("Cobrado",f));
             PdfPCell gastos = new PdfPCell(new Paragraph("Gastos. Adm.",f));
             PdfPCell rendido = new PdfPCell(new Paragraph("Rendido",f));
-            PdfPCell nro_cuota = new PdfPCell(new Paragraph("Cuota Nro.",f));
+            PdfPCell nro_cuota = new PdfPCell(new Paragraph("Cuota",f));
             PdfPCell observaciones = new PdfPCell(new Paragraph("Observaciones",f));  
             orden.setHorizontalAlignment(Element.ALIGN_CENTER);
             rbo_nro.setHorizontalAlignment(Element.ALIGN_CENTER);
@@ -249,7 +249,7 @@ public class ControladorMinuta implements MouseListener, ActionListener {
               BigDecimal total = new BigDecimal(0);
               for (int i = 0; i < listaMinutas.size(); i++) {                 
                   PdfPTable table2 = new PdfPTable(9);            
-                  table2.setTotalWidth(new float[]{ 1,2,4,2,2,2,2,2,4});
+                  table2.setTotalWidth(new float[]{ 1,2,4,2,2,2,2,2,3});
                   table2.setWidthPercentage(100);
                   PdfPCell nro_orden = new PdfPCell(new Paragraph(String.valueOf(conta),f));
                   nro_orden.setHorizontalAlignment(Element.ALIGN_CENTER);
@@ -286,7 +286,7 @@ public class ControladorMinuta implements MouseListener, ActionListener {
               }
             //------Linea Totales------//
             PdfPTable tableTotales = new PdfPTable(9);            
-            tableTotales.setTotalWidth(new float[]{ 1,2,4,2,2,2,2,2,4});
+            tableTotales.setTotalWidth(new float[]{ 1,2,4,2,2,2,2,2,3});
             tableTotales.setWidthPercentage(100);  
             PdfPCell cellcobrado = new PdfPCell(new Paragraph("$ "+String.format ("%.2f",acumulador_cobrado), f));
             PdfPCell cellgastos = new PdfPCell(new Paragraph("$ "+String.format ("%.2f",acumulador_gastos), f));
@@ -396,7 +396,7 @@ public class ControladorMinuta implements MouseListener, ActionListener {
             Logger.getLogger(DetalleCuota.class.getName()).log(Level.SEVERE, null, ex);
         } catch (FileNotFoundException ex) {
             Logger.getLogger(DetalleCuota.class.getName()).log(Level.SEVERE, null, ex);
-            JOptionPane.showMessageDialog(null, "No se puedo generar el documento."+"\r\n"+ "Verifique no lo tiene abierto actualmente.", "Atención", JOptionPane.INFORMATION_MESSAGE, null);
+            JOptionPane.showMessageDialog(null, "No se puedo generar el documento."+"\r\n"+ "Verifique que no lo tiene abierto actualmente.", "Atención", JOptionPane.INFORMATION_MESSAGE, null);
         } catch (IOException ex) {
             Logger.getLogger(DetalleCuota.class.getName()).log(Level.SEVERE, null, ex);
         }
