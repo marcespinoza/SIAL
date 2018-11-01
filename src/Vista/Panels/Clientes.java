@@ -7,6 +7,7 @@ package Vista.Panels;
 
 import java.awt.Color;
 import java.awt.Component;
+import javax.swing.JTable;
 import javax.swing.table.JTableHeader;
 import javax.swing.table.TableCellRenderer;
 
@@ -63,24 +64,7 @@ public class Clientes extends javax.swing.JPanel {
         jScrollPane2 = new javax.swing.JScrollPane();
         tablaCliente = new javax.swing.JTable()
         {
-            public Component prepareRenderer(TableCellRenderer renderer, int rowIndex, int vColIndex) {
-                Component c = super.prepareRenderer(renderer, rowIndex, vColIndex);
 
-                //---Pinto de rosado si el cliente no tiene propiedad asignada---//
-                if(tablaCliente.getValueAt(rowIndex, 11)==null){
-                    c.setBackground(Color.PINK);
-                }
-                //-----Pinto de rojo si el cliente esta dado de baja--//
-                if(tablaCliente.getValueAt(rowIndex, 10)!=null){
-                    if(tablaCliente.getValueAt(rowIndex, 10).toString().equals("1")){
-                        c.setBackground(Color.RED);
-                    }
-                }
-                if (isCellSelected(rowIndex, vColIndex)) {
-                    c.setBackground(Color.yellow);
-                }
-                return c;
-            }
         }
         ;
         jPanel2 = new javax.swing.JPanel();
@@ -328,7 +312,7 @@ public class Clientes extends javax.swing.JPanel {
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                true, false, false, false, false, false, false, false, false, false, false, false, false, false, true, true, false, false, false, true, false, false, true, false
+                true, false, false, false, false, false, false, false, false, false, false, false, false, false, true, true, false, false, false, false, false, false, true, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -338,8 +322,6 @@ public class Clientes extends javax.swing.JPanel {
         tablaCliente.getTableHeader().setReorderingAllowed(false);
         jScrollPane2.setViewportView(tablaCliente);
         if (tablaCliente.getColumnModel().getColumnCount() > 0) {
-            tablaCliente.getColumnModel().getColumn(0).setResizable(false);
-            tablaCliente.getColumnModel().getColumn(1).setResizable(false);
             tablaCliente.getColumnModel().getColumn(2).setResizable(false);
             tablaCliente.getColumnModel().getColumn(2).setPreferredWidth(1);
             tablaCliente.getColumnModel().getColumn(3).setMinWidth(0);

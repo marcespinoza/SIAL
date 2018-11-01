@@ -27,8 +27,21 @@ private JLabel component;
         }else{
             component.setBackground(null);
         }
+        if(isSelected){
+           component.setBackground(Color.yellow);
+        }
         if(table.getValueAt(row, 23) != null){
            component.setHorizontalAlignment(SwingConstants.CENTER);
+        }
+        //---Pinto de rosado si el cliente no tiene propiedad asignada---//
+        if(table.getValueAt(row, 11)==null){
+            component.setBackground(Color.PINK);
+        }
+        //-----Pinto de rojo si el cliente esta dado de baja--//
+        if(table.getValueAt(row, 10)!=null){
+            if(table.getValueAt(row, 10).toString().equals("1")){
+                component.setBackground(Color.RED);
+            }
         }
          return component;
     }

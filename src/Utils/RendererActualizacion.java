@@ -20,16 +20,27 @@ import javax.swing.table.DefaultTableCellRenderer;
 public class RendererActualizacion extends DefaultTableCellRenderer{
     
     Color verde = new Color(0, 151, 0);
+    private JLabel c;
     
     @Override
     public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-    Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus,row, column);
+     c = (JLabel) super.getTableCellRendererComponent(table, value, isSelected, hasFocus,row, column);
         if(table.getValueAt(row, 19).toString().equals("Cemento")){
            c.setForeground(Color.blue);
+          
         }else{
             c.setForeground(verde);
         }
+        if(isSelected){
+            c.setBackground(Color.YELLOW);
+        }else{
+            c.setBackground(Color.WHITE);
+        }
+        //---Pinto de rosado si el cliente no tiene propiedad asignada---//
+        if(table.getValueAt(row, 11)==null){
+            c.setBackground(Color.PINK);
+        }
         setHorizontalAlignment(SwingConstants.CENTER);
-return this;
+        return this;
     }   
   }
