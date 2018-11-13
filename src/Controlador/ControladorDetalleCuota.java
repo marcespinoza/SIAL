@@ -126,14 +126,11 @@ public class ControladorDetalleCuota implements ActionListener, TableModelListen
         dc.guardar.addActionListener(this);
         dc.volverBtn.addActionListener(this);
         dc.agregarPagoBtn.addActionListener(this);
+        dc.actualizarPagoBtn.addActionListener(this);
         dc.modificarPagoBtn.addActionListener(this);
         dc.eliminarPagoBtn.addActionListener(this);
         dc.generarReciboBtn.addActionListener(this);
         dc.resumenCliente.addActionListener(this);
-        dc.nombreLabel.setText(this.nombre);
-        dc.apellidoLabel.setText(this.apellido);
-        dc.direccionLabel.setText(barrio +", "+ calle +" "+ numero);
-        dc.telefonoLabel.setText(telefono);
         dc.tablaDetallePago.setDefaultRenderer(Object.class, r);
         //-------Limito la cantidad de caracteres de la celda editable-------//
         dc.tablaDetallePago.getColumnModel().getColumn(11).setCellEditor(new LimitCaracteres());
@@ -240,8 +237,15 @@ public class ControladorDetalleCuota implements ActionListener, TableModelListen
             CardLayout cl = (CardLayout)(Ventana.panelPrincipal.getLayout());
             cl.next(Ventana.panelPrincipal);
         }
+        //---------Boton Agregar cuota----------//
         if(e.getSource() == dc.agregarPagoBtn){
             new ControladorAltaCuota((Frame) SwingUtilities.getWindowAncestor(dc), id_control, dc.tablaDetallePago.getRowCount(), nro_cuotas);
+            llenarTabla(id_control);
+            llearTablaDchoPosesion(id_control);
+        }
+        //---------Boton Actualizar cuota----------//
+        if(e.getSource() == dc.actualizarPagoBtn){
+            new ControladorActualizarCuota((Frame) SwingUtilities.getWindowAncestor(dc),id_control);
             llenarTabla(id_control);
             llearTablaDchoPosesion(id_control);
         }
@@ -252,7 +256,7 @@ public class ControladorDetalleCuota implements ActionListener, TableModelListen
              }else if(row==0){
                  JOptionPane.showMessageDialog(null, "Cuota no valida", "Atención", JOptionPane.INFORMATION_MESSAGE, null);
              }else if(row!=-1){
-            new ControladorActualizarCuota((Ventana) SwingUtilities.getWindowAncestor(dc), id_control, Integer.parseInt(dc.tablaDetallePago.getModel().getValueAt(row, 0).toString()), new BigDecimal(dc.tablaDetallePago.getModel().getValueAt(row, 3).toString()),new BigDecimal(dc.tablaDetallePago.getModel().getValueAt(row, 4).toString()));
+            new ControladorModificarCuota((Ventana) SwingUtilities.getWindowAncestor(dc), id_control, Integer.parseInt(dc.tablaDetallePago.getModel().getValueAt(row, 0).toString()), new BigDecimal(dc.tablaDetallePago.getModel().getValueAt(row, 3).toString()),new BigDecimal(dc.tablaDetallePago.getModel().getValueAt(row, 4).toString()));
             llenarTabla(id_control);
             llearTablaDchoPosesion(id_control);}
         }
@@ -355,7 +359,7 @@ public class ControladorDetalleCuota implements ActionListener, TableModelListen
             Font f=new Font(Font.FontFamily.TIMES_ROMAN,10.0f,0,null);
             listaFichaControl = fcd.obtenerFichaControl(id_control); 
         try {
-            PdfWriter.getInstance(document, new FileOutputStream(new File(dc.path.getText(), "Resumen "+dc.nombreLabel.getText()+" "+ dc.apellidoLabel.getText()+".pdf")));
+            PdfWriter.getInstance(document, new FileOutputStream(new File(dc.path.getText(), "Resumen "+".pdf")));
             document.open();       
             Image image = Image.getInstance(IMG); 
             image.scaleAbsolute(70, 70);
@@ -370,8 +374,8 @@ public class ControladorDetalleCuota implements ActionListener, TableModelListen
             document.add( Chunk.NEWLINE );
             document.add( Chunk.NEWLINE );
             document.add( Chunk.NEWLINE );
-            document.add(new Paragraph("Apellido y nombres: "+dc.nombreLabel.getText()+" "+ dc.apellidoLabel.getText(),f));
-            document.add(new Paragraph("Direcciòn: "+dc.direccionLabel.getText(),f));
+            document.add(new Paragraph("Apellido y nombres: "));
+            document.add(new Paragraph("Direcciòn: "));
             document.add(new Paragraph("Propiedad: "+listaFichaControl.get(0).getBarrio()+" - Mz: "+listaFichaControl.get(0).getManzana()+" - Pc: "+listaFichaControl.get(0).getParcela(),f));
             document.add( Chunk.NEWLINE );
             //------Cabeceras de las columnas de las cuotas---------//
@@ -490,7 +494,7 @@ public class ControladorDetalleCuota implements ActionListener, TableModelListen
            pd.dispose();
            try {
             //-------Abro pdf del recibo-------//   
-               Desktop.getDesktop().open(new File(dc.path.getText(), "Resumen "+dc.nombreLabel.getText()+" "+ dc.apellidoLabel.getText()+".pdf"));
+               Desktop.getDesktop().open(new File(dc.path.getText(), "Resumen "+".pdf"));
            } catch (IOException ex) {
                Logger.getLogger(ControladorRecibo.class.getName()).log(Level.SEVERE, null, ex);
            }

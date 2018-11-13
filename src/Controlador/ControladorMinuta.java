@@ -134,8 +134,7 @@ public class ControladorMinuta implements MouseListener, ActionListener {
             fechaMinuta = new Object[] {nro,df.format(fecha)};
             model.addRow(fechaMinuta);
             nro ++;
-        }
-            
+        }           
         
         vistaMinuta.tablaFechaMinuta.getColumnModel().getColumn(0).setPreferredWidth(1); 
     }
@@ -418,6 +417,7 @@ public class ControladorMinuta implements MouseListener, ActionListener {
 
        @Override
        public void done() { 
+           System.out.println(minutas+"minutas");
            llenarTabla(minutas);
        }
     

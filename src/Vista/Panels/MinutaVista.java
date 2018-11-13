@@ -51,8 +51,6 @@ public class MinutaVista extends javax.swing.JPanel {
                 return c;
             }
         };
-        jScrollPane2 = new javax.swing.JScrollPane();
-        tablaFechaMinuta = new javax.swing.JTable();
         generarMinuta = new javax.swing.JButton();
         guardar_en = new javax.swing.JButton();
         path = new javax.swing.JTextField();
@@ -66,9 +64,14 @@ public class MinutaVista extends javax.swing.JPanel {
         totalRendido = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        tablaFechaMinuta = new javax.swing.JTable();
+
+        setPreferredSize(new java.awt.Dimension(1112, 479));
 
         JTableHeader header = tablaMinuta.getTableHeader();
         Color micolor = new Color(36,47,65);
+        tablaMinuta.getTableHeader().setOpaque(false);
         header.setForeground(Color.white);
         header.setBackground(micolor);
         tablaMinuta.setModel(new javax.swing.table.DefaultTableModel(
@@ -87,6 +90,7 @@ public class MinutaVista extends javax.swing.JPanel {
                 return canEdit [columnIndex];
             }
         });
+        tablaMinuta.setSelectionForeground(new java.awt.Color(0, 51, 153));
         jScrollPane1.setViewportView(tablaMinuta);
         if (tablaMinuta.getColumnModel().getColumnCount() > 0) {
             tablaMinuta.getColumnModel().getColumn(0).setPreferredWidth(1);
@@ -101,30 +105,6 @@ public class MinutaVista extends javax.swing.JPanel {
             tablaMinuta.getColumnModel().getColumn(9).setPreferredWidth(0);
             tablaMinuta.getColumnModel().getColumn(9).setMaxWidth(0);
         }
-
-        JTableHeader headerMinuta = tablaFechaMinuta.getTableHeader();
-        headerMinuta.setForeground(Color.white);
-        headerMinuta.setBackground(micolor);
-        tablaFechaMinuta.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null}
-            },
-            new String [] {
-                "Nro", "Fecha"
-            }
-        ) {
-            boolean[] canEdit = new boolean [] {
-                false, false
-            };
-
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
-            }
-        });
-        jScrollPane2.setViewportView(tablaFechaMinuta);
 
         generarMinuta.setText("Generar minuta");
 
@@ -189,6 +169,32 @@ public class MinutaVista extends javax.swing.JPanel {
         jLabel4.setFont(new java.awt.Font("Century Gothic", 1, 14)); // NOI18N
         jLabel4.setText("Total rendido:");
 
+        jScrollPane3.setPreferredSize(new java.awt.Dimension(150, 10));
+
+        JTableHeader headerMinuta = tablaFechaMinuta.getTableHeader();
+        headerMinuta.setForeground(Color.white);
+        headerMinuta.setBackground(micolor);
+        tablaFechaMinuta.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null}
+            },
+            new String [] {
+                "Nro", "Fecha"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jScrollPane3.setViewportView(tablaFechaMinuta);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -196,7 +202,7 @@ public class MinutaVista extends javax.swing.JPanel {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                    .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane1)
@@ -209,7 +215,7 @@ public class MinutaVista extends javax.swing.JPanel {
                                 .addComponent(path, javax.swing.GroupLayout.PREFERRED_SIZE, 475, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(generarMinuta)
-                        .addContainerGap(297, Short.MAX_VALUE))
+                        .addContainerGap(183, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(totalRendido, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -242,8 +248,9 @@ public class MinutaVista extends javax.swing.JPanel {
                         .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 337, Short.MAX_VALUE)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 382, Short.MAX_VALUE)
+                    .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -258,7 +265,7 @@ public class MinutaVista extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
     public com.toedter.calendar.JDateChooser minutaDesde;
     public com.toedter.calendar.JDateChooser minutaHasta;
     public javax.swing.JTextField path;

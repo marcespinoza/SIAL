@@ -174,6 +174,22 @@ public class FichaControlDAO {
         }
   }
    
+   public void actualizarValorCuota( BigDecimal gastos, BigDecimal cuota_pura, int id_control){
+        try {
+            Connection con = conexion.dataSource.getConnection();
+            PreparedStatement ps = con.prepareStatement(
+                    "UPDATE ficha_control_lote SET gastos = ?, cuota_pura = ? WHERE id_control = ?");
+            ps.setBigDecimal(1, gastos);
+            ps.setBigDecimal(2, cuota_pura);
+            ps.setInt(3, id_control);
+            ps.executeUpdate();
+            ps.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(CuotaDAO.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println(ex.getMessage());
+        }
+  }
+   
     public void actualizarObservacion(String observacion, int id_control){
         try {
             Connection con = conexion.dataSource.getConnection();
