@@ -98,6 +98,7 @@ public class DetalleCuota extends javax.swing.JPanel {
                 return canEdit [columnIndex];
             }
         });
+        tablaDetallePago.setSelectionForeground(new java.awt.Color(0, 51, 153));
         jScrollPane1.setViewportView(tablaDetallePago);
         if (tablaDetallePago.getColumnModel().getColumnCount() > 0) {
             tablaDetallePago.getColumnModel().getColumn(13).setMinWidth(0);
@@ -138,6 +139,7 @@ public class DetalleCuota extends javax.swing.JPanel {
                 return canEdit [columnIndex];
             }
         });
+        tablaDchoPosesion.setSelectionForeground(new java.awt.Color(0, 51, 153));
         jScrollPane2.setViewportView(tablaDchoPosesion);
         if (tablaDchoPosesion.getColumnModel().getColumnCount() > 0) {
             tablaDchoPosesion.getColumnModel().getColumn(0).setResizable(false);
@@ -241,7 +243,7 @@ public class DetalleCuota extends javax.swing.JPanel {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(actualizarPagoBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGap(4, 4, 4))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 1315, Short.MAX_VALUE))
+                    .addComponent(jScrollPane1))
                 .addContainerGap())
         );
         layout.setVerticalGroup(

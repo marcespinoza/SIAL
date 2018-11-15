@@ -135,7 +135,6 @@ public class Ventana extends javax.swing.JFrame implements ActionListener{
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Mi Primer Casa");
-        setPreferredSize(new java.awt.Dimension(1366, 728));
         setResizable(false);
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowOpened(java.awt.event.WindowEvent evt) {
