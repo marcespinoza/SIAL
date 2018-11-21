@@ -8,12 +8,14 @@ package Controlador;
 import Clases.FichaDeControl;
 import Modelo.FichaControlDAO;
 import Vista.Dialogs.ActualizarCuota;
+import Vista.Dialogs.Progress;
 import Vista.Frame.Ventana;
-import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.List;
+import javax.swing.SwingWorker;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
@@ -64,8 +66,8 @@ public class ControladorActualizarCuota implements ActionListener{
                 BigDecimal aumento;
                 BigDecimal cuota_total = new BigDecimal(ac.valor_actual.getText());   
                 aumento = ((cuota_total.multiply(new BigDecimal(ac.porcentaje.getText()))).divide(new BigDecimal("100"),2, BigDecimal.ROUND_HALF_UP)).add(cuota_total);
-//                gasto = (cuota_total.multiply(new BigDecimal("10"))).divide(new BigDecimal("100"),2, BigDecimal.ROUND_HALF_UP);
-                ac.valor_actualizado.setText(aumento.toString());
+               ac.valor_actualizado.setText(aumento.toString());
+              
             }else{
                 ac.valor_actualizado.setText("");
             }
@@ -77,11 +79,35 @@ public class ControladorActualizarCuota implements ActionListener{
     @Override
     public void actionPerformed(ActionEvent e) {
          if(e.getSource() == ac.actualizar){
-             
+              if(!ac.valor_actual.getText().equals("")){
+                  new Actualizar_cuota().execute();
+              }else{
+              }
            }
             if(e.getSource() == ac.cancelar){
                ac.dispose();
            }
     }
+    
+   //----Hilo para generar recibo y minutas-----//      
+       public class Actualizar_cuota extends javax.swing.SwingWorker<Void, Void>{
+         
+       final Progress progress = new Progress(ac, false);
+
+        @Override
+        protected Void doInBackground() throws Exception {     
+            progress.setVisible(true);        
+            BigDecimal gastos =new BigDecimal(ac.valor_actualizado.getText()).subtract((new BigDecimal(ac.valor_actualizado.getText())).divide(new BigDecimal(1.1),2, BigDecimal.ROUND_HALF_UP));
+            BigDecimal cuotaPura = new BigDecimal(ac.valor_actualizado.getText()).subtract(gastos);     
+            fc.actualizarValorCuota(gastos, cuotaPura, id_control);
+           return null;
+       }
+
+       @Override
+       public void done() {             
+            progress.setVisible(false);
+            ac.dispose();
+         }    
+        }
     
 }

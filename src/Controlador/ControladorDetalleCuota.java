@@ -5,9 +5,11 @@
  */
 package Controlador;
 
+import Clases.Actualizacion;
 import Clases.Cuota;
 import Clases.FichaDeControl;
 import Clases.LimitadorCaracteres;
+import Modelo.ActualizacionDAO;
 import Modelo.CuotaDAO;
 import Modelo.DchoPosesionDAO;
 import Modelo.FichaControlDAO;
@@ -47,6 +49,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Properties;
 import java.util.logging.Level;
@@ -73,11 +76,13 @@ public class ControladorDetalleCuota implements ActionListener, TableModelListen
     RendererTablaDchoPosesion rdp = new RendererTablaDchoPosesion();
     DetalleCuota dc = new DetalleCuota();
     CuotaDAO cd = new CuotaDAO();
+    ActualizacionDAO ad = new ActualizacionDAO();
     MinutaDAO md = new MinutaDAO();
     DchoPosesionDAO dp = new DchoPosesionDAO();
     FichaControlDAO fcd = new FichaControlDAO();
     Object [] detallePago;
     Object [] dchoPosesion;
+    Object [] actualizacion;
     String apellido;
     String nombre;
     int id_control, nro_cuotas;
@@ -138,7 +143,8 @@ public class ControladorDetalleCuota implements ActionListener, TableModelListen
         dc.tablaDetallePago.getColumnModel().getColumn(0).setPreferredWidth(Math.round(0.25f));
         dc.tablaDchoPosesion.setDefaultRenderer(Object.class, rdp);
         llenarTabla(id_control);
-        llearTablaDchoPosesion(id_control);
+        llenarTablaDchoPosesion(id_control);
+        llenarTablaActualizacion(id_control);
         cargarPathMinuta();
         desactivarBotones();
     }
@@ -174,7 +180,23 @@ public class ControladorDetalleCuota implements ActionListener, TableModelListen
        }
      } 
     
-   public void llearTablaDchoPosesion(int id_control){
+    private void llenarTablaActualizacion(int id_control){
+        List<Actualizacion>actualizaciones;
+        actualizaciones = ad.listaActualizaciones(id_control);
+        DefaultTableModel model = (DefaultTableModel) dc.tablaActualizacion.getModel();
+        model.setRowCount(0);
+        if(!actualizaciones.isEmpty()){
+              for(int i = 0; i < actualizaciones.size(); i++){
+                Date fecha = actualizaciones.get(i).getFecha();
+                BigDecimal saldo_anterior = actualizaciones.get(i).getSaldo_anterior();
+                BigDecimal saldo_nuevo = actualizaciones.get(i).getSaldo_nuevo();
+                actualizacion = new Object[] {fecha, saldo_anterior, saldo_nuevo}; 
+                model.addRow(actualizacion);
+              }
+        }
+    }
+    
+   public void llenarTablaDchoPosesion(int id_control){
         int num_cuota=0;
         derechoPosesion = dp.listarCuenta(id_control);
         DefaultTableModel model = (DefaultTableModel) dc.tablaDchoPosesion.getModel();
@@ -223,8 +245,6 @@ public class ControladorDetalleCuota implements ActionListener, TableModelListen
                 detallePago= new Object[] {nro_cuota, fecha, detalle, cuota_pura, gastos_admin, debe, haber, saldo, cemento_debe, cemento_haber,cemento_saldo, observaciones, nro_recibo, id_recibo, tipo_pago};                    
                 model.addRow(detallePago); 
             }
-            //---------Reseteo resultset para recorrerlo nuevamente cuando quiero---------//
-            //---------crear resumen de cliente--------------------------------------------//
             CardLayout cl = (CardLayout)(Ventana.panelPrincipal.getLayout());
             Ventana.panelPrincipal.add(dc, "Detalle_pago");
             cl.show(Ventana.panelPrincipal, "Detalle_pago");
@@ -241,13 +261,13 @@ public class ControladorDetalleCuota implements ActionListener, TableModelListen
         if(e.getSource() == dc.agregarPagoBtn){
             new ControladorAltaCuota((Frame) SwingUtilities.getWindowAncestor(dc), id_control, dc.tablaDetallePago.getRowCount(), nro_cuotas);
             llenarTabla(id_control);
-            llearTablaDchoPosesion(id_control);
+            llenarTablaDchoPosesion(id_control);
         }
         //---------Boton Actualizar cuota----------//
         if(e.getSource() == dc.actualizarPagoBtn){
             new ControladorActualizarCuota((Ventana) SwingUtilities.getWindowAncestor(dc),id_control);
             llenarTabla(id_control);
-            llearTablaDchoPosesion(id_control);
+            llenarTablaDchoPosesion(id_control);
         }
         if(e.getSource() == dc.modificarPagoBtn){
             int row = dc.tablaDetallePago.getSelectedRow();             
@@ -258,7 +278,7 @@ public class ControladorDetalleCuota implements ActionListener, TableModelListen
              }else if(row!=-1){
             new ControladorModificarCuota((Ventana) SwingUtilities.getWindowAncestor(dc), id_control, Integer.parseInt(dc.tablaDetallePago.getModel().getValueAt(row, 0).toString()), new BigDecimal(dc.tablaDetallePago.getModel().getValueAt(row, 3).toString()),new BigDecimal(dc.tablaDetallePago.getModel().getValueAt(row, 4).toString()));
             llenarTabla(id_control);
-            llearTablaDchoPosesion(id_control);}
+            llenarTablaDchoPosesion(id_control);}
         }
         if(e.getSource()==dc.eliminarPagoBtn){
              int row = dc.tablaDetallePago.getSelectedRow();             
@@ -353,7 +373,7 @@ public class ControladorDetalleCuota implements ActionListener, TableModelListen
     }
     
     private void generarResumenPdf(){
-            List<FichaDeControl> listaFichaControl = new ArrayList<>();
+            List<FichaDeControl> listaFichaControl;
             Document document= new Document(PageSize.A4);
             //DateFormat fecha1 = new SimpleDateFormat("dd/MM/yyyy");
             Font f=new Font(Font.FontFamily.TIMES_ROMAN,10.0f,0,null);

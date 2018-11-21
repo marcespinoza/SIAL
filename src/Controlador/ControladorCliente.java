@@ -337,11 +337,11 @@ public class ControladorCliente implements ActionListener, MouseListener, TableM
             int row = vistaClientes.tablaCliente.getSelectedRow();
            if(row != -1){
                if(vistaClientes.tablaCliente.getValueAt(row, 10) != null){
-                 int reply = JOptionPane.showConfirmDialog(null, "Dar de baja a "+vistaClientes.tablaCliente.getModel().getValueAt(row, 0)+" "+""+" "+vistaClientes.tablaCliente.getModel().getValueAt(row, 1)+"?",
+                 int reply = JOptionPane.showConfirmDialog(null, "Dar de baja a "+vistaClientes.tablaCliente.getModel().getValueAt(vistaClientes.tablaCliente.convertRowIndexToModel(row), 0)+" "+""+" "+vistaClientes.tablaCliente.getModel().getValueAt(vistaClientes.tablaCliente.convertRowIndexToModel(row), 1)+"?",
                  "Advertencia",JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null);
                   if (reply == JOptionPane.YES_OPTION) {  
-                    fd.bajaPropietario(Integer.parseInt(vistaClientes.tablaCliente.getValueAt(row, 2).toString()), Integer.parseInt(vistaClientes.tablaCliente.getValueAt(row, 11).toString()));
-                    ld.editarPropiedad(0, vistaClientes.tablaCliente.getValueAt(row, 16).toString(), Integer.parseInt(vistaClientes.tablaCliente.getValueAt(row, 17).toString()), Integer.parseInt(vistaClientes.tablaCliente.getValueAt(row, 18).toString()));
+                    fd.bajaPropietario(Integer.parseInt(vistaClientes.tablaCliente.getValueAt(row, 2).toString()), Integer.parseInt(vistaClientes.tablaCliente.getValueAt(vistaClientes.tablaCliente.convertRowIndexToModel(row), 11).toString()));
+                    ld.editarPropiedad(0, vistaClientes.tablaCliente.getValueAt(row, 16).toString(), Integer.parseInt(vistaClientes.tablaCliente.getValueAt(row, 17).toString()), Integer.parseInt(vistaClientes.tablaCliente.getValueAt(vistaClientes.tablaCliente.convertRowIndexToModel(row), 18).toString()));
                     llenarTabla();
                   }
                    }else{
@@ -458,7 +458,7 @@ public class ControladorCliente implements ActionListener, MouseListener, TableM
                 String barrio_prop = listaClientes.get(i).getBarrio();
                 String manzana_prop = listaClientes.get(i).getManzana();
                 String parcela_prop = listaClientes.get(i).getParcela();
-                if(listaClientes.get(i).getBandera_cemento()==1){
+                if(listaClientes.get(i).getBandera_cemento()==0){
                     tipoActualizacion = "Emp. Público";
                 }
                 BigDecimal cuota_pura = listaClientes.get(i).getCuota_pura();   
@@ -507,16 +507,12 @@ public class ControladorCliente implements ActionListener, MouseListener, TableM
     
     @Override
     public void mouseClicked(MouseEvent e) {
-        int row = vistaClientes.tablaCliente.getSelectedRow();   
-        //========Respaldo valores barrio, manzana y parcela por si quiere editarlas=========//
-        // barrio = vistaClientes.tablaCliente.getModel().getValueAt(row, 16).toString();
-        // manzana = Integer.parseInt(vistaClientes.tablaCliente.getModel().getValueAt(row, 17).toString());
-        // parcela = Integer.parseInt(vistaClientes.tablaCliente.getModel().getValueAt(row, 18).toString());
-        //=========Fin respaldo===============//
+        int row = vistaClientes.tablaCliente.getSelectedRow();  
         vistaClientes.barrio.setText(vistaClientes.tablaCliente.getModel().getValueAt(vistaClientes.tablaCliente.convertRowIndexToModel(row), 5).toString());
         vistaClientes.calle.setText(vistaClientes.tablaCliente.getModel().getValueAt(vistaClientes.tablaCliente.convertRowIndexToModel(row), 6).toString());
         vistaClientes.numero.setText(vistaClientes.tablaCliente.getModel().getValueAt(vistaClientes.tablaCliente.convertRowIndexToModel(row), 7).toString());
         vistaClientes.trabajo.setText(vistaClientes.tablaCliente.getModel().getValueAt(vistaClientes.tablaCliente.convertRowIndexToModel(row), 9).toString());  
+        vistaClientes.telefono.setText(vistaClientes.tablaCliente.getModel().getValueAt(vistaClientes.tablaCliente.convertRowIndexToModel(row), 3).toString()+"_"+vistaClientes.tablaCliente.getModel().getValueAt(vistaClientes.tablaCliente.convertRowIndexToModel(row), 4).toString());
         //-------Si no tiene propiedad asignada entonces este valor va a ser nulo--------//
         if(vistaClientes.tablaCliente.getModel().getValueAt(row, 13)!=null){
             //----Muestro valor bolsa de cemento y fecha de actualizacion---------//

@@ -28,8 +28,6 @@ public class ClienteDAO {
        conexion = new Conexion();
     }
     
- public void obtenerClientes(){}
- 
  public List<ClientesPorCriterio> clientesPorLotes(){
      ResultSet rs = null;
      Connection connection = null;

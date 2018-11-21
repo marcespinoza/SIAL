@@ -419,10 +419,8 @@ public class ControladorRecibo implements ActionListener{
     }
     
     //---------Hilo para rellenar los campos cuando se muestra el formulario-----//    
-      public class RellenarCampos extends javax.swing.SwingWorker<Void, Void>{
-          
+      public class RellenarCampos extends javax.swing.SwingWorker<Void, Void>{         
       
-
         @Override
         protected Void doInBackground() throws Exception {
             datosPropiedad();
@@ -472,7 +470,7 @@ public class ControladorRecibo implements ActionListener{
             //-----------Agrego nro de recibo a la cuota-----------//
             cuod.actualizarNroRecibo(Integer.parseInt(ar.nro_recibo.getText()), id_recibo, saldo_cemento, id_control);
             ar.dispose();         
-            cdc.llearTablaDchoPosesion(id_control);
+            cdc.llenarTablaDchoPosesion(id_control);
             cdc.llenarTabla(id_control);
             progress.setVisible(false);
          }    

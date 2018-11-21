@@ -295,12 +295,12 @@ public class ControladorAsignacionPropiedad implements ActionListener, KeyListen
 
         @Override
         protected Void doInBackground() throws Exception { 
-           byte flag_cemento = 0; 
-           if(vistaAsignarPropiedad.bolsaCemento.isSelected()){
-               flag_cemento = 1;
+           byte flag_cemento = 1; 
+           if(vistaAsignarPropiedad.empPublico.isSelected()){
+               flag_cemento = 0;
            } 
            BigDecimal gastos =new BigDecimal(vistaAsignarPropiedad.cuota_total.getText()).subtract((new BigDecimal(vistaAsignarPropiedad.cuota_total.getText())).divide(new BigDecimal(1.1),2, BigDecimal.ROUND_HALF_UP));
-           id_control = fichaControlDAO.altaFichaControl(vistaAsignarPropiedad.tipo_propiedad.getSelectedItem().toString(), vistaAsignarPropiedad.dimension.getText(), Integer.parseInt(vistaAsignarPropiedad.cantidad_cuotas.getText()),  new BigDecimal(vistaAsignarPropiedad.cuota_total.getText()).subtract(gastos), gastos,flag_cemento ,new BigDecimal(vistaAsignarPropiedad.bolsa_cemento.getText()), new java.sql.Date(vistaAsignarPropiedad.fch_suscripción.getDate().getTime()),String.valueOf(vistaAsignarPropiedad.barrio.getSelectedItem()),Integer.parseInt((String)vistaAsignarPropiedad.manzana.getSelectedItem()), Integer.parseInt((String)vistaAsignarPropiedad.parcela.getSelectedItem()));
+           id_control = fichaControlDAO.altaFichaControl(vistaAsignarPropiedad.tipo_propiedad.getSelectedItem().toString(), vistaAsignarPropiedad.dimension.getText(), Integer.parseInt(vistaAsignarPropiedad.cantidad_cuotas.getText()),  new BigDecimal(vistaAsignarPropiedad.cuota_total.getText()).subtract(gastos), gastos, flag_cemento ,new BigDecimal(vistaAsignarPropiedad.bolsa_cemento.getText()), new java.sql.Date(vistaAsignarPropiedad.fch_suscripción.getDate().getTime()),String.valueOf(vistaAsignarPropiedad.barrio.getSelectedItem()),Integer.parseInt((String)vistaAsignarPropiedad.manzana.getSelectedItem()), Integer.parseInt((String)vistaAsignarPropiedad.parcela.getSelectedItem()));
            return null;
         }
 
