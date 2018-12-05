@@ -37,6 +37,7 @@ import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Properties;
@@ -180,6 +181,7 @@ public class ControladorCliente implements ActionListener, MouseListener, TableM
         this.vistaClientes.tablaCliente.setDefaultRenderer(Object.class, r);
         this.vistaClientes.tablaCliente.getColumn("Aviso").setCellRenderer(new RendererAviso());
         this.vistaClientes.tablaCliente.getColumn("Actualizacion").setCellRenderer(new RendererActualizacion());
+        
         llenarComboApellidos();
         llenarTabla();
     }

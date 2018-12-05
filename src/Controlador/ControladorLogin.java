@@ -12,26 +12,22 @@ import Vista.Dialogs.Login;
 import Vista.Frame.Ventana;
 import conexion.Conexion;
 import java.awt.Color;
-import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.time.DayOfWeek;
+import java.time.LocalDate;
+import java.time.Month;
 import java.util.Calendar;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -77,6 +73,12 @@ public class ControladorLogin implements ActionListener, KeyListener{
         login.usuario.setCaretColor(Color.WHITE);
         login.contraseña.setCaretColor(Color.WHITE);
         login.operadorChk.setSelected(true);
+        Calendar cal = Calendar.getInstance();
+        int day = cal.get(Calendar.DATE);
+        int month = cal.get(Calendar.MONTH)+1;
+        if(day <= 7 && month <= 12){
+            login.guirnalda.setIcon(null);
+        }
         login.eyePass.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {

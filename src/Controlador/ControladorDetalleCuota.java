@@ -188,9 +188,10 @@ public class ControladorDetalleCuota implements ActionListener, TableModelListen
         if(!actualizaciones.isEmpty()){
               for(int i = 0; i < actualizaciones.size(); i++){
                 Date fecha = actualizaciones.get(i).getFecha();
+                byte porcentaje = actualizaciones.get(i).getPorcentaje();
                 BigDecimal saldo_anterior = actualizaciones.get(i).getSaldo_anterior();
                 BigDecimal saldo_nuevo = actualizaciones.get(i).getSaldo_nuevo();
-                actualizacion = new Object[] {fecha, saldo_anterior, saldo_nuevo}; 
+                actualizacion = new Object[] {fecha, porcentaje,saldo_anterior, saldo_nuevo}; 
                 model.addRow(actualizacion);
               }
         }
@@ -268,6 +269,7 @@ public class ControladorDetalleCuota implements ActionListener, TableModelListen
             new ControladorActualizarCuota((Ventana) SwingUtilities.getWindowAncestor(dc),id_control);
             llenarTabla(id_control);
             llenarTablaDchoPosesion(id_control);
+            llenarTablaActualizacion(id_control);
         }
         if(e.getSource() == dc.modificarPagoBtn){
             int row = dc.tablaDetallePago.getSelectedRow();             

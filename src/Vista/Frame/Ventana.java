@@ -14,8 +14,6 @@ import Controlador.ControladorRegistro;
 import Controlador.ControladorResumen;
 import Vista.Panels.MinutaVista;
 import Vista.Panels.Resumen;
-import java.awt.GraphicsEnvironment;
-import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -71,10 +69,12 @@ public class Ventana extends javax.swing.JFrame implements ActionListener{
         about.addActionListener(this);
         baseDeDatos.addActionListener(this);
         scheduleBackupBD();
-//        final java.awt.Point x= GraphicsEnvironment.getLocalGraphicsEnvironment().getCenterPoint();
-//        Rectangle r = GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds();
-//        System.out.println(r.getSize());
-//        setSize(r.getSize());
+        Calendar cal = Calendar.getInstance();
+        int day = cal.get(Calendar.DATE);
+        int month = cal.get(Calendar.MONTH)+1;
+        if(day <= 7 && month <= 12){
+            guirnalda.setIcon(null);
+        }
         this.setResizable(true);
     }
     
@@ -112,6 +112,7 @@ public class Ventana extends javax.swing.JFrame implements ActionListener{
         btnCumpleaños = new javax.swing.JButton();
         ayuda = new javax.swing.JLabel();
         calculadora = new javax.swing.JButton();
+        guirnalda = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
         MenuInicio = new javax.swing.JMenu();
         cerrarSesion = new javax.swing.JMenuItem();
@@ -222,6 +223,8 @@ public class Ventana extends javax.swing.JFrame implements ActionListener{
             }
         });
 
+        guirnalda.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/guirnalda.png"))); // NOI18N
+
         javax.swing.GroupLayout panelBotones1Layout = new javax.swing.GroupLayout(panelBotones1);
         panelBotones1.setLayout(panelBotones1Layout);
         panelBotones1Layout.setHorizontalGroup(
@@ -239,7 +242,9 @@ public class Ventana extends javax.swing.JFrame implements ActionListener{
                 .addComponent(btnCumpleaños, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(ayuda, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 372, Short.MAX_VALUE)
+                .addGap(157, 157, 157)
+                .addComponent(guirnalda)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 165, Short.MAX_VALUE)
                 .addComponent(nombreUsuario)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(apellidoUsuario)
@@ -253,9 +258,12 @@ public class Ventana extends javax.swing.JFrame implements ActionListener{
         );
         panelBotones1Layout.setVerticalGroup(
             panelBotones1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelBotones1Layout.createSequentialGroup()
+            .addGroup(panelBotones1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(panelBotones1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(panelBotones1Layout.createSequentialGroup()
+                        .addComponent(guirnalda)
+                        .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(panelBotones1Layout.createSequentialGroup()
                         .addGroup(panelBotones1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(labelUsuario, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -391,6 +399,7 @@ public class Ventana extends javax.swing.JFrame implements ActionListener{
     private Vista.Panels.Clientes clientes;
     public javax.swing.JMenuItem configuracion;
     public Vista.Panels.DetalleCuota detallePago;
+    public javax.swing.JLabel guirnalda;
     public javax.swing.JMenu info;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JMenu jMenu1;

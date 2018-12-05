@@ -6,6 +6,7 @@
 package Controlador;
 
 import Clases.FichaDeControl;
+import Modelo.ActualizacionDAO;
 import Modelo.FichaControlDAO;
 import Vista.Dialogs.ActualizarCuota;
 import Vista.Dialogs.Progress;
@@ -27,6 +28,7 @@ public class ControladorActualizarCuota implements ActionListener{
     
     ActualizarCuota ac;
     FichaControlDAO fc = new FichaControlDAO();
+    ActualizacionDAO ad =new ActualizacionDAO();
     Ventana ventana;
     int id_control;
 
@@ -96,10 +98,13 @@ public class ControladorActualizarCuota implements ActionListener{
 
         @Override
         protected Void doInBackground() throws Exception {     
-            progress.setVisible(true);        
-            BigDecimal gastos =new BigDecimal(ac.valor_actualizado.getText()).subtract((new BigDecimal(ac.valor_actualizado.getText())).divide(new BigDecimal(1.1),2, BigDecimal.ROUND_HALF_UP));
-            BigDecimal cuotaPura = new BigDecimal(ac.valor_actualizado.getText()).subtract(gastos);     
+            progress.setVisible(true);      
+            Date date = new Date();
+            BigDecimal valorActualizado = new BigDecimal(ac.valor_actualizado.getText());
+            BigDecimal gastos =valorActualizado.subtract((valorActualizado).divide(new BigDecimal(1.1),2, BigDecimal.ROUND_HALF_UP));
+            BigDecimal cuotaPura = valorActualizado.subtract(gastos);     
             fc.actualizarValorCuota(gastos, cuotaPura, id_control);
+            ad.altaActualizacion(id_control, new java.sql.Date(date.getTime()), Byte.parseByte(ac.porcentaje.getText()), new BigDecimal(ac.valor_actual.getText()), valorActualizado);
            return null;
        }
 

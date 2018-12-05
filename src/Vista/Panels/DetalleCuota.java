@@ -176,10 +176,13 @@ public class DetalleCuota extends javax.swing.JPanel {
 
             },
             new String [] {
-                "Fecha", "Saldo actual", "Saldo nuevo"
+                "Fecha", "%", "Saldo actual", "Saldo nuevo"
             }
         ));
         jScrollPane3.setViewportView(tablaActualizacion);
+        if (tablaActualizacion.getColumnModel().getColumnCount() > 0) {
+            tablaActualizacion.getColumnModel().getColumn(1).setPreferredWidth(1);
+        }
 
         jPanel1.setBackground(new java.awt.Color(36, 47, 65));
 
@@ -271,8 +274,8 @@ public class DetalleCuota extends javax.swing.JPanel {
                                 .addComponent(path))
                             .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 215, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 26, Short.MAX_VALUE)
+                        .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 225, Short.MAX_VALUE)
+                        .addGap(18, 18, 18)
                         .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jScrollPane1)))
         );

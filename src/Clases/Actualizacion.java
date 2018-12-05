@@ -16,10 +16,19 @@ public class Actualizacion {
     
     int id_control;
     Date fecha;
+    byte porcentaje;
     BigDecimal saldo_anterior;
     BigDecimal saldo_nuevo;
 
     public Actualizacion() {
+    }
+
+    public byte getPorcentaje() {
+        return porcentaje;
+    }
+
+    public void setPorcentaje(byte actualizacion) {
+        this.porcentaje = actualizacion;
     }
 
     public int getId_control() {
