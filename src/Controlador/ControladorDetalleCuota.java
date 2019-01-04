@@ -95,13 +95,13 @@ public class ControladorDetalleCuota implements ActionListener, TableModelListen
     Boolean posesion = false;
     public static final String IMG = "src/Imagenes/logo_reporte.png";
     ResultSet derechoPosesion;
-    List<Cuota> detalleCuota = null;
+    List<Cuota> detalleCuota = new ArrayList();
     int baja_logica;
     
     public ControladorDetalleCuota() {
     }
     
-    public ControladorDetalleCuota(int nro_cuotas,String apellido, String nombre, String telefono, String barrio,String calle,int numero,int id_control, int baja_logica) {
+    public ControladorDetalleCuota(ArrayList arrayList, int nro_cuotas,String apellido, String nombre, String telefono, String barrio, String calle,int numero,int id_control, int baja_logica) {
         this.apellido=apellido;
         this.nombre=nombre;
         this.id_control=id_control;
@@ -111,6 +111,7 @@ public class ControladorDetalleCuota implements ActionListener, TableModelListen
            dc.eliminarPagoBtn.setEnabled(false);
            dc.generarReciboBtn.setEnabled(false);
         }
+        dc.nya.setText(this.apellido+" "+this.nombre);
         dc.tablaDetallePago.getModel().addTableModelListener(this);
         dc.tablaDchoPosesion.addMouseListener(new MouseAdapter() {
             @Override
@@ -160,7 +161,6 @@ public class ControladorDetalleCuota implements ActionListener, TableModelListen
     
     public void desactivarBotones(){
       if(Ventana.labelTipoUsuario.getText().equals("operador")){
-            dc.eliminarPagoBtn.setEnabled(false);
             dc.modificarPagoBtn.setEnabled(false);
         }
     }
@@ -222,6 +222,7 @@ public class ControladorDetalleCuota implements ActionListener, TableModelListen
    }  
     
    public void llenarTabla(int idControl){
+        detalleCuota.clear();
         detalleCuota = cd.listaDetalleCuota(idControl);
         DefaultTableModel model = (DefaultTableModel) dc.tablaDetallePago.getModel();
         model.setRowCount(0);

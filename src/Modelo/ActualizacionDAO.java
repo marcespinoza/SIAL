@@ -43,10 +43,10 @@ public class ActualizacionDAO {
          rs = st.executeQuery(listar);
          while(rs.next()){
             Actualizacion a = new Actualizacion();
-            a.setFecha(rs.getDate(2));
-            a.setPorcentaje(rs.getByte(3));
-            a.setSaldo_anterior(rs.getBigDecimal(4));
-            a.setSaldo_nuevo(rs.getBigDecimal(5));
+            a.setFecha(rs.getDate(3));
+            a.setPorcentaje(rs.getByte(4));
+            a.setSaldo_anterior(rs.getBigDecimal(5));
+            a.setSaldo_nuevo(rs.getBigDecimal(6));
             actualizaciones.add(a);
         }
        }catch (SQLException ex) {

@@ -45,6 +45,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
+import javax.swing.JTextField;
 import javax.swing.SwingWorker;
 import javax.swing.table.DefaultTableModel;
 
@@ -187,7 +188,7 @@ public class ControladorMinuta implements MouseListener, ActionListener {
     public void generarPdf(){
       Document document= new Document(PageSize.A4);
       DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-      DateFormat dateFormat2 = new SimpleDateFormat("dd.MM.yyyy");
+      DateFormat dateFormat2 = new SimpleDateFormat("dd-MM-yyyy");
       java.util.Date date = new java.util.Date();
         try {
             pathMinuta = new File(vistaMinuta.path.getText(), "Minuta - "+dateFormat2.format(date)+".pdf");
@@ -198,16 +199,22 @@ public class ControladorMinuta implements MouseListener, ActionListener {
             Font f=new Font(Font.FontFamily.TIMES_ROMAN,10.0f,0,null); 
             Font f2=new Font(Font.FontFamily.TIMES_ROMAN,9.0f,0,null); 
             document.add(new Chunk(image, 0, -55f));
-            Paragraph titulo = new Paragraph("Minuta diaria");  
+            Paragraph titulo = new Paragraph("Minuta general"+"                      "+dateFormat.format(date));  
             titulo.setAlignment(Element.ALIGN_CENTER);
             document.add(titulo);
             document.add( Chunk.NEWLINE );
-            Paragraph subtitulo = new Paragraph("Fecha: "+dateFormat.format(date));  
+            Paragraph subtitulo = null; 
+            if((vistaMinuta.minutaDesde.getDate())!=null){ 
+                subtitulo = new Paragraph(dateFormat2.format(vistaMinuta.minutaDesde.getDate().getTime())+"  a  "+dateFormat2.format(vistaMinuta.minutaHasta.getDate().getTime()));
+            }else{
+                int row = vistaMinuta.tablaFechaMinuta.getSelectedRow();  
+                subtitulo = new Paragraph(vistaMinuta.tablaFechaMinuta.getModel().getValueAt(row,1).toString());
+            }              
             subtitulo.setAlignment(Element.ALIGN_CENTER);
             document.add(subtitulo);
             document.add( Chunk.NEWLINE );
             PdfPTable table = new PdfPTable(9);            
-            table.setTotalWidth(new float[]{ 1,2,4,2,2,2,2,2,3});
+            table.setTotalWidth(new float[]{1,2,4,2,2,2,2,2,3});
             table.setWidthPercentage(100);
             PdfPCell orden = new PdfPCell(new Paragraph("ORD",f2));
             PdfPCell rbo_nro = new PdfPCell(new Paragraph("Rbo. Nro",f));
@@ -343,32 +350,34 @@ public class ControladorMinuta implements MouseListener, ActionListener {
             Paragraph son_pesos = new Paragraph("Son pesos: ", f);
             document.add(son_pesos);
             //---------Pie pagina-------//
-            PdfPTable pie = new PdfPTable(2);
-            pie.setWidthPercentage(50);
+            PdfPTable pie = new PdfPTable(3);
+            pie.setWidthPercentage(90);
             pie.setSpacingBefore(10f);
             PdfPCell confecciono = new PdfPCell(new Paragraph("Confeccionó", f));
+            PdfPCell controlo = new PdfPCell(new Paragraph("Controló", f));
             PdfPCell conformidad = new PdfPCell(new Paragraph("Conformidad", f));
             confecciono.setBorder(Rectangle.NO_BORDER);
+            controlo.setBorder(Rectangle.NO_BORDER);
+            controlo.setHorizontalAlignment(Element.ALIGN_LEFT);
             conformidad.setBorder(Rectangle.NO_BORDER);
-            conformidad.setHorizontalAlignment(Element.ALIGN_RIGHT);
+            conformidad.setHorizontalAlignment(Element.ALIGN_LEFT);
             pie.addCell(confecciono);
+            pie.addCell(controlo);
             pie.addCell(conformidad);
             document.add(pie);
+            document.add( Chunk.NEWLINE );
             //---------Tabla de billetes-----------//
-            PdfPTable tablaBilletes = new PdfPTable(3);
-            tablaBilletes.setWidthPercentage(50);
-            tablaBilletes.setSpacingBefore(10f);
+            PdfPTable tablaBilletes2 = new PdfPTable(3);
+            tablaBilletes2.setWidthPercentage(50);
+            tablaBilletes2.setSpacingBefore(10f);
             PdfPCell billetes1 = new PdfPCell(new Paragraph("Cant.", f));
             PdfPCell billetes2 = new PdfPCell(new Paragraph("Valor unitario", f));
             PdfPCell billetes3 = new PdfPCell(new Paragraph("Valor total", f));
-            tablaBilletes.addCell(billetes1);
-            tablaBilletes.addCell(billetes2);
-            tablaBilletes.addCell(billetes3);            
-            document.add(tablaBilletes);
+            tablaBilletes2.addCell(billetes1);
+            tablaBilletes2.addCell(billetes2);
+            tablaBilletes2.addCell(billetes3);            
             for (int i = 1; i < 11; i++) {
-                //---Agrego celdas vacias----//
-                PdfPTable tablaBilletes2 = new PdfPTable(3);
-                tablaBilletes2.setWidthPercentage(50);
+                //---Agrego celdas vacias----//                
                 PdfPCell empty1 = new PdfPCell(new Paragraph("\n", f));
                 PdfPCell empty2 = null;
                 switch (i) {
@@ -386,16 +395,20 @@ public class ControladorMinuta implements MouseListener, ActionListener {
                 PdfPCell empty3 = new PdfPCell(new Paragraph("\n", f));
                 tablaBilletes2.addCell(empty1);
                 tablaBilletes2.addCell(empty2);
-                tablaBilletes2.addCell(empty3);            
-                document.add(tablaBilletes2);  
-             }
-            
+                tablaBilletes2.addCell(empty3);           
+             }             
+             PdfPTable nesting = new PdfPTable(1);
+             nesting.setWidthPercentage(50);
+             PdfPCell cell = new PdfPCell(tablaBilletes2);
+             cell.setBorder(PdfPCell.NO_BORDER);
+             nesting.addCell(cell);
+             document.add(nesting); 
             document.close();
             }catch (DocumentException ex) {
             Logger.getLogger(DetalleCuota.class.getName()).log(Level.SEVERE, null, ex);
         } catch (FileNotFoundException ex) {
             Logger.getLogger(DetalleCuota.class.getName()).log(Level.SEVERE, null, ex);
-            JOptionPane.showMessageDialog(null, "No se puedo generar el documento."+"\r\n"+ "Verifique que no lo tiene abierto actualmente.", "Atención", JOptionPane.INFORMATION_MESSAGE, null);
+            JOptionPane.showMessageDialog(null, "No se pudo generar el documento."+"\r\n"+ "Verifique que no lo tiene abierto actualmente.", "Atención", JOptionPane.INFORMATION_MESSAGE, null);
         } catch (IOException ex) {
             Logger.getLogger(DetalleCuota.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -446,6 +459,9 @@ public class ControladorMinuta implements MouseListener, ActionListener {
     
     @Override
     public void mouseClicked(MouseEvent e) {
+        //---------Limpio los campos de los calendarios si selecciona una minuta diaria-------//
+         vistaMinuta.minutaDesde.setCalendar(null);
+         vistaMinuta.minutaHasta.setCalendar(null);
          new MinutasPorFecha().execute();         
     }
 
