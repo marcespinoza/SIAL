@@ -17,7 +17,7 @@ public class Conexion {
     public String db = "miprimercasa";
     public String url = "jdbc:mysql://localhost:3306/miprimercasa?zeroDateTimeBehavior=convertToNull";
     public String user = "root";
-    public String root = "MiPrimerCasa";        
+    public String root = "";        
     public DataSource dataSource;       
     static org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(Conexion.class.getName());  
     
@@ -27,7 +27,7 @@ public class Conexion {
     
     public void getConexion(){      
      BasicDataSource basicDataSource = new BasicDataSource();
-     basicDataSource.setDriverClassName("com.mysql.jdbc.Driver");
+     basicDataSource.setDriverClassName("com.mysql.cj.jdbc.Driver");
      basicDataSource.setUsername(user);
      basicDataSource.setPassword(root);
      basicDataSource.setUrl(url); 

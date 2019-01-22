@@ -5,6 +5,7 @@
  */
 package principal;
 
+import Controlador.ControladorLogin;
 import Vista.Frame.Ventana;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
@@ -12,8 +13,8 @@ import javax.swing.UnsupportedLookAndFeelException;
 public class Main {
     
     public static void main(String[] args) throws UnsupportedLookAndFeelException, ClassNotFoundException, InstantiationException, IllegalAccessException {
-         UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-        new Ventana();      
+        UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        new ControladorLogin();
        // ventana.setVisible(true);
     }
     

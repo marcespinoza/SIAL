@@ -74,7 +74,7 @@ public class ControladorBotones implements ActionListener{
         
         if(e.getSource()==ventana.btnClientes){
          CardLayout cl = (CardLayout)(Ventana.panelPrincipal.getLayout());
-         cl.show(Ventana.panelPrincipal, "card2");
+         cl.show(Ventana.panelPrincipal, "Clientes");
         }
         
         if(e.getSource()==ventana.btnCumpleaños){

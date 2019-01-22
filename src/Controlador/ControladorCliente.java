@@ -33,6 +33,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -83,17 +84,18 @@ public class ControladorCliente implements ActionListener, MouseListener, TableM
     FileInputStream fileIn = null;
     FileOutputStream fileOut = null;
     private Object [] clientes;
-    private String [] detalleCumpleaños;
     private List<Object> cliente = new ArrayList<>();
     private List<Object> referencia = new ArrayList<>();
-    File configFile = new File("config.properties");
+//    File configFile = new File("config.properties");
+//    ClassLoader classLoader = getClass().getClassLoader();
+//File configFile = new File(classLoader.getResource("src/config.properties").getFile());
     public static final DefaultTableCellRenderer DEFAULT_RENDERER = new DefaultTableCellRenderer();
     private String nombres, apellidos;
     static Logger log = Logger.getLogger(ControladorCliente.class.getName());
     
     
-    public ControladorCliente(Ventana ventana, Clientes vistaClientes){
-        this.vistaClientes=vistaClientes;
+    public ControladorCliente(Clientes vistaCliente, Ventana ventana){
+        this.vistaClientes=vistaCliente;
         this.ventana=ventana;
         this.vistaClientes.agregarBtn.addActionListener(this);
         this.vistaClientes.eliminarBtn.addActionListener(this);
@@ -183,10 +185,9 @@ public class ControladorCliente implements ActionListener, MouseListener, TableM
 				BorderFactory.createLineBorder(Color.BLACK), "Datos referencia"));
         this.vistaClientes.tablaCliente.setDefaultRenderer(Object.class, r);
         this.vistaClientes.tablaCliente.getColumn("Aviso").setCellRenderer(new RendererAviso());
-        this.vistaClientes.tablaCliente.getColumn("Actualizacion").setCellRenderer(new RendererActualizacion());
-        
+        this.vistaClientes.tablaCliente.getColumn("Actualizacion").setCellRenderer(new RendererActualizacion());         
         llenarComboApellidos();
-        llenarTabla();
+         llenarTabla();
     }
 
     public ControladorCliente() {
@@ -199,7 +200,7 @@ public class ControladorCliente implements ActionListener, MouseListener, TableM
             vistaClientes.comboApellido.setSelectedIndex(0);
             vistaClientes.comboNombre.setSelectedIndex(0);
             apellidos = "";
-            llenarTabla();
+           
         }
         
         //=======Eventos sobre comboApellido=====//
@@ -364,7 +365,7 @@ public class ControladorCliente implements ActionListener, MouseListener, TableM
             FileReader reader = null;
         try {
             //-------Obtengo el propietario seleccionado por default, para mostrar los clientes de ese propietario----//
-            reader = new FileReader(configFile);
+            reader= new FileReader("config.properties");
             Properties props = new Properties();
             props.load(reader);
             apellidos = props.getProperty("apellidoPropietario");
@@ -376,17 +377,14 @@ public class ControladorCliente implements ActionListener, MouseListener, TableM
             for (int i = 0; i < propietarios.size(); i++) {   
                 vistaClientes.comboApellido.addItem(propietarios.get(i).getApellidos());
             }
+             System.out.println("combo"+vistaClientes.comboApellido.getItemCount());
             } catch (FileNotFoundException ex) {
                 java.util.logging.Logger.getLogger(ControladorCliente.class.getName()).log(Level.SEVERE, null, ex);
             } catch (IOException ex) {
                 java.util.logging.Logger.getLogger(ControladorCliente.class.getName()).log(Level.SEVERE, null, ex);
-            } finally {
-            try {
-                reader.close();
-            } catch (IOException ex) {
-                java.util.logging.Logger.getLogger(ControladorCliente.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            }
+            } 
+            
+        llenarTabla();
      }   
       public void llenarComboNombres(String apellidos){
             List<Propietario>propietarios = null;        
@@ -396,15 +394,17 @@ public class ControladorCliente implements ActionListener, MouseListener, TableM
                 for(int i=0; i< propietarios.size();i++) {
                     vistaClientes.comboNombre.addItem(propietarios.get(i).getNombres());
                 }
+               
      }
     
      public void llenarTabla(){
-        List<ClientesPorCriterio> listaClientes;
+         
+        List<ClientesPorCriterio> listaClientes;        
         if(apellidos.equals("")){
             listaClientes = cd.clientesPorLotes();}
         else{
            listaClientes = cd.clientesPorPropietarios(apellidos, nombres);
-        }        
+        }         
         DefaultTableModel model = (DefaultTableModel) vistaClientes.tablaCliente.getModel();
         model.setRowCount(0);
         SimpleDateFormat sdf=new SimpleDateFormat("dd-MM-YYYY");
@@ -412,7 +412,6 @@ public class ControladorCliente implements ActionListener, MouseListener, TableM
         JLabel icono;
         String fch_actualizacion = "";
         String actualizar_cemento = "";
-        String aviso = "";
         String cumpleaños;
         String tipoActualizacion;
         Date date = new Date();
@@ -421,7 +420,6 @@ public class ControladorCliente implements ActionListener, MouseListener, TableM
             if(listaClientes.size()>0){
                 for (int i = 0; i < listaClientes.size(); i++) {
                    tipoActualizacion = "Cemento" ;
-                   aviso = "";
                    icono = new JLabel();
                    cumpleaños = "0";
                    int dni = listaClientes.get(i).getDni();
@@ -478,6 +476,7 @@ public class ControladorCliente implements ActionListener, MouseListener, TableM
                     BigDecimal cuota_pura = listaClientes.get(i).getCuota_pura();   
                     clientes = new Object[] {apellidos, nombres, dni, telefono1, telefono2, barrio, calle, numero, fecha_nacimiento, trabajo, baja, idControl, cantidad_cuotas, gastos, bolsa_cemento, fch_actualizacion, barrio_prop, manzana_prop, parcela_prop, tipoActualizacion, actualizar_cemento, cumpleaños, cuota_pura, icono};
                     model.addRow(clientes); 
+                    
                     }
             }
             controlCumpleaños();                
@@ -495,23 +494,6 @@ public class ControladorCliente implements ActionListener, MouseListener, TableM
         modeloCumpleaños.setRowCount(0);
         //----Verifico que la tabla de listaClientes tenga al menos una fila--------//
         if(model.getRowCount()!=0){            
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-//        for (int i = 0; i < model.getRowCount(); i++) {
-//            //----Si tiene un 1 en la columna cumpleaños, es su cumpleaños (y si!!!)--------//
-//         if(vistaClientes.tablaCliente.getModel().getValueAt(i, 21).toString().equals("1")){
-//             try {
-//                 String nombre = vistaClientes.tablaCliente.getModel().getValueAt(i, 1).toString();
-//                 String apellido = vistaClientes.tablaCliente.getModel().getValueAt(i, 0).toString();
-//                 String fch_nacimiento = vistaClientes.tablaCliente.getModel().getValueAt(i, 8).toString();
-//                 String edad = String.valueOf(Years.yearsBetween(new LocalDate(formatter.parse(fch_nacimiento)), LocalDate.now()).getYears());
-//                 String telefono = vistaClientes.tablaCliente.getModel().getValueAt(i, 3).toString();
-//                 detalleCumpleaños = new String[] {nombre, apellido, fch_nacimiento, edad, telefono};
-//                 modeloCumpleaños.addRow(detalleCumpleaños);
-//             } catch (ParseException ex) {
-//                 log.debug("Cliente"+ex);
-//             }
-//         }
-//        }  
         //------Si hay cumpleaños en el dia, habilito el boton para mostrar los cumpleaños--------//
         if(modeloCumpleaños.getRowCount()!=0){
             Ventana.btnCumpleaños.setVisible(true);

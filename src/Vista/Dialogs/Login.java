@@ -16,8 +16,8 @@ public class Login extends javax.swing.JDialog {
     /**
      * Creates new form Login
      */
-    public Login(java.awt.Frame parent, boolean modal) {
-        super(parent, modal);
+    public Login(boolean modal) {
+        super();
         initComponents();
         this.getContentPane().setBackground(new Color(36,47,65));
         this.setLocationRelativeTo(null);
@@ -45,7 +45,6 @@ public class Login extends javax.swing.JDialog {
         administradorChk = new javax.swing.JRadioButton();
         aviso = new javax.swing.JLabel();
         eyePass = new javax.swing.JLabel();
-        guirnalda = new javax.swing.JLabel();
 
         setTitle("Iniciar sesión");
         setBackground(new java.awt.Color(36, 47, 65));
@@ -96,8 +95,6 @@ public class Login extends javax.swing.JDialog {
 
         eyePass.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/iconos/eye.png"))); // NOI18N
 
-        guirnalda.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/guirnalda_login.png"))); // NOI18N
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -123,17 +120,11 @@ public class Login extends javax.swing.JDialog {
                         .addComponent(eyePass))
                     .addComponent(aviso, javax.swing.GroupLayout.PREFERRED_SIZE, 235, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(23, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(guirnalda)
-                .addGap(128, 128, 128))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(guirnalda)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap(59, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(usuario, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel1))
@@ -197,7 +188,7 @@ public class Login extends javax.swing.JDialog {
         /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                Login dialog = new Login(new javax.swing.JFrame(), true);
+                Login dialog = new Login(true);
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
                     @Override
                     public void windowClosing(java.awt.event.WindowEvent e) {
@@ -215,7 +206,6 @@ public class Login extends javax.swing.JDialog {
     public javax.swing.JButton cancelar;
     public javax.swing.JPasswordField contraseña;
     public javax.swing.JLabel eyePass;
-    public javax.swing.JLabel guirnalda;
     public javax.swing.JButton iniciar_sesion;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;

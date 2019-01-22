@@ -45,18 +45,8 @@ public class ControladorLogin implements ActionListener, KeyListener{
    static org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(Conexion.class.getName());  
    
     Logger extAppLogger= Logger.getLogger("errorAppender"); 
-    public ControladorLogin(Ventana frame) {        
-        this.frame = frame;
-        login = new Login(frame, true);
-        //----Cuando aprieta boton X de la pantalla de login, cierra el Frame principal------------//
-        login.addWindowListener(new WindowAdapter() {
-            @Override
-            public void windowClosing(WindowEvent e) {
-                super.windowClosing(e); 
-                frame.dispose();
-            }
-            
-        });
+    public ControladorLogin() {        
+        login = new Login( true);       
         login.usuario.addKeyListener(this);
         login.usuario.setDocument(new LimitadorCaracteres(15));
         login.contraseña.addKeyListener(this);
@@ -74,11 +64,6 @@ public class ControladorLogin implements ActionListener, KeyListener{
         login.contraseña.setCaretColor(Color.WHITE);
         login.operadorChk.setSelected(true);
         Calendar cal = Calendar.getInstance();
-        int day = cal.get(Calendar.DATE);
-        int month = cal.get(Calendar.MONTH)+1;
-        if(day <= 7 && month <= 12){
-            login.guirnalda.setIcon(null);
-        }
         login.eyePass.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
@@ -103,12 +88,13 @@ public class ControladorLogin implements ActionListener, KeyListener{
                 usuario = ud.validarUsuario(login.usuario.getText(), contraseña, login.tipo_operador.getSelection().getActionCommand());
                     try {
                         if (usuario!=null){
+                            frame = new Ventana();
                             log.info(usuario.getNombres()+" "+usuario.getApellidos()+ " - Inicio sesión");
                             log.error(usuario.getNombres()+" "+usuario.getApellidos()+ " - Inicio sesión");
-                            Ventana.labelUsuario.setText(usuario.getUsuario());
-                            Ventana.labelTipoUsuario.setText(usuario.getTipoUsuario());
-                            Ventana.nombreUsuario.setText(usuario.getNombres());
-                            Ventana.apellidoUsuario.setText(usuario.getApellidos());    
+                            frame.labelUsuario.setText(usuario.getUsuario());
+                            frame.labelTipoUsuario.setText(usuario.getTipoUsuario());
+                            frame.nombreUsuario.setText(usuario.getNombres());
+                            frame.apellidoUsuario.setText(usuario.getApellidos());    
                             //--------Escribo en el archivo de log quien inició sesion, dia y hora---------//
                             File file = new File("log.txt");
                             if(!file.exists()){
@@ -121,7 +107,7 @@ public class ControladorLogin implements ActionListener, KeyListener{
                             bw.newLine();
                             bw.close();
                             //-------Oculto ventana login y muestro el frame----------//
-                            login.dispose();
+                            login.dispose();   
                             frame.setVisible(true);
                         }else{
                             login.aviso.setText("* Usuario y/o contraseña incorrectos");              
@@ -133,7 +119,6 @@ public class ControladorLogin implements ActionListener, KeyListener{
             }
             if(e.getSource() == login.cancelar){
                 login.dispose();
-                frame.dispose();
             }
 
     }

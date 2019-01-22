@@ -12,10 +12,16 @@ import Controlador.ControladorLogin;
 import Controlador.ControladorMinuta;
 import Controlador.ControladorRegistro;
 import Controlador.ControladorResumen;
+import Vista.Panels.Clientes;
 import Vista.Panels.MinutaVista;
 import Vista.Panels.Resumen;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -32,6 +38,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.ImageIcon;
+import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 
 /**
@@ -40,7 +47,6 @@ import javax.swing.JOptionPane;
  */
 public class Ventana extends javax.swing.JFrame implements ActionListener{
     
-    ControladorLogin cl;
     MinutaVista vistaMinuta = MinutaVista.getInstance();
     Resumen vistaResumen = Resumen.getInstance();
     public static ControladorMinuta cm;
@@ -48,7 +54,7 @@ public class Ventana extends javax.swing.JFrame implements ActionListener{
     File configFile = new File("config.properties");
     String pathRespaldoBD = null;
     String pathMysqldump = null;
-    DateFormat fecha = new SimpleDateFormat("dd-MM-yyyy");
+    DateFormat fecha = new SimpleDateFormat("yyyy-MM-dd");
     Calendar cal = Calendar.getInstance();
     java.util.Date date = new java.util.Date();
 
@@ -57,32 +63,32 @@ public class Ventana extends javax.swing.JFrame implements ActionListener{
 //        this.setSize(1366, 768);
         ImageIcon icon = new ImageIcon("src/Imagenes/logo.png_32x32.png");
         this.setIconImage(icon.getImage());         
-        inicializarPaneles();
-        cl = new ControladorLogin(this);
-        cm = new ControladorMinuta(vistaMinuta);
-        cr = new ControladorResumen(vistaResumen);       
+        cm = new ControladorMinuta(minuta);
+        cr = new ControladorResumen(resumen);       
         desactivarBotones();
-        panelPrincipal.add(vistaMinuta, "Minuta");
-        panelPrincipal.add(vistaResumen, "Resumen");
         configuracion.addActionListener(this);
         registroEventos.addActionListener(this);
         about.addActionListener(this);
         baseDeDatos.addActionListener(this);
         scheduleBackupBD();
         Calendar cal = Calendar.getInstance();
-        int day = cal.get(Calendar.DATE);
-        int month = cal.get(Calendar.MONTH)+1;
-        if(day <= 7 && month <= 12){
-            guirnalda.setIcon(null);
-        }
+        this.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowOpened(WindowEvent e) {
+                super.windowOpened(e);
+               inicializarPaneles();
+            }            
+            });
         this.setResizable(true);
-    }
+         
+      }
     
-    public void inicializarPaneles(){
-        inicializarBotones();        
-        new ControladorCliente(this, clientes);
+      public void inicializarPaneles(){
+          inicializarBotones();       
+        
         //-------Controlador para manejar botones superiores - Clientes,Minutas---------//
-        new ControladorBotones(this);        
+        new ControladorBotones(this);   
+        new ControladorCliente(clientes, this);
     }
 
     @SuppressWarnings("unchecked")
@@ -112,7 +118,6 @@ public class Ventana extends javax.swing.JFrame implements ActionListener{
         btnCumpleaños = new javax.swing.JButton();
         ayuda = new javax.swing.JLabel();
         calculadora = new javax.swing.JButton();
-        guirnalda = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
         MenuInicio = new javax.swing.JMenu();
         cerrarSesion = new javax.swing.JMenuItem();
@@ -145,10 +150,10 @@ public class Ventana extends javax.swing.JFrame implements ActionListener{
 
         panelPrincipal.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         panelPrincipal.setLayout(new java.awt.CardLayout());
-        panelPrincipal.add(clientes, "card2");
-        panelPrincipal.add(detallePago, "card3");
-        panelPrincipal.add(resumen, "card4");
-        panelPrincipal.add(minuta, "card5");
+        panelPrincipal.add(clientes, "Clientes");
+        panelPrincipal.add(detallePago, "DetallePago");
+        panelPrincipal.add(resumen, "Resumen");
+        panelPrincipal.add(minuta, "Minuta");
 
         panelBotones1.setBackground(new java.awt.Color(36, 47, 65));
 
@@ -223,8 +228,6 @@ public class Ventana extends javax.swing.JFrame implements ActionListener{
             }
         });
 
-        guirnalda.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/guirnalda.png"))); // NOI18N
-
         javax.swing.GroupLayout panelBotones1Layout = new javax.swing.GroupLayout(panelBotones1);
         panelBotones1.setLayout(panelBotones1Layout);
         panelBotones1Layout.setHorizontalGroup(
@@ -242,9 +245,7 @@ public class Ventana extends javax.swing.JFrame implements ActionListener{
                 .addComponent(btnCumpleaños, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(ayuda, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(157, 157, 157)
-                .addComponent(guirnalda)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 165, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 482, Short.MAX_VALUE)
                 .addComponent(nombreUsuario)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(apellidoUsuario)
@@ -261,9 +262,6 @@ public class Ventana extends javax.swing.JFrame implements ActionListener{
             .addGroup(panelBotones1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(panelBotones1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(panelBotones1Layout.createSequentialGroup()
-                        .addComponent(guirnalda)
-                        .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(panelBotones1Layout.createSequentialGroup()
                         .addGroup(panelBotones1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(labelUsuario, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -396,10 +394,9 @@ public class Ventana extends javax.swing.JFrame implements ActionListener{
     public static javax.swing.JButton btnResumen;
     public static javax.swing.JButton calculadora;
     public static javax.swing.JMenuItem cerrarSesion;
-    private Vista.Panels.Clientes clientes;
+    public Vista.Panels.Clientes clientes;
     public javax.swing.JMenuItem configuracion;
     public Vista.Panels.DetalleCuota detallePago;
-    public javax.swing.JLabel guirnalda;
     public javax.swing.JMenu info;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JMenu jMenu1;
@@ -411,25 +408,17 @@ public class Ventana extends javax.swing.JFrame implements ActionListener{
     private javax.swing.JMenuBar jMenuBar3;
     public static javax.swing.JLabel labelTipoUsuario;
     public static javax.swing.JLabel labelUsuario;
-    private Vista.Panels.MinutaVista minuta;
+    public Vista.Panels.MinutaVista minuta;
     public static javax.swing.JLabel nombreUsuario;
     private Vista.Panels.PanelBotones panelBotones1;
     public static javax.swing.JPanel panelPrincipal;
     public javax.swing.JMenuItem registroEventos;
-    private Vista.Panels.Resumen resumen;
+    public Vista.Panels.Resumen resumen;
     // End of variables declaration//GEN-END:variables
 
     public void inicializarBotones(){
     if(Ventana.labelTipoUsuario.getText().equals("operador"))
     registroEventos.setEnabled(false);
-//    btnClientes.setVerticalTextPosition(SwingConstants.BOTTOM);
-//    btnClientes.setHorizontalTextPosition(SwingConstants.CENTER);
-//    btnResumen.setVerticalTextPosition(SwingConstants.BOTTOM);
-//    btnResumen.setHorizontalTextPosition(SwingConstants.CENTER);    
-//    btnMinuta.setVerticalTextPosition(SwingConstants.BOTTOM);
-//    btnMinuta.setHorizontalTextPosition(SwingConstants.CENTER);
-//    btnCumpleaños.setVerticalTextPosition(SwingConstants.BOTTOM);
-//    btnCumpleaños.setHorizontalTextPosition(SwingConstants.CENTER);
 }
 
     private void scheduleBackupBD(){       
@@ -456,6 +445,7 @@ public class Ventana extends javax.swing.JFrame implements ActionListener{
       ScheduledExecutorService schedulerTarde = Executors.newScheduledThreadPool(1);
       schedulerTarde.schedule(new MyRunnable("_20Hs"), delay2, TimeUnit.MILLISECONDS);}
     }
+
     
    public class MyRunnable implements Runnable {
        
@@ -467,10 +457,9 @@ public class Ventana extends javax.swing.JFrame implements ActionListener{
 
        public void run() {
        // task to run goes here
-         System.out.println("Hello !!");
          try {
              System.out.println(fecha.format(cal.getTime()));
-             Runtime.getRuntime().exec(pathMysqldump+"/mysqldump -u root -pMiPrimerCasa --add-drop-database -B miprimercasa -r "+"\""+pathRespaldoBD+"/Backup Base de datos - "+fecha.format(cal.getTime())+parameter+".sql\"");
+             Runtime.getRuntime().exec(pathMysqldump+"/mysqldump -u root -pMiPrimerCasa --add-drop-database -B miprimercasa -r "+"\""+pathRespaldoBD+fecha.format(cal.getTime())+parameter+".sql\"");
          } catch (IOException ex) {
              System.out.println(ex.getMessage());
              Logger.getLogger(Ventana.class.getName()).log(Level.SEVERE, null, ex);
@@ -480,7 +469,6 @@ public class Ventana extends javax.swing.JFrame implements ActionListener{
 
     public void desactivarBotones(){  
         if(Ventana.labelTipoUsuario.getText().equals("operador")){
-//            clientes.editarBtn.setEnabled(false);
             clientes.eliminarBtn.setEnabled(false);
             registroEventos.setEnabled(false);
         }

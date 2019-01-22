@@ -182,9 +182,12 @@
       <Layout class="org.netbeans.modules.form.compat2.layouts.DesignCardLayout"/>
       <SubComponents>
         <Component class="Vista.Panels.Clientes" name="clientes">
+          <AuxValues>
+            <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="1"/>
+          </AuxValues>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignCardLayout" value="org.netbeans.modules.form.compat2.layouts.DesignCardLayout$CardConstraintsDescription">
-              <CardConstraints cardName="card2"/>
+              <CardConstraints cardName="Clientes"/>
             </Constraint>
           </Constraints>
         </Component>
@@ -194,21 +197,27 @@
           </AuxValues>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignCardLayout" value="org.netbeans.modules.form.compat2.layouts.DesignCardLayout$CardConstraintsDescription">
-              <CardConstraints cardName="card3"/>
+              <CardConstraints cardName="DetallePago"/>
             </Constraint>
           </Constraints>
         </Component>
         <Component class="Vista.Panels.Resumen" name="resumen">
+          <AuxValues>
+            <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="1"/>
+          </AuxValues>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignCardLayout" value="org.netbeans.modules.form.compat2.layouts.DesignCardLayout$CardConstraintsDescription">
-              <CardConstraints cardName="card4"/>
+              <CardConstraints cardName="Resumen"/>
             </Constraint>
           </Constraints>
         </Component>
         <Component class="Vista.Panels.MinutaVista" name="minuta">
+          <AuxValues>
+            <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="1"/>
+          </AuxValues>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignCardLayout" value="org.netbeans.modules.form.compat2.layouts.DesignCardLayout$CardConstraintsDescription">
-              <CardConstraints cardName="card5"/>
+              <CardConstraints cardName="Minuta"/>
             </Constraint>
           </Constraints>
         </Component>
@@ -237,9 +246,7 @@
                   <Component id="btnCumpleaños" min="-2" max="-2" attributes="0"/>
                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
                   <Component id="ayuda" min="-2" pref="79" max="-2" attributes="0"/>
-                  <EmptySpace min="-2" pref="157" max="-2" attributes="0"/>
-                  <Component id="guirnalda" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace pref="165" max="32767" attributes="0"/>
+                  <EmptySpace pref="482" max="32767" attributes="0"/>
                   <Component id="nombreUsuario" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="apellidoUsuario" min="-2" max="-2" attributes="0"/>
@@ -259,10 +266,6 @@
               <Group type="102" alignment="0" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Group type="102" attributes="0">
-                          <Component id="guirnalda" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
-                      </Group>
                       <Group type="102" alignment="0" attributes="0">
                           <Group type="103" groupAlignment="0" max="-2" attributes="0">
                               <Component id="labelUsuario" alignment="0" max="32767" attributes="0"/>
@@ -486,16 +489,6 @@
           </Events>
           <AuxValues>
             <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="9"/>
-          </AuxValues>
-        </Component>
-        <Component class="javax.swing.JLabel" name="guirnalda">
-          <Properties>
-            <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-              <Image iconType="3" name="/Imagenes/guirnalda.png"/>
-            </Property>
-          </Properties>
-          <AuxValues>
-            <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="1"/>
           </AuxValues>
         </Component>
       </SubComponents>

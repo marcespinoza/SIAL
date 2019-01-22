@@ -61,6 +61,7 @@ public class ClienteDAO {
             cpp.setBandera_cemento(rs.getByte(20));
             cpp.setCuota_pura(rs.getBigDecimal(21));
             clientesPorLotes.add(cpp);
+
          }
         } catch (SQLException ex) {
           System.out.println(ex.getMessage());
@@ -236,12 +237,15 @@ public class ClienteDAO {
    public List<ClientesPorCriterio> clientesPorPropietarios(String apellido, String nombre){
      ResultSet rs;
      Connection connection = null;
+     PreparedStatement preparedStmt = null;
      List<ClientesPorCriterio> clientesPorPropietario = new ArrayList<>();
      try {
       connection = conexion.dataSource.getConnection();
-      String listar = "SELECT DISTINCT c.Dni, c.Apellidos, c.Nombres,c.fecha_nacimiento, c.barrio, c.calle, c.numero, c.Telefono1, c.telefono2, c.trabajo, cl.baja, f.Id_control, f.cantidad_cuotas, f.gastos, f.bolsa_cemento, f.fecha_actualizacion, f.lote_Barrio, f.lote_Manzana, f.lote_Parcela, f.bandera_cemento, f.cuota_pura from ((((cliente c INNER join cliente_tiene_lote cl on c.dni=cl.cliente_dni) INNER join ficha_control_lote f on cl.id_control=f.id_control) INNER join lote l on f.lote_barrio=l.barrio) INNER join lote l2 on l2.manzana=f.lote_manzana) INNER join lote l3 on l3.parcela=f.lote_parcela where l3.propietario_Apellidos='"+apellido+"' and l3.propietario_Nombres='"+nombre+"' order by c.apellidos"; 
-      Statement st = connection.createStatement();
-      rs = st.executeQuery(listar);
+      String listar = "SELECT DISTINCT c.Dni, c.Apellidos, c.Nombres,c.fecha_nacimiento, c.barrio, c.calle, c.numero, c.Telefono1, c.telefono2, c.trabajo, cl.baja, f.Id_control, f.cantidad_cuotas, f.gastos, f.bolsa_cemento, f.fecha_actualizacion, f.lote_Barrio, f.lote_Manzana, f.lote_Parcela, f.bandera_cemento, f.cuota_pura from ((cliente c INNER join cliente_tiene_lote cl on c.dni=cl.cliente_dni) INNER join ficha_control_lote f on cl.id_control=f.id_control) INNER join lote l on f.lote_barrio=l.barrio AND l.manzana=f.lote_manzana AND l.parcela=f.lote_parcela where l.propietario_Apellidos=? and l.propietario_Nombres=? order by c.apellidos"; 
+      preparedStmt = connection.prepareStatement(listar);
+      preparedStmt.setString(1, apellido);
+      preparedStmt.setString(2, nombre);
+      rs = preparedStmt.executeQuery();
       while (rs.next()) {
         ClientesPorCriterio cpp = new ClientesPorCriterio();
         cpp.setDni(rs.getInt(1));
@@ -266,6 +270,8 @@ public class ClienteDAO {
         cpp.setBandera_cemento(rs.getByte(20));
         cpp.setCuota_pura(rs.getBigDecimal(21));
         clientesPorPropietario.add(cpp);
+                 
+
      }
     } catch (SQLException ex) {
       System.out.println(ex.getMessage());
