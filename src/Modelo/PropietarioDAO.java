@@ -5,11 +5,8 @@
  */
 package Modelo;
 
-import Clases.Lote;
 import Clases.Propietario;
-import Clases.Usuario;
 import conexion.Conexion;
-import java.sql.Array;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -70,8 +67,9 @@ public class PropietarioDAO {
  }
      
      public void editarPropietario(String apellidos, String nombres, String cuit, int nro_recibo, String backup_cuit){
+          Connection con = null;
          try {
-             Connection con = conexion.dataSource.getConnection();
+             con = conexion.dataSource.getConnection();
              PreparedStatement pstm = con.prepareStatement("UPDATE propietario set apellidos= ? , nombres= ? , cuit= ? , nro_recibo= ? where cuit= ? ");             
              pstm.setString(1,apellidos);
              pstm.setString(2,nombres);
@@ -82,12 +80,19 @@ public class PropietarioDAO {
          } catch (SQLException ex) {
              Logger.getLogger(PropietarioDAO.class.getName()).log(Level.SEVERE, null, ex);
              System.out.println(ex.getMessage());
+         } finally{
+             try {
+                 con.close();
+             } catch (Exception e) {
+                  System.out.println(e.getMessage());
+             }
          }
      }
      
      public void editarNroRecibo(String apellidos, String nombres, String cuit, int nro_recibo){
+         Connection con = null;
          try {
-             Connection con = conexion.dataSource.getConnection();
+             con = conexion.dataSource.getConnection();
              PreparedStatement pstm = con.prepareStatement("update propietario set nro_recibo= ? where apellidos= ? and nombres=? and cuit=? ");             
              pstm.setInt(1,nro_recibo);
              pstm.setString(2,apellidos);
@@ -96,6 +101,12 @@ public class PropietarioDAO {
              pstm.executeUpdate();
          } catch (SQLException ex) {
              Logger.getLogger(PropietarioDAO.class.getName()).log(Level.SEVERE, null, ex);
+         }finally{
+             try {
+                 con.close();
+             } catch (Exception e) {
+                  System.out.println(e.getMessage());
+             }
          }
      }
      

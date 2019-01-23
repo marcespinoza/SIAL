@@ -316,13 +316,17 @@ public class ControladorDetalleCuota implements ActionListener, TableModelListen
               if(cuota || posesion){
               if(cuota){
                int row = dc.tablaDetallePago.getSelectedRow();
-               switch(row){
-                case 0: JOptionPane.showMessageDialog(null, "Cuota no válida", "Atención", JOptionPane.INFORMATION_MESSAGE, null); break;
-                case -1: JOptionPane.showMessageDialog(null, "Seleccione un pago", "Atención", JOptionPane.INFORMATION_MESSAGE, null); break;
-                default:
-                new ControladorRecibo(this,(Frame) SwingUtilities.getWindowAncestor(dc), id_control, dc ,new BigDecimal(dc.tablaDetallePago.getModel().getValueAt(row, 10).toString()),row, 1);    
-                break;
-             }
+               int nro_recibo = Integer.parseInt(dc.tablaDetallePago.getModel().getValueAt(row, 12).toString());
+               System.out.println(nro_recibo);
+               if(row==0){
+                JOptionPane.showMessageDialog(null, "Cuota no válida", "Atención", JOptionPane.INFORMATION_MESSAGE, null); 
+               }else if(row==-1){
+                JOptionPane.showMessageDialog(null, "Seleccione un pago", "Atención", JOptionPane.INFORMATION_MESSAGE, null);
+               }else if(nro_recibo!=0){
+                JOptionPane.showMessageDialog(null, "Cuota con recibo ya generado", "Advertencia", JOptionPane.WARNING_MESSAGE, null);
+               }else{
+                 new ControladorRecibo(this,(Frame) SwingUtilities.getWindowAncestor(dc), id_control, dc ,new BigDecimal(dc.tablaDetallePago.getModel().getValueAt(row, 10).toString()),row, 1);    
+               }                                     
              }else if(posesion){
                  int row = dc.tablaDchoPosesion.getSelectedRow();
                   switch(row){

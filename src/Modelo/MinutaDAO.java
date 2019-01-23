@@ -95,6 +95,7 @@ public class MinutaDAO {
           while(rs.next()){              
                Minuta minuta = new Minuta();
                minuta.setFechaMinuta(rs.getDate(1));   
+               System.out.println(rs.getString(1));
                minutas.add(minuta);
             }  
         } catch (Exception e) {

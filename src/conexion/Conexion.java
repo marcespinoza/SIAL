@@ -5,6 +5,7 @@
  */
 package conexion;
 
+import java.util.TimeZone;
 import javax.sql.DataSource;
 import org.apache.commons.dbcp.BasicDataSource;
 
@@ -15,7 +16,7 @@ import org.apache.commons.dbcp.BasicDataSource;
 public class Conexion {
     
     public String db = "miprimercasa";
-    public String url = "jdbc:mysql://localhost:3306/miprimercasa?zeroDateTimeBehavior=convertToNull";
+    public String url = "jdbc:mysql://localhost:3306/miprimercasa?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=" + TimeZone.getDefault().getID();;
     public String user = "root";
     public String root = "";        
     public DataSource dataSource;       

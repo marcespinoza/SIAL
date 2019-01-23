@@ -318,6 +318,7 @@ public class AltaRecibo extends javax.swing.JDialog {
         jLabel13.setFont(new java.awt.Font("Dialog", 0, 10)); // NOI18N
         jLabel13.setText("Nro. Recibo");
 
+        nro_recibo.setEditable(false);
         nro_recibo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 nro_reciboActionPerformed(evt);
@@ -325,6 +326,7 @@ public class AltaRecibo extends javax.swing.JDialog {
         });
 
         checkRecibo.setText("Mantener nro de recibo");
+        checkRecibo.setEnabled(false);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);

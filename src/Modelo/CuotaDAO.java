@@ -109,14 +109,28 @@ public class CuotaDAO {
      return cuotas;
     }
     
-    public int altaCuotaLote(Date fecha_pago,int nro_cuota, String detalle, BigDecimal cuota_pura, BigDecimal gastos, BigDecimal debe, BigDecimal haber, BigDecimal saldo, BigDecimal cemento_debe, BigDecimal cemento_haber, BigDecimal cemento_saldo, String observaciones, String tipo_pago, int id_control){
+    public int altaCuotaLote(Date fecha_pago, int nro_cuota, String detalle, BigDecimal cuota_pura, BigDecimal gastos, BigDecimal debe, BigDecimal haber, BigDecimal saldo, BigDecimal cemento_debe, BigDecimal cemento_haber, BigDecimal cemento_saldo, String observaciones, String tipo_pago, int id_control){
         int filasAfectadas=0;
         Connection connection = null;
         PreparedStatement ps = null;
      try {
          connection = conexion.dataSource.getConnection();
-         String insertar = "Insert into linea_control_lote (fecha, nro_cuota, detalle, cuota_pura, gastos_administrativos, debe, haber, saldo, cemento_debe, cemento_haber, cemento_saldo, observaciones, tipo_pago, id_Control) values ('"+fecha_pago+"','"+nro_cuota+"','"+detalle+"','"+cuota_pura+"','"+gastos+"','"+debe+"','"+haber+"','"+saldo+"','"+cemento_debe+"','"+cemento_haber+"','"+cemento_saldo+"','"+observaciones+"','"+tipo_pago+"','"+id_control+"') ";
+         String insertar = "Insert into linea_control_lote (fecha, nro_cuota, detalle, cuota_pura, gastos_administrativos, debe, haber, saldo, cemento_debe, cemento_haber, cemento_saldo, observaciones, tipo_pago, id_Control) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ";
          ps = connection.prepareStatement(insertar);
+         ps.setDate(1, fecha_pago);
+         ps.setInt(2, nro_cuota);
+         ps.setString(3, detalle);
+         ps.setBigDecimal(4, cuota_pura);
+         ps.setBigDecimal(5, gastos);
+         ps.setBigDecimal(6, debe);
+         ps.setBigDecimal(7, haber);
+         ps.setBigDecimal(8, saldo);
+         ps.setBigDecimal(9, cemento_debe);
+         ps.setBigDecimal(10, cemento_haber);
+         ps.setBigDecimal(11, cemento_saldo);
+         ps.setString(12, observaciones);
+         ps.setString(13, tipo_pago);
+         ps.setInt(14, id_control);
          filasAfectadas = ps.executeUpdate();         
      } catch (SQLException e) {  
            System.out.println(e.getMessage());
