@@ -135,12 +135,12 @@ public class ControladorBaseDeDatos implements ActionListener{
             bd.progressBar.setVisible(true);
             bd.progressBar.setIndeterminate(true);
             try {
-                DateFormat fecha = new SimpleDateFormat("dd-MM-yyyy");
+                DateFormat fecha = new SimpleDateFormat("yyyy-MM-dd");
                 java.util.Date date = new java.util.Date();
                 Process p;
                 Runtime runtime = Runtime.getRuntime();
-                p = runtime.exec(bd.pathMysqlTxf.getText()+"/mysqldump -u root -pMiPrimerCasa --add-drop-database -B miprimercasa -r "+"\""+bd.pathGuardarTxf.getText()+"/Backup Base de datos - "+fecha.format(date)+".sql\"");
-                completo = p.waitFor();                
+                p = runtime.exec(bd.pathMysqlTxf.getText()+"/mysqldump -u root -pMiPrimerCasa --add-drop-database -B miprimercasa -r "+"\""+bd.pathGuardarTxf.getText()+"/"+fecha.format(date)+".sql\"");
+                completo = p.waitFor();     
             } catch (IOException | InterruptedException ex) {
                 System.out.println(ex.getMessage());
                 Logger.getLogger(ControladorBaseDeDatos.class.getName()).log(Level.SEVERE, null, ex);

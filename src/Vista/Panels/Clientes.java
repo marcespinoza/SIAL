@@ -279,7 +279,7 @@ public class Clientes extends javax.swing.JPanel {
                     .addGroup(datosReferenciaLayout.createSequentialGroup()
                         .addComponent(jLabel12)
                         .addGap(48, 48, 48)
-                        .addComponent(parentesco, javax.swing.GroupLayout.DEFAULT_SIZE, 182, Short.MAX_VALUE))
+                        .addComponent(parentesco))
                     .addGroup(datosReferenciaLayout.createSequentialGroup()
                         .addComponent(jLabel9)
                         .addGap(56, 56, 56)
@@ -410,7 +410,7 @@ public class Clientes extends javax.swing.JPanel {
 
         bolsa_cemento.setToolTipText("Ingrese el nuevo valor y presione ENTER");
 
-        advertencia.setFont(new java.awt.Font("Century Gothic", 1, 18)); // NOI18N
+        advertencia.setFont(new java.awt.Font("Century Gothic", 1, 14)); // NOI18N
         advertencia.setForeground(new java.awt.Color(255, 0, 0));
 
         jLabel16.setFont(new java.awt.Font("Century Gothic", 0, 14)); // NOI18N
@@ -452,8 +452,7 @@ public class Clientes extends javax.swing.JPanel {
                     .addComponent(bolsa_cemento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel16))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(advertencia, javax.swing.GroupLayout.DEFAULT_SIZE, 7, Short.MAX_VALUE)
-                .addContainerGap())
+                .addComponent(advertencia, javax.swing.GroupLayout.DEFAULT_SIZE, 20, Short.MAX_VALUE))
         );
 
         jPanel5.setBorder(javax.swing.BorderFactory.createTitledBorder("Propietario"));
@@ -614,7 +613,7 @@ public class Clientes extends javax.swing.JPanel {
                     .addComponent(asignarBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(eliminarBtn, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(bajaBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(cambiarPropietario, javax.swing.GroupLayout.DEFAULT_SIZE, 128, Short.MAX_VALUE))
+                    .addComponent(cambiarPropietario, javax.swing.GroupLayout.PREFERRED_SIZE, 1, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jPanel6Layout.setVerticalGroup(
@@ -683,7 +682,7 @@ public class Clientes extends javax.swing.JPanel {
                         .addGap(14, 14, 14)
                         .addComponent(datosReferencia, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 308, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(35, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         datosCliente.getAccessibleContext().setAccessibleName("");

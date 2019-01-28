@@ -51,8 +51,7 @@ public class ControladorBotones implements ActionListener{
             }
 
                @Override
-               public void mouseEntered(MouseEvent e) {
-                  
+               public void mouseEntered(MouseEvent e) {                  
                }
              
            });
@@ -83,7 +82,7 @@ public class ControladorBotones implements ActionListener{
         
         if(e.getSource()==ventana.cerrarSesion){
           ventana.dispose();
-          new Ventana();
+          new ControladorLogin();
         }
                 
         if(e.getSource()==ventana.calculadora){

@@ -6,6 +6,7 @@
 package Controlador;
 
 import Clases.LimitadorCaracteres;
+import Clases.Propietario;
 import Modelo.PropietarioDAO;
 import Vista.Dialogs.Configuracion;
 import java.awt.Color;
@@ -22,6 +23,7 @@ import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.sql.ResultSet;
+import java.util.List;
 import java.util.Properties;
 import java.util.logging.Level;
 import javax.swing.BorderFactory;
@@ -97,23 +99,21 @@ public class ControladorPropietarios implements  ActionListener, KeyListener{
     }
     
     public void llenarTabla(){
-        ResultSet rs = pd.obtenerPropietarios();
+        List<Propietario> propietario = pd.obtenerPropietarios();
         DefaultTableModel model = (DefaultTableModel) vistaConfiguracion.propietarios.tablaPropietarios.getModel();        
         model.setRowCount(0);
-        try {
-            while(rs.next()){
-                String apellidos = rs.getString(1);  
-                String nombres = rs.getString(2);
-                String cuit = rs.getString(3);
-                String nroRecibo = rs.getString(4);
-                propietarios = new Object[] {apellidos, nombres, cuit, nroRecibo};
-                model.addRow(propietarios);
-            }
-        } 
-        catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
-    }
+        for (int i = 0; i < propietario.size(); i++) {          
+             String apellidos = propietario.get(i).getApellidos();
+             String nombres = propietario.get(i).getNombres();
+             String cuit = propietario.get(i).getCuit();
+             int nroRecibo = propietario.get(i).getNro_recibo();
+             propietarios = new Object[] {apellidos, nombres, cuit, nroRecibo};
+             model.addRow(propietarios);
+          }
+       }
+        
+       
+    
     
     private void cargarPropietarioDefecto() {
         try {

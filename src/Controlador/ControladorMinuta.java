@@ -110,10 +110,11 @@ public class ControladorMinuta implements MouseListener, ActionListener {
                 BigDecimal cobrado = listaMinutas.get(i).getCobrado();
                 BigDecimal gastos = listaMinutas.get(i).getGastos();
                 BigDecimal rendido = listaMinutas.get(i).getRendido();
+                int nro_recibo = listaMinutas.get(i).getNroRecibo();
                 int nro_cuota = listaMinutas.get(i).getNroCuota();
                 String observaciones = listaMinutas.get(i).getObservaciones();
                 int baja = listaMinutas.get(i).getBaja();
-                minuta = new Object[] {fecha_minuta,apellidos, nombres, mzpc, cobrado, gastos, rendido, nro_cuota, observaciones, baja};
+                minuta = new Object[] {fecha_minuta,apellidos, nombres, mzpc, cobrado, gastos, rendido, nro_recibo, nro_cuota, observaciones, baja};
                 model.addRow(minuta);   
             } 
         } 
@@ -430,7 +431,6 @@ public class ControladorMinuta implements MouseListener, ActionListener {
 
        @Override
        public void done() { 
-           System.out.println(minutas+"minutas");
            llenarTabla(minutas);
        }
     
@@ -440,7 +440,7 @@ public class ControladorMinuta implements MouseListener, ActionListener {
         BigDecimal total=new BigDecimal(0);
         for (int i = 0; i < vistaMinuta.tablaMinuta.getRowCount(); i++) {
          //----Las minutas que estan dadas de baja no las sumo----//   
-          if(Integer.parseInt(vistaMinuta.tablaMinuta.getValueAt(i, 9).toString())==0){   
+          if(Integer.parseInt(vistaMinuta.tablaMinuta.getValueAt(i, 10).toString())==0){   
             total=total.add(new BigDecimal(vistaMinuta.tablaMinuta.getValueAt(i, 4).toString()));
           }
         }
@@ -450,7 +450,7 @@ public class ControladorMinuta implements MouseListener, ActionListener {
           BigDecimal total=new BigDecimal(0);
         for (int i = 0; i < vistaMinuta.tablaMinuta.getRowCount(); i++) {
            //----Las minutas que estan dadas de baja no las sumo----//     
-           if(Integer.parseInt(vistaMinuta.tablaMinuta.getValueAt(i, 9).toString())==0){ 
+           if(Integer.parseInt(vistaMinuta.tablaMinuta.getValueAt(i, 10).toString())==0){ 
             total=total.add(new BigDecimal(vistaMinuta.tablaMinuta.getValueAt(i, 6).toString()));
            }
         }

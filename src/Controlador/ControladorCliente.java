@@ -251,7 +251,6 @@ public class ControladorCliente implements ActionListener, MouseListener, TableM
         if(e.getSource() == vistaClientes.agregarPropietario){
                int row = vistaClientes.tablaCliente.getSelectedRow();
            if(row != -1){
-               System.out.println(vistaClientes.tablaCliente.getValueAt(row, 11));
                if(vistaClientes.tablaCliente.getValueAt(row, 11) != null){          
                   new ControladorAltaCliente((Ventana) SwingUtilities.getWindowAncestor(vistaClientes),  Integer.parseInt(vistaClientes.tablaCliente.getModel().getValueAt(row, 11).toString()), 0, false);
                   llenarTabla();
@@ -377,7 +376,6 @@ public class ControladorCliente implements ActionListener, MouseListener, TableM
             for (int i = 0; i < propietarios.size(); i++) {   
                 vistaClientes.comboApellido.addItem(propietarios.get(i).getApellidos());
             }
-             System.out.println("combo"+vistaClientes.comboApellido.getItemCount());
             } catch (FileNotFoundException ex) {
                 java.util.logging.Logger.getLogger(ControladorCliente.class.getName()).log(Level.SEVERE, null, ex);
             } catch (IOException ex) {
@@ -449,7 +447,7 @@ public class ControladorCliente implements ActionListener, MouseListener, TableM
                     LocalDate fecha_actualizacion = LocalDateTime.ofInstant(instant2, ZoneId.systemDefault()).toLocalDate();   
                     fch_actualizacion = sdf.format(listaClientes.get(i).getFecha_actualizacion());
                     //----Controlo si ya paso un año de la ultima fecha de actualizacion de la bolsa de cemento----//
-                     if((Period.between(fecha_actualizacion, LocalDate.now())).getYears()>0){
+                     if(((Period.between(fecha_actualizacion, LocalDate.now())).getMonths())%5==0 && (Period.between(fecha_actualizacion, LocalDate.now())).getMonths()!=0){
                          actualizar_cemento = "1";
                      }else{
                           actualizar_cemento = "0";
@@ -520,7 +518,7 @@ public class ControladorCliente implements ActionListener, MouseListener, TableM
         }
         //----Si tengo un 1 ha pasado un año o mas y tengo que actualizar precio bolsa de cemento-----//
         if(vistaClientes.tablaCliente.getModel().getValueAt(row, 20).toString().equals("1")){
-            vistaClientes.advertencia.setText("-- Actualizar precio bolsa cemento --");
+            vistaClientes.advertencia.setText("Actualizar precio bolsa cemento");
         }else{
             vistaClientes.advertencia.setText("");
         }
@@ -534,6 +532,11 @@ public class ControladorCliente implements ActionListener, MouseListener, TableM
                 vistaClientes.telefono_referencia.setText(listaReferencia.get(i).getTelefono());
                 vistaClientes.parentesco.setText(listaReferencia.get(i).getParentesco()); 
             }
+        }else{
+                vistaClientes.apellido_referencia.setText("");
+                vistaClientes.nombre_referencia.setText("");
+                vistaClientes.telefono_referencia.setText("");
+                vistaClientes.parentesco.setText(""); 
         }
         
     }    

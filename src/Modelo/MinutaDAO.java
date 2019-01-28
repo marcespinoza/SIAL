@@ -39,7 +39,7 @@ public class MinutaDAO {
          PreparedStatement ps = con.prepareStatement(insertar);
          filasAfectadas = ps.executeUpdate();         
      } catch (Exception e) { 
-         System.out.println(e.getMessage()+"dat");
+         System.out.println(e.getMessage());
      }
      return filasAfectadas;
  }
@@ -95,7 +95,6 @@ public class MinutaDAO {
           while(rs.next()){              
                Minuta minuta = new Minuta();
                minuta.setFechaMinuta(rs.getDate(1));   
-               System.out.println(rs.getString(1));
                minutas.add(minuta);
             }  
         } catch (Exception e) {

@@ -40,6 +40,12 @@ public class RendererActualizacion extends DefaultTableCellRenderer{
         if(table.getValueAt(row, 11)==null){
             c.setBackground(Color.PINK);
         }
+        //-----Pinto de rojo si el cliente esta dado de baja--//
+        if(table.getValueAt(row, 10)!=null){
+            if(table.getValueAt(row, 10).toString().equals("1")){
+                c.setBackground(Color.RED);
+            }
+        }
         setHorizontalAlignment(SwingConstants.CENTER);
         return this;
     }   

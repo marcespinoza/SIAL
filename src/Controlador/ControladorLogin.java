@@ -46,7 +46,16 @@ public class ControladorLogin implements ActionListener, KeyListener{
    
     Logger extAppLogger= Logger.getLogger("errorAppender"); 
     public ControladorLogin() {        
-        login = new Login( true);       
+        login = new Login( true);  
+        login.addWindowListener(new WindowAdapter() {
+
+            @Override
+            public void windowClosed(WindowEvent e) {
+                super.windowClosed(e); //To change body of generated methods, choose Tools | Templates.
+                login.dispose();
+            }
+            
+        });
         login.usuario.addKeyListener(this);
         login.usuario.setDocument(new LimitadorCaracteres(15));
         login.contraseña.addKeyListener(this);

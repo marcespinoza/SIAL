@@ -79,11 +79,11 @@ public class MinutaVista extends javax.swing.JPanel {
 
             },
             new String [] {
-                "Fecha", "Apellido/s", "Nombre/s", "Mz. Pc.", "Cobrado", "Gastos Admin.", "Rendido", "Cuota cobrada", "Observaciones", "baja"
+                "Fecha", "Apellido/s", "Nombre/s", "Mz. Pc.", "Cobrado", "Gastos Admin.", "Rendido", "Nro. recibo", "Nro. cuota", "Observaciones", "baja"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false, false, false, false, false
+                false, false, false, false, false, false, false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -94,16 +94,20 @@ public class MinutaVista extends javax.swing.JPanel {
         jScrollPane1.setViewportView(tablaMinuta);
         if (tablaMinuta.getColumnModel().getColumnCount() > 0) {
             tablaMinuta.getColumnModel().getColumn(0).setPreferredWidth(1);
-            tablaMinuta.getColumnModel().getColumn(1).setPreferredWidth(1);
+            tablaMinuta.getColumnModel().getColumn(1).setMinWidth(160);
+            tablaMinuta.getColumnModel().getColumn(1).setPreferredWidth(100);
+            tablaMinuta.getColumnModel().getColumn(1).setMaxWidth(100);
+            tablaMinuta.getColumnModel().getColumn(2).setMinWidth(160);
+            tablaMinuta.getColumnModel().getColumn(2).setPreferredWidth(100);
+            tablaMinuta.getColumnModel().getColumn(2).setMaxWidth(100);
             tablaMinuta.getColumnModel().getColumn(3).setPreferredWidth(1);
             tablaMinuta.getColumnModel().getColumn(4).setPreferredWidth(1);
             tablaMinuta.getColumnModel().getColumn(5).setPreferredWidth(1);
             tablaMinuta.getColumnModel().getColumn(6).setPreferredWidth(1);
             tablaMinuta.getColumnModel().getColumn(7).setPreferredWidth(1);
             tablaMinuta.getColumnModel().getColumn(8).setPreferredWidth(1);
-            tablaMinuta.getColumnModel().getColumn(9).setMinWidth(0);
-            tablaMinuta.getColumnModel().getColumn(9).setPreferredWidth(0);
-            tablaMinuta.getColumnModel().getColumn(9).setMaxWidth(0);
+            tablaMinuta.getColumnModel().getColumn(9).setPreferredWidth(1);
+            tablaMinuta.getColumnModel().getColumn(10).setPreferredWidth(1);
         }
 
         generarMinuta.setText("Generar minuta");
@@ -218,9 +222,8 @@ public class MinutaVista extends javax.swing.JPanel {
                                 .addGap(24, 24, 24)
                                 .addComponent(totalRendido, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addGap(341, 341, 341)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(generarMinuta)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 31, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 38, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel3)
                         .addGap(18, 18, 18)

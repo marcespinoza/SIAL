@@ -110,17 +110,34 @@ public class PropietarioDAO {
          }
      }
      
-     public ResultSet obtenerPropietarios(){
+     public List<Propietario> obtenerPropietarios(){
+          List<Propietario> propietarios = new ArrayList<Propietario>();
           ResultSet rs = null;
+          Propietario propietario = null;
+          Connection connection = null;
      try {
-          Connection con = conexion.dataSource.getConnection();         
+          connection = conexion.dataSource.getConnection();         
           String listar = "SELECT apellidos, nombres, cuit, nro_recibo from propietario"; 
-          Statement st = con.createStatement();
+          Statement st = connection.createStatement();
           rs = st.executeQuery(listar);
-        } catch (Exception e) {
+          while (rs.next()){
+              propietario = new Propietario();
+              propietario.setApellidos(rs.getString(1));
+              propietario.setNombres(rs.getString(2));
+              propietario.setCuit(rs.getString(3));
+              propietario.setNro_recibo(rs.getInt(4));
+              propietarios.add(propietario);
+          }
+      } catch (Exception e) {
+          System.out.println(e.getMessage());
+      }finally{
+         try {
+            connection.close();
+         } catch (Exception e) {
             System.out.println(e.getMessage());
-        }
-     return rs;
+         }
+     }
+     return propietarios;
      }
         
       public ResultSet obtenerApellidosXLote(){
@@ -207,26 +224,26 @@ public class PropietarioDAO {
           ResultSet rs = null;
           Connection con = null; 
           List<Propietario> propietarios = new ArrayList<>();
-     try {
-          con = conexion.dataSource.getConnection();         
-          String listar = "SELECT apellidos from propietario"; 
-          Statement st = con.createStatement();
-          rs = st.executeQuery(listar);          
+          try {
+            con = conexion.dataSource.getConnection();         
+           String listar = "SELECT apellidos from propietario"; 
+           Statement st = con.createStatement();
+           rs = st.executeQuery(listar);          
            while (rs.next()) {
                 Propietario p = new Propietario();
                 p.setApellidos(rs.getString(1));
                 propietarios.add(p);
             }            
-        } catch (Exception e) {
+         } catch (Exception e) {
             System.out.println(e.getMessage());
-        }finally{
+         }finally{
               try {
                   con.close();
               } catch (SQLException ex) {
                   Logger.getLogger(PropietarioDAO.class.getName()).log(Level.SEVERE, null, ex);
               }
         }
-     return propietarios;
+      return propietarios;
      }
      
        public List<Propietario> obtenerNombres(String apellidos){

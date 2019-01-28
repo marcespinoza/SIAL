@@ -401,14 +401,8 @@ public class ControladorRecibo implements ActionListener{
     @Override
     public void actionPerformed(ActionEvent e) {
         if(e.getSource() == ar.aceptar){
-            if(validarCampos()){  
-            //------Controlo si ya se genero recibo de la cuota seleccionada, si es asi, solo genero pdf, sino genero recibo, pdf y mminuta --// 
-            if(!ar.checkRecibo.isSelected()){ 
-                new GenerarMinuta().execute();
-              }else{
-                generarRecibo();
-                ar.dispose();
-              }
+            if(validarCampos()){              
+                new GenerarMinuta().execute();             
             }else{
               JOptionPane.showMessageDialog(null, "Rellene todos los campos", "Atención", JOptionPane.INFORMATION_MESSAGE, null);
             }
