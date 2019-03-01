@@ -86,9 +86,7 @@ public class ControladorCliente implements ActionListener, MouseListener, TableM
     private Object [] clientes;
     private List<Object> cliente = new ArrayList<>();
     private List<Object> referencia = new ArrayList<>();
-//    File configFile = new File("config.properties");
-//    ClassLoader classLoader = getClass().getClassLoader();
-//File configFile = new File(classLoader.getResource("src/config.properties").getFile());
+    File configFile = new File("config.properties");
     public static final DefaultTableCellRenderer DEFAULT_RENDERER = new DefaultTableCellRenderer();
     private String nombres, apellidos;
     static Logger log = Logger.getLogger(ControladorCliente.class.getName());
@@ -187,20 +185,26 @@ public class ControladorCliente implements ActionListener, MouseListener, TableM
         this.vistaClientes.tablaCliente.getColumn("Aviso").setCellRenderer(new RendererAviso());
         this.vistaClientes.tablaCliente.getColumn("Actualizacion").setCellRenderer(new RendererActualizacion());         
         llenarComboApellidos();
-         llenarTabla();
+        desactivarBotones();
     }
 
     public ControladorCliente() {
     }    
     
+     public void desactivarBotones(){
+      if(Ventana.labelTipoUsuario.getText().equals("operador")){
+            vistaClientes.bolsa_cemento.setEnabled(false);
+        }
+    }
+    
     @Override
     public void actionPerformed(ActionEvent e) {
         //-----------Boton mostrar todos los clientes----//
         if(e.getSource()==vistaClientes.mostrarTodos){
+            apellidos = ""; 
             vistaClientes.comboApellido.setSelectedIndex(0);
-            vistaClientes.comboNombre.setSelectedIndex(0);
-            apellidos = "";
-           
+//            vistaClientes.comboNombre.setSelectedIndex(0);
+                      
         }
         
         //=======Eventos sobre comboApellido=====//
@@ -219,8 +223,9 @@ public class ControladorCliente implements ActionListener, MouseListener, TableM
            if(vistaClientes.comboNombre.getItemCount()!=0){
             if(!vistaClientes.comboNombre.getSelectedItem().equals("Seleccione")){ 
                 nombres = vistaClientes.comboNombre.getSelectedItem().toString();
-                llenarTabla();
+                
             }
+            llenarTabla();
             }
         }
          //-----------Boton cambiar propietario------------//
@@ -361,10 +366,9 @@ public class ControladorCliente implements ActionListener, MouseListener, TableM
     }    
     
     public void llenarComboApellidos(){
-            FileReader reader = null;
         try {
             //-------Obtengo el propietario seleccionado por default, para mostrar los clientes de ese propietario----//
-            reader= new FileReader("config.properties");
+            FileReader reader = new FileReader(configFile);
             Properties props = new Properties();
             props.load(reader);
             apellidos = props.getProperty("apellidoPropietario");
@@ -372,27 +376,29 @@ public class ControladorCliente implements ActionListener, MouseListener, TableM
             List<Propietario> propietarios;
             propietarios = pd.obtenerApellidos();
             vistaClientes.comboApellido.removeAllItems();
-            vistaClientes.comboApellido.addItem("Seleccione");
+            vistaClientes.comboApellido.addItem("Seleccione");            
             for (int i = 0; i < propietarios.size(); i++) {   
                 vistaClientes.comboApellido.addItem(propietarios.get(i).getApellidos());
             }
+            vistaClientes.comboApellido.setSelectedItem(apellidos);
             } catch (FileNotFoundException ex) {
                 java.util.logging.Logger.getLogger(ControladorCliente.class.getName()).log(Level.SEVERE, null, ex);
             } catch (IOException ex) {
                 java.util.logging.Logger.getLogger(ControladorCliente.class.getName()).log(Level.SEVERE, null, ex);
             } 
             
-        llenarTabla();
+        
      }   
       public void llenarComboNombres(String apellidos){
             List<Propietario>propietarios = null;        
-                propietarios = pd.obtenerNombres(apellidos);
-                vistaClientes.comboNombre.removeAllItems();
-                vistaClientes.comboNombre.addItem("Seleccione");
-                for(int i=0; i< propietarios.size();i++) {
-                    vistaClientes.comboNombre.addItem(propietarios.get(i).getNombres());
-                }
-               
+            propietarios = pd.obtenerNombres(apellidos);
+            vistaClientes.comboNombre.removeAllItems();
+            vistaClientes.comboNombre.addItem("Seleccione");
+            for(int i=0; i< propietarios.size();i++) {
+               vistaClientes.comboNombre.addItem(propietarios.get(i).getNombres());
+            }
+            vistaClientes.comboNombre.setSelectedItem(nombres);
+            llenarTabla();
      }
     
      public void llenarTabla(){
@@ -447,19 +453,22 @@ public class ControladorCliente implements ActionListener, MouseListener, TableM
                     LocalDate fecha_actualizacion = LocalDateTime.ofInstant(instant2, ZoneId.systemDefault()).toLocalDate();   
                     fch_actualizacion = sdf.format(listaClientes.get(i).getFecha_actualizacion());
                     //----Controlo si ya paso un año de la ultima fecha de actualizacion de la bolsa de cemento----//
-                     if(((Period.between(fecha_actualizacion, LocalDate.now())).getMonths())%5==0 && (Period.between(fecha_actualizacion, LocalDate.now())).getMonths()!=0){
+                     if(((Period.between(fecha_actualizacion, LocalDate.now())).getMonths())%6==0 && (Period.between(fecha_actualizacion, LocalDate.now())).getMonths()!=0){
                          actualizar_cemento = "1";
+                         icono.setIcon(icon);
+                         icono.setHorizontalAlignment(SwingConstants.CENTER);
                      }else{
                           actualizar_cemento = "0";
+                          icono.setIcon(null);
                      }
                      //-------------------------------------//
                      //------Controla si pasaron 6 meses desde la ultima actualizacion del precio de la bolsa de cemento para calcular amortizacion--------------//
-                     if(((Period.between(fecha_actualizacion, LocalDate.now())).getMonths())%5==0 && (Period.between(fecha_actualizacion, LocalDate.now())).getMonths()!=0){
-                     icono.setIcon(icon);
-                     icono.setHorizontalAlignment(SwingConstants.CENTER);
-                     }else{
-                         icono.setIcon(null);
-                     }
+//                     if(((Period.between(fecha_actualizacion, LocalDate.now())).getMonths())%6==0 && (Period.between(fecha_actualizacion, LocalDate.now())).getMonths()!=0){
+//                         icono.setIcon(icon);
+//                         icono.setHorizontalAlignment(SwingConstants.CENTER);
+//                     }else{
+//                         icono.setIcon(null);
+//                     }
                          //----------------------------//
                     }else{
                         fch_actualizacion = "";
@@ -519,8 +528,10 @@ public class ControladorCliente implements ActionListener, MouseListener, TableM
         //----Si tengo un 1 ha pasado un año o mas y tengo que actualizar precio bolsa de cemento-----//
         if(vistaClientes.tablaCliente.getModel().getValueAt(row, 20).toString().equals("1")){
             vistaClientes.advertencia.setText("Actualizar precio bolsa cemento");
+            vistaClientes.detalleBtn.setEnabled(false);
         }else{
             vistaClientes.advertencia.setText("");
+            vistaClientes.detalleBtn.setEnabled(true);
         }
          List<Referencia> listaReferencia;
         listaReferencia = new ArrayList<>();

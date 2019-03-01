@@ -9,7 +9,10 @@ import conexion.Conexion;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -25,16 +28,23 @@ public class ReciboDAO {
     
      public int altaRecibo(int nro_recibo, String apellido_propietario, String nombre_propietario){
          int id_control = 1;
+         Connection con = null;
      try {
-          Connection con = conexion.dataSource.getConnection();
+          con = conexion.dataSource.getConnection();
           String insertar = "Insert into recibo(nro_recibo, apellido_propietario, nombre_propietario) values ('"+nro_recibo+"','"+apellido_propietario+"','"+nombre_propietario+"')";
           PreparedStatement ps = con.prepareStatement(insertar, Statement.RETURN_GENERATED_KEYS);
           ps.executeUpdate();  
           ResultSet rs = ps.getGeneratedKeys();  
           id_control = rs.next() ? rs.getInt(1) : 0;
-        } catch (Exception e) {
-            System.out.println(e.getMessage().toString());
-        }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }finally{
+             try {
+                 con.close();
+             } catch (SQLException ex) {
+                 Logger.getLogger(ReciboDAO.class.getName()).log(Level.SEVERE, null, ex);
+             }
+     }
      //********Retorno id_control generado por la inserción********
      return id_control;
     }

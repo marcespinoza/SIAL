@@ -158,7 +158,6 @@ public class CuotaDAO {
          filasAfectadas = ps.executeUpdate();
          
          } catch (Exception e) {  
-           System.out.println(e.getMessage()+"cuotadao");
          }finally{
           try {
                connection.close();
@@ -199,22 +198,30 @@ public class CuotaDAO {
   public boolean getUltimaCuota(int id_control, int nroCuotas){
        boolean flag = false;       
        ResultSet rs = null;
+       Connection con = null;
         try {           
-            Connection con = conexion.dataSource.getConnection();
+            con = conexion.dataSource.getConnection();
             String bandera = "select * from linea_control_lote where nro_cuota='"+nroCuotas+"' and id_control='"+id_control+"'";
             Statement st = con.createStatement();
             rs = st.executeQuery(bandera);
             flag = rs.next();
         } catch (SQLException ex) {
             Logger.getLogger(CuotaDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }finally{
+           try {
+               con.close();
+           } catch (SQLException ex) {
+               Logger.getLogger(CuotaDAO.class.getName()).log(Level.SEVERE, null, ex);
+           }
         }
         return flag;
   }
   
   //------Actualiza las observaciones------//
   public void actualizarCuota(String observaciones, BigDecimal saldo_cemento, int id_control){
+      Connection con = null;
         try {
-            Connection con = conexion.dataSource.getConnection();
+            con = conexion.dataSource.getConnection();
             PreparedStatement ps = con.prepareStatement("UPDATE linea_control_lote SET observaciones = ? WHERE cemento_saldo = ? AND id_control = ?");
             ps.setString(1,observaciones);
             ps.setBigDecimal(2,saldo_cemento);
@@ -225,14 +232,21 @@ public class CuotaDAO {
             con.close();
         } catch (SQLException ex) {
             Logger.getLogger(CuotaDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }finally{
+          try {
+              con.close();
+          } catch (SQLException ex) {
+              Logger.getLogger(CuotaDAO.class.getName()).log(Level.SEVERE, null, ex);
+          }
         }
   }
   
   //------Actualiza monto cuota------//
   public int actualizarMontoCuota(BigDecimal cuota_pura, BigDecimal gastos_administrativos, BigDecimal haber, BigDecimal saldo, BigDecimal cemento_haber, BigDecimal cemento_saldo, int nro_cuota, int id_control){
            int filas = 0;  
+           Connection con = null;
       try {
-            Connection con = conexion.dataSource.getConnection();
+            con = conexion.dataSource.getConnection();
             PreparedStatement ps = con.prepareStatement("UPDATE linea_control_lote SET cuota_pura = ?, gastos_administrativos = ?, haber = ?, saldo = ?, cemento_haber = ?, cemento_saldo = ?  WHERE nro_cuota = ? AND id_control = ?");
             ps.setBigDecimal(1,cuota_pura);
             ps.setBigDecimal(2, gastos_administrativos);
@@ -248,14 +262,20 @@ public class CuotaDAO {
             con.close();
         } catch (SQLException ex) {
             Logger.getLogger(CuotaDAO.class.getName()).log(Level.SEVERE, null, ex);
-            return filas;
+        }finally{
+               try {
+                   con.close();
+               } catch (SQLException ex) {
+                   Logger.getLogger(CuotaDAO.class.getName()).log(Level.SEVERE, null, ex);
+               }
         }
       return filas;
   }
   
   public void actualizarNroRecibo(int nro_recibo, int id_recibo, BigDecimal saldo_cemento, int id_control){
+        Connection con = null;
       try {
-        Connection con = conexion.dataSource.getConnection();
+        con = conexion.dataSource.getConnection();
         PreparedStatement ps = con.prepareStatement("UPDATE linea_control_lote SET Nro_recibo = ?, id_recibo=? WHERE cemento_saldo = ? AND id_control = ?");
         ps.setInt(1, nro_recibo);
         ps.setInt(2, id_recibo);
@@ -265,12 +285,19 @@ public class CuotaDAO {
         ps.close();
       } catch (SQLException ex) {
         Logger.getLogger(CuotaDAO.class.getName()).log(Level.SEVERE, null, ex);
+      }finally{
+            try {
+                con.close();
+            } catch (SQLException ex) {
+                Logger.getLogger(CuotaDAO.class.getName()).log(Level.SEVERE, null, ex);
+            }
       }
   }
   
   public void eliminarCuota(int nro_cuota, int id_control){
+      Connection con = null;
        try {
-         Connection con = conexion.dataSource.getConnection();
+         con = conexion.dataSource.getConnection();
          String eliminar = "delete from linea_control_lote where nro_cuota = '"+nro_cuota+"' and id_control='"+id_control+"'";
          PreparedStatement ps = con.prepareStatement(eliminar);
          ps.executeUpdate();
@@ -278,7 +305,13 @@ public class CuotaDAO {
          con.close();
      } catch (Exception e) {
          System.out.println(e.getMessage());
-     }
+     }finally{
+          try {
+              con.close();
+          } catch (SQLException ex) {
+              Logger.getLogger(CuotaDAO.class.getName()).log(Level.SEVERE, null, ex);
+          }
+       }
   }
     
 }

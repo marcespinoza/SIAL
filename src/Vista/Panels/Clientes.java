@@ -7,6 +7,7 @@ package Vista.Panels;
 
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Dimension;
 import javax.swing.JTable;
 import javax.swing.table.JTableHeader;
 import javax.swing.table.TableCellRenderer;
@@ -394,9 +395,9 @@ public class Clientes extends javax.swing.JPanel {
             tablaCliente.getColumnModel().getColumn(22).setMinWidth(0);
             tablaCliente.getColumnModel().getColumn(22).setPreferredWidth(0);
             tablaCliente.getColumnModel().getColumn(22).setMaxWidth(0);
-            tablaCliente.getColumnModel().getColumn(23).setResizable(false);
-            tablaCliente.getColumnModel().getColumn(23).setPreferredWidth(1);
         }
+        Dimension tableSize = tablaCliente.getSize();
+        tablaCliente.getColumnModel().getColumn(22).setPreferredWidth(Math.round(tableSize.width*0.10f));
 
         jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Bolsa de cemento", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Dialog", 3, 12))); // NOI18N
 
