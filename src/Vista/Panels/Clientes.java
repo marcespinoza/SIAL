@@ -326,11 +326,11 @@ public class Clientes extends javax.swing.JPanel {
 
             },
             new String [] {
-                "Apellido/s", "Nombre/s", "Documento", "Title 4", "Title 5", "Title 6", "Title 7", "Title 8", "Title 9", "Title 10", "Title 11", "Title 12", "Title 13", "Title 14", "Title 15", "Title 16", "Barrio", "Manzana", "Parcela", "Actualizacion", "actualizar_cto", "cumpleaños", "Title 23", "Aviso"
+                "Apellido/s", "Nombre/s", "Documento", "Title 4", "Title 5", "Title 6", "Title 7", "Title 8", "Title 9", "Title 10", "Title 11", "Title 12", "Title 13", "Title 14", "Title 15", "Title 16", "Barrio", "Mz", "Pc", "Actualizacion", "actualizar_cto", "cumpleaños", "Title 23", "Aviso", "Nro", "Fch"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                true, false, false, false, false, false, false, false, false, false, false, false, false, false, true, true, false, false, false, false, false, false, true, false
+                true, false, false, false, false, false, false, false, false, false, false, false, false, false, true, true, false, false, false, false, false, false, true, false, true, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -395,9 +395,20 @@ public class Clientes extends javax.swing.JPanel {
             tablaCliente.getColumnModel().getColumn(22).setMinWidth(0);
             tablaCliente.getColumnModel().getColumn(22).setPreferredWidth(0);
             tablaCliente.getColumnModel().getColumn(22).setMaxWidth(0);
+            tablaCliente.getColumnModel().getColumn(23).setMinWidth(1);
+            tablaCliente.getColumnModel().getColumn(23).setPreferredWidth(1);
         }
-        Dimension tableSize = tablaCliente.getSize();
-        tablaCliente.getColumnModel().getColumn(22).setPreferredWidth(Math.round(tableSize.width*0.10f));
+        Dimension tableSize =  tablaCliente.getPreferredSize();
+        tablaCliente.getColumnModel().getColumn(23).setMinWidth(Math.round(tableSize.width*0.15f));
+        tablaCliente.getColumnModel().getColumn(23).setMaxWidth(Math.round(tableSize.width*0.15f));
+        tablaCliente.getColumnModel().getColumn(17).setMinWidth(Math.round(tableSize.width*0.15f));
+        tablaCliente.getColumnModel().getColumn(17).setMaxWidth(Math.round(tableSize.width*0.15f));
+        tablaCliente.getColumnModel().getColumn(18).setMinWidth(Math.round(tableSize.width*0.15f));
+        tablaCliente.getColumnModel().getColumn(18).setMaxWidth(Math.round(tableSize.width*0.15f));
+        tablaCliente.getColumnModel().getColumn(24).setMinWidth(Math.round(tableSize.width*0.15f));
+        tablaCliente.getColumnModel().getColumn(24).setMaxWidth(Math.round(tableSize.width*0.15f));
+        tablaCliente.getColumnModel().getColumn(25).setMinWidth(Math.round(tableSize.width*0.20f));
+        tablaCliente.getColumnModel().getColumn(25).setMaxWidth(Math.round(tableSize.width*0.20f));
 
         jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Bolsa de cemento", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Dialog", 3, 12))); // NOI18N
 

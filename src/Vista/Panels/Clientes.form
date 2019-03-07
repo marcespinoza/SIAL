@@ -520,7 +520,7 @@
         <Component class="javax.swing.JTable" name="tablaCliente">
           <Properties>
             <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
-              <Table columnCount="24" rowCount="0">
+              <Table columnCount="26" rowCount="0">
                 <Column editable="true" title="Apellido/s" type="java.lang.Object"/>
                 <Column editable="false" title="Nombre/s" type="java.lang.Object"/>
                 <Column editable="false" title="Documento" type="java.lang.Object"/>
@@ -538,16 +538,18 @@
                 <Column editable="true" title="Title 15" type="java.lang.Object"/>
                 <Column editable="true" title="Title 16" type="java.lang.Object"/>
                 <Column editable="false" title="Barrio" type="java.lang.Object"/>
-                <Column editable="false" title="Manzana" type="java.lang.Object"/>
-                <Column editable="false" title="Parcela" type="java.lang.Object"/>
+                <Column editable="false" title="Mz" type="java.lang.Object"/>
+                <Column editable="false" title="Pc" type="java.lang.Object"/>
                 <Column editable="false" title="Actualizacion" type="java.lang.Object"/>
                 <Column editable="false" title="actualizar_cto" type="java.lang.Object"/>
                 <Column editable="false" title="cumplea&#xf1;os" type="java.lang.Object"/>
                 <Column editable="true" title="Title 23" type="java.lang.Object"/>
                 <Column editable="false" title="Aviso" type="java.lang.Object"/>
+                <Column editable="true" title="Nro" type="java.lang.Object"/>
+                <Column editable="false" title="Fch" type="java.lang.Object"/>
               </Table>
             </Property>
-            <Property name="columnModel" type="javax.swing.table.TableColumnModel" editor="org.netbeans.modules.form.editors2.TableColumnModelEditor" postCode="Dimension tableSize = tablaCliente.getSize();&#xa;tablaCliente.getColumnModel().getColumn(22).setPreferredWidth(Math.round(tableSize.width*0.10f));">
+            <Property name="columnModel" type="javax.swing.table.TableColumnModel" editor="org.netbeans.modules.form.editors2.TableColumnModelEditor" postCode="Dimension tableSize =  tablaCliente.getPreferredSize();&#xa;tablaCliente.getColumnModel().getColumn(23).setMinWidth(Math.round(tableSize.width*0.15f));&#xa;tablaCliente.getColumnModel().getColumn(23).setMaxWidth(Math.round(tableSize.width*0.15f));&#xa;tablaCliente.getColumnModel().getColumn(17).setMinWidth(Math.round(tableSize.width*0.15f));&#xa;tablaCliente.getColumnModel().getColumn(17).setMaxWidth(Math.round(tableSize.width*0.15f));&#xa;tablaCliente.getColumnModel().getColumn(18).setMinWidth(Math.round(tableSize.width*0.15f));&#xa;tablaCliente.getColumnModel().getColumn(18).setMaxWidth(Math.round(tableSize.width*0.15f));&#xa;tablaCliente.getColumnModel().getColumn(24).setMinWidth(Math.round(tableSize.width*0.15f));&#xa;tablaCliente.getColumnModel().getColumn(24).setMaxWidth(Math.round(tableSize.width*0.15f));&#xa;tablaCliente.getColumnModel().getColumn(25).setMinWidth(Math.round(tableSize.width*0.20f));&#xa;tablaCliente.getColumnModel().getColumn(25).setMaxWidth(Math.round(tableSize.width*0.20f));">
               <TableColumnModel selectionModel="0">
                 <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
                   <Title/>
@@ -660,6 +662,16 @@
                   <Renderer/>
                 </Column>
                 <Column maxWidth="0" minWidth="0" prefWidth="0" resizable="true">
+                  <Title/>
+                  <Editor/>
+                  <Renderer/>
+                </Column>
+                <Column maxWidth="-1" minWidth="1" prefWidth="1" resizable="true">
+                  <Title/>
+                  <Editor/>
+                  <Renderer/>
+                </Column>
+                <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
                   <Title/>
                   <Editor/>
                   <Renderer/>

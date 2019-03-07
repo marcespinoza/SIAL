@@ -159,18 +159,26 @@ public class FichaControlDAO {
   }
   
    public void actualizarBolsaCemento( BigDecimal precio_cemento, Date fecha_actualizacion, String id_control){
+             Connection con = null;
+             PreparedStatement ps = null;
         try {
-            Connection con = conexion.dataSource.getConnection();
-            PreparedStatement ps = con.prepareStatement(
+            con = conexion.dataSource.getConnection();
+            ps = con.prepareStatement(
                     "UPDATE ficha_control_lote SET bolsa_cemento = ?, fecha_actualizacion = ? WHERE id_control = ?");
             ps.setBigDecimal(1, precio_cemento);
             ps.setDate(2, fecha_actualizacion);
             ps.setString(3, id_control);
             ps.executeUpdate();
-            ps.close();
         } catch (SQLException ex) {
             Logger.getLogger(CuotaDAO.class.getName()).log(Level.SEVERE, null, ex);
             System.out.println(ex.getMessage());
+        }finally{
+                 try {
+                     ps.close();
+                     con.close();
+                 } catch (SQLException ex) {
+                     Logger.getLogger(FichaControlDAO.class.getName()).log(Level.SEVERE, null, ex);
+                 }            
         }
   }
    
@@ -191,16 +199,23 @@ public class FichaControlDAO {
   }
    
     public void actualizarObservacion(String observacion, int id_control){
+          Connection con = null;
+          PreparedStatement ps = null;
         try {
-            Connection con = conexion.dataSource.getConnection();
-            PreparedStatement ps = con.prepareStatement("UPDATE ficha_control_lote SET observacion = ? WHERE id_control = ?");
+            con = conexion.dataSource.getConnection();
+            ps = con.prepareStatement("UPDATE ficha_control_lote SET observacion = ? WHERE id_control = ?");
             ps.setString(1,observacion);
             ps.setInt(2,id_control);
-            ps.executeUpdate();            
-            ps.close();
-            con.close();
+            ps.executeUpdate();          
         } catch (SQLException ex) {
             Logger.getLogger(CuotaDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }finally{
+              try {
+                  ps.close();
+                  con.close();
+              } catch (SQLException ex) {
+                  Logger.getLogger(FichaControlDAO.class.getName()).log(Level.SEVERE, null, ex);
+              }
         }
   }
     

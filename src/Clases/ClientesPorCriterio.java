@@ -29,14 +29,8 @@ public class ClientesPorCriterio {
     int cantidad_cuotas;
     BigDecimal gastos;
     byte bandera_cemento;
-
-    public byte getBandera_cemento() {
-        return bandera_cemento;
-    }
-
-    public void setBandera_cemento(byte bandera_cemento) {
-        this.bandera_cemento = bandera_cemento;
-    }
+    int cuotas;
+    Date ultimaCuota;
     BigDecimal bolsa_cemento;
     Date fecha_actualizacion;
     String manzana;
@@ -44,6 +38,31 @@ public class ClientesPorCriterio {
     String parcela;
     String observacion;
     BigDecimal cuota_pura;
+
+    public int getCuotas() {
+        return cuotas;
+    }
+
+    public void setCuotas(int cuotas) {
+        this.cuotas = cuotas;
+    }
+
+    public Date getUltimaCuota() {
+        return ultimaCuota;
+    }
+
+    public void setUltimaCuota(Date ultimaCuota) {
+        this.ultimaCuota = ultimaCuota;
+    }
+    
+    
+    public byte getBandera_cemento() {
+        return bandera_cemento;
+    }
+
+    public void setBandera_cemento(byte bandera_cemento) {
+        this.bandera_cemento = bandera_cemento;
+    }
 
     public int getDni() {
         return dni;

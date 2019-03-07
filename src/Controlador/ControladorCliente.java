@@ -141,17 +141,11 @@ public class ControladorCliente implements ActionListener, MouseListener, TableM
             public void keyPressed(KeyEvent e){
                if(e.getKeyCode()==KeyEvent.VK_ENTER){                   
                     Date date = new Date();
-                if(!vistaClientes.bolsa_cemento.getText().equals("")){
-                  if(!((Integer.parseInt(vistaClientes.bolsa_cemento.getText()))==0)){  
+                    String bolsaCemento = vistaClientes.bolsa_cemento.getText();
+                if(!bolsaCemento.equals("")){
+                  if(!new BigDecimal(bolsaCemento).equals(BigDecimal.ZERO)){  
                     int i = vistaClientes.tablaCliente.getSelectedRow();
-                    //----Aca solo debo actualizar saldo bolsa de cemento -----//
-//                    BigDecimal gastos_ = new BigDecimal(vistaClientes.tablaCliente.getModel().getValueAt(i, 13).toString());
-//                    BigDecimal cuota_ = new BigDecimal(vistaClientes.tablaCliente.getModel().getValueAt(i, 22).toString());
-//                    BigDecimal bolsa_cemento_ = new BigDecimal(vistaClientes.tablaCliente.getModel().getValueAt(i, 14).toString());
-                      BigDecimal nuevo_bolsa_cemento = new BigDecimal(vistaClientes.bolsa_cemento.getText());
-//                    BigDecimal nueva_cuota = ((gastos_.add(cuota_)).divide(bolsa_cemento_, 2, RoundingMode.DOWN)).multiply(nuevo_bolsa_cemento);
-//                    BigDecimal nuevo_gasto = nueva_cuota.subtract(nueva_cuota.divide(new BigDecimal("1.1"), 2, BigDecimal.ROUND_HALF_UP));
-//                    BigDecimal nueva_cuota_pura = nueva_cuota.subtract(nuevo_gasto);
+                    BigDecimal nuevo_bolsa_cemento = new BigDecimal(vistaClientes.bolsa_cemento.getText());
                     fd.actualizarBolsaCemento( nuevo_bolsa_cemento, new java.sql.Date(date.getTime()), vistaClientes.tablaCliente.getModel().getValueAt(i, 11).toString());
                     llenarTabla();
                     vistaClientes.tablaCliente.getSelectionModel().clearSelection();
@@ -481,7 +475,9 @@ public class ControladorCliente implements ActionListener, MouseListener, TableM
                         tipoActualizacion = "Emp. Público";
                     }
                     BigDecimal cuota_pura = listaClientes.get(i).getCuota_pura();   
-                    clientes = new Object[] {apellidos, nombres, dni, telefono1, telefono2, barrio, calle, numero, fecha_nacimiento, trabajo, baja, idControl, cantidad_cuotas, gastos, bolsa_cemento, fch_actualizacion, barrio_prop, manzana_prop, parcela_prop, tipoActualizacion, actualizar_cemento, cumpleaños, cuota_pura, icono};
+                    int nroCuota = listaClientes.get(i).getCuotas();
+                    String ultimaCuota = sdf.format(listaClientes.get(i).getUltimaCuota());
+                    clientes = new Object[] {apellidos, nombres, dni, telefono1, telefono2, barrio, calle, numero, fecha_nacimiento, trabajo, baja, idControl, cantidad_cuotas, gastos, bolsa_cemento, fch_actualizacion, barrio_prop, manzana_prop, parcela_prop, tipoActualizacion, actualizar_cemento, cumpleaños, cuota_pura, icono, nroCuota, ultimaCuota};
                     model.addRow(clientes); 
                     
                     }
