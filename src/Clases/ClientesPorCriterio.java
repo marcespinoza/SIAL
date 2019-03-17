@@ -30,7 +30,7 @@ public class ClientesPorCriterio {
     BigDecimal gastos;
     byte bandera_cemento;
     int cuotas;
-    Date ultimaCuota;
+    String ultimaCuota;
     BigDecimal bolsa_cemento;
     Date fecha_actualizacion;
     String manzana;
@@ -38,6 +38,15 @@ public class ClientesPorCriterio {
     String parcela;
     String observacion;
     BigDecimal cuota_pura;
+    int clientes; 
+
+    public int getClientes() {
+        return clientes;
+    }
+
+    public void setClientes(int clientes) {
+        this.clientes = clientes;
+    }
 
     public int getCuotas() {
         return cuotas;
@@ -47,11 +56,11 @@ public class ClientesPorCriterio {
         this.cuotas = cuotas;
     }
 
-    public Date getUltimaCuota() {
+    public String getUltimaCuota() {
         return ultimaCuota;
     }
 
-    public void setUltimaCuota(Date ultimaCuota) {
+    public void setUltimaCuota(String ultimaCuota) {
         this.ultimaCuota = ultimaCuota;
     }
     

@@ -414,6 +414,7 @@ public class ControladorCliente implements ActionListener, MouseListener, TableM
         String tipoActualizacion;
         Date date = new Date();
         LocalDate fecha_actual = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        vistaClientes.nroClientes.setText(String.valueOf(listaClientes.size()));
         try {
             if(listaClientes.size()>0){
                 for (int i = 0; i < listaClientes.size(); i++) {
@@ -455,15 +456,6 @@ public class ControladorCliente implements ActionListener, MouseListener, TableM
                           actualizar_cemento = "0";
                           icono.setIcon(null);
                      }
-                     //-------------------------------------//
-                     //------Controla si pasaron 6 meses desde la ultima actualizacion del precio de la bolsa de cemento para calcular amortizacion--------------//
-//                     if(((Period.between(fecha_actualizacion, LocalDate.now())).getMonths())%6==0 && (Period.between(fecha_actualizacion, LocalDate.now())).getMonths()!=0){
-//                         icono.setIcon(icon);
-//                         icono.setHorizontalAlignment(SwingConstants.CENTER);
-//                     }else{
-//                         icono.setIcon(null);
-//                     }
-                         //----------------------------//
                     }else{
                         fch_actualizacion = "";
                         actualizar_cemento = "0";
@@ -476,7 +468,7 @@ public class ControladorCliente implements ActionListener, MouseListener, TableM
                     }
                     BigDecimal cuota_pura = listaClientes.get(i).getCuota_pura();   
                     int nroCuota = listaClientes.get(i).getCuotas();
-                    String ultimaCuota = sdf.format(listaClientes.get(i).getUltimaCuota());
+                    String ultimaCuota = listaClientes.get(i).getUltimaCuota();
                     clientes = new Object[] {apellidos, nombres, dni, telefono1, telefono2, barrio, calle, numero, fecha_nacimiento, trabajo, baja, idControl, cantidad_cuotas, gastos, bolsa_cemento, fch_actualizacion, barrio_prop, manzana_prop, parcela_prop, tipoActualizacion, actualizar_cemento, cumpleaños, cuota_pura, icono, nroCuota, ultimaCuota};
                     model.addRow(clientes); 
                     
@@ -524,7 +516,7 @@ public class ControladorCliente implements ActionListener, MouseListener, TableM
         //----Si tengo un 1 ha pasado un año o mas y tengo que actualizar precio bolsa de cemento-----//
         if(vistaClientes.tablaCliente.getModel().getValueAt(row, 20).toString().equals("1")){
             vistaClientes.advertencia.setText("Actualizar precio bolsa cemento");
-            vistaClientes.detalleBtn.setEnabled(false);
+//            vistaClientes.detalleBtn.setEnabled(false);
         }else{
             vistaClientes.advertencia.setText("");
             vistaClientes.detalleBtn.setEnabled(true);

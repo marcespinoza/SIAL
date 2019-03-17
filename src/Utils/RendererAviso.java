@@ -5,14 +5,11 @@
  */
 package Utils;
 
-import java.awt.Color;
 import java.awt.Component;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JTable;
-import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableCellRenderer;
-
 /**
  *
  * @author Marcelo Espinoza
@@ -21,10 +18,9 @@ public class RendererAviso extends DefaultTableCellRenderer{
     
     ImageIcon icon = new ImageIcon(getClass().getResource("/Imagenes/iconos/alerta.png"));
     JLabel jLabel = new JLabel();
-//private JLabel component;
     @Override
     public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-
+        
          return (Component) value;
     }   
   }
