@@ -6,7 +6,7 @@
 package Controlador;
 
 import Clases.FichaDeControl;
-import Modelo.ActualizacionDAO;
+import Modelo.ActualizacionEmpleadoDAO;
 import Modelo.FichaControlDAO;
 import Vista.Dialogs.ActualizarCuota;
 import Vista.Dialogs.Progress;
@@ -28,7 +28,7 @@ public class ControladorActualizarCuota implements ActionListener{
     
     ActualizarCuota ac;
     FichaControlDAO fc = new FichaControlDAO();
-    ActualizacionDAO ad =new ActualizacionDAO();
+    ActualizacionEmpleadoDAO ad =new ActualizacionEmpleadoDAO();
     Ventana ventana;
     int id_control;
 

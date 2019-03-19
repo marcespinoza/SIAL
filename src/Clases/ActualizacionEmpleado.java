@@ -12,15 +12,16 @@ import java.util.Date;
  *
  * @author Marceloi7
  */
-public class Actualizacion {
+
+public class ActualizacionEmpleado {
     
     int id_control;
     Date fecha;
     byte porcentaje;
-    BigDecimal saldo_anterior;
-    BigDecimal saldo_nuevo;
+    BigDecimal cuota_anterior;
+    BigDecimal cuota_actualizada;
 
-    public Actualizacion() {
+    public ActualizacionEmpleado() {
     }
 
     public byte getPorcentaje() {
@@ -47,20 +48,20 @@ public class Actualizacion {
         this.fecha = fecha;
     }
 
-    public BigDecimal getSaldo_anterior() {
-        return saldo_anterior;
+    public BigDecimal getCuota_anterior() {
+        return cuota_anterior;
     }
 
-    public void setSaldo_anterior(BigDecimal saldo_anterior) {
-        this.saldo_anterior = saldo_anterior;
+    public void setCuota_anterior(BigDecimal cuota_anterior) {
+        this.cuota_anterior = cuota_anterior;
     }
 
-    public BigDecimal getSaldo_nuevo() {
-        return saldo_nuevo;
+    public BigDecimal getCuota_actualizada() {
+        return cuota_actualizada;
     }
 
-    public void setSaldo_nuevo(BigDecimal saldo_nuevo) {
-        this.saldo_nuevo = saldo_nuevo;
+    public void setCuota_actualizada(BigDecimal cuota_actualizada) {
+        this.cuota_actualizada = cuota_actualizada;
     }
     
     

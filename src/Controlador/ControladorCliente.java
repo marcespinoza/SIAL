@@ -5,6 +5,7 @@
  */
 package Controlador;
 
+import Modelo.ActualizacionCementoDAO;
 import Clases.ClientesPorCriterio;
 import Clases.Propietario;
 import Clases.Referencia;
@@ -33,9 +34,8 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.InputStream;
 import java.math.BigDecimal;
-import java.text.ParseException;
+import java.math.BigInteger;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.time.LocalDate;
@@ -43,7 +43,6 @@ import java.time.LocalDateTime;
 import java.time.Period;
 import java.time.ZoneId;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Properties;
@@ -75,6 +74,7 @@ public class ControladorCliente implements ActionListener, MouseListener, TableM
     ReferenciaDAO rd = new ReferenciaDAO();
     FichaControlDAO fd = new FichaControlDAO();
     PropietarioDAO pd = new PropietarioDAO();
+    ActualizacionCementoDAO acd = new ActualizacionCementoDAO();
     LoteDAO ld = new LoteDAO();
     private ArrayList<String[]> cumpleaños = new ArrayList<String[]>();
     public ArrayList<Object> datosCliente = new ArrayList<>();
@@ -147,6 +147,7 @@ public class ControladorCliente implements ActionListener, MouseListener, TableM
                     int i = vistaClientes.tablaCliente.getSelectedRow();
                     BigDecimal nuevo_bolsa_cemento = new BigDecimal(vistaClientes.bolsa_cemento.getText());
                     fd.actualizarBolsaCemento( nuevo_bolsa_cemento, new java.sql.Date(date.getTime()), vistaClientes.tablaCliente.getModel().getValueAt(i, 11).toString());
+                    acd.actualizarCemento(vistaClientes.tablaCliente.getModel().getValueAt(i, 11).toString(), new java.sql.Date(date.getTime()), new BigDecimal(vistaClientes.tablaCliente.getModel().getValueAt(i, 14).toString()), nuevo_bolsa_cemento);
                     llenarTabla();
                     vistaClientes.tablaCliente.getSelectionModel().clearSelection();
                     vistaClientes.fch_actualizacion.setText("");

@@ -5,7 +5,7 @@
  */
 package Modelo;
 
-import Clases.Actualizacion;
+import Clases.ActualizacionEmpleado;
 import Clases.ClientesPorCriterio;
 import conexion.Conexion;
 import java.math.BigDecimal;
@@ -24,29 +24,29 @@ import java.util.logging.Logger;
  *
  * @author Marceloi7
  */
-public class ActualizacionDAO {
+public class ActualizacionEmpleadoDAO {
     
      Conexion conexion;
     
-    public ActualizacionDAO(){
+    public ActualizacionEmpleadoDAO(){
        conexion = new Conexion();
     }
     
-    public List<Actualizacion> listaActualizaciones(int id_control){         
+    public List<ActualizacionEmpleado> listaActualizaciones(int id_control){         
          ResultSet rs = null;
          Connection connection = null;
-         List<Actualizacion> actualizaciones = new ArrayList<>();
+         List<ActualizacionEmpleado> actualizaciones = new ArrayList<>();
        try {
          connection = conexion.dataSource.getConnection();
-         String listar = "SELECT * from actualizacion a where a.id_control='"+id_control+"'";
+         String listar = "SELECT * from actualizacion_empleado a where a.id_control='"+id_control+"'";
          Statement st = connection.createStatement();
          rs = st.executeQuery(listar);
          while(rs.next()){
-            Actualizacion a = new Actualizacion();
+            ActualizacionEmpleado a = new ActualizacionEmpleado();
             a.setFecha(rs.getDate(3));
             a.setPorcentaje(rs.getByte(4));
-            a.setSaldo_anterior(rs.getBigDecimal(5));
-            a.setSaldo_nuevo(rs.getBigDecimal(6));
+            a.setCuota_anterior(rs.getBigDecimal(5));
+            a.setCuota_actualizada(rs.getBigDecimal(6));
             actualizaciones.add(a);
         }
        }catch (SQLException ex) {
@@ -61,18 +61,18 @@ public class ActualizacionDAO {
         return actualizaciones;   
     }
     
-    public void altaActualizacion(int id_control, Date fecha, byte porcentaje, BigDecimal valor_anterior, BigDecimal valor_nuevo) throws SQLException{
+    public void altaActualizacion(int id_control, Date fecha, byte porcentaje, BigDecimal valor_anterior, BigDecimal valor_actualizado) throws SQLException{
          PreparedStatement stmt = null;
          Connection con = null;
         try {
             con = conexion.dataSource.getConnection();
-            String insertar = "insert into actualizacion (id_control, fecha, porcentaje, saldo_anterior, saldo_nuevo) values (?,?,?,?,?)";
+            String insertar = "insert into actualizacion_empleado (id_control, fecha, porcentaje, cuota_anterior, cuota_actualizada) values (?,?,?,?,?)";
             stmt = con.prepareStatement(insertar);
             stmt.setInt(1, id_control);
             stmt.setDate(2, fecha);
             stmt.setByte(3, porcentaje);
             stmt.setBigDecimal(4, valor_anterior);
-            stmt.setBigDecimal(5, valor_nuevo);
+            stmt.setBigDecimal(5, valor_actualizado);
             stmt.executeUpdate();
         } catch (SQLException ex) {
             Logger.getLogger(ClienteDAO.class.getName()).log(Level.SEVERE, null, ex);

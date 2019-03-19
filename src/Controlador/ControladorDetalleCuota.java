@@ -5,11 +5,11 @@
  */
 package Controlador;
 
-import Clases.Actualizacion;
+import Clases.ActualizacionEmpleado;
 import Clases.Cuota;
 import Clases.FichaDeControl;
 import Clases.LimitadorCaracteres;
-import Modelo.ActualizacionDAO;
+import Modelo.ActualizacionEmpleadoDAO;
 import Modelo.CuotaDAO;
 import Modelo.DchoPosesionDAO;
 import Modelo.FichaControlDAO;
@@ -76,7 +76,7 @@ public class ControladorDetalleCuota implements ActionListener, TableModelListen
     RendererTablaDchoPosesion rdp = new RendererTablaDchoPosesion();
     DetalleCuota dc = new DetalleCuota();
     CuotaDAO cd = new CuotaDAO();
-    ActualizacionDAO ad = new ActualizacionDAO();
+    ActualizacionEmpleadoDAO ad = new ActualizacionEmpleadoDAO();
     MinutaDAO md = new MinutaDAO();
     DchoPosesionDAO dp = new DchoPosesionDAO();
     FichaControlDAO fcd = new FichaControlDAO();
@@ -181,7 +181,7 @@ public class ControladorDetalleCuota implements ActionListener, TableModelListen
      } 
     
     private void llenarTablaActualizacion(int id_control){
-        List<Actualizacion>actualizaciones;
+        List<ActualizacionEmpleado>actualizaciones;
         actualizaciones = ad.listaActualizaciones(id_control);
         DefaultTableModel model = (DefaultTableModel) dc.tablaActualizacion.getModel();
         model.setRowCount(0);
@@ -189,8 +189,8 @@ public class ControladorDetalleCuota implements ActionListener, TableModelListen
               for(int i = 0; i < actualizaciones.size(); i++){
                 Date fecha = actualizaciones.get(i).getFecha();
                 byte porcentaje = actualizaciones.get(i).getPorcentaje();
-                BigDecimal saldo_anterior = actualizaciones.get(i).getSaldo_anterior();
-                BigDecimal saldo_nuevo = actualizaciones.get(i).getSaldo_nuevo();
+                BigDecimal saldo_anterior = actualizaciones.get(i).getCuota_anterior();
+                BigDecimal saldo_nuevo = actualizaciones.get(i).getCuota_actualizada();
                 actualizacion = new Object[] {fecha, porcentaje,saldo_anterior, saldo_nuevo}; 
                 model.addRow(actualizacion);
               }
