@@ -343,8 +343,8 @@
               <Table columnCount="4" rowCount="0">
                 <Column editable="true" title="Fecha" type="java.lang.Object"/>
                 <Column editable="true" title="%" type="java.lang.Object"/>
-                <Column editable="true" title="Saldo actual" type="java.lang.Object"/>
-                <Column editable="true" title="Saldo nuevo" type="java.lang.Object"/>
+                <Column editable="true" title="Cuota anterior" type="java.lang.Object"/>
+                <Column editable="true" title="Cuota actualizada" type="java.lang.Object"/>
               </Table>
             </Property>
             <Property name="columnModel" type="javax.swing.table.TableColumnModel" editor="org.netbeans.modules.form.editors2.TableColumnModelEditor">

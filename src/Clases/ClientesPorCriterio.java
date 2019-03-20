@@ -38,6 +38,15 @@ public class ClientesPorCriterio {
     String parcela;
     String observacion;
     BigDecimal cuota_pura;
+    BigDecimal total;
+
+    public BigDecimal getTotal() {
+        return total;
+    }
+
+    public void setTotal(BigDecimal total) {
+        this.total = total;
+    }
     int clientes; 
 
     public int getClientes() {

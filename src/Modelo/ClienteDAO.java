@@ -34,7 +34,7 @@ public class ClienteDAO {
      List<ClientesPorCriterio> clientesPorLotes = new ArrayList<>();
      try {
           connection = conexion.dataSource.getConnection();
-          String listar = "SELECT c.Dni, c.Apellidos, c.Nombres,c.fecha_nacimiento, c.barrio, c.calle, c.numero, c.Telefono1, c.telefono2, c.trabajo, h.baja, f.Id_control, f.cantidad_cuotas, f.gastos, f.bolsa_cemento, f.fecha_actualizacion, f.lote_Barrio, f.lote_Manzana, f.lote_Parcela,f.bandera_cemento, f.cuota_pura, IF(COUNT(lc.Nro_cuota)=0,0, COUNT(lc.Nro_cuota)) as cuotas, IFNULL((SELECT lc.Fecha FROM linea_control_lote lc WHERE lc.id_control=f.Id_control ORDER BY lc.Fecha DESC LIMIT 1 ), 0000-00-00) as ultimaCuota  from ((cliente c LEFT JOIN cliente_tiene_lote h ON c.Dni = h.cliente_Dni) left join ficha_control_lote f on f.Id_control=h.Id_control) LEFT JOIN linea_control_lote lc ON lc.id_control=f.Id_control GROUP BY f.Id_control, c.dni, ifnull(f.Id_control, c.Dni) order by c.apellidos"; 
+          String listar = "SELECT c.Dni, c.Apellidos, c.Nombres,c.fecha_nacimiento, c.barrio, c.calle, c.numero, c.Telefono1, c.telefono2, c.trabajo, h.baja, f.Id_control, f.cantidad_cuotas, f.gastos, f.bolsa_cemento, f.fecha_actualizacion, f.lote_Barrio, f.lote_Manzana, f.lote_Parcela,f.bandera_cemento, f.cuota_pura, IF(COUNT(lc.Nro_cuota)=0,0, COUNT(lc.Nro_cuota)) as cuotas, IFNULL((SELECT lc.Fecha FROM linea_control_lote lc WHERE lc.id_control=f.Id_control ORDER BY lc.Fecha DESC LIMIT 1 ), 0000-00-00) as ultimaCuota, SUM(lc.Haber) as total   from ((cliente c LEFT JOIN cliente_tiene_lote h ON c.Dni = h.cliente_Dni) left join ficha_control_lote f on f.Id_control=h.Id_control) LEFT JOIN linea_control_lote lc ON lc.id_control=f.Id_control GROUP BY f.Id_control, c.dni, ifnull(f.Id_control, c.Dni) order by c.apellidos"; 
           Statement st = connection.createStatement();
           rs = st.executeQuery(listar);
           while (rs.next()) {
@@ -62,6 +62,7 @@ public class ClienteDAO {
             cpp.setCuota_pura(rs.getBigDecimal(21));
             cpp.setCuotas(rs.getInt(22));
             cpp.setUltimaCuota(rs.getString(23));
+            cpp.setTotal(rs.getBigDecimal(24));
             clientesPorLotes.add(cpp);
 
          }
@@ -243,7 +244,7 @@ public class ClienteDAO {
      List<ClientesPorCriterio> clientesPorPropietario = new ArrayList<>();
      try {
       connection = conexion.dataSource.getConnection();
-      String listar = "SELECT DISTINCT  c.Dni, c.Apellidos, c.Nombres,c.fecha_nacimiento, c.barrio, c.calle, c.numero, c.Telefono1, c.telefono2, c.trabajo, cl.baja, f.Id_control, f.cantidad_cuotas, f.gastos, f.bolsa_cemento, f.fecha_actualizacion, f.lote_Barrio, f.lote_Manzana, f.lote_Parcela, f.bandera_cemento, f.cuota_pura, (SELECT COUNT(lc.Nro_cuota)-1 as cuotas from linea_control_lote lc where lc.id_control=f.Id_control) as cuotas, (SELECT lc.Fecha FROM linea_control_lote lc WHERE lc.id_control=f.Id_control ORDER BY lc.Fecha DESC LIMIT 1 ) as ultimaCuota from ((cliente c INNER join cliente_tiene_lote cl on c.dni=cl.cliente_dni) INNER join ficha_control_lote f on cl.id_control=f.id_control) INNER join lote l on f.lote_barrio=l.barrio AND l.manzana=f.lote_manzana AND l.parcela=f.lote_parcela where l.propietario_Apellidos=? and l.propietario_Nombres=? order by c.apellidos, c.nombres"; 
+      String listar = "SELECT DISTINCT  c.Dni, c.Apellidos, c.Nombres,c.fecha_nacimiento, c.barrio, c.calle, c.numero, c.Telefono1, c.telefono2, c.trabajo, cl.baja, f.Id_control, f.cantidad_cuotas, f.gastos, f.bolsa_cemento, f.fecha_actualizacion, f.lote_Barrio, f.lote_Manzana, f.lote_Parcela, f.bandera_cemento, f.cuota_pura, (SELECT COUNT(lc.Nro_cuota)-1 as cuotas from linea_control_lote lc where lc.id_control=f.Id_control) as cuotas, (SELECT lc.Fecha FROM linea_control_lote lc WHERE lc.id_control=f.Id_control ORDER BY lc.Fecha DESC LIMIT 1 ) as ultimaCuota, (Select SUM(lc.haber) from linea_control_lote lc where lc.id_control=f.id_control)as total  from ((cliente c INNER join cliente_tiene_lote cl on c.dni=cl.cliente_dni) INNER join ficha_control_lote f on cl.id_control=f.id_control) INNER join lote l on f.lote_barrio=l.barrio AND l.manzana=f.lote_manzana AND l.parcela=f.lote_parcela where l.propietario_Apellidos=? and l.propietario_Nombres=? order by c.apellidos, c.nombres"; 
       preparedStmt = connection.prepareStatement(listar);
       preparedStmt.setString(1, apellido);
       preparedStmt.setString(2, nombre);
@@ -273,9 +274,8 @@ public class ClienteDAO {
         cpp.setCuota_pura(rs.getBigDecimal(21));
         cpp.setCuotas(rs.getInt(22));
         cpp.setUltimaCuota(rs.getString(23));
-        clientesPorPropietario.add(cpp);
-                 
-
+        cpp.setTotal(rs.getBigDecimal(24));
+        clientesPorPropietario.add(cpp);                
      }
     } catch (SQLException ex) {
       System.out.println(ex.getMessage());

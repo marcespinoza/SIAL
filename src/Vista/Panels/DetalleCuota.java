@@ -177,7 +177,7 @@ public class DetalleCuota extends javax.swing.JPanel {
 
             },
             new String [] {
-                "Fecha", "%", "Saldo actual", "Saldo nuevo"
+                "Fecha", "%", "Cuota anterior", "Cuota actualizada"
             }
         ));
         jScrollPane3.setViewportView(tablaActualizacion);

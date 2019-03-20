@@ -470,7 +470,8 @@ public class ControladorCliente implements ActionListener, MouseListener, TableM
                     BigDecimal cuota_pura = listaClientes.get(i).getCuota_pura();   
                     int nroCuota = listaClientes.get(i).getCuotas();
                     String ultimaCuota = listaClientes.get(i).getUltimaCuota();
-                    clientes = new Object[] {apellidos, nombres, dni, telefono1, telefono2, barrio, calle, numero, fecha_nacimiento, trabajo, baja, idControl, cantidad_cuotas, gastos, bolsa_cemento, fch_actualizacion, barrio_prop, manzana_prop, parcela_prop, tipoActualizacion, actualizar_cemento, cumpleaños, cuota_pura, icono, nroCuota, ultimaCuota};
+                    BigDecimal total = listaClientes.get(i).getTotal();
+                    clientes = new Object[] {apellidos, nombres, dni, telefono1, telefono2, barrio, calle, numero, fecha_nacimiento, trabajo, baja, idControl, cantidad_cuotas, gastos, bolsa_cemento, fch_actualizacion, barrio_prop, manzana_prop, parcela_prop, tipoActualizacion, actualizar_cemento, cumpleaños, cuota_pura, icono, nroCuota, ultimaCuota, total};
                     model.addRow(clientes); 
                     
                     }
