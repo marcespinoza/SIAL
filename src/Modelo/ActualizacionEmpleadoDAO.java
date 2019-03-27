@@ -66,7 +66,7 @@ public class ActualizacionEmpleadoDAO {
          Connection con = null;
         try {
             con = conexion.dataSource.getConnection();
-            String insertar = "insert into actualizacion_empleado (id_control, fecha, porcentaje, cuota_anterior, cuota_actualizada) values (?,?,?,?,?)";
+            String insertar = "insert into actualizacion_empleado (id_control, fecha, porcentaje, saldo_anterior, saldo_nuevo) values (?,?,?,?,?)";
             stmt = con.prepareStatement(insertar);
             stmt.setInt(1, id_control);
             stmt.setDate(2, fecha);

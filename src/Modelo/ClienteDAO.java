@@ -61,7 +61,7 @@ public class ClienteDAO {
             cpp.setBandera_cemento(rs.getByte(20));
             cpp.setCuota_pura(rs.getBigDecimal(21));
             cpp.setCuotas(rs.getInt(22));
-            cpp.setUltimaCuota(rs.getString(23));
+            cpp.setUltimaCuota(rs.getDate(23));
             cpp.setTotal(rs.getBigDecimal(24));
             clientesPorLotes.add(cpp);
 
@@ -273,7 +273,7 @@ public class ClienteDAO {
         cpp.setBandera_cemento(rs.getByte(20));
         cpp.setCuota_pura(rs.getBigDecimal(21));
         cpp.setCuotas(rs.getInt(22));
-        cpp.setUltimaCuota(rs.getString(23));
+        cpp.setUltimaCuota(rs.getDate(23));
         cpp.setTotal(rs.getBigDecimal(24));
         clientesPorPropietario.add(cpp);                
      }
