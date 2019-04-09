@@ -470,7 +470,7 @@ public class ControladorCliente implements ActionListener, MouseListener, TableM
                    int cantidad_cuotas = listaClientes.get(i).getCantidad_cuotas();
                    BigDecimal gastos = listaClientes.get(i).getGastos();
                    BigDecimal bolsa_cemento = listaClientes.get(i).getBolsa_cemento();
-                   if(listaClientes.get(i).getFecha_actualizacion()!=null){
+                   if(listaClientes.get(i).getFecha_actualizacion()!=null && listaClientes.get(i).getBandera_cemento()==1){
                     Date fechaActualizacion = listaClientes.get(i).getFecha_actualizacion();
                     Instant instant2 = Instant.ofEpochMilli(fechaActualizacion.getTime());
                     LocalDate fecha_actualizacion = LocalDateTime.ofInstant(instant2, ZoneId.systemDefault()).toLocalDate();   

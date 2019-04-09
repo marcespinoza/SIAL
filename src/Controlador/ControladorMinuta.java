@@ -247,13 +247,13 @@ public class ControladorMinuta implements MouseListener, ActionListener {
             document.add(table);  
           //-------Itero-----------//
               int conta = 1;
-              BigDecimal acumulador_cobrado = new BigDecimal(0);
-              BigDecimal acumulador_gastos = new BigDecimal(0);
-              BigDecimal acumulador_rendido = new BigDecimal(0);             
-              BigDecimal deposito = new BigDecimal(0);
-              BigDecimal t_debito = new BigDecimal(0);
-              BigDecimal t_credito = new BigDecimal(0);
-              BigDecimal total = new BigDecimal(0);
+              BigDecimal acumulador_cobrado = BigDecimal.ZERO;
+              BigDecimal acumulador_gastos = BigDecimal.ZERO;
+              BigDecimal acumulador_rendido = BigDecimal.ZERO;             
+              BigDecimal deposito = BigDecimal.ZERO;
+              BigDecimal t_debito = BigDecimal.ZERO;
+              BigDecimal t_credito = BigDecimal.ZERO;
+              BigDecimal efectivo = BigDecimal.ZERO;
               for (int i = 0; i < listaMinutas.size(); i++) {                 
                   PdfPTable table2 = new PdfPTable(9);            
                   table2.setTotalWidth(new float[]{ 1,2,4,2,2,2,2,2,3});
@@ -281,23 +281,25 @@ public class ControladorMinuta implements MouseListener, ActionListener {
                   //-------Controlo que el cliente no este dado de baja------//
                   if(listaMinutas.get(i).getBaja()!=1){
                      acumulador_cobrado = acumulador_cobrado.add(listaMinutas.get(i).getCobrado());
-                     acumulador_gastos = acumulador_gastos.add(listaMinutas.get(i).getGastos());                   
+                     acumulador_gastos = acumulador_gastos.add(listaMinutas.get(i).getGastos());  
+                     acumulador_rendido = acumulador_rendido.add(listaMinutas.get(i).getRendido());
                       switch(listaMinutas.get(i).getObservaciones()){                     
-                          case "Dpto. Bancario":deposito = deposito;break; 
+                          case "Dpto. Bancario":deposito = deposito.add(listaMinutas.get(i).getRendido());break; 
                           case "Tarjeta credito":t_debito = t_debito.add(listaMinutas.get(i).getRendido());break;
                           case "Tarjeta debito":t_credito = t_credito.add(listaMinutas.get(i).getRendido());break;
-                          case "Efectivo":acumulador_rendido = acumulador_rendido.add(listaMinutas.get(i).getRendido());break;
+                          case "Efectivo":efectivo = efectivo.add(listaMinutas.get(i).getRendido());break;
                       }
-                  }
+                  }                 
                   conta ++;
               }
             //------Linea Totales------//
             PdfPTable tableTotales = new PdfPTable(9);            
             tableTotales.setTotalWidth(new float[]{ 1,2,4,2,2,2,2,2,3});
             tableTotales.setWidthPercentage(100);  
-            PdfPCell cellcobrado = new PdfPCell(new Paragraph("$ "+String.format ("%.2f",acumulador_cobrado), f));
-            PdfPCell cellgastos = new PdfPCell(new Paragraph("$ "+String.format ("%.2f",acumulador_gastos), f));
-            PdfPCell cellrendido = new PdfPCell(new Paragraph("$ "+String.format ("%.2f",acumulador_rendido), f));
+            Font ftotal=new Font(Font.FontFamily.TIMES_ROMAN,9.0f,0,null); 
+            PdfPCell cellcobrado = new PdfPCell(new Paragraph("$ "+String.format ("%.2f",acumulador_cobrado), ftotal));
+            PdfPCell cellgastos = new PdfPCell(new Paragraph("$ "+String.format ("%.2f",acumulador_gastos), ftotal));
+            PdfPCell cellrendido = new PdfPCell(new Paragraph("$ "+String.format ("%.2f",acumulador_rendido), ftotal));
             PdfPCell cellEmpty = new PdfPCell(new Paragraph("",f));
             cellEmpty.setUseVariableBorders(true);
             cellEmpty.setBorderColorBottom(BaseColor.WHITE);
@@ -314,12 +316,11 @@ public class ControladorMinuta implements MouseListener, ActionListener {
             tableTotales.addCell(cellEmpty);
             document.add(tableTotales);
             //-------------//
-            total = acumulador_rendido.add(deposito).add(t_credito).add(t_debito);
             PdfPTable tablaa = new PdfPTable(2);
             tablaa.setWidthPercentage(50);
             tablaa.setSpacingBefore(10f);
-            PdfPCell nuevo = new PdfPCell(new Paragraph("Total rendido $", f));
-            PdfPCell nuevo2 = new PdfPCell(new Paragraph(String.format ("%.2f",acumulador_rendido), f));
+            PdfPCell nuevo = new PdfPCell(new Paragraph("Efectivo $", f));
+            PdfPCell nuevo2 = new PdfPCell(new Paragraph(String.format ("%.2f",efectivo), f));
             nuevo2.setHorizontalAlignment(Element.ALIGN_RIGHT);
             tablaa.addCell(nuevo);
             tablaa.addCell(nuevo2);
@@ -338,7 +339,7 @@ public class ControladorMinuta implements MouseListener, ActionListener {
             PdfPTable total_final = new PdfPTable(2);
             total_final.setWidthPercentage(50);
             PdfPCell total1 = new PdfPCell(new Paragraph("Total $", f));
-            PdfPCell total2 = new PdfPCell(new Paragraph(String.format ("%.2f",total), f));
+            PdfPCell total2 = new PdfPCell(new Paragraph(String.format ("%.2f",acumulador_rendido), f));
             total1.setBorder(Rectangle.NO_BORDER);
             total2.setBorder(Rectangle.NO_BORDER);
             total2.setHorizontalAlignment(Element.ALIGN_RIGHT);
@@ -450,7 +451,7 @@ public class ControladorMinuta implements MouseListener, ActionListener {
           BigDecimal total=new BigDecimal(0);
         for (int i = 0; i < vistaMinuta.tablaMinuta.getRowCount(); i++) {
            //----Las minutas que estan dadas de baja no las sumo----//     
-           if(Integer.parseInt(vistaMinuta.tablaMinuta.getValueAt(i, 10).toString())==0){ 
+           if(Integer.parseInt(vistaMinuta.tablaMinuta.getValueAt(i, 10).toString())==0 ){ 
             total=total.add(new BigDecimal(vistaMinuta.tablaMinuta.getValueAt(i, 6).toString()));
            }
         }

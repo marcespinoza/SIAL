@@ -23,7 +23,7 @@ public class Conexion {
     static org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(Conexion.class.getName());  
     
     public Conexion(){
-        getConexion();
+       getConexion();
     }
     
     public void getConexion(){      
@@ -33,6 +33,6 @@ public class Conexion {
      basicDataSource.setPassword(root);
      basicDataSource.setUrl(url); 
      dataSource = basicDataSource;
-}
+     }
     
 }
