@@ -124,12 +124,7 @@ public class ControladorEditarCliente implements ActionListener{
         }else{
          ac.calle.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
         }
-        if(ac.numero.getText().isEmpty()){
-         ac.numero.setBorder(BorderFactory.createLineBorder(Color.RED, 1));
-         bandera=false;
-        }else{
-         ac.numero.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
-        }
+      
         if(ac.telefono1.getText().isEmpty()){
          ac.telefono1.setBorder(BorderFactory.createLineBorder(Color.RED, 1));
          bandera=false;
@@ -147,6 +142,7 @@ public class ControladorEditarCliente implements ActionListener{
         @Override
         protected Void doInBackground() throws Exception {  
              Date fecha =df.parse(ac.fecha_nac.getText());
+             ac.numero.setText("");
              cd.editarCliente(Integer.parseInt(ac.documento.getText()), ac.apellidos.getText(), ac.nombres.getText(),new java.sql.Date(fecha.getTime()), ac.barrio.getText(), ac.calle.getText(), Integer.parseInt(ac.numero.getText()), ac.telefono1.getText(), ac.telefono2.getText(), ac.trabajo.getText(),Integer.parseInt(cliente.get(2).toString()));        
             return null;
         }

@@ -7,7 +7,6 @@ package Controlador;
 
 import Modelo.ActualizacionCementoDAO;
 import Clases.ClientesPorCriterio;
-import Clases.FichaDeControl;
 import Clases.GenerarLista;
 import Clases.Propietario;
 import Clases.Referencia;
@@ -51,8 +50,6 @@ import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.math.BigInteger;
-import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
@@ -125,6 +122,7 @@ public class ControladorCliente implements ActionListener, MouseListener, TableM
         this.vistaClientes.agregarPropietario.addActionListener(this);
         this.vistaClientes.cambiarPropietario.addActionListener(this);
         this.vistaClientes.comboApellido.addActionListener(this);
+        this.vistaClientes.comboDias.addActionListener(this);
         this.vistaClientes.comboNombre.addActionListener(this);
         this.vistaClientes.mostrarTodos.addActionListener(this);
         this.vistaClientes.imprimirClientes.addActionListener(this);
@@ -217,16 +215,17 @@ public class ControladorCliente implements ActionListener, MouseListener, TableM
     public void actionPerformed(ActionEvent e) {
         if(e.getSource()==vistaClientes.imprimirClientes){
             List<ClientesPorCriterio> listaClientes;
-            listaClientes = cd.clientesPorPropietarios(apellidos, nombres);
-            GenerarLista.generarResumenPdf(listaClientes);
-//            vistaClientes.comboNombre.setSelectedIndex(0);
+            int dias =  Integer.parseInt(vistaClientes.comboDias.getSelectedItem().toString());
+            listaClientes = cd.clientesPorPropietarios(apellidos, nombres, dias);
+            GenerarLista.generarResumenPdf(listaClientes, dias);
+        // vistaClientes.comboNombre.setSelectedIndex(0);
                       
         }
         //-----------Boton mostrar todos los clientes----//
         if(e.getSource()==vistaClientes.mostrarTodos){
             apellidos = ""; 
             vistaClientes.comboApellido.setSelectedIndex(0);
-//            vistaClientes.comboNombre.setSelectedIndex(0);
+        // vistaClientes.comboNombre.setSelectedIndex(0);
                       
         }
         
@@ -237,7 +236,7 @@ public class ControladorCliente implements ActionListener, MouseListener, TableM
                 apellidos =vistaClientes.comboApellido.getSelectedItem().toString();
                 llenarComboNombres(apellidos);
             }else{
-                 vistaClientes.comboNombre.setSelectedIndex(0);
+                vistaClientes.comboNombre.setSelectedIndex(0);
             }
           } 
         }
@@ -245,12 +244,15 @@ public class ControladorCliente implements ActionListener, MouseListener, TableM
          if(e.getSource()==vistaClientes.comboNombre){
            if(vistaClientes.comboNombre.getItemCount()!=0){
             if(!vistaClientes.comboNombre.getSelectedItem().equals("Seleccione")){ 
-                nombres = vistaClientes.comboNombre.getSelectedItem().toString();
-                
+                nombres = vistaClientes.comboNombre.getSelectedItem().toString();                
             }
             llenarTabla();
             }
         }
+         //-------Evento sobre combo dias--------//
+         if(e.getSource()==vistaClientes.comboDias){
+             llenarTabla();             
+         }
          //-----------Boton cambiar propietario------------//
           if(e.getSource() == vistaClientes.cambiarPropietario){
               int row = vistaClientes.tablaCliente.getSelectedRow();
@@ -429,7 +431,8 @@ public class ControladorCliente implements ActionListener, MouseListener, TableM
         if(apellidos.equals("")){
             listaClientes = cd.clientesPorLotes();}
         else{
-           listaClientes = cd.clientesPorPropietarios(apellidos, nombres);
+           int dias =  Integer.parseInt(vistaClientes.comboDias.getSelectedItem().toString());
+           listaClientes = cd.clientesPorPropietarios(apellidos, nombres, dias);
         }         
         DefaultTableModel model = (DefaultTableModel) vistaClientes.tablaCliente.getModel();
         model.setRowCount(0);
@@ -446,8 +449,10 @@ public class ControladorCliente implements ActionListener, MouseListener, TableM
         try {
             if(listaClientes.size()>0){
                 for (int i = 0; i < listaClientes.size(); i++) {
+                   actualizar_cemento = "0";
                    tipoActualizacion = "Cemento" ;
                    icono = new JLabel();
+                   icono.setIcon(null);
                    cumpleaños = "0";
                    int dni = listaClientes.get(i).getDni();
                    String apellidos = listaClientes.get(i).getApellidos();
@@ -471,18 +476,20 @@ public class ControladorCliente implements ActionListener, MouseListener, TableM
                    BigDecimal gastos = listaClientes.get(i).getGastos();
                    BigDecimal bolsa_cemento = listaClientes.get(i).getBolsa_cemento();
                    if(listaClientes.get(i).getFecha_actualizacion()!=null && listaClientes.get(i).getBandera_cemento()==1){
-                    Date fechaActualizacion = listaClientes.get(i).getFecha_actualizacion();
-                    Instant instant2 = Instant.ofEpochMilli(fechaActualizacion.getTime());
-                    LocalDate fecha_actualizacion = LocalDateTime.ofInstant(instant2, ZoneId.systemDefault()).toLocalDate();   
-                    fch_actualizacion = sdf.format(listaClientes.get(i).getFecha_actualizacion());
-                    //----Controlo si ya paso un año de la ultima fecha de actualizacion de la bolsa de cemento----//
+                   Date fechaActualizacion = listaClientes.get(i).getFecha_actualizacion();
+                   Instant instant2 = Instant.ofEpochMilli(fechaActualizacion.getTime());
+                   LocalDate fecha_actualizacion = LocalDateTime.ofInstant(instant2, ZoneId.systemDefault()).toLocalDate();   
+                   fch_actualizacion = sdf.format(fechaActualizacion);
+                    //----Controlo si ya paso 6 meses de la ultima fecha de actualizacion de la bolsa de cemento----//
                      if(((Period.between(fecha_actualizacion, LocalDate.now())).getMonths())%6==0 && (Period.between(fecha_actualizacion, LocalDate.now())).getMonths()!=0){
                          actualizar_cemento = "1";
                          icono.setIcon(icon);
                          icono.setHorizontalAlignment(SwingConstants.CENTER);
-                     }else{
-                          actualizar_cemento = "0";
-                          icono.setIcon(null);
+                     }
+                      if(((Period.between(fecha_actualizacion, LocalDate.now())).getMonths())%12==0 && (Period.between(fecha_actualizacion, LocalDate.now())).getMonths()!=0){
+                         actualizar_cemento = "1";
+                         icono.setIcon(icon);
+                         icono.setHorizontalAlignment(SwingConstants.CENTER);
                      }
                     }else{
                         fch_actualizacion = "";
@@ -638,7 +645,7 @@ public class ControladorCliente implements ActionListener, MouseListener, TableM
             fileToSave = fileChooser.getSelectedFile();
             }
             List<ClientesPorCriterio> listaClientes;
-            listaClientes = cd.clientesPorPropietarios(apellidos, nombres);
+            listaClientes = cd.clientesPorPropietarios(apellidos, nombres, 0);
             Document document= new Document(PageSize.A4);
             DateFormat dateFormat2 = new SimpleDateFormat("dd-MM-yyyy");
             java.util.Date date = new java.util.Date();

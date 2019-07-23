@@ -42,7 +42,7 @@ public class GenerarLista {
     public GenerarLista() {
     }
     
-    public static void generarResumenPdf(List<ClientesPorCriterio> listaClientes){
+    public static void generarResumenPdf(List<ClientesPorCriterio> listaClientes, int dias){
             JFrame parentFrame = new JFrame(); 
             JFileChooser fileChooser = new JFileChooser();
             fileChooser.setDialogTitle("Guardar en..");  
@@ -70,7 +70,7 @@ public class GenerarLista {
             ph.add(ph1);
             ph.add(ph2);
             ph.setAlignment(Element.ALIGN_CENTER);
-            Paragraph total = new Paragraph("B° Doña Valentina - Total clientes: "+listaClientes.size());
+            Paragraph total = new Paragraph("B° Doña Valentina - Total clientes: "+listaClientes.size()+" - Ultima cuota >= "+dias+" días");
             total.setAlignment(Element.ALIGN_CENTER);
             document.add(ph);
             document.add( Chunk.NEWLINE );
@@ -78,13 +78,14 @@ public class GenerarLista {
             document.add( Chunk.NEWLINE );
             //------Cabeceras de las columnas de las cuotas---------//
             if(!listaClientes.isEmpty()){//---Si la tabla tiene 1 fila no imprimo cabeceras----//            
-            PdfPTable table = new PdfPTable(7); 
-            table.setTotalWidth(new float[]{ 2,2,1,2,1,1,1});
+            PdfPTable table = new PdfPTable(8); 
+            table.setTotalWidth(new float[]{ 2,2,1,2,1,1,1,1});
             table.setWidthPercentage(100);
             PdfPCell nro_cuota = new PdfPCell(new Paragraph("Apellido",f));
             PdfPCell fecha_pago = new PdfPCell(new Paragraph("Nombre/s",f));
             PdfPCell lote = new PdfPCell(new Paragraph("Mz - Pc",f));
             PdfPCell telefono = new PdfPCell(new Paragraph("Tel.",f));
+            PdfPCell valorCuota = new PdfPCell(new Paragraph("Cuota",f));
             PdfPCell cemento_saldo = new PdfPCell(new Paragraph("Cuotas",f));
             PdfPCell ultima_cuota = new PdfPCell(new Paragraph("Ultima cuota",f));
             PdfPCell total_cuotas = new PdfPCell(new Paragraph("Total $",f));
@@ -92,6 +93,7 @@ public class GenerarLista {
             fecha_pago.setHorizontalAlignment(Element.ALIGN_CENTER);
             lote.setHorizontalAlignment(Element.ALIGN_CENTER);
             telefono.setHorizontalAlignment(Element.ALIGN_CENTER);
+            valorCuota.setHorizontalAlignment(Element.ALIGN_CENTER);
             cemento_saldo.setHorizontalAlignment(Element.ALIGN_CENTER);
             ultima_cuota.setHorizontalAlignment(Element.ALIGN_CENTER);
             total_cuotas.setHorizontalAlignment(Element.ALIGN_CENTER);
@@ -99,24 +101,28 @@ public class GenerarLista {
             table.addCell(fecha_pago);
             table.addCell(lote);
             table.addCell(telefono);
+            table.addCell(valorCuota);
             table.addCell(cemento_saldo);
             table.addCell(ultima_cuota);
             table.addCell(total_cuotas);
             document.add(table);    
             BigDecimal totales = BigDecimal.ZERO;
             for(int i = 0; i < listaClientes.size(); i++){
-                  PdfPTable table2 = new PdfPTable(7);            
-                  table2.setTotalWidth(new float[]{ 2,2,1,2,1,1,1});
+                if(listaClientes.get(i).baja!=1){
+                  PdfPTable table2 = new PdfPTable(8);            
+                  table2.setTotalWidth(new float[]{ 2,2,1,2,1,1,1,1});
                   table2.setWidthPercentage(100);
                   table2.addCell(new PdfPCell(new Paragraph(String.valueOf(listaClientes.get(i).getApellidos()),f))).setHorizontalAlignment(Element.ALIGN_CENTER);
                   table2.addCell(new PdfPCell(new Paragraph(String.valueOf(listaClientes.get(i).getNombres()),f))).setHorizontalAlignment(Element.ALIGN_CENTER);
                   table2.addCell(new PdfPCell(new Paragraph(String.valueOf(listaClientes.get(i).getManzana()+" - "+listaClientes.get(i).getParcela()),f))).setHorizontalAlignment(Element.ALIGN_CENTER);
                   table2.addCell(new PdfPCell(new Paragraph(String.valueOf(listaClientes.get(i).getTelefono1()+" / "+listaClientes.get(i).getTelefono2()),f))).setHorizontalAlignment(Element.ALIGN_CENTER);
+                  table2.addCell(new PdfPCell(new Paragraph(String.valueOf("$ "+listaClientes.get(i).getGastos().add(listaClientes.get(i).getCuota_pura())),f))).setHorizontalAlignment(Element.ALIGN_CENTER);
                   table2.addCell(new PdfPCell(new Paragraph(String.valueOf(listaClientes.get(i).getCuotas()),f))).setHorizontalAlignment(Element.ALIGN_CENTER);
                   table2.addCell(new PdfPCell(new Paragraph(String.valueOf(sdf.format(listaClientes.get(i).getUltimaCuota())),f))).setHorizontalAlignment(Element.ALIGN_CENTER);
                   table2.addCell(new PdfPCell(new Paragraph(String.valueOf(listaClientes.get(i).getTotal()),f))).setHorizontalAlignment(Element.ALIGN_CENTER);
                   totales = totales.add(listaClientes.get(i).getTotal());
                   document.add(table2);
+                }
               }
             PdfPTable table3 = new PdfPTable(1);  
             table3.setWidthPercentage(100);

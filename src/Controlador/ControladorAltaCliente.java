@@ -69,7 +69,7 @@ public class ControladorAltaCliente implements ActionListener, KeyListener{
     public void actionPerformed(ActionEvent e) {
         if(e.getSource() == ac.aceptar){
             if(validarCampos()){ 
-            new AltaClienteSwing().execute();
+             new AltaClienteSwing().execute();
             }
         }
           if(e.getSource() == ac.cancelar){

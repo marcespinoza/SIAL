@@ -135,7 +135,7 @@ public class ControladorBaseDeDatos implements ActionListener{
             bd.progressBar.setVisible(true);
             bd.progressBar.setIndeterminate(true);
             try {
-                DateFormat fecha = new SimpleDateFormat("yyyy-MM-dd");
+                DateFormat fecha = new SimpleDateFormat("yyyy-MM-dd_HH-mm");
                 java.util.Date date = new java.util.Date();
                 Process p;
                 Runtime runtime = Runtime.getRuntime();
@@ -159,10 +159,12 @@ public class ControladorBaseDeDatos implements ActionListener{
                  case 1:
                      bd.respaldoOk.setForeground(Color.RED);
                      bd.respaldoOk.setText("No se pudo crear el respaldo");
+                      System.out.println(completo);
                      break;
                  default:       
                      bd.respaldoOk.setForeground(Color.RED);
                      bd.respaldoOk.setText("No se pudo crear el respaldo");
+                      System.out.println(completo);
                      break;
              }
         }

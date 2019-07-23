@@ -93,7 +93,7 @@ public class FichaControlDAO {
          List<FichaDeControl> listaFichaControl = new ArrayList<>();
      try {
           connection = conexion.dataSource.getConnection();
-          String listar = "SELECT dimension, cantidad_cuotas, cuota_pura, gastos, bolsa_cemento, lote_barrio, lote_manzana, lote_parcela FROM ficha_control_lote where id_control = '"+id_control+"'"; 
+          String listar = "SELECT dimension, cantidad_cuotas, cuota_pura, gastos, bolsa_cemento, lote_barrio, lote_manzana, lote_parcela, cantidad_bc FROM ficha_control_lote where id_control = '"+id_control+"'"; 
           Statement st = connection.createStatement();
           rs = st.executeQuery(listar);
           while(rs.next()){
@@ -106,6 +106,7 @@ public class FichaControlDAO {
               fc.setBarrio(rs.getString(6));
               fc.setManzana(rs.getInt(7));
               fc.setParcela(rs.getInt(8));
+              fc.setCantidad_bc(rs.getBigDecimal(9));
               listaFichaControl.add(fc);
           }
         } catch (Exception e) {

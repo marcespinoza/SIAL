@@ -16,6 +16,7 @@ public class FichaDeControl {
     BigDecimal precio;
     BigDecimal gastos;
     BigDecimal bolsaCemento;
+    BigDecimal cantidad_bc;
     String dimension;
     int cantidadCuotas;
     BigDecimal cuotaPura;
@@ -97,5 +98,15 @@ public class FichaDeControl {
     public void setBolsaCemento(BigDecimal bolsaCemento) {
         this.bolsaCemento = bolsaCemento;
     }
+
+    public BigDecimal getCantidad_bc() {
+        return cantidad_bc;
+    }
+
+    public void setCantidad_bc(BigDecimal cantidad_bc) {
+        this.cantidad_bc = cantidad_bc;
+    }
+    
+    
     
 }

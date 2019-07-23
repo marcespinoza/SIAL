@@ -10,10 +10,17 @@ import Clases.ClientesPorCriterio;
 import conexion.Conexion;
 import java.sql.Connection;
 import java.sql.*;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.Period;
+import java.time.ZoneId;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import jdk.nashorn.internal.objects.Global;
 
 
 /**
@@ -237,7 +244,7 @@ public class ClienteDAO {
      return rs;
  }
  
-   public List<ClientesPorCriterio> clientesPorPropietarios(String apellido, String nombre){
+   public List<ClientesPorCriterio> clientesPorPropietarios(String apellido, String nombre, int dias){
      ResultSet rs;
      Connection connection = null;
      PreparedStatement preparedStmt = null;
@@ -275,7 +282,12 @@ public class ClienteDAO {
         cpp.setCuotas(rs.getInt(22));
         cpp.setUltimaCuota(rs.getDate(23));
         cpp.setTotal(rs.getBigDecimal(24));
-        clientesPorPropietario.add(cpp);                
+        Instant instant2 = Instant.ofEpochMilli(rs.getDate(23).getTime());
+        LocalDate fecha_pago = LocalDateTime.ofInstant(instant2, ZoneId.systemDefault()).toLocalDate();
+        long days = ChronoUnit.DAYS.between(fecha_pago, LocalDate.now());             
+        if(days>=dias){
+            clientesPorPropietario.add(cpp); 
+        };                       
      }
     } catch (SQLException ex) {
       System.out.println(ex.getMessage());

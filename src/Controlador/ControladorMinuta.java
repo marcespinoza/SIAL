@@ -183,6 +183,10 @@ public class ControladorMinuta implements MouseListener, ActionListener {
                 List<Minuta> listaMinutas = md.minutasPorRango2(new java.sql.Date(vistaMinuta.minutaDesde.getDate().getTime()) , new java.sql.Date(vistaMinuta.minutaHasta.getDate().getTime()));
                 llenarTabla(listaMinutas);
             }
+            
+            if(e.getSource()== vistaMinuta.actualizarButton){
+                llenarTablaFecha();
+            }
     }
 
     
@@ -325,6 +329,7 @@ public class ControladorMinuta implements MouseListener, ActionListener {
             tablaa.addCell(nuevo);
             tablaa.addCell(nuevo2);
             document.add(tablaa);
+            //----Agrega detalle deposito bancario----//
             if(deposito.compareTo(BigDecimal.ZERO) != 0){
                  PdfPTable dpto_bancario = new PdfPTable(2);
                  dpto_bancario.setWidthPercentage(50);
@@ -335,6 +340,17 @@ public class ControladorMinuta implements MouseListener, ActionListener {
                  dpto_bancario.addCell(dpto2);
                  document.add(dpto_bancario); 
             }   
+            //----Agrega detalle tarjeta debito----//
+            if(t_debito.compareTo(BigDecimal.ZERO) != 0){
+                 PdfPTable t_debitotable = new PdfPTable(2);
+                 t_debitotable.setWidthPercentage(50);
+                 PdfPCell tdebito1 = new PdfPCell(new Paragraph("Tarjeta debito $", f));
+                 PdfPCell tdebito2 = new PdfPCell(new Paragraph(String.format ("%.2f",t_debito), f));
+                 tdebito2.setHorizontalAlignment(Element.ALIGN_RIGHT);
+                 t_debitotable.addCell(tdebito1);
+                 t_debitotable.addCell(tdebito2);
+                 document.add(t_debitotable); 
+            }  
             //-----Total final------//
             PdfPTable total_final = new PdfPTable(2);
             total_final.setWidthPercentage(50);

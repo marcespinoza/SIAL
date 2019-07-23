@@ -48,8 +48,15 @@ import java.math.BigDecimal;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.Period;
+import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Properties;
 import java.util.logging.Level;
@@ -59,6 +66,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
+import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
 import javax.swing.event.TableModelEvent;
@@ -224,13 +232,33 @@ public class ControladorDetalleCuota implements ActionListener, TableModelListen
    public void llenarTabla(int idControl){
         detalleCuota.clear();
         detalleCuota = cd.listaDetalleCuota(idControl);
+        List<FichaDeControl> listaFichaControl = fcd.obtenerFichaControl(id_control); 
         DefaultTableModel model = (DefaultTableModel) dc.tablaDetallePago.getModel();
         model.setRowCount(0);
         SimpleDateFormat input = new SimpleDateFormat("dd-MM-YYYY");
         if(detalleCuota!=null){
             for(int i = 0; i < detalleCuota.size(); i++){
-                int nro_cuota = detalleCuota.get(i).getNro_cuota();
+                int nro_cuota = detalleCuota.get(i).getNro_cuota();                
                 String fecha = input.format(detalleCuota.get(i).getFecha());
+                if(nro_cuota==0){
+                    Date fechaIncripcion = detalleCuota.get(i).getFecha();
+                    Calendar inscripcion = new GregorianCalendar();
+                    inscripcion.setTime(fechaIncripcion);
+                    Calendar fechaActual = new GregorianCalendar();
+                    fechaActual.setTime(new Date());        
+                    int yearsInBetween = fechaActual.get(Calendar.YEAR) - inscripcion.get(Calendar.YEAR);
+                    int monthsDiff = fechaActual.get(Calendar.MONTH) - inscripcion.get(Calendar.MONTH);
+                    long meses = yearsInBetween*12 + monthsDiff;
+                    if(meses%12==0){
+                        BigDecimal cbc =  listaFichaControl.get(i).getCantidad_bc();
+                        BigDecimal precio_bc = listaFichaControl.get(i).getBolsaCemento();
+                        BigDecimal valor_cuota = cbc.multiply(precio_bc);
+                        BigDecimal gastos =valor_cuota.subtract((valor_cuota).divide(new BigDecimal(1.1),2, BigDecimal.ROUND_HALF_UP));
+
+                        System.out.println(meses+" "+gastos+" "+valor_cuota);
+                    }
+                    
+                }
                 String detalle = detalleCuota.get(i).getDetalle();
                 BigDecimal cuota_pura = detalleCuota.get(i).getCuota_pura();
                 BigDecimal gastos_admin = detalleCuota.get(i).getGastos_administrativos();
@@ -243,7 +271,8 @@ public class ControladorDetalleCuota implements ActionListener, TableModelListen
                 String observaciones = detalleCuota.get(i).getObservaciones();
                 int nro_recibo = detalleCuota.get(i).getNro_recibo();
                 int id_recibo = detalleCuota.get(i).getId_recibo();
-                String tipo_pago = detalleCuota.get(i).getTipo_pago();
+                String tipo_pago = detalleCuota.get(i).getTipo_pago(); 
+                
                 detallePago= new Object[] {nro_cuota, fecha, detalle, cuota_pura, gastos_admin, debe, haber, saldo, cemento_debe, cemento_haber,cemento_saldo, observaciones, nro_recibo, id_recibo, tipo_pago};                    
                 model.addRow(detallePago); 
             }
