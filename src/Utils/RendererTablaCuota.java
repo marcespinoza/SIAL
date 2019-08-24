@@ -19,12 +19,19 @@ public class RendererTablaCuota extends DefaultTableCellRenderer{
 private JLabel component;
     @Override
     public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-               component = (JLabel) super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column); //To change body of generated methods, choose Tools | Templates.
+        component = (JLabel) super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column); //To change body of generated methods, choose Tools | Templates.
           
-         if (row==0 && column==2) {
-        setBackground(Color.green);
+        if (row==0 && column==2) {
+             setBackground(Color.green);
         }else{
-             setBackground(null);}
+             setBackground(null);
+        }
+         //-----Pinto de rojo si el cliente esta dado de baja--//
+        if(table.getValueAt(row, 15)!=null){
+            if(table.getValueAt(row, 15).toString().equals("1")){
+                setBackground(Color.green);
+            }
+        }
          return component;
     }   
   }

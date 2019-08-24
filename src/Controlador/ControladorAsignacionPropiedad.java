@@ -56,7 +56,9 @@ public class ControladorAsignacionPropiedad implements ActionListener, KeyListen
         this.parent=parent;
         this.dni=dni;
         vistaAsignarPropiedad.tipo_actualizacion.add(vistaAsignarPropiedad.bolsaCemento);
-        vistaAsignarPropiedad.tipo_actualizacion.add(vistaAsignarPropiedad.empPublico);        
+        vistaAsignarPropiedad.tipo_actualizacion.add(vistaAsignarPropiedad.empPublico);  
+        vistaAsignarPropiedad.tipo_actualizacion.add(vistaAsignarPropiedad.cuota_fija);
+        vistaAsignarPropiedad.tipo_actualizacion.add(vistaAsignarPropiedad.cuota_fija_vble);
         vistaAsignarPropiedad.aceptarBtn.addActionListener(this);
         vistaAsignarPropiedad.cancelarBtn.addActionListener(this);
         vistaAsignarPropiedad.bolsa_cemento.addKeyListener(this);
@@ -265,7 +267,7 @@ public class ControladorAsignacionPropiedad implements ActionListener, KeyListen
         }else{
          vistaAsignarPropiedad.fch_suscripción.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
         }
-        if(vistaAsignarPropiedad.parcela.getSelectedItem()==null || (!vistaAsignarPropiedad.bolsaCemento.isSelected() && !vistaAsignarPropiedad.empPublico.isSelected())){
+        if(vistaAsignarPropiedad.parcela.getSelectedItem()==null || (!vistaAsignarPropiedad.bolsaCemento.isSelected() && !vistaAsignarPropiedad.empPublico.isSelected() && !vistaAsignarPropiedad.cuota_fija.isSelected() && !vistaAsignarPropiedad.cuota_fija_vble.isSelected())){
          vistaAsignarPropiedad.mensaje_error.setText("Complete todos los campos");
          bandera=false;
         }else{
@@ -298,6 +300,10 @@ public class ControladorAsignacionPropiedad implements ActionListener, KeyListen
            byte flag_cemento = 1; 
            if(vistaAsignarPropiedad.empPublico.isSelected()){
                flag_cemento = 0;
+           }else if(vistaAsignarPropiedad.cuota_fija.isSelected()){
+               flag_cemento = 2;
+           }else if(vistaAsignarPropiedad.cuota_fija_vble.isSelected()){
+               flag_cemento = 3;
            } 
            BigDecimal gastos =new BigDecimal(vistaAsignarPropiedad.cuota_total.getText()).subtract((new BigDecimal(vistaAsignarPropiedad.cuota_total.getText())).divide(new BigDecimal(1.1),2, BigDecimal.ROUND_HALF_UP));
            id_control = fichaControlDAO.altaFichaControl(vistaAsignarPropiedad.tipo_propiedad.getSelectedItem().toString(), vistaAsignarPropiedad.dimension.getText(), Integer.parseInt(vistaAsignarPropiedad.cantidad_cuotas.getText()),  new BigDecimal(vistaAsignarPropiedad.cuota_total.getText()).subtract(gastos), gastos, flag_cemento ,new BigDecimal(vistaAsignarPropiedad.bolsa_cemento.getText()), new java.sql.Date(vistaAsignarPropiedad.fch_suscripción.getDate().getTime()),String.valueOf(vistaAsignarPropiedad.barrio.getSelectedItem()),Integer.parseInt((String)vistaAsignarPropiedad.manzana.getSelectedItem()), Integer.parseInt((String)vistaAsignarPropiedad.parcela.getSelectedItem()));
@@ -308,7 +314,7 @@ public class ControladorAsignacionPropiedad implements ActionListener, KeyListen
        public void done() { 
            BigDecimal saldo = new BigDecimal(vistaAsignarPropiedad.cantidad_cuotas.getText()).multiply(new BigDecimal(vistaAsignarPropiedad.cuota_total.getText()));
            switch(vistaAsignarPropiedad.tipo_propiedad.getSelectedItem().toString()){
-               case "Terreno":cuotaDao.altaCuotaLote(new java.sql.Date(vistaAsignarPropiedad.fch_suscripción.getDate().getTime()), 0,"Saldo Inicio", new BigDecimal(0),new BigDecimal(0), saldo , new BigDecimal(0), saldo, saldo.divide(new BigDecimal(vistaAsignarPropiedad.bolsa_cemento.getText()),2, BigDecimal.ROUND_HALF_UP), new BigDecimal(0), saldo.divide(new BigDecimal(vistaAsignarPropiedad.bolsa_cemento.getText()),2, BigDecimal.ROUND_HALF_UP), "", "", id_control); break;
+               case "Terreno":cuotaDao.altaCuotaLote(new java.sql.Date(vistaAsignarPropiedad.fch_suscripción.getDate().getTime()), 0,"Saldo Inicio", new BigDecimal(0),new BigDecimal(0), saldo , new BigDecimal(0), saldo, saldo.divide(new BigDecimal(vistaAsignarPropiedad.bolsa_cemento.getText()),2, BigDecimal.ROUND_HALF_UP), new BigDecimal(0), saldo.divide(new BigDecimal(vistaAsignarPropiedad.bolsa_cemento.getText()),2, BigDecimal.ROUND_HALF_UP), "", "", id_control, 0); break;
                case "Departamento":cuotaDao.altaCuotaDpto(new java.sql.Date(vistaAsignarPropiedad.fch_suscripción.getDate().getTime()), 0,"Saldo Inicio", new BigDecimal(0),new BigDecimal(0), saldo , new BigDecimal(0), saldo, saldo.divide(new BigDecimal(vistaAsignarPropiedad.bolsa_cemento.getText())), new BigDecimal(0), saldo.divide(new BigDecimal(vistaAsignarPropiedad.bolsa_cemento.getText())), "", "", id_control);  break;
            }
            BigDecimal saldo_dcho_posesion = (saldo.multiply(new BigDecimal (50))).divide(new BigDecimal(100));

@@ -29,6 +29,7 @@ public class Cuota {
     int nro_recibo;
     int id_recibo;
     String tipo_pago;
+    String actualizacionCuota;
 
     public Cuota() {
     }
@@ -36,6 +37,16 @@ public class Cuota {
     public int getNro_cuota() {
         return nro_cuota;
     }
+
+    public String getActualizacionCuota() {
+        return actualizacionCuota;
+    }
+
+    public void setActualizacionCuota(String actualizacionCuota) {
+        this.actualizacionCuota = actualizacionCuota;
+    }
+    
+    
 
     public void setNro_cuota(int nro_cuota) {
         this.nro_cuota = nro_cuota;

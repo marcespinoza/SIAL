@@ -39,7 +39,16 @@ public class ClientesPorCriterio {
     String observacion;
     BigDecimal cuota_pura;
     BigDecimal total;
+    Date fecha_suscripcion;
 
+    public Date getFecha_suscripcion() {
+        return fecha_suscripcion;
+    }
+
+    public void setFecha_suscripcion(Date fecha_suscripcion) {
+        this.fecha_suscripcion = fecha_suscripcion;
+    }
+        
     public BigDecimal getTotal() {
         return total;
     }

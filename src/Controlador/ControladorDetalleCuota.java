@@ -31,6 +31,7 @@ import com.itextpdf.text.Phrase;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
+import conexion.Conexion;
 import java.awt.CardLayout;
 import java.awt.Desktop;
 import java.awt.Frame;
@@ -48,11 +49,6 @@ import java.math.BigDecimal;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
-import java.time.Instant;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.Period;
-import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -101,19 +97,23 @@ public class ControladorDetalleCuota implements ActionListener, TableModelListen
     File configFile = new File("config.properties");
     Boolean cuota = false;
     Boolean posesion = false;
+    String tipoAct;
     public static final String IMG = "src/Imagenes/logo_reporte.png";
     ResultSet derechoPosesion;
     List<Cuota> detalleCuota = new ArrayList();
     int baja_logica;
+    static org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(ControladorDetalleCuota.class.getName());  
+
     
     public ControladorDetalleCuota() {
     }
     
-    public ControladorDetalleCuota(ArrayList arrayList, int nro_cuotas,String apellido, String nombre, String telefono, String barrio, String calle,int numero,int id_control, int baja_logica) {
+    public ControladorDetalleCuota(ArrayList arrayList, int nro_cuotas,String apellido, String nombre, String telefono, String barrio, String calle,int numero,int id_control, int baja_logica, String tipoAct) {
         this.apellido=apellido;
         this.nombre=nombre;
         this.id_control=id_control;
         this.nro_cuotas=nro_cuotas;
+        this.tipoAct = tipoAct;
         if(baja_logica==1){
            dc.agregarPagoBtn.setEnabled(false);
            dc.eliminarPagoBtn.setEnabled(false);
@@ -145,6 +145,7 @@ public class ControladorDetalleCuota implements ActionListener, TableModelListen
         dc.eliminarPagoBtn.addActionListener(this);
         dc.generarReciboBtn.addActionListener(this);
         dc.resumenCliente.addActionListener(this);
+        dc.actualizarSaldoBtn.addActionListener(this);
         dc.tablaDetallePago.setDefaultRenderer(Object.class, r);
         //-------Limito la cantidad de caracteres de la celda editable-------//
         dc.tablaDetallePago.getColumnModel().getColumn(11).setCellEditor(new LimitCaracteres());
@@ -250,14 +251,12 @@ public class ControladorDetalleCuota implements ActionListener, TableModelListen
                     int monthsDiff = fechaActual.get(Calendar.MONTH) - inscripcion.get(Calendar.MONTH);
                     long meses = yearsInBetween*12 + monthsDiff;
                     if(meses%12==0){
+                        //===Obtengo la cantidad de bolsa de cemento que me cubre una cuota=====/
                         BigDecimal cbc =  listaFichaControl.get(i).getCantidad_bc();
                         BigDecimal precio_bc = listaFichaControl.get(i).getBolsaCemento();
                         BigDecimal valor_cuota = cbc.multiply(precio_bc);
-                        BigDecimal gastos =valor_cuota.subtract((valor_cuota).divide(new BigDecimal(1.1),2, BigDecimal.ROUND_HALF_UP));
-
-                        System.out.println(meses+" "+gastos+" "+valor_cuota);
-                    }
-                    
+                        BigDecimal gastos = valor_cuota.subtract((valor_cuota).divide(new BigDecimal(1.1),2, BigDecimal.ROUND_HALF_UP));
+                    }                    
                 }
                 String detalle = detalleCuota.get(i).getDetalle();
                 BigDecimal cuota_pura = detalleCuota.get(i).getCuota_pura();
@@ -272,8 +271,8 @@ public class ControladorDetalleCuota implements ActionListener, TableModelListen
                 int nro_recibo = detalleCuota.get(i).getNro_recibo();
                 int id_recibo = detalleCuota.get(i).getId_recibo();
                 String tipo_pago = detalleCuota.get(i).getTipo_pago(); 
-                
-                detallePago= new Object[] {nro_cuota, fecha, detalle, cuota_pura, gastos_admin, debe, haber, saldo, cemento_debe, cemento_haber,cemento_saldo, observaciones, nro_recibo, id_recibo, tipo_pago};                    
+                String actCuota = detalleCuota.get(i).getActualizacionCuota();
+                detallePago= new Object[] {nro_cuota, fecha, detalle, cuota_pura, gastos_admin, debe, haber, saldo, cemento_debe, cemento_haber,cemento_saldo, observaciones, nro_recibo, id_recibo, tipo_pago, actCuota};                    
                 model.addRow(detallePago); 
             }
             CardLayout cl = (CardLayout)(Ventana.panelPrincipal.getLayout());
@@ -296,10 +295,18 @@ public class ControladorDetalleCuota implements ActionListener, TableModelListen
         }
         //---------Boton Actualizar cuota----------//
         if(e.getSource() == dc.actualizarPagoBtn){
+         //----Si es cemento debo actualizar cuota y saldo----//   
+           if(tipoAct.equals("Emp. Público")){ 
             new ControladorActualizarCuota((Ventana) SwingUtilities.getWindowAncestor(dc),id_control);
             llenarTabla(id_control);
             llenarTablaDchoPosesion(id_control);
             llenarTablaActualizacion(id_control);
+           }else{
+                new ControladorActualizarCuotaSaldo((Ventana) SwingUtilities.getWindowAncestor(dc),id_control);
+           }
+        }
+        if(e.getSource()==dc.actualizarSaldoBtn){
+            new ControladorActualizarCuotaSaldo((Ventana) SwingUtilities.getWindowAncestor(dc), id_control);
         }
         if(e.getSource() == dc.modificarPagoBtn){
             int row = dc.tablaDetallePago.getSelectedRow();             

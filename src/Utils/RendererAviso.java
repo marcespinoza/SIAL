@@ -5,6 +5,7 @@
  */
 package Utils;
 
+import java.awt.Color;
 import java.awt.Component;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
@@ -16,11 +17,35 @@ import javax.swing.table.DefaultTableCellRenderer;
  */
 public class RendererAviso extends DefaultTableCellRenderer{
     
-    ImageIcon icon = new ImageIcon(getClass().getResource("/Imagenes/iconos/alerta.png"));
     JLabel jLabel = new JLabel();
+    ImageIcon icon = new ImageIcon(getClass().getResource("/Imagenes/iconos/alerta.png"));
+    ImageIcon icon2 = new ImageIcon(getClass().getResource("/Imagenes/iconos/alerta2.png"));
     @Override
     public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-        
-         return (Component) value;
+        jLabel = (JLabel) super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column); //To change body of generated methods, choose Tools | Templates.
+
+        if(isSelected){
+            setBackground(Color.YELLOW);
+        }else{
+            setBackground(Color.WHITE);
+        }
+         //-----Pinto de rojo si el cliente esta dado de baja--//
+        if(table.getValueAt(row, 10)!=null){
+            if(table.getValueAt(row, 10).toString().equals("1")){                
+                jLabel.setBackground(Color.RED);
+            }
+        }
+        if(table.getValueAt(row, 21)!=null){
+            if(table.getValueAt(row, 20).toString().equals("1")){                
+                jLabel.setIcon(icon);
+            }else if(table.getValueAt(row, 20).toString().equals("2")){                
+                jLabel.setIcon(icon2);
+                jLabel.setHorizontalAlignment(CENTER);
+            }
+            else{
+                jLabel.setIcon(null);
+            }
+        }
+         return jLabel;
     }   
   }

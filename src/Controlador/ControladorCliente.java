@@ -328,8 +328,7 @@ public class ControladorCliente implements ActionListener, MouseListener, TableM
             referencia.add(vistaClientes.parentesco.getText());
             new ControladorEditarCliente((Ventana) SwingUtilities.getWindowAncestor(vistaClientes), cliente, referencia);
             llenarTabla();
-            }
-            else{
+            } else{
                  JOptionPane.showMessageDialog(null, "Seleccione un cliente de la lista", "Atención", JOptionPane.INFORMATION_MESSAGE, null);
             }
           }
@@ -338,9 +337,8 @@ public class ControladorCliente implements ActionListener, MouseListener, TableM
            int row = vistaClientes.tablaCliente.getSelectedRow();
            if(row != -1){
                if(vistaClientes.tablaCliente.getModel().getValueAt(vistaClientes.tablaCliente.convertRowIndexToModel(row), 11) != null){
-//                   datosCliente.clear();
-//                   datosCliente.add(1, Integer.parseInt(vistaClientes.tablaCliente.getModel().getValueAt(vistaClientes.tablaCliente.convertRowIndexToModel(row), 12).toString()));
-                   new ControladorDetalleCuota(datosCliente, Integer.parseInt(vistaClientes.tablaCliente.getModel().getValueAt(vistaClientes.tablaCliente.convertRowIndexToModel(row), 12).toString()), vistaClientes.tablaCliente.getModel().getValueAt(vistaClientes.tablaCliente.convertRowIndexToModel(row), 0).toString(),vistaClientes.tablaCliente.getModel().getValueAt(vistaClientes.tablaCliente.convertRowIndexToModel(row), 1).toString(), vistaClientes.tablaCliente.getModel().getValueAt(vistaClientes.tablaCliente.convertRowIndexToModel(row), 3).toString(), vistaClientes.tablaCliente.getModel().getValueAt(vistaClientes.tablaCliente.convertRowIndexToModel(row), 5).toString(), vistaClientes.tablaCliente.getModel().getValueAt(vistaClientes.tablaCliente.convertRowIndexToModel(row), 6).toString(), Integer.parseInt(vistaClientes.tablaCliente.getModel().getValueAt(vistaClientes.tablaCliente.convertRowIndexToModel(row), 7).toString()),  Integer.parseInt(vistaClientes.tablaCliente.getModel().getValueAt(vistaClientes.tablaCliente.convertRowIndexToModel(row), 11).toString()),Integer.parseInt(vistaClientes.tablaCliente.getModel().getValueAt(vistaClientes.tablaCliente.convertRowIndexToModel(row), 10).toString()));
+                   String tipo_actualizacion = vistaClientes.tablaCliente.getModel().getValueAt(vistaClientes.tablaCliente.convertRowIndexToModel(row), 19).toString();
+                   new ControladorDetalleCuota(datosCliente, Integer.parseInt(vistaClientes.tablaCliente.getModel().getValueAt(vistaClientes.tablaCliente.convertRowIndexToModel(row), 12).toString()), vistaClientes.tablaCliente.getModel().getValueAt(vistaClientes.tablaCliente.convertRowIndexToModel(row), 0).toString(),vistaClientes.tablaCliente.getModel().getValueAt(vistaClientes.tablaCliente.convertRowIndexToModel(row), 1).toString(), vistaClientes.tablaCliente.getModel().getValueAt(vistaClientes.tablaCliente.convertRowIndexToModel(row), 3).toString(), vistaClientes.tablaCliente.getModel().getValueAt(vistaClientes.tablaCliente.convertRowIndexToModel(row), 5).toString(), vistaClientes.tablaCliente.getModel().getValueAt(vistaClientes.tablaCliente.convertRowIndexToModel(row), 6).toString(), Integer.parseInt(vistaClientes.tablaCliente.getModel().getValueAt(vistaClientes.tablaCliente.convertRowIndexToModel(row), 7).toString()),  Integer.parseInt(vistaClientes.tablaCliente.getModel().getValueAt(vistaClientes.tablaCliente.convertRowIndexToModel(row), 11).toString()),Integer.parseInt(vistaClientes.tablaCliente.getModel().getValueAt(vistaClientes.tablaCliente.convertRowIndexToModel(row), 10).toString()), tipo_actualizacion);
                }else{
                   JOptionPane.showMessageDialog(null, "Debe asignar una propiedad para ver los detalles", "Atención", JOptionPane.INFORMATION_MESSAGE, null); 
                }
@@ -444,6 +442,8 @@ public class ControladorCliente implements ActionListener, MouseListener, TableM
         String cumpleaños;
         String tipoActualizacion;
         Date date = new Date();
+        Date fechaActualizacion;
+        Date fechaSuscripcion;
         LocalDate fecha_actual = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
         vistaClientes.nroClientes.setText(String.valueOf(listaClientes.size()));
         try {
@@ -457,6 +457,8 @@ public class ControladorCliente implements ActionListener, MouseListener, TableM
                    int dni = listaClientes.get(i).getDni();
                    String apellidos = listaClientes.get(i).getApellidos();
                    String nombres = listaClientes.get(i).getNombres();
+                   Instant fchSuscripcion;
+                   LocalDate fecha_suscripcion;
                    Date fecha_nacimiento = listaClientes.get(i).getFecha_nacimiento();
                     //------Controlo dia y mes para saber si es el cumpleaños--------//
                     Instant instant = Instant.ofEpochMilli(fecha_nacimiento.getTime());
@@ -476,20 +478,24 @@ public class ControladorCliente implements ActionListener, MouseListener, TableM
                    BigDecimal gastos = listaClientes.get(i).getGastos();
                    BigDecimal bolsa_cemento = listaClientes.get(i).getBolsa_cemento();
                    if(listaClientes.get(i).getFecha_actualizacion()!=null && listaClientes.get(i).getBandera_cemento()==1){
-                   Date fechaActualizacion = listaClientes.get(i).getFecha_actualizacion();
-                   Instant instant2 = Instant.ofEpochMilli(fechaActualizacion.getTime());
-                   LocalDate fecha_actualizacion = LocalDateTime.ofInstant(instant2, ZoneId.systemDefault()).toLocalDate();   
+                   fechaActualizacion = listaClientes.get(i).getFecha_actualizacion();
+                   fechaSuscripcion = listaClientes.get(i).getFecha_suscripcion();
+                   fchSuscripcion = Instant.ofEpochMilli(fechaSuscripcion.getTime());
+                   Instant fchActualizacion = Instant.ofEpochMilli(fechaActualizacion.getTime());
+                   LocalDate fecha_actualizacion = LocalDateTime.ofInstant(fchActualizacion, ZoneId.systemDefault()).toLocalDate();
+                   fecha_suscripcion = LocalDateTime.ofInstant(fchSuscripcion, ZoneId.systemDefault()).toLocalDate();
                    fch_actualizacion = sdf.format(fechaActualizacion);
                     //----Controlo si ya paso 6 meses de la ultima fecha de actualizacion de la bolsa de cemento----//
                      if(((Period.between(fecha_actualizacion, LocalDate.now())).getMonths())%6==0 && (Period.between(fecha_actualizacion, LocalDate.now())).getMonths()!=0){
                          actualizar_cemento = "1";
-                         icono.setIcon(icon);
-                         icono.setHorizontalAlignment(SwingConstants.CENTER);
+//                         icono.setIcon(icon);
+//                         icono.setHorizontalAlignment(SwingConstants.CENTER);
                      }
-                      if(((Period.between(fecha_actualizacion, LocalDate.now())).getMonths())%12==0 && (Period.between(fecha_actualizacion, LocalDate.now())).getMonths()!=0){
-                         actualizar_cemento = "1";
-                         icono.setIcon(icon);
-                         icono.setHorizontalAlignment(SwingConstants.CENTER);
+                      if(((Period.between(fecha_suscripcion, LocalDate.now())).getMonths())%12==0 ){
+                         actualizar_cemento = "2";
+                         System.out.println("suscrip"+idControl);
+//                         icono.setIcon(icon);
+//                         icono.setHorizontalAlignment(SwingConstants.CENTER);
                      }
                     }else{
                         fch_actualizacion = "";
@@ -498,16 +504,18 @@ public class ControladorCliente implements ActionListener, MouseListener, TableM
                     String barrio_prop = listaClientes.get(i).getBarrio();
                     String manzana_prop = listaClientes.get(i).getManzana();
                     String parcela_prop = listaClientes.get(i).getParcela();
-                    if(listaClientes.get(i).getBandera_cemento()==0){
-                        tipoActualizacion = "Emp. Público";
+                    switch(listaClientes.get(i).getBandera_cemento()){
+                        case 0: tipoActualizacion = "Emp. Público"; break;
+                        case 2: tipoActualizacion = "C. Fija"; break;
+                        case 3: tipoActualizacion = "C. fija vble."; break;
+                        default: break;
                     }
                     BigDecimal cuota_pura = listaClientes.get(i).getCuota_pura();   
                     int nroCuota = listaClientes.get(i).getCuotas();
                     String ultimaCuota = sdf.format(listaClientes.get(i).getUltimaCuota());
                     BigDecimal total = listaClientes.get(i).getTotal();
-                    clientes = new Object[] {apellidos, nombres, dni, telefono1, telefono2, barrio, calle, numero, fecha_nacimiento, trabajo, baja, idControl, cantidad_cuotas, gastos, bolsa_cemento, fch_actualizacion, barrio_prop, manzana_prop, parcela_prop, tipoActualizacion, actualizar_cemento, cumpleaños, cuota_pura, icono, nroCuota, ultimaCuota, total};
-                    model.addRow(clientes); 
-                    
+                    clientes = new Object[] {apellidos, nombres, dni, telefono1, telefono2, barrio, calle, numero, fecha_nacimiento, trabajo, baja, idControl, cantidad_cuotas, gastos, bolsa_cemento, fch_actualizacion, barrio_prop, manzana_prop, parcela_prop, tipoActualizacion, actualizar_cemento, cumpleaños, cuota_pura, "", nroCuota, ultimaCuota, total};
+                    model.addRow(clientes);                     
                     }
             }
             controlCumpleaños();                

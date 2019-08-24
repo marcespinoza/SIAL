@@ -164,8 +164,7 @@ public class FichaControlDAO {
              PreparedStatement ps = null;
         try {
             con = conexion.dataSource.getConnection();
-            ps = con.prepareStatement(
-                    "UPDATE ficha_control_lote SET bolsa_cemento = ?, fecha_actualizacion = ? WHERE id_control = ?");
+            ps = con.prepareStatement("UPDATE ficha_control_lote SET bolsa_cemento = ?, fecha_actualizacion = ? WHERE id_control = ?");
             ps.setBigDecimal(1, precio_cemento);
             ps.setDate(2, fecha_actualizacion);
             ps.setString(3, id_control);
@@ -219,5 +218,29 @@ public class FichaControlDAO {
               }
         }
   }
+    
+    //------Actualiza valor cuota y nuevo saldo------//
+//  public void actualizarSaldo( BigDecimal gastos, BigDecimal cuota_pura, int id_control){
+//      Connection con = null;
+//        try {
+//            con = conexion.dataSource.getConnection();
+//            PreparedStatement ps = con.prepareStatement("UPDATE ficha_control_lote SET gastos = ? WHERE id_control = ?");
+//            ps.setBigDecimal(1,gastos);
+//            ps.setBigDecimal(2, cuota_pura);
+//            ps.setInt(3, id_control);
+//            // call executeUpdate to execute our sql update statement
+//            ps.executeUpdate();
+//            ps.close();
+//            con.close();
+//        } catch (SQLException ex) {
+//            Logger.getLogger(CuotaDAO.class.getName()).log(Level.SEVERE, null, ex);
+//        }finally{
+//          try {
+//              con.close();
+//          } catch (SQLException ex) {
+//              Logger.getLogger(CuotaDAO.class.getName()).log(Level.SEVERE, null, ex);
+//          }
+//        }
+//  }
     
 }

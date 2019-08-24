@@ -20,14 +20,18 @@ import javax.swing.table.DefaultTableCellRenderer;
 public class RendererActualizacion extends DefaultTableCellRenderer{
     
     Color verde = new Color(0, 151, 0);
+    Color violeta= new Color(167, 33, 199);
     private JLabel c;
     
     @Override
     public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
      c = (JLabel) super.getTableCellRendererComponent(table, value, isSelected, hasFocus,row, column);
         if(table.getValueAt(row, 19).toString().equals("Cemento")){
-           c.setForeground(Color.blue);
-          
+           c.setForeground(Color.blue);          
+        }else if (table.getValueAt(row, 19).toString().equals("C. Fija")){
+            c.setForeground(Color.DARK_GRAY); 
+        }else if (table.getValueAt(row, 19).toString().equals("C. fija vble.")){
+            c.setForeground(violeta); 
         }else{
             c.setForeground(verde);
         }

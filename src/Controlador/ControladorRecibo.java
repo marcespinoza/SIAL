@@ -248,7 +248,7 @@ public class ControladorRecibo implements ActionListener{
     
     public void generarRecibo(){
             Document document= new Document(PageSize.A4);
-            DateFormat fecha1 = new SimpleDateFormat("dd/MM/yyyy");
+            DateFormat fecha1 = new SimpleDateFormat("dd/MM/yyyy_HH:mm");
             java.util.Date date = new java.util.Date();
         try {
             pathRecibo = new File(dc.path.getText(), "Recibo-"+ar.nro_recibo.getText()+".pdf");

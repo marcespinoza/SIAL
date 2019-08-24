@@ -11,6 +11,7 @@ import Modelo.CuotaDAO;
 import Modelo.DchoPosesionDAO;
 import Modelo.FichaControlDAO;
 import Clases.LimitadorCaracteres;
+import static Controlador.ControladorLogin.log;
 import Vista.Dialogs.AltaCuota;
 import Vista.Dialogs.Progress;
 import Vista.Frame.Ventana;
@@ -51,7 +52,7 @@ public class ControladorAltaCuota implements ActionListener, KeyListener{
     BigDecimal cuota_total;
     BigDecimal gastos;
     private int filas_insertadas=0;
-    static org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(ControladorCliente.class.getName());
+    static org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(ControladorAltaCuota.class.getName());
     public ControladorAltaCuota(Frame parent, int id_control, int row_count, int nro_cuota) {
         this.parent = parent;
         this.id_control=id_control;
@@ -257,13 +258,13 @@ public class ControladorAltaCuota implements ActionListener, KeyListener{
                    cuota=listaC.get(indice).getNro_cuota();
                    indice = indice + 1;
                }
-                 filas_insertadas = cd.altaCuotaLote(new java.sql.Date(date.getTime()),listaC.get(indice).getNro_cuota()-1, detalle, cuota_pura, gastos, new BigDecimal(0), haber, saldo_actual, new BigDecimal(0), cemento_haber, cemento_saldo, observaciones, tipoPago, id_control);  
+                 filas_insertadas = cd.altaCuotaLote(new java.sql.Date(date.getTime()),listaC.get(indice).getNro_cuota()-1, detalle, cuota_pura, gastos, new BigDecimal(0), haber, saldo_actual, new BigDecimal(0), cemento_haber, cemento_saldo, observaciones, tipoPago, id_control, 0);  
 
               }else{
-                 filas_insertadas = cd.altaCuotaLote(new java.sql.Date(date.getTime()),nro_cuota, detalle, cuota_pura, gastos, new BigDecimal(0), haber, saldo_actual, new BigDecimal(0), cemento_haber, cemento_saldo, observaciones, tipoPago, id_control);                    
+                 filas_insertadas = cd.altaCuotaLote(new java.sql.Date(date.getTime()),nro_cuota, detalle, cuota_pura, gastos, new BigDecimal(0), haber, saldo_actual, new BigDecimal(0), cemento_haber, cemento_saldo, observaciones, tipoPago, id_control, 0);                    
               }
            }else{
-                filas_insertadas = cd.altaCuotaLote(new java.sql.Date(date.getTime()),Integer.parseInt(ac.nro_cuota.getText()), detalle, cuota_pura, gastos, new BigDecimal(0), haber, saldo_actual, new BigDecimal(0), cemento_haber, cemento_saldo, observaciones, tipoPago, id_control);  
+                filas_insertadas = cd.altaCuotaLote(new java.sql.Date(date.getTime()),Integer.parseInt(ac.nro_cuota.getText()), detalle, cuota_pura, gastos, new BigDecimal(0), haber, saldo_actual, new BigDecimal(0), cemento_haber, cemento_saldo, observaciones, tipoPago, id_control, 0);  
            }
            if (filas_insertadas==1) {
                ac.dispose();

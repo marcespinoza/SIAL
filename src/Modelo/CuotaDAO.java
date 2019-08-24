@@ -37,7 +37,7 @@ public class CuotaDAO {
           List<Cuota> cuotas = new ArrayList<>();
      try {
           connection = conexion.dataSource.getConnection();
-          String listar = "SELECT nro_cuota, fecha, detalle, cuota_pura, gastos_administrativos, debe, haber, saldo, cemento_debe, cemento_haber, cemento_saldo, observaciones, tipo_pago from linea_control_lote where id_Control = '"+idControl+"' order by saldo desc "; 
+          String listar = "SELECT nro_cuota, fecha, detalle, cuota_pura, gastos_administrativos, debe, haber, saldo, cemento_debe, cemento_haber, cemento_saldo, observaciones, tipo_pago from linea_control_lote where id_Control = '"+idControl+"' order by fecha asc "; 
           Statement st = connection.createStatement();
           rs = st.executeQuery(listar);
            while (rs.next()) {
@@ -75,7 +75,7 @@ public class CuotaDAO {
           List<Cuota> cuotas = new ArrayList<>();
      try {
           connection = conexion.dataSource.getConnection();
-          String listar = "SELECT nro_cuota, fecha, detalle, cuota_pura, gastos_administrativos, debe, haber, saldo, cemento_debe, cemento_haber, cemento_saldo, observaciones, nro_recibo, id_recibo, tipo_pago from linea_control_lote where id_Control = '"+idControl+"' order by nro_cuota, cemento_saldo DESC" ; 
+          String listar = "SELECT nro_cuota, fecha, detalle, cuota_pura, gastos_administrativos, debe, haber, saldo, cemento_debe, cemento_haber, cemento_saldo, observaciones, nro_recibo, id_recibo, tipo_pago, actualizacion_cuota from linea_control_lote where id_Control = '"+idControl+"' order by nro_cuota, cemento_saldo DESC" ; 
           Statement st = connection.createStatement();
           rs = st.executeQuery(listar);
           while (rs.next()) {
@@ -95,6 +95,7 @@ public class CuotaDAO {
                 c.setNro_recibo(rs.getInt(13));
                 c.setId_recibo(rs.getInt(14));
                 c.setTipo_pago(rs.getString(15));
+                c.setActualizacionCuota(rs.getString(16));
                 cuotas.add(c);
             }  
         } catch (Exception e) {
@@ -109,13 +110,13 @@ public class CuotaDAO {
      return cuotas;
     }
     
-    public int altaCuotaLote(Date fecha_pago, int nro_cuota, String detalle, BigDecimal cuota_pura, BigDecimal gastos, BigDecimal debe, BigDecimal haber, BigDecimal saldo, BigDecimal cemento_debe, BigDecimal cemento_haber, BigDecimal cemento_saldo, String observaciones, String tipo_pago, int id_control){
+    public int altaCuotaLote(Date fecha_pago, int nro_cuota, String detalle, BigDecimal cuota_pura, BigDecimal gastos, BigDecimal debe, BigDecimal haber, BigDecimal saldo, BigDecimal cemento_debe, BigDecimal cemento_haber, BigDecimal cemento_saldo, String observaciones, String tipo_pago, int id_control, int act_saldo){
         int filasAfectadas=0;
         Connection connection = null;
         PreparedStatement ps = null;
      try {
          connection = conexion.dataSource.getConnection();
-         String insertar = "Insert into linea_control_lote (fecha, nro_cuota, detalle, cuota_pura, gastos_administrativos, debe, haber, saldo, cemento_debe, cemento_haber, cemento_saldo, observaciones, tipo_pago, id_Control) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ";
+         String insertar = "Insert into linea_control_lote (fecha, nro_cuota, detalle, cuota_pura, gastos_administrativos, debe, haber, saldo, cemento_debe, cemento_haber, cemento_saldo, observaciones, tipo_pago, id_Control, actualizacion_cuota) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ";
          ps = connection.prepareStatement(insertar);
          ps.setDate(1, fecha_pago);
          ps.setInt(2, nro_cuota);
@@ -131,6 +132,7 @@ public class CuotaDAO {
          ps.setString(12, observaciones);
          ps.setString(13, tipo_pago);
          ps.setInt(14, id_control);
+         ps.setInt(15, act_saldo);
          filasAfectadas = ps.executeUpdate();         
      } catch (SQLException e) {  
            System.out.println(e.getMessage());
@@ -174,7 +176,7 @@ public class CuotaDAO {
           List<Cuota> listaCuota = new ArrayList<>();
         try {           
             connection = conexion.dataSource.getConnection();
-            String bandera = "select nro_cuota from linea_control_lote where id_control='"+idControl+"' order by nro_cuota asc";
+            String bandera = "select nro_cuota from linea_control_lote where id_control='"+idControl+"' and actualizacion_cuota='0' order by nro_cuota asc";
             Statement st = connection.createStatement();
             rs = st.executeQuery(bandera);
             while (rs.next()) {
@@ -313,5 +315,7 @@ public class CuotaDAO {
           }
        }
   }
+  
+  
     
 }
