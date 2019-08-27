@@ -307,6 +307,8 @@ public class ControladorDetalleCuota implements ActionListener, TableModelListen
         }
         if(e.getSource()==dc.actualizarSaldoBtn){
             new ControladorActualizarCuotaSaldo((Ventana) SwingUtilities.getWindowAncestor(dc), id_control);
+            llenarTabla(id_control);
+            llenarTablaDchoPosesion(id_control);
         }
         if(e.getSource() == dc.modificarPagoBtn){
             int row = dc.tablaDetallePago.getSelectedRow();             

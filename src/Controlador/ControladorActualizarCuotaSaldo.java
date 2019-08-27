@@ -19,9 +19,13 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.SwingWorker;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
@@ -92,7 +96,14 @@ public class ControladorActualizarCuotaSaldo implements ActionListener{
     }
 
     public void actualizarSaldo(){
-        Date date = new Date();
+         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+           String dateString = format.format( new Date()   );
+           Date date = null;  
+            try {
+            date = format.parse ( dateString );
+            } catch (ParseException ex) {
+            Logger.getLogger(ControladorAltaCuota.class.getName()).log(Level.SEVERE, null, ex);
+             }
         int filas_insertadas = cd.altaCuotaLote(new java.sql.Date(date.getTime()),cuota, "ACTUALIZACION ", cuota_pura, gastos, new BigDecimal(0), BigDecimal.ZERO, nuevo_saldo, new BigDecimal(0), BigDecimal.ZERO, cemento_saldo, "ACTUALIZACION", "", id_control, 1);  
         fc.actualizarValorCuota(gastos, cuota_pura, id_control);
    

@@ -26,6 +26,8 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -229,7 +231,14 @@ public class ControladorAltaCuota implements ActionListener, KeyListener{
     
     
     public void calcularValores(BigDecimal ultimo_saldo, BigDecimal cuota_pura, BigDecimal gastos, BigDecimal bolsa_cemento, BigDecimal saldo_bolsa_cemento){  
-           Date date = new Date();
+           SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+           String dateString = format.format( new Date()   );
+           Date   date = null;  
+            try {
+            date = format.parse ( dateString );
+              } catch (ParseException ex) {
+            Logger.getLogger(ControladorAltaCuota.class.getName()).log(Level.SEVERE, null, ex);
+             }
            List<Cuota>listaC;
            String detalle = ac.detallePago.getText();
            String observaciones = ac.observacionesPago.getText();

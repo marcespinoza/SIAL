@@ -54,6 +54,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.time.LocalDate;
+import static java.time.LocalDate.now;
 import java.time.LocalDateTime;
 import java.time.Period;
 import java.time.ZoneId;
@@ -77,6 +78,8 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableRowSorter;
 import org.apache.log4j.Logger;
+import org.joda.time.Days;
+import org.joda.time.Years;
 
 /**
  *
@@ -444,6 +447,8 @@ public class ControladorCliente implements ActionListener, MouseListener, TableM
         Date date = new Date();
         Date fechaActualizacion;
         Date fechaSuscripcion;
+        Period age;
+        int years;
         LocalDate fecha_actual = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
         vistaClientes.nroClientes.setText(String.valueOf(listaClientes.size()));
         try {
@@ -488,14 +493,11 @@ public class ControladorCliente implements ActionListener, MouseListener, TableM
                     //----Controlo si ya paso 6 meses de la ultima fecha de actualizacion de la bolsa de cemento----//
                      if(((Period.between(fecha_actualizacion, LocalDate.now())).getMonths())%6==0 && (Period.between(fecha_actualizacion, LocalDate.now())).getMonths()!=0){
                          actualizar_cemento = "1";
-//                         icono.setIcon(icon);
-//                         icono.setHorizontalAlignment(SwingConstants.CENTER);
                      }
-                      if(((Period.between(fecha_suscripcion, LocalDate.now())).getMonths())%12==0 ){
+                    age = Period.between(fecha_suscripcion, LocalDate.now());
+                    years = age.getYears();
+                    if(years >0 ){
                          actualizar_cemento = "2";
-                         System.out.println("suscrip"+idControl);
-//                         icono.setIcon(icon);
-//                         icono.setHorizontalAlignment(SwingConstants.CENTER);
                      }
                     }else{
                         fch_actualizacion = "";
