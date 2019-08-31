@@ -8,6 +8,7 @@ package Controlador;
 import Clases.Cuota;
 import Clases.FichaDeControl;
 import static Controlador.ControladorAltaCuota.log;
+import Modelo.ActualizacionCementoDAO;
 import Modelo.ActualizacionEmpleadoDAO;
 import Modelo.CuotaDAO;
 import Modelo.FichaControlDAO;
@@ -22,6 +23,7 @@ import java.math.RoundingMode;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
@@ -42,8 +44,9 @@ public class ControladorActualizarCuotaSaldo implements ActionListener{
     Ventana ventana;
     int id_control, cuota;
     FichaControlDAO fcd = new FichaControlDAO();
+    ActualizacionCementoDAO acd = new ActualizacionCementoDAO();
     CuotaDAO cd = new CuotaDAO();
-    BigDecimal cdc, precio_bc, nueva_cuota, gastos, cuota_pura, nuevo_saldo, cemento_saldo;
+    BigDecimal cdc, precio_bc, nueva_cuota, gastos, cuota_pura, nuevo_saldo, cemento_saldo, cantidad_bc, cuota_anterior;
 
     public ControladorActualizarCuotaSaldo(Ventana ventana, int id_control) {
         this.ventana=ventana;
@@ -56,16 +59,14 @@ public class ControladorActualizarCuotaSaldo implements ActionListener{
     }
     
     public void calcularValores(){
-         List<Cuota> lcuotas = new ArrayList<>();
-         List<Cuota>listaC;
-         List<FichaDeControl> listaFichaControl = fcd.obtenerFichaControl(id_control);
-         lcuotas = cd.listaDetalleCuotaXsaldo(id_control); 
-         BigDecimal cbc =  listaFichaControl.get(0).getCantidad_bc();
-         precio_bc = listaFichaControl.get(0).getBolsaCemento();
-         cemento_saldo =  lcuotas.get(lcuotas.size()-1).getCemento_saldo();
-         nueva_cuota = cbc.multiply(precio_bc);
-         gastos = nueva_cuota.subtract((nueva_cuota).divide(new BigDecimal(1.1),2, BigDecimal.ROUND_HALF_UP));
-         cuota_pura = nueva_cuota.subtract(gastos);
+        List<Cuota> lcuotas = new ArrayList<>();
+        List<Cuota>listaC;
+        List<FichaDeControl> listaFichaControl = fcd.obtenerFichaControl(id_control);
+        lcuotas = cd.listaDetalleCuotaXsaldo(id_control); 
+        BigDecimal cbc =  listaFichaControl.get(0).getCantidad_bc();
+        precio_bc = listaFichaControl.get(0).getBolsaCemento();
+        cemento_saldo =  lcuotas.get(lcuotas.size()-1).getCemento_saldo(); 
+        cuota_anterior = listaFichaControl.get(0).getCuotaPura().add(listaFichaControl.get(0).getGastos());
          //------Calculo el nro de cuota--------//
         cuota = 0;
         int indice = 0;
@@ -79,6 +80,10 @@ public class ControladorActualizarCuotaSaldo implements ActionListener{
           }
         }
         int cant_cuotas = 180-(listaC.size()-1);
+        cantidad_bc = cemento_saldo.divide(new BigDecimal(cant_cuotas),2, BigDecimal.ROUND_HALF_UP);
+        nueva_cuota = cantidad_bc.multiply(precio_bc);
+        gastos = nueva_cuota.subtract((nueva_cuota).divide(new BigDecimal(1.12),2, BigDecimal.ROUND_HALF_UP));
+        cuota_pura = nueva_cuota.subtract(gastos);
         nuevo_saldo = nueva_cuota.multiply(new BigDecimal(cant_cuotas));
         acs.cuotaActualizada.setText(String.valueOf(nueva_cuota.setScale(2, RoundingMode.HALF_UP)));
         acs.saldoActualizado.setText(String.valueOf(nuevo_saldo.setScale(2, RoundingMode.HALF_UP)));
@@ -96,21 +101,16 @@ public class ControladorActualizarCuotaSaldo implements ActionListener{
     }
 
     public void actualizarSaldo(){
-         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-           String dateString = format.format( new Date()   );
-           Date date = null;  
-            try {
-            date = format.parse ( dateString );
-            } catch (ParseException ex) {
-            Logger.getLogger(ControladorAltaCuota.class.getName()).log(Level.SEVERE, null, ex);
-             }
-        int filas_insertadas = cd.altaCuotaLote(new java.sql.Date(date.getTime()),cuota, "ACTUALIZACION ", cuota_pura, gastos, new BigDecimal(0), BigDecimal.ZERO, nuevo_saldo, new BigDecimal(0), BigDecimal.ZERO, cemento_saldo, "ACTUALIZACION", "", id_control, 1);  
-        fc.actualizarValorCuota(gastos, cuota_pura, id_control);
-   
-         if (filas_insertadas==1) {
-               acs.dispose();
-               filas_insertadas=0;
-               log.info(Ventana.nombreUsuario.getText() + " - Alta pago");
+        long fechaActual = Calendar.getInstance().getTimeInMillis();
+        Date date = new Date();
+        int filas_insertadas = cd.altaCuotaLote(new java.sql.Timestamp(fechaActual),cuota, "", BigDecimal.ZERO, BigDecimal.ZERO, new BigDecimal(0), nueva_cuota, nuevo_saldo, new BigDecimal(0), cantidad_bc, cemento_saldo, "ACTUALIZACION", "", id_control, 1);  
+        fc.actualizarValorCuota(gastos, cuota_pura, id_control);         
+        acd.actualizarCemento(String.valueOf(id_control), new java.sql.Date(date.getTime()), cuota_anterior , nueva_cuota);
+
+        if (filas_insertadas==1) {
+           acs.dispose();
+           filas_insertadas=0;
+           log.info(Ventana.nombreUsuario.getText() + " - Alta pago");
          } 
     }
     

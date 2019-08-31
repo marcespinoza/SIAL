@@ -41,7 +41,7 @@ public class ClienteDAO {
      List<ClientesPorCriterio> clientesPorLotes = new ArrayList<>();
      try {
           connection = conexion.dataSource.getConnection();
-          String listar = "SELECT c.Dni, c.Apellidos, c.Nombres,c.fecha_nacimiento, c.barrio, c.calle, c.numero, c.Telefono1, c.telefono2, c.trabajo, h.baja, f.Id_control, f.cantidad_cuotas, f.gastos, f.bolsa_cemento, f.fecha_actualizacion, f.lote_Barrio, f.lote_Manzana, f.lote_Parcela,f.bandera_cemento, f.cuota_pura, IF(COUNT(lc.Nro_cuota)=0,0, COUNT(lc.Nro_cuota)) as cuotas, IFNULL((SELECT lc.Fecha FROM linea_control_lote lc WHERE lc.id_control=f.Id_control ORDER BY lc.Fecha DESC LIMIT 1 ), 0000-00-00) as ultimaCuota, SUM(lc.Haber) as total   from ((cliente c LEFT JOIN cliente_tiene_lote h ON c.Dni = h.cliente_Dni) left join ficha_control_lote f on f.Id_control=h.Id_control) LEFT JOIN linea_control_lote lc ON lc.id_control=f.Id_control GROUP BY f.Id_control, c.dni, ifnull(f.Id_control, c.Dni) order by c.apellidos"; 
+          String listar = "SELECT c.Dni, c.Apellidos, c.Nombres,c.fecha_nacimiento, c.barrio, c.calle, c.numero, c.Telefono1, c.telefono2, c.trabajo, h.baja, f.Id_control, f.cantidad_cuotas, f.gastos, f.bolsa_cemento, f.fecha_actualizacion, f.lote_Barrio, f.lote_Manzana, f.lote_Parcela,f.bandera_cemento, f.cuota_pura, IF(COUNT(lc.Nro_cuota)=0,0, COUNT(lc.Nro_cuota)) as cuotas, IFNULL((SELECT lc.Fecha FROM linea_control_lote lc WHERE lc.id_control=f.Id_control ORDER BY lc.Fecha DESC LIMIT 1 ), 0000-00-00) as ultimaCuota, SUM(lc.Haber) as total, (Select fecha from linea_control_lote lc where lc.id_control=f.id_control and lc.nro_cuota=0)as suscripcion   from ((cliente c LEFT JOIN cliente_tiene_lote h ON c.Dni = h.cliente_Dni) left join ficha_control_lote f on f.Id_control=h.Id_control) LEFT JOIN linea_control_lote lc ON lc.id_control=f.Id_control GROUP BY f.Id_control, c.dni, ifnull(f.Id_control, c.Dni) order by c.apellidos"; 
           Statement st = connection.createStatement();
           rs = st.executeQuery(listar);
           while (rs.next()) {
@@ -70,6 +70,7 @@ public class ClienteDAO {
             cpp.setCuotas(rs.getInt(22));
             cpp.setUltimaCuota(rs.getDate(23));
             cpp.setTotal(rs.getBigDecimal(24));
+            cpp.setFecha_suscripcion(rs.getDate(25));
             clientesPorLotes.add(cpp);
 
          }

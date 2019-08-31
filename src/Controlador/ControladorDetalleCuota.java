@@ -5,10 +5,12 @@
  */
 package Controlador;
 
+import Clases.ActualizacionCemento;
 import Clases.ActualizacionEmpleado;
 import Clases.Cuota;
 import Clases.FichaDeControl;
 import Clases.LimitadorCaracteres;
+import Modelo.ActualizacionCementoDAO;
 import Modelo.ActualizacionEmpleadoDAO;
 import Modelo.CuotaDAO;
 import Modelo.DchoPosesionDAO;
@@ -81,6 +83,7 @@ public class ControladorDetalleCuota implements ActionListener, TableModelListen
     DetalleCuota dc = new DetalleCuota();
     CuotaDAO cd = new CuotaDAO();
     ActualizacionEmpleadoDAO ad = new ActualizacionEmpleadoDAO();
+    ActualizacionCementoDAO acd = new ActualizacionCementoDAO();
     MinutaDAO md = new MinutaDAO();
     DchoPosesionDAO dp = new DchoPosesionDAO();
     FichaControlDAO fcd = new FichaControlDAO();
@@ -108,7 +111,7 @@ public class ControladorDetalleCuota implements ActionListener, TableModelListen
     public ControladorDetalleCuota() {
     }
     
-    public ControladorDetalleCuota(ArrayList arrayList, int nro_cuotas,String apellido, String nombre, String telefono, String barrio, String calle,int numero,int id_control, int baja_logica, String tipoAct) {
+    public ControladorDetalleCuota(ArrayList arrayList, int nro_cuotas, String apellido, String nombre, String telefono, String barrio, String calle,int numero,int id_control, int baja_logica, String tipoAct) {
         this.apellido=apellido;
         this.nombre=nombre;
         this.id_control=id_control;
@@ -154,7 +157,11 @@ public class ControladorDetalleCuota implements ActionListener, TableModelListen
         dc.tablaDchoPosesion.setDefaultRenderer(Object.class, rdp);
         llenarTabla(id_control);
         llenarTablaDchoPosesion(id_control);
-        llenarTablaActualizacion(id_control);
+        if(tipoAct.equals("Emp. Público")){
+            llenarTablaActualizacion(id_control);
+        }else{
+            llenarTablaActualizacionCemento(id_control);
+        }
         cargarPathMinuta();
         desactivarBotones();
     }
@@ -201,6 +208,22 @@ public class ControladorDetalleCuota implements ActionListener, TableModelListen
                 BigDecimal saldo_anterior = actualizaciones.get(i).getCuota_anterior();
                 BigDecimal saldo_nuevo = actualizaciones.get(i).getCuota_actualizada();
                 actualizacion = new Object[] {fecha, porcentaje,saldo_anterior, saldo_nuevo}; 
+                model.addRow(actualizacion);
+              }
+        }
+    }
+    
+    private void llenarTablaActualizacionCemento(int id_control){
+        List<ActualizacionCemento>actualizaciones;
+        actualizaciones = acd.listaActualizaciones(id_control);
+        DefaultTableModel model = (DefaultTableModel) dc.tablaActualizacion.getModel();
+        model.setRowCount(0);
+        if(!actualizaciones.isEmpty()){
+              for(int i = 0; i < actualizaciones.size(); i++){
+                Date fecha = actualizaciones.get(i).getFecha();
+                BigDecimal saldo_anterior = actualizaciones.get(i).getPrecioAnterior();
+                BigDecimal saldo_nuevo = actualizaciones.get(i).getPrecioActualizado();
+                actualizacion = new Object[] {fecha, "",saldo_anterior, saldo_nuevo}; 
                 model.addRow(actualizacion);
               }
         }
@@ -302,13 +325,15 @@ public class ControladorDetalleCuota implements ActionListener, TableModelListen
             llenarTablaDchoPosesion(id_control);
             llenarTablaActualizacion(id_control);
            }else{
-                new ControladorActualizarCuotaSaldo((Ventana) SwingUtilities.getWindowAncestor(dc),id_control);
+             new ControladorActualizarCuotaSaldo((Ventana) SwingUtilities.getWindowAncestor(dc),id_control);
            }
         }
+         //---------Boton Actualizar saldo y cuota----------//
         if(e.getSource()==dc.actualizarSaldoBtn){
             new ControladorActualizarCuotaSaldo((Ventana) SwingUtilities.getWindowAncestor(dc), id_control);
             llenarTabla(id_control);
             llenarTablaDchoPosesion(id_control);
+            llenarTablaActualizacionCemento(id_control);
         }
         if(e.getSource() == dc.modificarPagoBtn){
             int row = dc.tablaDetallePago.getSelectedRow();             

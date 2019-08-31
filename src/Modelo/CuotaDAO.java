@@ -37,7 +37,7 @@ public class CuotaDAO {
           List<Cuota> cuotas = new ArrayList<>();
      try {
           connection = conexion.dataSource.getConnection();
-          String listar = "SELECT nro_cuota, fecha, detalle, cuota_pura, gastos_administrativos, debe, haber, saldo, cemento_debe, cemento_haber, cemento_saldo, observaciones, tipo_pago from linea_control_lote where id_Control = '"+idControl+"' order by fecha asc "; 
+          String listar = "SELECT nro_cuota, fecha, detalle, cuota_pura, gastos_administrativos, debe, haber, saldo, cemento_debe, cemento_haber, cemento_saldo, observaciones, tipo_pago from linea_control_lote where id_Control = '"+idControl+"' order by nro_cuota, cemento_saldo DESC "; 
           Statement st = connection.createStatement();
           rs = st.executeQuery(listar);
            while (rs.next()) {
@@ -110,7 +110,7 @@ public class CuotaDAO {
      return cuotas;
     }
     
-    public int altaCuotaLote(Date fecha_pago, int nro_cuota, String detalle, BigDecimal cuota_pura, BigDecimal gastos, BigDecimal debe, BigDecimal haber, BigDecimal saldo, BigDecimal cemento_debe, BigDecimal cemento_haber, BigDecimal cemento_saldo, String observaciones, String tipo_pago, int id_control, int act_saldo){
+    public int altaCuotaLote(java.sql.Timestamp fecha_pago, int nro_cuota, String detalle, BigDecimal cuota_pura, BigDecimal gastos, BigDecimal debe, BigDecimal haber, BigDecimal saldo, BigDecimal cemento_debe, BigDecimal cemento_haber, BigDecimal cemento_saldo, String observaciones, String tipo_pago, int id_control, int act_saldo){
         int filasAfectadas=0;
         Connection connection = null;
         PreparedStatement ps = null;
@@ -118,7 +118,7 @@ public class CuotaDAO {
          connection = conexion.dataSource.getConnection();
          String insertar = "Insert into linea_control_lote (fecha, nro_cuota, detalle, cuota_pura, gastos_administrativos, debe, haber, saldo, cemento_debe, cemento_haber, cemento_saldo, observaciones, tipo_pago, id_Control, actualizacion_cuota) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ";
          ps = connection.prepareStatement(insertar);
-         ps.setDate(1, fecha_pago);
+         ps.setTimestamp(1, fecha_pago);
          ps.setInt(2, nro_cuota);
          ps.setString(3, detalle);
          ps.setBigDecimal(4, cuota_pura);

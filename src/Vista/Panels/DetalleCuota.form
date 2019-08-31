@@ -35,7 +35,7 @@
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="jScrollPane3" pref="410" max="32767" attributes="0"/>
+                          <Component id="jScrollPane3" pref="117" max="32767" attributes="0"/>
                           <Component id="nya" max="32767" attributes="0"/>
                       </Group>
                       <EmptySpace type="separate" max="-2" attributes="0"/>
@@ -398,32 +398,22 @@
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" attributes="0">
+                  <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Group type="102" alignment="0" attributes="0">
-                          <EmptySpace max="-2" attributes="0"/>
-                          <Group type="103" groupAlignment="0" attributes="0">
-                              <Group type="102" alignment="1" attributes="0">
-                                  <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
-                                  <Component id="generarReciboBtn" min="-2" max="-2" attributes="0"/>
-                              </Group>
-                              <Component id="eliminarPagoBtn" alignment="1" max="32767" attributes="0"/>
-                              <Component id="agregarPagoBtn" max="32767" attributes="0"/>
-                          </Group>
-                          <EmptySpace max="32767" attributes="0"/>
+                      <Component id="agregarPagoBtn" max="32767" attributes="0"/>
+                      <Group type="102" attributes="0">
+                          <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                          <Component id="actualizarSaldoBtn" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <Group type="102" alignment="0" attributes="0">
-                          <EmptySpace min="-2" pref="13" max="-2" attributes="0"/>
-                          <Component id="actualizarSaldoBtn" min="-2" pref="118" max="-2" attributes="0"/>
-                          <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
-                      </Group>
+                      <Component id="generarReciboBtn" alignment="1" max="32767" attributes="0"/>
+                      <Component id="eliminarPagoBtn" max="32767" attributes="0"/>
                   </Group>
+                  <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" max="-2" attributes="0">
                       <Component id="volverBtn" max="32767" attributes="0"/>
-                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                          <Component id="resumenCliente" alignment="1" max="32767" attributes="0"/>
-                          <Component id="modificarPagoBtn" alignment="1" max="32767" attributes="0"/>
-                          <Component id="actualizarPagoBtn" alignment="1" max="32767" attributes="0"/>
-                      </Group>
+                      <Component id="resumenCliente" alignment="1" max="32767" attributes="0"/>
+                      <Component id="modificarPagoBtn" alignment="1" max="32767" attributes="0"/>
+                      <Component id="actualizarPagoBtn" alignment="1" max="32767" attributes="0"/>
                   </Group>
                   <EmptySpace min="-2" max="-2" attributes="0"/>
               </Group>
@@ -525,7 +515,7 @@
         </Component>
         <Component class="javax.swing.JButton" name="actualizarSaldoBtn">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Act. saldo"/>
+            <Property name="text" type="java.lang.String" value="Actualizar saldo"/>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="actualizarSaldoBtnActionPerformed"/>

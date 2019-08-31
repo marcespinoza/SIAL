@@ -29,6 +29,7 @@ import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
@@ -51,8 +52,7 @@ public class ControladorAltaCuota implements ActionListener, KeyListener{
     AltaCuota ac;
     int id_control, nro_cuota;
     int row_count;
-    BigDecimal cuota_total;
-    BigDecimal gastos;
+    BigDecimal cuota_total, gastos;
     private int filas_insertadas=0;
     static org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(ControladorAltaCuota.class.getName());
     public ControladorAltaCuota(Frame parent, int id_control, int row_count, int nro_cuota) {
@@ -68,6 +68,7 @@ public class ControladorAltaCuota implements ActionListener, KeyListener{
         ac.chk_cuota.addActionListener(this);
         ac.chk_dcho_posesion.addActionListener(this);
         ac.chk_adelanto_cuota.addActionListener(this);
+        ac.actualizarGasto.addActionListener(this);
         ac.chk_cuota.setSelected(true);
         ac.nro_cuota.setDocument(new LimitadorCaracteres(8));
         ac.detallePago.setDocument(new LimitadorCaracteres(40));
@@ -152,8 +153,10 @@ public class ControladorAltaCuota implements ActionListener, KeyListener{
         FichaControlDAO fcd = new FichaControlDAO();
         listaFc = fcd.obtenerFichaControl(id_control);
         cuota_total = listaFc.get(listaFc.size()-1).getCuotaPura().add(listaFc.get(listaFc.size()-1).getGastos());
-        ac.cuota_total.setText(cuota_total.toString());
+        gastos = listaFc.get(0).getGastos();
+        ac.cuota_total.setText(cuota_total.toString());  
         nuevoGasto();
+        ac.gastos.setText(String.valueOf(gastos));
         //------Calculo el nro de cuota--------//
         int cuota = 0;
         int indice = 0;
@@ -172,8 +175,7 @@ public class ControladorAltaCuota implements ActionListener, KeyListener{
     }
 
     @Override
-    public void actionPerformed(ActionEvent e) {
-        
+    public void actionPerformed(ActionEvent e) {        
            if(e.getSource() == ac.aceptarBtn){
               new AltaCuotaSwing().execute();
            }
@@ -191,7 +193,12 @@ public class ControladorAltaCuota implements ActionListener, KeyListener{
             if(e.getSource()==ac.chk_adelanto_cuota){
               nuevoGasto();
               ac.nro_cuota.setEnabled(false);
-            }            
+            }  
+            if(e.getSource() == ac.actualizarGasto){
+                BigDecimal nuevo_gasto = new BigDecimal(ac.gastos.getText());
+                fc.actualizarGasto(cuota_total.subtract(nuevo_gasto), nuevo_gasto, id_control);
+                rellenarCampos();
+            }
     }
     
     public void altaPago(){
@@ -231,14 +238,7 @@ public class ControladorAltaCuota implements ActionListener, KeyListener{
     
     
     public void calcularValores(BigDecimal ultimo_saldo, BigDecimal cuota_pura, BigDecimal gastos, BigDecimal bolsa_cemento, BigDecimal saldo_bolsa_cemento){  
-           SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-           String dateString = format.format( new Date()   );
-           Date   date = null;  
-            try {
-            date = format.parse ( dateString );
-              } catch (ParseException ex) {
-            Logger.getLogger(ControladorAltaCuota.class.getName()).log(Level.SEVERE, null, ex);
-             }
+           long fechaActual = Calendar.getInstance().getTimeInMillis();
            List<Cuota>listaC;
            String detalle = ac.detallePago.getText();
            String observaciones = ac.observacionesPago.getText();
@@ -267,13 +267,13 @@ public class ControladorAltaCuota implements ActionListener, KeyListener{
                    cuota=listaC.get(indice).getNro_cuota();
                    indice = indice + 1;
                }
-                 filas_insertadas = cd.altaCuotaLote(new java.sql.Date(date.getTime()),listaC.get(indice).getNro_cuota()-1, detalle, cuota_pura, gastos, new BigDecimal(0), haber, saldo_actual, new BigDecimal(0), cemento_haber, cemento_saldo, observaciones, tipoPago, id_control, 0);  
+                 filas_insertadas = cd.altaCuotaLote(new java.sql.Timestamp(fechaActual),listaC.get(indice).getNro_cuota()-1, detalle, cuota_pura, gastos, new BigDecimal(0), haber, saldo_actual, new BigDecimal(0), cemento_haber, cemento_saldo, observaciones, tipoPago, id_control, 0);  
 
               }else{
-                 filas_insertadas = cd.altaCuotaLote(new java.sql.Date(date.getTime()),nro_cuota, detalle, cuota_pura, gastos, new BigDecimal(0), haber, saldo_actual, new BigDecimal(0), cemento_haber, cemento_saldo, observaciones, tipoPago, id_control, 0);                    
+                 filas_insertadas = cd.altaCuotaLote(new java.sql.Timestamp(fechaActual),nro_cuota, detalle, cuota_pura, gastos, new BigDecimal(0), haber, saldo_actual, new BigDecimal(0), cemento_haber, cemento_saldo, observaciones, tipoPago, id_control, 0);                    
               }
            }else{
-                filas_insertadas = cd.altaCuotaLote(new java.sql.Date(date.getTime()),Integer.parseInt(ac.nro_cuota.getText()), detalle, cuota_pura, gastos, new BigDecimal(0), haber, saldo_actual, new BigDecimal(0), cemento_haber, cemento_saldo, observaciones, tipoPago, id_control, 0);  
+                filas_insertadas = cd.altaCuotaLote(new java.sql.Timestamp(fechaActual),Integer.parseInt(ac.nro_cuota.getText()), detalle, cuota_pura, gastos, new BigDecimal(0), haber, saldo_actual, new BigDecimal(0), cemento_haber, cemento_saldo, observaciones, tipoPago, id_control, 0);  
            }
            if (filas_insertadas==1) {
                ac.dispose();
@@ -297,12 +297,12 @@ public class ControladorAltaCuota implements ActionListener, KeyListener{
         }else{
          ac.cuota_total.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
         }
-        if(ac.porcentaje_gastos.getText().isEmpty()){
-         ac.porcentaje_gastos.setBorder(BorderFactory.createLineBorder(Color.RED, 1));
-         bandera=false;
-        }else{
-         ac.porcentaje_gastos.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
-        }
+//        if(ac.porcentaje_gastos.getText().isEmpty()){
+//         ac.porcentaje_gastos.setBorder(BorderFactory.createLineBorder(Color.RED, 1));
+//         bandera=false;
+//        }else{
+//         ac.porcentaje_gastos.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
+//        }
         if(ac.chk_cuota.isSelected()){
          if(ac.nro_cuota.getText().isEmpty()){
           ac.nro_cuota.setBorder(BorderFactory.createLineBorder(Color.RED, 1));

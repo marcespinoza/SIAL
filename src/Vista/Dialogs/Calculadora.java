@@ -137,8 +137,8 @@ public class Calculadora extends javax.swing.JDialog {
 
     private void calculadora(){
         if(!this.pesos.getText().equals("") && !this.total.getText().equals("")){BigDecimal pesos = new BigDecimal(this.pesos.getText());
-        BigDecimal total = new BigDecimal(this.total.getText());
-        BigDecimal cien = new BigDecimal(100);        
+          BigDecimal total = new BigDecimal(this.total.getText());
+          BigDecimal cien = new BigDecimal(100);        
             porcentaje.setText(((pesos.multiply(cien)).divide(total, 5, RoundingMode.HALF_UP).toString()));
         }else{
             porcentaje.setText("");

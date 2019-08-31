@@ -97,7 +97,11 @@
                                   <Group type="103" groupAlignment="0" attributes="0">
                                       <Component id="jScrollPane2" min="-2" pref="246" max="-2" attributes="0"/>
                                       <Component id="interes" alignment="0" min="-2" pref="105" max="-2" attributes="0"/>
-                                      <Component id="gastos" alignment="0" min="-2" pref="105" max="-2" attributes="0"/>
+                                      <Group type="102" alignment="0" attributes="0">
+                                          <Component id="gastos" min="-2" pref="105" max="-2" attributes="0"/>
+                                          <EmptySpace max="-2" attributes="0"/>
+                                          <Component id="actualizarGasto" min="-2" pref="19" max="-2" attributes="0"/>
+                                      </Group>
                                       <Component id="chk_adelanto_cuota" alignment="0" min="-2" max="-2" attributes="0"/>
                                       <Component id="chk_dcho_posesion" alignment="0" min="-2" max="-2" attributes="0"/>
                                       <Group type="103" alignment="0" groupAlignment="1" attributes="0">
@@ -152,6 +156,7 @@
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="gastos" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="jLabel8" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="actualizarGasto" alignment="3" min="-2" pref="22" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
@@ -390,6 +395,16 @@
         <Component class="javax.swing.JTextField" name="porcentaje_gastos">
           <Properties>
             <Property name="toolTipText" type="java.lang.String" value=""/>
+          </Properties>
+          <AuxValues>
+            <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="1"/>
+          </AuxValues>
+        </Component>
+        <Component class="javax.swing.JButton" name="actualizarGasto">
+          <Properties>
+            <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+              <Image iconType="3" name="/Imagenes/iconos/save.png"/>
+            </Property>
           </Properties>
           <AuxValues>
             <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="1"/>

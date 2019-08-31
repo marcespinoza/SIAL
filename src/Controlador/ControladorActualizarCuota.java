@@ -68,7 +68,7 @@ public class ControladorActualizarCuota implements ActionListener{
                 BigDecimal aumento;
                 BigDecimal cuota_total = new BigDecimal(ac.valor_actual.getText());   
                 aumento = ((cuota_total.multiply(new BigDecimal(ac.porcentaje.getText()))).divide(new BigDecimal("100"),2, BigDecimal.ROUND_HALF_UP)).add(cuota_total);
-               ac.valor_actualizado.setText(aumento.toString());
+                ac.valor_actualizado.setText(aumento.toString());
               
             }else{
                 ac.valor_actualizado.setText("");

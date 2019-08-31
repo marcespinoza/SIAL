@@ -219,28 +219,27 @@ public class FichaControlDAO {
         }
   }
     
-    //------Actualiza valor cuota y nuevo saldo------//
-//  public void actualizarSaldo( BigDecimal gastos, BigDecimal cuota_pura, int id_control){
-//      Connection con = null;
-//        try {
-//            con = conexion.dataSource.getConnection();
-//            PreparedStatement ps = con.prepareStatement("UPDATE ficha_control_lote SET gastos = ? WHERE id_control = ?");
-//            ps.setBigDecimal(1,gastos);
-//            ps.setBigDecimal(2, cuota_pura);
-//            ps.setInt(3, id_control);
-//            // call executeUpdate to execute our sql update statement
-//            ps.executeUpdate();
-//            ps.close();
-//            con.close();
-//        } catch (SQLException ex) {
-//            Logger.getLogger(CuotaDAO.class.getName()).log(Level.SEVERE, null, ex);
-//        }finally{
-//          try {
-//              con.close();
-//          } catch (SQLException ex) {
-//              Logger.getLogger(CuotaDAO.class.getName()).log(Level.SEVERE, null, ex);
-//          }
-//        }
-//  }
+   // ------Actualiza valor cuota y nuevo saldo------//
+  public void actualizarGasto(BigDecimal cuota_pura, BigDecimal gastos, int id_control){
+      Connection con = null;
+        try {
+            con = conexion.dataSource.getConnection();
+            PreparedStatement ps = con.prepareStatement("UPDATE ficha_control_lote SET cuota_pura = ?, gastos = ? WHERE id_control = ?");
+            ps.setBigDecimal(1, cuota_pura);
+            ps.setBigDecimal(2,gastos);
+            ps.setInt(3, id_control);
+            ps.executeUpdate();
+            ps.close();
+            con.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(CuotaDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }finally{
+          try {
+              con.close();
+          } catch (SQLException ex) {
+              Logger.getLogger(CuotaDAO.class.getName()).log(Level.SEVERE, null, ex);
+          }
+        }
+  }
     
 }
