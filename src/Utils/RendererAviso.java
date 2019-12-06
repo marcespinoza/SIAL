@@ -36,6 +36,8 @@ public class RendererAviso extends DefaultTableCellRenderer{
             }
         }
         if(table.getValueAt(row, 21)!=null){
+           //-----Si esta dado de baja no pongo el aviso de actualizacion de cuota---//
+           if(!table.getValueAt(row, 10).toString().equals("1")){  
             if(table.getValueAt(row, 20).toString().equals("1")){                
                 jLabel.setIcon(icon);
                 jLabel.setHorizontalAlignment(CENTER);
@@ -46,6 +48,7 @@ public class RendererAviso extends DefaultTableCellRenderer{
             else{
                 jLabel.setIcon(null);
             }
+           }
         }
          return jLabel;
     }   

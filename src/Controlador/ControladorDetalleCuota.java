@@ -106,12 +106,13 @@ public class ControladorDetalleCuota implements ActionListener, TableModelListen
     List<Cuota> detalleCuota = new ArrayList();
     int baja_logica;
     static org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(ControladorDetalleCuota.class.getName());  
-
+    ControladorCliente cc;
     
     public ControladorDetalleCuota() {
     }
     
-    public ControladorDetalleCuota(ArrayList arrayList, int nro_cuotas, String apellido, String nombre, String telefono, String barrio, String calle,int numero,int id_control, int baja_logica, String tipoAct) {
+    public ControladorDetalleCuota(ArrayList arrayList, int nro_cuotas, String apellido, String nombre, String telefono, String barrio, String calle,int numero,int id_control, int baja_logica, String tipoAct, ControladorCliente cc) {
+        this.cc = cc;
         this.apellido=apellido;
         this.nombre=nombre;
         this.id_control=id_control;
@@ -165,6 +166,7 @@ public class ControladorDetalleCuota implements ActionListener, TableModelListen
         cargarPathMinuta();
         desactivarBotones();
     }
+
     
     class LimitCaracteres extends DefaultCellEditor {
 
@@ -256,31 +258,13 @@ public class ControladorDetalleCuota implements ActionListener, TableModelListen
    public void llenarTabla(int idControl){
         detalleCuota.clear();
         detalleCuota = cd.listaDetalleCuota(idControl);
-        List<FichaDeControl> listaFichaControl = fcd.obtenerFichaControl(id_control); 
         DefaultTableModel model = (DefaultTableModel) dc.tablaDetallePago.getModel();
         model.setRowCount(0);
         SimpleDateFormat input = new SimpleDateFormat("dd-MM-YYYY");
         if(detalleCuota!=null){
             for(int i = 0; i < detalleCuota.size(); i++){
                 int nro_cuota = detalleCuota.get(i).getNro_cuota();                
-                String fecha = input.format(detalleCuota.get(i).getFecha());
-                if(nro_cuota==0){
-                    Date fechaIncripcion = detalleCuota.get(i).getFecha();
-                    Calendar inscripcion = new GregorianCalendar();
-                    inscripcion.setTime(fechaIncripcion);
-                    Calendar fechaActual = new GregorianCalendar();
-                    fechaActual.setTime(new Date());        
-                    int yearsInBetween = fechaActual.get(Calendar.YEAR) - inscripcion.get(Calendar.YEAR);
-                    int monthsDiff = fechaActual.get(Calendar.MONTH) - inscripcion.get(Calendar.MONTH);
-                    long meses = yearsInBetween*12 + monthsDiff;
-                    if(meses%12==0){
-                        //===Obtengo la cantidad de bolsa de cemento que me cubre una cuota=====/
-                        BigDecimal cbc =  listaFichaControl.get(i).getCantidad_bc();
-                        BigDecimal precio_bc = listaFichaControl.get(i).getBolsaCemento();
-                        BigDecimal valor_cuota = cbc.multiply(precio_bc);
-                        BigDecimal gastos = valor_cuota.subtract((valor_cuota).divide(new BigDecimal(1.1),2, BigDecimal.ROUND_HALF_UP));
-                    }                    
-                }
+                String fecha = input.format(detalleCuota.get(i).getFecha());                
                 String detalle = detalleCuota.get(i).getDetalle();
                 BigDecimal cuota_pura = detalleCuota.get(i).getCuota_pura();
                 BigDecimal gastos_admin = detalleCuota.get(i).getGastos_administrativos();
@@ -334,6 +318,7 @@ public class ControladorDetalleCuota implements ActionListener, TableModelListen
             llenarTabla(id_control);
             llenarTablaDchoPosesion(id_control);
             llenarTablaActualizacionCemento(id_control);
+            cc.llenarComboApellidos();
         }
         if(e.getSource() == dc.modificarPagoBtn){
             int row = dc.tablaDetallePago.getSelectedRow();             
@@ -449,7 +434,7 @@ public class ControladorDetalleCuota implements ActionListener, TableModelListen
             Font f=new Font(Font.FontFamily.TIMES_ROMAN,10.0f,0,null);
             listaFichaControl = fcd.obtenerFichaControl(id_control); 
         try {
-            PdfWriter.getInstance(document, new FileOutputStream(new File(dc.path.getText(), "Resumen "+".pdf")));
+            PdfWriter.getInstance(document, new FileOutputStream(new File(dc.path.getText(), "Resumen"+".pdf")));
             document.open();       
             Image image = Image.getInstance(IMG); 
             image.scaleAbsolute(70, 70);
@@ -464,8 +449,7 @@ public class ControladorDetalleCuota implements ActionListener, TableModelListen
             document.add( Chunk.NEWLINE );
             document.add( Chunk.NEWLINE );
             document.add( Chunk.NEWLINE );
-            document.add(new Paragraph("Apellido y nombres: "));
-            document.add(new Paragraph("Direcciòn: "));
+            document.add(new Paragraph("Apellido y nombres: "+listaFichaControl.get(0).getApellido()+" "+listaFichaControl.get(0).getNombre(), f));
             document.add(new Paragraph("Propiedad: "+listaFichaControl.get(0).getBarrio()+" - Mz: "+listaFichaControl.get(0).getManzana()+" - Pc: "+listaFichaControl.get(0).getParcela(),f));
             document.add( Chunk.NEWLINE );
             //------Cabeceras de las columnas de las cuotas---------//
@@ -479,10 +463,11 @@ public class ControladorDetalleCuota implements ActionListener, TableModelListen
             ph3.setAlignment(Element.ALIGN_CENTER);
             document.add(ph3);
             document.add( Chunk.NEWLINE );
-            PdfPTable table = new PdfPTable(5); 
-            table.setTotalWidth(new float[]{ 1,1,2,2,2});
+            PdfPTable table = new PdfPTable(6); 
+            table.setTotalWidth(new float[]{ 1,1,1,2,2,2});
             table.setWidthPercentage(100);
             PdfPCell nro_cuota = new PdfPCell(new Paragraph("Nro. cuota",f));
+            PdfPCell nro_recibo = new PdfPCell(new Paragraph("Nro. recibo",f));
             PdfPCell fecha_pago = new PdfPCell(new Paragraph("Fecha pago",f));
             PdfPCell monto_cuota = new PdfPCell(new Paragraph("Monto",f));
             PdfPCell saldo = new PdfPCell(new Paragraph("Saldo",f));
@@ -493,13 +478,14 @@ public class ControladorDetalleCuota implements ActionListener, TableModelListen
             saldo.setHorizontalAlignment(Element.ALIGN_CENTER);
             cemento_saldo.setHorizontalAlignment(Element.ALIGN_CENTER);
             table.addCell(nro_cuota);
+            table.addCell(nro_recibo);
             table.addCell(fecha_pago);
             table.addCell(monto_cuota);
             table.addCell(saldo);
             table.addCell(cemento_saldo);
             document.add(table); 
-            PdfPTable primerLinea = new PdfPTable(5);            
-            primerLinea.setTotalWidth(new float[]{ 1,1,2,2,2});
+            PdfPTable primerLinea = new PdfPTable(6);            
+            primerLinea.setTotalWidth(new float[]{ 1,1,1,2,2,2});
             primerLinea.setWidthPercentage(100);
             primerLinea.addCell(new PdfPCell(new Paragraph("-",f))).setHorizontalAlignment(Element.ALIGN_CENTER);
             primerLinea.addCell(new PdfPCell(new Paragraph(String.valueOf(detalleCuota.get(0).getFecha()),f))).setHorizontalAlignment(Element.ALIGN_CENTER);
@@ -508,10 +494,11 @@ public class ControladorDetalleCuota implements ActionListener, TableModelListen
             primerLinea.addCell(new PdfPCell(new Paragraph(String.valueOf(detalleCuota.get(0).getCemento_saldo()),f))).setHorizontalAlignment(Element.ALIGN_CENTER);
             document.add(primerLinea);            
             for(int i = 1; i < detalleCuota.size(); i++){
-                  PdfPTable table2 = new PdfPTable(5);            
-                  table2.setTotalWidth(new float[]{ 1,1,2,2,2});
+                  PdfPTable table2 = new PdfPTable(6);            
+                  table2.setTotalWidth(new float[]{ 1,1,1,2,2,2});
                   table2.setWidthPercentage(100);
                   table2.addCell(new PdfPCell(new Paragraph(String.valueOf(detalleCuota.get(i).getNro_cuota()),f))).setHorizontalAlignment(Element.ALIGN_CENTER);
+                  table2.addCell(new PdfPCell(new Paragraph(String.valueOf(detalleCuota.get(i).getNro_recibo()),f))).setHorizontalAlignment(Element.ALIGN_CENTER);
                   table2.addCell(new PdfPCell(new Paragraph(String.valueOf(detalleCuota.get(i).getFecha()),f))).setHorizontalAlignment(Element.ALIGN_CENTER);
                   table2.addCell(new PdfPCell(new Paragraph(String.valueOf(detalleCuota.get(i).getCuota_pura().add(detalleCuota.get(i).getGastos_administrativos())),f))).setHorizontalAlignment(Element.ALIGN_CENTER);
                   table2.addCell(new PdfPCell(new Paragraph(String.valueOf(detalleCuota.get(i).getSaldo()),f))).setHorizontalAlignment(Element.ALIGN_CENTER);
@@ -584,7 +571,7 @@ public class ControladorDetalleCuota implements ActionListener, TableModelListen
            pd.dispose();
            try {
             //-------Abro pdf del recibo-------//   
-               Desktop.getDesktop().open(new File(dc.path.getText(), "Resumen "+".pdf"));
+               Desktop.getDesktop().open(new File(dc.path.getText(), "Resumen"+".pdf"));
            } catch (IOException ex) {
                Logger.getLogger(ControladorRecibo.class.getName()).log(Level.SEVERE, null, ex);
            }

@@ -14,6 +14,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -93,7 +94,7 @@ public class FichaControlDAO {
          List<FichaDeControl> listaFichaControl = new ArrayList<>();
      try {
           connection = conexion.dataSource.getConnection();
-          String listar = "SELECT dimension, cantidad_cuotas, cuota_pura, gastos, bolsa_cemento, lote_barrio, lote_manzana, lote_parcela, cantidad_bc FROM ficha_control_lote where id_control = '"+id_control+"'"; 
+          String listar = "SELECT fc.dimension, fc.cantidad_cuotas, fc.cuota_pura, fc.gastos, fc.bolsa_cemento, fc.lote_barrio, fc.lote_manzana, fc.lote_parcela,  fc.bandera, c.apellidos, c.nombres FROM ficha_control_lote fc inner join cliente_tiene_lote cl on fc.id_control=cl.id_control inner join cliente c on c.dni=cl.cliente_dni where fc.id_control = '"+id_control+"'"; 
           Statement st = connection.createStatement();
           rs = st.executeQuery(listar);
           while(rs.next()){
@@ -106,7 +107,9 @@ public class FichaControlDAO {
               fc.setBarrio(rs.getString(6));
               fc.setManzana(rs.getInt(7));
               fc.setParcela(rs.getInt(8));
-              fc.setCantidad_bc(rs.getBigDecimal(9));
+              fc.setBandera(rs.getTimestamp(9));
+              fc.setApellido(rs.getString(10));
+              fc.setNombre(rs.getString(11));
               listaFichaControl.add(fc);
           }
         } catch (Exception e) {
@@ -182,14 +185,15 @@ public class FichaControlDAO {
         }
   }
    
-   public void actualizarValorCuota( BigDecimal gastos, BigDecimal cuota_pura, int id_control){
+   public void actualizarValorCuota( BigDecimal gastos, BigDecimal cuota_pura, Timestamp bandera,int id_control){
         try {
             Connection con = conexion.dataSource.getConnection();
             PreparedStatement ps = con.prepareStatement(
-                    "UPDATE ficha_control_lote SET gastos = ?, cuota_pura = ? WHERE id_control = ?");
+                    "UPDATE ficha_control_lote SET gastos = ?, cuota_pura = ?, bandera = ? WHERE id_control = ?");
             ps.setBigDecimal(1, gastos);
             ps.setBigDecimal(2, cuota_pura);
-            ps.setInt(3, id_control);
+            ps.setTimestamp(3, bandera);
+            ps.setInt(4, id_control);
             ps.executeUpdate();
             ps.close();
         } catch (SQLException ex) {
@@ -228,6 +232,28 @@ public class FichaControlDAO {
             ps.setBigDecimal(1, cuota_pura);
             ps.setBigDecimal(2,gastos);
             ps.setInt(3, id_control);
+            ps.executeUpdate();
+            ps.close();
+            con.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(CuotaDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }finally{
+          try {
+              con.close();
+          } catch (SQLException ex) {
+              Logger.getLogger(CuotaDAO.class.getName()).log(Level.SEVERE, null, ex);
+          }
+        }
+  }
+  
+   // ------Bandera para cuando se actualiza el saldo y la cuota------//
+  public void actualizarBandera(boolean bandera,int id_control){
+      Connection con = null;
+        try {
+            con = conexion.dataSource.getConnection();
+            PreparedStatement ps = con.prepareStatement("UPDATE ficha_control_lote SET bandera = ? WHERE id_control = ?");
+            ps.setBoolean(1, bandera);
+            ps.setInt(2, id_control);
             ps.executeUpdate();
             ps.close();
             con.close();

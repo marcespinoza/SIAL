@@ -14,6 +14,7 @@ import Vista.Frame.Ventana;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.math.BigDecimal;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import javax.swing.SwingWorker;
@@ -98,12 +99,13 @@ public class ControladorActualizarCuota implements ActionListener{
 
         @Override
         protected Void doInBackground() throws Exception {     
-            progress.setVisible(true);      
+            progress.setVisible(true);  
+            long fechaActual = Calendar.getInstance().getTimeInMillis();
             Date date = new Date();
             BigDecimal valorActualizado = new BigDecimal(ac.valor_actualizado.getText());
             BigDecimal gastos =valorActualizado.subtract((valorActualizado).divide(new BigDecimal(1.1),2, BigDecimal.ROUND_HALF_UP));
             BigDecimal cuotaPura = valorActualizado.subtract(gastos);     
-            fc.actualizarValorCuota(gastos, cuotaPura, id_control);
+            fc.actualizarValorCuota(gastos, cuotaPura, new java.sql.Timestamp(fechaActual), id_control);
             ad.altaActualizacion(id_control, new java.sql.Date(date.getTime()), Byte.parseByte(ac.porcentaje.getText()), new BigDecimal(ac.valor_actual.getText()), valorActualizado);
            return null;
        }

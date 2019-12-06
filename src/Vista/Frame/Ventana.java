@@ -8,20 +8,19 @@ import Controlador.ControladorBaseDeDatos;
 import Controlador.ControladorCliente;
 import Controlador.ControladorBotones;
 import Controlador.ControladorConfiguracion;
-import Controlador.ControladorLogin;
 import Controlador.ControladorMinuta;
 import Controlador.ControladorRegistro;
 import Controlador.ControladorResumen;
-import Vista.Panels.Clientes;
 import Vista.Panels.MinutaVista;
 import Vista.Panels.Resumen;
+import com.itextpdf.text.Rectangle;
+import java.awt.Dimension;
+import java.awt.GraphicsEnvironment;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.ComponentEvent;
-import java.awt.event.ComponentListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -38,7 +37,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.ImageIcon;
-import javax.swing.JDialog;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
 /**
@@ -61,7 +60,7 @@ public class Ventana extends javax.swing.JFrame implements ActionListener{
     public Ventana() {
         initComponents();      
 //        this.setSize(1366, 768);
-        ImageIcon icon = new ImageIcon("src/Imagenes/logo.png_32x32.png");
+        ImageIcon icon = new ImageIcon("src/Imagenes/logo.png");
         this.setIconImage(icon.getImage());         
         cm = new ControladorMinuta(minuta);
         cr = new ControladorResumen(resumen);       
@@ -70,7 +69,7 @@ public class Ventana extends javax.swing.JFrame implements ActionListener{
         registroEventos.addActionListener(this);
         about.addActionListener(this);
         baseDeDatos.addActionListener(this);
-        scheduleBackupBD();
+//        scheduleBackupBD();
         Calendar cal = Calendar.getInstance();
         this.addWindowListener(new WindowAdapter() {
             @Override
@@ -79,7 +78,13 @@ public class Ventana extends javax.swing.JFrame implements ActionListener{
                inicializarPaneles();
             }            
             });
-        this.setResizable(true);
+        pack();
+        java.awt.Rectangle winSize = GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds();
+        int taskBarHeight = 768 - winSize.height;
+        setSize(1024,taskBarHeight);
+        this.pack();
+        this.setLocationRelativeTo(null);
+        this.setVisible(true);
          
       }
     

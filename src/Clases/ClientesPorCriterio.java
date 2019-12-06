@@ -40,7 +40,17 @@ public class ClientesPorCriterio {
     BigDecimal cuota_pura;
     BigDecimal total;
     Date fecha_suscripcion;
+    Date bandera;
 
+    public Date getBandera() {
+        return bandera;
+    }
+
+    public void setBandera(Date bandera) {
+        this.bandera = bandera;
+    }
+    
+    
     public Date getFecha_suscripcion() {
         return fecha_suscripcion;
     }

@@ -8,6 +8,7 @@ package Controlador;
 import Modelo.ClienteDAO;
 import Modelo.FichaControlDAO;
 import Clases.LimitadorCaracteres;
+import static Controlador.ControladorAltaCuota.log;
 import Modelo.ReferenciaDAO;
 import Vista.Dialogs.AltaCliente;
 import Vista.Frame.Ventana;
@@ -38,6 +39,7 @@ public class ControladorAltaCliente implements ActionListener, KeyListener{
     ReferenciaDAO rd = new ReferenciaDAO();
     private int id_control, dni=0;
     boolean bandera_=false;
+    static org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(ControladorAltaCuota.class.getName());
     
     public ControladorAltaCliente(Ventana ventana, int id_control,int dni, boolean bandera_){
         ac = new AltaCliente(ventana, true);  
@@ -168,6 +170,7 @@ public class ControladorAltaCliente implements ActionListener, KeyListener{
        public void done() { 
            //--------Si alta es igual a 1 el cliente fue agregado-----------//
            if(alta==1){
+             log.info(Ventana.nombreUsuario.getText() + " - Alta cliente");
            if(bandera_){
              fd.cambiarPropietario(Integer.parseInt(ac.documento.getText()), dni, id_control);
             }

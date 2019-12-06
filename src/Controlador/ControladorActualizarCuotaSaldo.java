@@ -63,7 +63,6 @@ public class ControladorActualizarCuotaSaldo implements ActionListener{
         List<Cuota>listaC;
         List<FichaDeControl> listaFichaControl = fcd.obtenerFichaControl(id_control);
         lcuotas = cd.listaDetalleCuotaXsaldo(id_control); 
-        BigDecimal cbc =  listaFichaControl.get(0).getCantidad_bc();
         precio_bc = listaFichaControl.get(0).getBolsaCemento();
         cemento_saldo =  lcuotas.get(lcuotas.size()-1).getCemento_saldo(); 
         cuota_anterior = listaFichaControl.get(0).getCuotaPura().add(listaFichaControl.get(0).getGastos());
@@ -104,13 +103,12 @@ public class ControladorActualizarCuotaSaldo implements ActionListener{
         long fechaActual = Calendar.getInstance().getTimeInMillis();
         Date date = new Date();
         int filas_insertadas = cd.altaCuotaLote(new java.sql.Timestamp(fechaActual),cuota, "", BigDecimal.ZERO, BigDecimal.ZERO, new BigDecimal(0), nueva_cuota, nuevo_saldo, new BigDecimal(0), cantidad_bc, cemento_saldo, "ACTUALIZACION", "", id_control, 1);  
-        fc.actualizarValorCuota(gastos, cuota_pura, id_control);         
+        fc.actualizarValorCuota(gastos, cuota_pura, new java.sql.Timestamp(fechaActual), id_control);         
         acd.actualizarCemento(String.valueOf(id_control), new java.sql.Date(date.getTime()), cuota_anterior , nueva_cuota);
-
+        
         if (filas_insertadas==1) {
            acs.dispose();
            filas_insertadas=0;
-           log.info(Ventana.nombreUsuario.getText() + " - Alta pago");
          } 
     }
     

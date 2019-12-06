@@ -6,6 +6,7 @@
 package Clases;
 
 import java.math.BigDecimal;
+import java.util.Date;
 
 /**
  *
@@ -16,17 +17,46 @@ public class FichaDeControl {
     BigDecimal precio;
     BigDecimal gastos;
     BigDecimal bolsaCemento;
-    BigDecimal cantidad_bc;
+    Date bandera;
     String dimension;
     int cantidadCuotas;
     BigDecimal cuotaPura;
     String barrio; 
     int manzana;
     int parcela;
+    String nombre;
+    String apellido;
+
+    public String getApellido() {
+        return apellido;
+    }
+
+    public void setApellido(String apellido) {
+        this.apellido = apellido;
+    }
+    
+    
+
+    public String getNombre(){
+        return nombre;
+   }
+
+    public void setNombre(String nombre){
+        this.nombre = nombre;
+    }
     
     public FichaDeControl() {
     }
 
+    public Date getBandera() {
+        return bandera;
+    }
+
+    public void setBandera(Date bandera) {
+        this.bandera = bandera;
+    }
+  
+    
     public String getDimension() {
         return dimension;
     }
@@ -97,16 +127,7 @@ public class FichaDeControl {
 
     public void setBolsaCemento(BigDecimal bolsaCemento) {
         this.bolsaCemento = bolsaCemento;
-    }
-
-    public BigDecimal getCantidad_bc() {
-        return cantidad_bc;
-    }
-
-    public void setCantidad_bc(BigDecimal cantidad_bc) {
-        this.cantidad_bc = cantidad_bc;
-    }
-    
+    }   
     
     
 }
