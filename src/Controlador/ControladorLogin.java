@@ -99,7 +99,6 @@ public class ControladorLogin implements ActionListener, KeyListener{
                         if (usuario!=null){
                             frame = new Ventana();
                             log.info(usuario.getNombres()+" "+usuario.getApellidos()+ " - Inicio sesión");
-                            log.error(usuario.getNombres()+" "+usuario.getApellidos()+ " - Inicio sesión");
                             frame.labelUsuario.setText(usuario.getUsuario());
                             frame.labelTipoUsuario.setText(usuario.getTipoUsuario());
                             frame.nombreUsuario.setText(usuario.getNombres());

@@ -118,6 +118,11 @@ public class ControladorDetalleCuota implements ActionListener, TableModelListen
         this.id_control=id_control;
         this.nro_cuotas=nro_cuotas;
         this.tipoAct = tipoAct;
+        if(!tipoAct.equals("Emp. Público")){
+            dc.actualizarPagoBtn.setEnabled(false);
+        }else{
+            dc.actualizarSaldoBtn.setEnabled(false);
+        }
         if(baja_logica==1){
            dc.agregarPagoBtn.setEnabled(false);
            dc.eliminarPagoBtn.setEnabled(false);
@@ -364,9 +369,11 @@ public class ControladorDetalleCuota implements ActionListener, TableModelListen
               if(cuota || posesion){
               if(cuota){
                int row = dc.tablaDetallePago.getSelectedRow();
+               //-----Obtengo nro recibo si ya tiene generado----//
                int nro_recibo = Integer.parseInt(dc.tablaDetallePago.getModel().getValueAt(row, 12).toString());
-               System.out.println(nro_recibo);
-               if(row==0){
+               //---Obtengo si es una linea de actualizacion de cuota----//
+               int actualizacion_cuota = Integer.parseInt(dc.tablaDetallePago.getModel().getValueAt(row, 15).toString());
+               if(row==0 || actualizacion_cuota==1){
                 JOptionPane.showMessageDialog(null, "Cuota no válida", "Atención", JOptionPane.INFORMATION_MESSAGE, null); 
                }else if(row==-1){
                 JOptionPane.showMessageDialog(null, "Seleccione un pago", "Atención", JOptionPane.INFORMATION_MESSAGE, null);
@@ -434,7 +441,8 @@ public class ControladorDetalleCuota implements ActionListener, TableModelListen
             Font f=new Font(Font.FontFamily.TIMES_ROMAN,10.0f,0,null);
             listaFichaControl = fcd.obtenerFichaControl(id_control); 
         try {
-            PdfWriter.getInstance(document, new FileOutputStream(new File(dc.path.getText(), "Resumen"+".pdf")));
+            String nya = listaFichaControl.get(0).getApellido()+" "+listaFichaControl.get(0).getNombre();
+            PdfWriter.getInstance(document, new FileOutputStream(new File(dc.path.getText(), "Resumen_"+nya+".pdf")));
             document.open();       
             Image image = Image.getInstance(IMG); 
             image.scaleAbsolute(70, 70);
@@ -449,7 +457,7 @@ public class ControladorDetalleCuota implements ActionListener, TableModelListen
             document.add( Chunk.NEWLINE );
             document.add( Chunk.NEWLINE );
             document.add( Chunk.NEWLINE );
-            document.add(new Paragraph("Apellido y nombres: "+listaFichaControl.get(0).getApellido()+" "+listaFichaControl.get(0).getNombre(), f));
+            document.add(new Paragraph("Apellido y nombres: "+nya, f));
             document.add(new Paragraph("Propiedad: "+listaFichaControl.get(0).getBarrio()+" - Mz: "+listaFichaControl.get(0).getManzana()+" - Pc: "+listaFichaControl.get(0).getParcela(),f));
             document.add( Chunk.NEWLINE );
             //------Cabeceras de las columnas de las cuotas---------//

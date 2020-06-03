@@ -33,14 +33,22 @@ public class MinutaDAO {
     
     public int altaMinuta(Date fecha, String apellidos, String nombres, int manzana, int parcela, BigDecimal cobrado, BigDecimal gastos, BigDecimal rendido, int nro_cuota, String observaciones, String categoria, int id_recibo){
     int filasAfectadas=0;
+    Connection con = null;
      try {
-         Connection con = conexion.dataSource.getConnection();
+         con = conexion.dataSource.getConnection();
          String insertar = "Insert into minuta(fecha_minuta, apellidos, nombres, manzana, parcela, cobrado, gastos, rendido, nro_cuota, observaciones, categoria, id_Recibo) values ('"+fecha+"','"+apellidos+"','"+nombres+"','"+manzana+"','"+parcela+"','"+cobrado+"','"+gastos+"','"+rendido+"','"+nro_cuota+"','"+observaciones+"','"+categoria+"','"+id_recibo+"') ";
          PreparedStatement ps = con.prepareStatement(insertar);
          filasAfectadas = ps.executeUpdate();         
      } catch (Exception e) { 
          System.out.println(e.getMessage());
-     }
+     }finally{
+         try {
+            con.close();
+         } catch (SQLException ex) {
+            Logger.getLogger(PropietarioDAO.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println(ex.getMessage());
+         }
+        }
      return filasAfectadas;
  }
     
@@ -89,7 +97,7 @@ public class MinutaDAO {
      Connection con = null;
      try {
           con = conexion.dataSource.getConnection();
-          String listar = "SELECT DISTINCT fecha_minuta FROM Minuta";
+          String listar = "SELECT DISTINCT fecha_minuta FROM Minuta order by fecha_minuta DESC";
           Statement st = con.createStatement();
           rs = st.executeQuery(listar);
           while(rs.next()){              
@@ -159,20 +167,6 @@ public class MinutaDAO {
      return rs;
     }
     
-     public ResultSet minutasPorRango(Date desde, Date hasta){
-     ResultSet rs = null;
-     try {
-          Connection con = conexion.dataSource.getConnection();
-          PreparedStatement statement =
-          con.prepareStatement("SELECT * FROM minuta WHERE fecha_minuta between ? and ?");
-          statement.setDate(1, desde);
-          statement.setDate(2, hasta);
-          rs = statement.executeQuery();
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
-     return rs;
- }
      
      
      public List<Minuta> minutasPorRango2(Date desde, Date hasta){

@@ -253,7 +253,12 @@ public class ClienteDAO {
      List<ClientesPorCriterio> clientesPorPropietario = new ArrayList<>();
      try {
       connection = conexion.dataSource.getConnection();
-      String listar = "SELECT DISTINCT  c.Dni, c.Apellidos, c.Nombres,c.fecha_nacimiento, c.barrio, c.calle, c.numero, c.Telefono1, c.telefono2, c.trabajo, cl.baja, f.Id_control, f.cantidad_cuotas, f.gastos, f.bolsa_cemento, f.fecha_actualizacion, f.lote_Barrio, f.lote_Manzana, f.lote_Parcela, f.bandera_cemento, f.cuota_pura, (SELECT COUNT(lc.Nro_cuota)-1 as cuotas from linea_control_lote lc where lc.id_control=f.Id_control) as cuotas, (SELECT lc.Fecha FROM linea_control_lote lc WHERE lc.id_control=f.Id_control ORDER BY lc.Fecha DESC LIMIT 1 ) as ultimaCuota, (Select SUM(lc.haber) from linea_control_lote lc where lc.id_control=f.id_control)as total, (Select fecha from linea_control_lote lc where lc.id_control=f.id_control and lc.nro_cuota=0)as suscripcion, f.bandera  from ((cliente c INNER join cliente_tiene_lote cl on c.dni=cl.cliente_dni) INNER join ficha_control_lote f on cl.id_control=f.id_control) INNER join lote l on f.lote_barrio=l.barrio AND l.manzana=f.lote_manzana AND l.parcela=f.lote_parcela where l.propietario_Apellidos=? and l.propietario_Nombres=? order by c.apellidos, c.nombres"; 
+      String listar = "SELECT DISTINCT  c.Dni, c.Apellidos, c.Nombres,c.fecha_nacimiento, c.barrio, c.calle, c.numero, c.Telefono1, c.telefono2, c.trabajo, cl.baja, f.Id_control, f.cantidad_cuotas, f.gastos, f.bolsa_cemento, f.fecha_actualizacion, f.lote_Barrio, f.lote_Manzana, f.lote_Parcela, f.bandera_cemento, f.cuota_pura, "
+              + "      (SELECT COUNT(lc.Nro_cuota)-1 as cuotas from linea_control_lote lc where lc.id_control=f.Id_control) as cuotas, "
+              + "      (SELECT lc.Fecha FROM linea_control_lote lc WHERE lc.id_control=f.Id_control ORDER BY lc.Fecha DESC LIMIT 1 ) as ultimaCuota,"
+              + "      " + "      (Select SUM(lc.haber) from linea_control_lote lc where lc.id_control=f.id_control)as total, "
+              + "      (Select fecha from linea_control_lote lc where lc.id_control=f.id_control and lc.nro_cuota=0)as suscripcion, "
+              + "      f.bandera  from ((cliente c INNER join cliente_tiene_lote cl on c.dni=cl.cliente_dni) INNER join ficha_control_lote f on cl.id_control=f.id_control) INNER join lote l on f.lote_barrio=l.barrio AND l.manzana=f.lote_manzana AND l.parcela=f.lote_parcela where l.propietario_Apellidos=? and l.propietario_Nombres=? and cl.baja=0 order by c.apellidos, c.nombres"; 
       preparedStmt = connection.prepareStatement(listar);
       preparedStmt.setString(1, apellido);
       preparedStmt.setString(2, nombre);
@@ -309,5 +314,72 @@ public class ClienteDAO {
      return clientesPorPropietario;
  }
 
+    public List<ClientesPorCriterio> clientesPorManzana(String apellido, String nombre, int manzana){
+     ResultSet rs;
+     Connection connection = null;
+     PreparedStatement preparedStmt = null;
+     List<ClientesPorCriterio> clientesPorPropietario = new ArrayList<>();
+     try {
+      connection = conexion.dataSource.getConnection();
+      String listar = "SELECT DISTINCT  c.Dni, c.Apellidos, c.Nombres,c.fecha_nacimiento, c.barrio, c.calle, c.numero, c.Telefono1, c.telefono2, c.trabajo, cl.baja, f.Id_control, f.cantidad_cuotas, f.gastos, f.bolsa_cemento, f.fecha_actualizacion, f.lote_Barrio, f.lote_Manzana, f.lote_Parcela, f.bandera_cemento, f.cuota_pura, "
+              + "      (SELECT COUNT(lc.Nro_cuota)-1 as cuotas from linea_control_lote lc where lc.id_control=f.Id_control) as cuotas, "
+              + "      (SELECT lc.Fecha FROM linea_control_lote lc WHERE lc.id_control=f.Id_control ORDER BY lc.Fecha DESC LIMIT 1 ) as ultimaCuota,"
+              + "      " + "      (Select SUM(lc.haber) from linea_control_lote lc where lc.id_control=f.id_control)as total, "
+              + "      (Select fecha from linea_control_lote lc where lc.id_control=f.id_control and lc.nro_cuota=0)as suscripcion, "
+              + "      f.bandera  from ((cliente c INNER join cliente_tiene_lote cl on c.dni=cl.cliente_dni) INNER join ficha_control_lote f on cl.id_control=f.id_control) INNER join lote l on f.lote_barrio=l.barrio AND l.manzana=f.lote_manzana AND l.parcela=f.lote_parcela where l.propietario_Apellidos=? and l.propietario_Nombres=? and cl.baja=0 order by c.apellidos, c.nombres"; 
+      preparedStmt = connection.prepareStatement(listar);
+      preparedStmt.setString(1, apellido);
+      preparedStmt.setString(2, nombre);
+      rs = preparedStmt.executeQuery();
+      while (rs.next()) {
+        ClientesPorCriterio cpp = new ClientesPorCriterio();
+        cpp.setDni(rs.getInt(1));
+        cpp.setApellidos(rs.getString(2));
+        cpp.setNombres(rs.getString(3));
+        cpp.setFecha_nacimiento(rs.getDate(4));
+        cpp.setBarrio_cliente(rs.getString(5));
+        cpp.setCalle_cliente(rs.getString(6));
+        cpp.setNro_cliente(rs.getInt(7));
+        cpp.setTelefono1(rs.getString(8));
+        cpp.setTelefono2(rs.getString(9));
+        cpp.setTrabajo(rs.getString(10));
+        cpp.setBaja(rs.getInt(11));
+        cpp.setIdControl(rs.getString(12));
+        cpp.setCantidad_cuotas(rs.getInt(13));
+        cpp.setGastos(rs.getBigDecimal(14));
+        cpp.setBolsa_cemento(rs.getBigDecimal(15));
+        cpp.setFecha_actualizacion(rs.getDate(16));
+        cpp.setBarrio(rs.getString(17));
+        cpp.setManzana(rs.getString(18));
+        cpp.setParcela(rs.getString(19));            
+        cpp.setBandera_cemento(rs.getByte(20));
+        cpp.setCuota_pura(rs.getBigDecimal(21));
+        cpp.setCuotas(rs.getInt(22));
+        cpp.setUltimaCuota(rs.getDate(23));
+        cpp.setTotal(rs.getBigDecimal(24));
+        cpp.setFecha_suscripcion(rs.getDate(25));
+        cpp.setBandera(rs.getTimestamp(26));
+        Instant instant2 = null;
+        long days = 0;
+        Date time = rs.getDate(23);
+        if(time!=null){      
+          instant2 = Instant.ofEpochMilli(rs.getDate(23).getTime());
+          LocalDate fecha_pago = LocalDateTime.ofInstant(instant2, ZoneId.systemDefault()).toLocalDate();
+             days = ChronoUnit.DAYS.between(fecha_pago, LocalDate.now());         
+         if(days>=manzana){
+            clientesPorPropietario.add(cpp); 
+        };  }                     
+     }
+    } catch (SQLException ex) {
+      System.out.println(ex.getMessage());
+    }finally{
+      try {
+          connection.close();
+      } catch (SQLException ex) {
+          Logger.getLogger(PropietarioDAO.class.getName()).log(Level.SEVERE, null, ex);
+      }
+    }
+     return clientesPorPropietario;
+ }
     
 }

@@ -79,7 +79,9 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableRowSorter;
 import org.apache.log4j.Logger;
+import org.joda.time.DateTime;
 import org.joda.time.Days;
+import org.joda.time.Months;
 import org.joda.time.Years;
 
 /**
@@ -223,8 +225,7 @@ public class ControladorCliente implements ActionListener, MouseListener, TableM
             int dias =  Integer.parseInt(vistaClientes.comboDias.getSelectedItem().toString());
             listaClientes = cd.clientesPorPropietarios(apellidos, nombres, dias);
             GenerarLista.generarResumenPdf(listaClientes, dias);
-        // vistaClientes.comboNombre.setSelectedIndex(0);
-                      
+        // vistaClientes.comboNombre.setSelectedIndex(0);                      
         }
         //-----------Boton mostrar todos los clientes----//
         if(e.getSource()==vistaClientes.mostrarTodos){
@@ -446,6 +447,8 @@ public class ControladorCliente implements ActionListener, MouseListener, TableM
         String cumpleaños;
         String tipoActualizacion;
         Date date = new Date();
+        DateTime current_date = new DateTime();
+        DateTime joda_suscription_time, joda_actualizacion_time;
         Date fechaActualizacion, fechaSuscripcion, bandera;
         Period age, banderaAge;
         int years, banderaInt;
@@ -489,22 +492,22 @@ public class ControladorCliente implements ActionListener, MouseListener, TableM
                       bandera_ = LocalDateTime.ofInstant(banderaInstant, ZoneId.systemDefault()).toLocalDate();
                       fechaActualizacion = listaClientes.get(i).getFecha_actualizacion();
                       fechaSuscripcion = listaClientes.get(i).getFecha_suscripcion();
+                      joda_suscription_time = new DateTime(bandera);
+                      joda_actualizacion_time = new DateTime(fechaActualizacion);
                       fchSuscripcion = Instant.ofEpochMilli(fechaSuscripcion.getTime());
-                      Instant fchActualizacion = Instant.ofEpochMilli(fechaActualizacion.getTime());
-                      LocalDate fecha_actualizacion = LocalDateTime.ofInstant(fchActualizacion, ZoneId.systemDefault()).toLocalDate();
                       fecha_suscripcion = LocalDateTime.ofInstant(fchSuscripcion, ZoneId.systemDefault()).toLocalDate();
                       fch_actualizacion = sdf.format(fechaActualizacion);
                       //----Controlo si ya paso 6, 18,30 meses de la ultima fecha de actualizacion de la bolsa de cemento----//
-                      int difMeses = (Period.between(fecha_suscripcion, LocalDate.now())).getMonths();
-                      if(((Period.between(fecha_actualizacion, LocalDate.now())).getMonths())>=6 && sucesion.contains(difMeses)){
+                      int difMeses = (Months.monthsBetween(joda_actualizacion_time, current_date)).getMonths();
+                      if(difMeses >= 12 || (fechaActualizacion.equals(fechaSuscripcion) && (Months.monthsBetween(joda_suscription_time, current_date)).getMonths() >= 6)){
                             actualizar_cemento = "1"; 
-                        }
-                        age = Period.between(fecha_suscripcion, LocalDate.now());
-                        years = age.getYears();
-                        banderaInt = (Period.between(bandera_, LocalDate.now())).getMonths();
+                        }        
+                                  
+                        int monthsBetween = Months.monthsBetween(joda_suscription_time, current_date).getMonths();     
                         //----Getmonths devuelve desde 0 a 11 meses, luego empieza nuevamente desde 0---//
                         //------ Actualizo cuota y saldo-------------//
-                        if(years >0 && banderaInt > 6){
+                        
+                        if(monthsBetween >= 12  ){
                          actualizar_cemento = "2";
                         }
                      }else{
@@ -563,16 +566,16 @@ public class ControladorCliente implements ActionListener, MouseListener, TableM
         vistaClientes.trabajo.setText(vistaClientes.tablaCliente.getModel().getValueAt(vistaClientes.tablaCliente.convertRowIndexToModel(row), 9).toString());  
         vistaClientes.telefono.setText(vistaClientes.tablaCliente.getModel().getValueAt(vistaClientes.tablaCliente.convertRowIndexToModel(row), 3).toString()+"_"+vistaClientes.tablaCliente.getModel().getValueAt(vistaClientes.tablaCliente.convertRowIndexToModel(row), 4).toString());
         //-------Si no tiene propiedad asignada entonces este valor va a ser nulo--------//
-        if(vistaClientes.tablaCliente.getModel().getValueAt(row, 13)!=null){
+        if(vistaClientes.tablaCliente.getModel().getValueAt(vistaClientes.tablaCliente.convertRowIndexToModel(row), 13)!=null){
             //----Muestro valor bolsa de cemento y fecha de actualizacion---------//
-            vistaClientes.fch_actualizacion.setText(vistaClientes.tablaCliente.getModel().getValueAt(row, 15).toString());
-            vistaClientes.bolsa_cemento.setText(vistaClientes.tablaCliente.getModel().getValueAt(row, 14).toString());
+            vistaClientes.fch_actualizacion.setText(vistaClientes.tablaCliente.getModel().getValueAt(vistaClientes.tablaCliente.convertRowIndexToModel(row), 15).toString());
+            vistaClientes.bolsa_cemento.setText(vistaClientes.tablaCliente.getModel().getValueAt(vistaClientes.tablaCliente.convertRowIndexToModel(row), 14).toString());
         }else{
             vistaClientes.fch_actualizacion.setText("");
             vistaClientes.bolsa_cemento.setText("");
         }
         //----Si tengo un 1 ha pasado un año o mas y tengo que actualizar precio bolsa de cemento-----//
-        if(vistaClientes.tablaCliente.getModel().getValueAt(row, 20).toString().equals("1")){
+        if(vistaClientes.tablaCliente.getModel().getValueAt(vistaClientes.tablaCliente.convertRowIndexToModel(row), 20).toString().equals("1")){
             vistaClientes.advertencia.setText("Actualizar precio bolsa cemento");
 //            vistaClientes.detalleBtn.setEnabled(false);
         }else{

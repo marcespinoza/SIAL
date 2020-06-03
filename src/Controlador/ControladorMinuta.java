@@ -26,8 +26,12 @@ import com.itextpdf.text.pdf.PdfWriter;
 import java.awt.Desktop;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -75,10 +79,16 @@ public class ControladorMinuta implements MouseListener, ActionListener {
         this.vistaMinuta.generarMinuta.addActionListener(this);
         this.vistaMinuta.guardar_en.addActionListener(this);
         this.vistaMinuta.buscar.addActionListener(this);
+        
         vistaMinuta.totalCobrado.setText("0");
         vistaMinuta.totalRendido.setText("0");
         cargarPathMinuta();
         llenarTablaFecha();
+    }
+    
+    public void vaciarTablaMinuta(){
+        DefaultTableModel model = (DefaultTableModel) vistaMinuta.tablaMinuta.getModel();
+        model.setRowCount(0);
     }
 
     
@@ -125,9 +135,8 @@ public class ControladorMinuta implements MouseListener, ActionListener {
     public void llenarTablaFecha(){
         List<Minuta> minutas = null;
         minutas = md.obtenerFecha();
+        vaciarTablaMinuta();
         DefaultTableModel model = (DefaultTableModel) vistaMinuta.tablaFechaMinuta.getModel();
-        DefaultTableModel model2 = (DefaultTableModel) vistaMinuta.tablaMinuta.getModel();
-        model2.setRowCount(0);
         model.setRowCount(0);
         SimpleDateFormat df = new SimpleDateFormat("dd-MM-yyyy");
         int nro = 1;
@@ -136,9 +145,8 @@ public class ControladorMinuta implements MouseListener, ActionListener {
             fechaMinuta = new Object[] {nro,df.format(fecha)};
             model.addRow(fechaMinuta);
             nro ++;
-        }           
-        
-        vistaMinuta.tablaFechaMinuta.getColumnModel().getColumn(0).setPreferredWidth(1); 
+        }          
+       vistaMinuta.tablaFechaMinuta.getColumnModel().getColumn(0).setPreferredWidth(1); 
     }
 
     @Override
@@ -175,13 +183,15 @@ public class ControladorMinuta implements MouseListener, ActionListener {
                 } catch (IOException ex) {
                    // I/O error
                 }
-                }
+               }
             }
             
             if(e.getSource() == vistaMinuta.buscar){
+              if(vistaMinuta.minutaDesde.getDate()!=null && vistaMinuta.minutaHasta.getDate()!=null){  
                 SimpleDateFormat dcn = new SimpleDateFormat("dd-MM-yyyy");
                 List<Minuta> listaMinutas = md.minutasPorRango2(new java.sql.Date(vistaMinuta.minutaDesde.getDate().getTime()) , new java.sql.Date(vistaMinuta.minutaHasta.getDate().getTime()));
                 llenarTabla(listaMinutas);
+             }
             }
             
             if(e.getSource()== vistaMinuta.actualizarButton){
@@ -190,10 +200,11 @@ public class ControladorMinuta implements MouseListener, ActionListener {
     }
 
     
+    
     public void generarPdf(){
       Document document= new Document(PageSize.A4);
       DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-      DateFormat dateFormat2 = new SimpleDateFormat("dd-MM-yyyy");
+      DateFormat dateFormat2 =  new SimpleDateFormat("dd-MM-yyyy_HH-mm-ss");
       java.util.Date date = new java.util.Date();
         try {
             pathMinuta = new File(vistaMinuta.path.getText(), "Minuta - "+dateFormat2.format(date)+".pdf");
@@ -203,14 +214,19 @@ public class ControladorMinuta implements MouseListener, ActionListener {
             image.scaleAbsolute(70, 70);
             Font f=new Font(Font.FontFamily.TIMES_ROMAN,10.0f,0,null); 
             Font f2=new Font(Font.FontFamily.TIMES_ROMAN,9.0f,0,null); 
+            Font f3=new Font(Font.FontFamily.TIMES_ROMAN,10.0f,0,null); 
+            f3.setColor(130, 130, 130);
             document.add(new Chunk(image, 0, -55f));
-            Paragraph titulo = new Paragraph("Minuta general"+"                      "+dateFormat.format(date));  
+            Paragraph titulo = new Paragraph("Minuta general");  
+            Paragraph fecha = new Paragraph(dateFormat.format(date), f3);
+            fecha.setAlignment(Element.ALIGN_RIGHT);
             titulo.setAlignment(Element.ALIGN_CENTER);
             document.add(titulo);
+            document.add(fecha);
             document.add( Chunk.NEWLINE );
             Paragraph subtitulo = null; 
             if((vistaMinuta.minutaDesde.getDate())!=null){ 
-                subtitulo = new Paragraph(dateFormat2.format(vistaMinuta.minutaDesde.getDate().getTime())+"  a  "+dateFormat2.format(vistaMinuta.minutaHasta.getDate().getTime()));
+                subtitulo = new Paragraph(dateFormat.format(vistaMinuta.minutaDesde.getDate().getTime())+"  a  "+dateFormat.format(vistaMinuta.minutaHasta.getDate().getTime()));
             }else{
                 int row = vistaMinuta.tablaFechaMinuta.getSelectedRow();  
                 subtitulo = new Paragraph(vistaMinuta.tablaFechaMinuta.getModel().getValueAt(row,1).toString());
@@ -476,10 +492,15 @@ public class ControladorMinuta implements MouseListener, ActionListener {
     
     @Override
     public void mouseClicked(MouseEvent e) {
-        //---------Limpio los campos de los calendarios si selecciona una minuta diaria-------//
-         vistaMinuta.minutaDesde.setCalendar(null);
-         vistaMinuta.minutaHasta.setCalendar(null);
-         new MinutasPorFecha().execute();         
+        if(e.getSource()==vistaMinuta.tablaFechaMinuta){
+          //---------Limpio los campos de los calendarios si selecciona una minuta diaria-------//
+          vistaMinuta.minutaDesde.setCalendar(null);
+          vistaMinuta.minutaHasta.setCalendar(null);
+          new MinutasPorFecha().execute(); 
+        }  
+        if(e.getSource()==vistaMinuta.minutaDesde){
+            vaciarTablaMinuta();
+        }
     }
 
     @Override

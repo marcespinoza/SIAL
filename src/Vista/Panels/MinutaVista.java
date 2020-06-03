@@ -129,6 +129,7 @@ public class MinutaVista extends javax.swing.JPanel {
         buscar.setText("Buscar");
 
         actualizarButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/iconos/refresh.png"))); // NOI18N
+        actualizarButton.setToolTipText("Actualizar tabla de fechas");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);

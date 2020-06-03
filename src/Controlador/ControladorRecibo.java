@@ -93,7 +93,7 @@ public class ControladorRecibo implements ActionListener{
     String monotributo=""; 
     String exento="";
     File pathRecibo;
-    static org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(ControladorCliente.class.getName());
+    static org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(ControladorRecibo.class.getName());
 
     public ControladorRecibo(ControladorDetalleCuota cdc, Frame parent, int id_control, DetalleCuota dc, BigDecimal saldo_cemento, int row, int tipoPago) {
         ar = new AltaRecibo(parent, true);
@@ -251,6 +251,8 @@ public class ControladorRecibo implements ActionListener{
             DateFormat fecha1 = new SimpleDateFormat("dd/MM/yyyy_HH:mm");
             java.util.Date date = new java.util.Date();
         try {
+            //----Escribo en el log------//
+            log.info(Ventana.nombreUsuario.getText() + " - Genera recibo "+ar.nro_recibo.getText());
             pathRecibo = new File(dc.path.getText(), "Recibo-"+ar.nro_recibo.getText()+".pdf");
             PdfWriter.getInstance(document, new FileOutputStream(pathRecibo));
             document.open();

@@ -115,14 +115,14 @@ public class Ventana extends javax.swing.JFrame implements ActionListener{
         btnClientes = new javax.swing.JButton();
         btnResumen = new javax.swing.JButton();
         btnMinuta = new javax.swing.JButton();
+        btnCumpleaños = new javax.swing.JButton();
+        calculadora = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         labelUsuario = new javax.swing.JLabel();
         labelTipoUsuario = new javax.swing.JLabel();
         apellidoUsuario = new javax.swing.JLabel();
         nombreUsuario = new javax.swing.JLabel();
-        btnCumpleaños = new javax.swing.JButton();
         ayuda = new javax.swing.JLabel();
-        calculadora = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         MenuInicio = new javax.swing.JMenu();
         cerrarSesion = new javax.swing.JMenuItem();
@@ -146,7 +146,6 @@ public class Ventana extends javax.swing.JFrame implements ActionListener{
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Mi Primer Casa");
-        setPreferredSize(new java.awt.Dimension(1360, 687));
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowOpened(java.awt.event.WindowEvent evt) {
                 formWindowOpened(evt);
@@ -162,7 +161,7 @@ public class Ventana extends javax.swing.JFrame implements ActionListener{
 
         panelBotones1.setBackground(new java.awt.Color(36, 47, 65));
 
-        btnClientes.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/iconos/cliente.png"))); // NOI18N
+        btnClientes.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/iconos/lotes.png"))); // NOI18N
         btnClientes.setText("Clientes");
         btnClientes.setMargin(new java.awt.Insets(2, 2, 2, 2));
 
@@ -188,6 +187,31 @@ public class Ventana extends javax.swing.JFrame implements ActionListener{
             }
         });
 
+        btnCumpleaños.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/iconos/cake.png"))); // NOI18N
+        btnCumpleaños.setMargin(new java.awt.Insets(2, 2, 2, 2));
+        btnCumpleaños.setMaximumSize(new java.awt.Dimension(92, 34));
+        btnCumpleaños.setMinimumSize(new java.awt.Dimension(92, 34));
+        btnCumpleaños.setName(""); // NOI18N
+        btnCumpleaños.setPreferredSize(new java.awt.Dimension(92, 34));
+        btnCumpleaños.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCumpleañosActionPerformed(evt);
+            }
+        });
+
+        calculadora.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/iconos/calculadora.png"))); // NOI18N
+        calculadora.setText("Calculadora");
+        calculadora.setMargin(new java.awt.Insets(2, 2, 2, 2));
+        calculadora.setMaximumSize(new java.awt.Dimension(92, 34));
+        calculadora.setMinimumSize(new java.awt.Dimension(92, 34));
+        calculadora.setName(""); // NOI18N
+        calculadora.setPreferredSize(new java.awt.Dimension(92, 34));
+        calculadora.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                calculadoraActionPerformed(evt);
+            }
+        });
+
         jLabel1.setFont(new java.awt.Font("Century Gothic", 1, 18)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(255, 255, 153));
         jLabel1.setText("Usuario:");
@@ -204,34 +228,9 @@ public class Ventana extends javax.swing.JFrame implements ActionListener{
         nombreUsuario.setForeground(new java.awt.Color(36, 47, 65));
         nombreUsuario.setText("jLabel2");
 
-        btnCumpleaños.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/iconos/cake.png"))); // NOI18N
-        btnCumpleaños.setMargin(new java.awt.Insets(2, 2, 2, 2));
-        btnCumpleaños.setMaximumSize(new java.awt.Dimension(92, 34));
-        btnCumpleaños.setMinimumSize(new java.awt.Dimension(92, 34));
-        btnCumpleaños.setName(""); // NOI18N
-        btnCumpleaños.setPreferredSize(new java.awt.Dimension(92, 34));
-        btnCumpleaños.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnCumpleañosActionPerformed(evt);
-            }
-        });
-
         ayuda.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
         ayuda.setForeground(new java.awt.Color(51, 255, 255));
         ayuda.setText("Ayuda");
-
-        calculadora.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/iconos/calculadora.png"))); // NOI18N
-        calculadora.setText("Calculadora");
-        calculadora.setMargin(new java.awt.Insets(2, 2, 2, 2));
-        calculadora.setMaximumSize(new java.awt.Dimension(92, 34));
-        calculadora.setMinimumSize(new java.awt.Dimension(92, 34));
-        calculadora.setName(""); // NOI18N
-        calculadora.setPreferredSize(new java.awt.Dimension(92, 34));
-        calculadora.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                calculadoraActionPerformed(evt);
-            }
-        });
 
         javax.swing.GroupLayout panelBotones1Layout = new javax.swing.GroupLayout(panelBotones1);
         panelBotones1.setLayout(panelBotones1Layout);
@@ -248,9 +247,9 @@ public class Ventana extends javax.swing.JFrame implements ActionListener{
                 .addComponent(calculadora, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnCumpleaños, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(ayuda, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 482, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 489, Short.MAX_VALUE)
                 .addComponent(nombreUsuario)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(apellidoUsuario)
