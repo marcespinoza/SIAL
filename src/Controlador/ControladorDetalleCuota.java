@@ -57,6 +57,7 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Properties;
+import java.util.concurrent.ExecutionException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultCellEditor;
@@ -434,15 +435,15 @@ public class ControladorDetalleCuota implements ActionListener, TableModelListen
         }
     }
     
-    private void generarResumenPdf(){
+    private String generarResumenPdf(){
             List<FichaDeControl> listaFichaControl;
             Document document= new Document(PageSize.A4);
             //DateFormat fecha1 = new SimpleDateFormat("dd/MM/yyyy");
             Font f=new Font(Font.FontFamily.TIMES_ROMAN,10.0f,0,null);
             listaFichaControl = fcd.obtenerFichaControl(id_control); 
         try {
-            String nya = listaFichaControl.get(0).getApellido()+" "+listaFichaControl.get(0).getNombre();
-            PdfWriter.getInstance(document, new FileOutputStream(new File(dc.path.getText(), "Resumen_"+nya+".pdf")));
+            String nya = (listaFichaControl.get(0).getApellido()+" "+listaFichaControl.get(0).getNombre());
+            PdfWriter.getInstance(document, new FileOutputStream(new File(dc.path.getText(), "Resumen_"+nya.replaceAll("/", "\\_")+".pdf")));
             document.open();       
             Image image = Image.getInstance(IMG); 
             image.scaleAbsolute(70, 70);
@@ -552,6 +553,7 @@ public class ControladorDetalleCuota implements ActionListener, TableModelListen
             derechoPosesion.beforeFirst();
             }
             document.close();
+            return nya;
         }            
             catch (DocumentException ex) {
             Logger.getLogger(DetalleCuota.class.getName()).log(Level.SEVERE, null, ex.getMessage());
@@ -561,25 +563,34 @@ public class ControladorDetalleCuota implements ActionListener, TableModelListen
         } catch (SQLException ex) {
             Logger.getLogger(ControladorDetalleCuota.class.getName()).log(Level.SEVERE, null, ex);
         }
+        return null;
     }
     
    //-----Hilo para mostrar barra de progreso mientras se crea el resumen de cliente----// 
-    public class GenerarResumen extends SwingWorker<Void, Void>{
+    public class GenerarResumen extends SwingWorker<String, Void>{
         
         ProgressDialog pd = new ProgressDialog();
 
         @Override
-        protected Void doInBackground() throws Exception {            
+        protected String doInBackground() throws Exception {            
             pd.setVisible(true);
-            generarResumenPdf();
-            return null;
+            String nya = generarResumenPdf();
+            return nya;
         }
         @Override
         public void done(){
            pd.dispose();
+           String nya = "";
+            try {
+                nya = get();
+            } catch (InterruptedException ex) {
+                Logger.getLogger(ControladorDetalleCuota.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (ExecutionException ex) {
+                Logger.getLogger(ControladorDetalleCuota.class.getName()).log(Level.SEVERE, null, ex);
+            }
            try {
             //-------Abro pdf del recibo-------//   
-               Desktop.getDesktop().open(new File(dc.path.getText(), "Resumen"+".pdf"));
+               Desktop.getDesktop().open(new File(dc.path.getText(), "Resumen_"+nya.replaceAll("/", "\\_")+".pdf"));
            } catch (IOException ex) {
                Logger.getLogger(ControladorRecibo.class.getName()).log(Level.SEVERE, null, ex);
            }

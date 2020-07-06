@@ -141,8 +141,8 @@ public class ControladorRecibo implements ActionListener{
         ar.apellido_comprador.setDocument(new LimitadorCaracteres(30));
         ar.nombre_comprador.setDocument(new LimitadorCaracteres(30));
         ar.domicilio_comprador.setDocument(new LimitadorCaracteres(75));
-        ar.importe.setDocument(new LimitadorCaracteres(7));
-        ar.total_pagado.setDocument(new LimitadorCaracteres(7));
+        ar.importe.setDocument(new LimitadorCaracteres(10));
+        ar.total_pagado.setDocument(new LimitadorCaracteres(10));
         ar.son_pesos.setDocument(new LimitadorCaracteres(50));
         ar.cons_final.setSelected(true);
         ar.monotributo.addActionListener(new ActionListener() {
@@ -232,7 +232,9 @@ public class ControladorRecibo implements ActionListener{
              cobrado = cuota_total.add(gastos_administrativos) ;
              ar.importe.setText(String.valueOf(cobrado));
              ar.total_pagado.setText(String.valueOf(cobrado));            
-             ar.detalle.setText("Paga cuota "+dc.tablaDetallePago.getModel().getValueAt(row, 0).toString()+"/"+cant_cuotas+ " - "+ "Saldo cemento "+dc.tablaDetallePago.getModel().getValueAt(row, 10).toString()+ " Bolsas" +"\r\n"+ barrio +" "+ " Mz. "+manzana +" Pc. "+ parcela+    " - Dimensión "+dimension +" "+dc.tablaDetallePago.getModel().getValueAt(row, 11).toString());
+             ar.detalle.setText("Paga cuota: "+dc.tablaDetallePago.getModel().getValueAt(row, 0).toString()+"/"+cant_cuotas+ 
+                                "\r\nSaldo cemento: "+dc.tablaDetallePago.getModel().getValueAt(row, 10).toString()+ " Bolsas" +
+                                "\r\nCemento por mes: "+dc.tablaDetallePago.getModel().getValueAt(row, 9).toString());
             //-----Si es 0 es derecho de posesion-------//
             }else if (tipoPago==0){
               ar.detalle.setText("Cta. derecho posesión "+    "\r\nDimension "+dimension +     "\r\n"+ barrio +" "+ " Mz. "+manzana +" Pc. "+ parcela+   "\r\n");
@@ -256,12 +258,20 @@ public class ControladorRecibo implements ActionListener{
             pathRecibo = new File(dc.path.getText(), "Recibo-"+ar.nro_recibo.getText()+".pdf");
             PdfWriter.getInstance(document, new FileOutputStream(pathRecibo));
             document.open();
-            for (int i = 1; i < 4; i++) {               
+            for (int i = 1; i < 3; i++) { 
+            document.add( new Paragraph( "" ) );
+            document.add( Chunk.NEWLINE );
+            document.add( Chunk.NEWLINE );
+            if(i==2){
+            document.add( Chunk.NEWLINE );
+            document.add( Chunk.NEWLINE );
+            }
             Font f=new Font(Font.FontFamily.TIMES_ROMAN,10.0f,0,null);
+            Font font_clausula=new Font(Font.FontFamily.TIMES_ROMAN,8.0f,0,null);
             Image image = Image.getInstance(getClass().getResource(IMG)); 
             Image image2 = Image.getInstance(getClass().getResource(IMG2));
-            image.scaleAbsolute(70, 70);
-            image2.scaleAbsolute(25, 38);
+            image.scaleAbsolute(80, 80);
+            image2.scaleAbsolute(25, 38);            
             PdfPTable table = new PdfPTable(1); 
             table.setWidthPercentage(57);
             table.setHorizontalAlignment(Element.ALIGN_CENTER); 
@@ -270,13 +280,12 @@ public class ControladorRecibo implements ActionListener{
             table.addCell(cell3);
             document.add(table); 
             Paragraph para = new Paragraph("Numero: "+ar.nro_recibo.getText(),f);
-            Paragraph cuit = new Paragraph("CUIT: 23-07431900-9",f);
-            Paragraph ingBrutos = new Paragraph("Ing Brutos: 01-23-07431900-9",f);
-            Paragraph inicAct = new Paragraph(fecha1.format(date)+"                                                        Inic. Act.: 01-08-2015",f); 
+            Paragraph cuit = new Paragraph("CUIT: 20132614009",f);
+            Paragraph ingBrutos = new Paragraph("Ing Brutos: 20132614009",f);
+            Paragraph inicAct = new Paragraph(fecha1.format(date)+"                                                        Inic. Act.: 01-11-2018",f); 
             switch(i){
-                case 1:document.add(new Chunk(image, 0, -55f)); document.add(new Chunk(image2, 190f, -40f));para.setSpacingBefore(-10); break;
-                case 2:document.add(new Chunk(image, 0, -38f)); document.add(new Chunk(image2, 190f, -22));para.setSpacingBefore(-26); break;
-                case 3:document.add(new Chunk(image, 0, -28f)); document.add(new Chunk(image2, 190f, -22));para.setSpacingBefore(-26); break;
+                case 1:document.add(new Chunk(image, 0, -46f)); document.add(new Chunk(image2, 170f, -23f));para.setSpacingBefore(-25); break;
+                case 2:document.add(new Chunk(image, 0, -43f)); document.add(new Chunk(image2, 170f, -22));para.setSpacingBefore(-26); break;
             }                         
             para.setAlignment(Paragraph.ALIGN_RIGHT);
             cuit.setAlignment(Paragraph.ALIGN_RIGHT);
@@ -340,7 +349,7 @@ public class ControladorRecibo implements ActionListener{
             PdfPTable table3 = new PdfPTable(2);
             table3.setTotalWidth(new float[]{ 3,1});
             table3.setWidthPercentage(100);
-            PdfPCell detalle = new PdfPCell(new Paragraph("Detalle ",f));
+            PdfPCell detalle = new PdfPCell(new Paragraph((barrio +" "+ " Mz. "+manzana +" Pc. "+ parcela+    " - Dimensión "+dimension +" "+dc.tablaDetallePago.getModel().getValueAt(row, 11).toString()).toUpperCase(),f));
             PdfPCell importe = new PdfPCell(new Paragraph("Importe ",f));
             table3.addCell(detalle);
             table3.addCell(importe);
@@ -349,7 +358,7 @@ public class ControladorRecibo implements ActionListener{
             table4.setTotalWidth(new float[]{ 3,1});
             table4.setWidthPercentage(100);
             PdfPCell detalle2 = new PdfPCell(new Paragraph(ar.detalle.getText(),f));
-            PdfPCell importe2 = new PdfPCell(new Paragraph(ar.importe.getText(),f));
+            PdfPCell importe2 = new PdfPCell(new Paragraph("",f));
             table4.addCell(detalle2);
             table4.addCell(importe2);
             document.add(table4);
@@ -360,7 +369,12 @@ public class ControladorRecibo implements ActionListener{
             PdfPCell total_variable = new PdfPCell(new Paragraph(ar.total_pagado.getText(),f));
             table5.addCell(total_pagado);
             table5.addCell(total_variable);
-            document.add(table5);             
+            document.add(table5);  
+            PdfPTable tableclausula = new PdfPTable(1);
+            tableclausula.setWidthPercentage(100);
+            PdfPCell cell_clausula = new PdfPCell(new Paragraph("RECUERDE QUE PARA LA POSESIÓN DEL TERRENO ES EL 10% DEL VALOR ESTIPULADO EN LA CLAUSULA 2DA DE SU CONTRATO ",font_clausula));
+            tableclausula.addCell(cell_clausula);
+            document.add(tableclausula); 
             document.add(new Paragraph("Son pesos: "+ar.son_pesos.getText(),f)); 
             PdfPTable table6 = new PdfPTable(3);
             table6.setTotalWidth(new float[]{ 1,1,1});
@@ -380,7 +394,12 @@ public class ControladorRecibo implements ActionListener{
             table6.addCell(cell9);            
             document.add(table6);
             document.add(new Paragraph("Efectivo/otros recepcionado ",f)); 
-            if(i!=3){
+            if(i==1){
+            document.add( Chunk.NEWLINE );
+            document.add( Chunk.NEWLINE );
+            document.add( Chunk.NEWLINE );
+            document.add( Chunk.NEWLINE );
+            document.add( Chunk.NEWLINE );
             Paragraph linea_punteada = new Paragraph("------------------------------------------------------------------------------------------------------------------------");
             linea_punteada.setAlignment(Rectangle.ALIGN_CENTER);
             document.add(linea_punteada);}
