@@ -458,10 +458,11 @@ public class ControladorRecibo implements ActionListener{
 
         @Override
         protected Void doInBackground() throws Exception {     
-            progress.setVisible(true);          
-            generarRecibo();
+            progress.setVisible(true); 
             //-----Devuelve id del recibo creado-----//
-            id_recibo = rd.altaRecibo(Integer.parseInt(ar.nro_recibo.getText()), apellido_propietario, nombre_propietario);         
+            id_recibo = rd.altaRecibo(Integer.parseInt(ar.nro_recibo.getText()), apellido_propietario, nombre_propietario); 
+            generarRecibo();
+               
             return null;
        }
 
@@ -470,6 +471,7 @@ public class ControladorRecibo implements ActionListener{
             Date date = new Date();
             BigDecimal rendido = cobrado.subtract(gastos_administrativos);
             Ventana.cm.llenarTablaFecha();
+            //------Tipo de pago 1 es cuota---------//
             if(tipoPago==1){
               md.altaMinuta(new java.sql.Date(date.getTime()), apellido_comprador, nombre_comprador, manzana, parcela, cobrado, gastos_administrativos, rendido, 
               Integer.parseInt(dc.tablaDetallePago.getModel().getValueAt(row, 0).toString()), 

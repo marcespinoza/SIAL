@@ -341,6 +341,7 @@ public class ControladorCliente implements ActionListener, MouseListener, TableM
         //----------Boton detalle de pago------//
          if(e.getSource() == vistaClientes.detalleBtn){  
            int row = vistaClientes.tablaCliente.getSelectedRow();
+           Object rowData = ((DefaultTableModel) vistaClientes.tablaCliente.getModel()).getDataVector().elementAt(vistaClientes.tablaCliente.getSelectedRow());
            if(row != -1){
                if(vistaClientes.tablaCliente.getModel().getValueAt(vistaClientes.tablaCliente.convertRowIndexToModel(row), 11) != null){
                    String tipo_actualizacion = vistaClientes.tablaCliente.getModel().getValueAt(vistaClientes.tablaCliente.convertRowIndexToModel(row), 19).toString();

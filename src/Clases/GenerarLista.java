@@ -79,7 +79,7 @@ public class GenerarLista {
             //------Cabeceras de las columnas de las cuotas---------//
             if(!listaClientes.isEmpty()){//---Si la tabla tiene 1 fila no imprimo cabeceras----//            
             PdfPTable table = new PdfPTable(8); 
-            table.setTotalWidth(new float[]{ 2,2,1,2,1,1,1,1});
+            table.setTotalWidth(new float[]{ 2,2,1,2,1,(float)0.5,1,1});
             table.setWidthPercentage(100);
             PdfPCell nro_cuota = new PdfPCell(new Paragraph("Apellido",f));
             PdfPCell fecha_pago = new PdfPCell(new Paragraph("Nombre/s",f));
@@ -88,7 +88,7 @@ public class GenerarLista {
             PdfPCell valorCuota = new PdfPCell(new Paragraph("Cuota",f));
             PdfPCell cemento_saldo = new PdfPCell(new Paragraph("Cuotas",f));
             PdfPCell ultima_cuota = new PdfPCell(new Paragraph("Ultima cuota",f));
-            PdfPCell total_cuotas = new PdfPCell(new Paragraph("Total $",f));
+            PdfPCell total_cuotas = new PdfPCell(new Paragraph("Tot. Acum $",f));
             nro_cuota.setHorizontalAlignment(Element.ALIGN_CENTER);
             fecha_pago.setHorizontalAlignment(Element.ALIGN_CENTER);
             lote.setHorizontalAlignment(Element.ALIGN_CENTER);
@@ -110,7 +110,7 @@ public class GenerarLista {
             for(int i = 0; i < listaClientes.size(); i++){
                 if(listaClientes.get(i).baja!=1){
                   PdfPTable table2 = new PdfPTable(8);            
-                  table2.setTotalWidth(new float[]{ 2,2,1,2,1,1,1,1});
+                  table2.setTotalWidth(new float[]{ 2,2,1,2,1,(float)0.5,1,1});
                   table2.setWidthPercentage(100);
                   table2.addCell(new PdfPCell(new Paragraph(String.valueOf(listaClientes.get(i).getApellidos()),f))).setHorizontalAlignment(Element.ALIGN_CENTER);
                   table2.addCell(new PdfPCell(new Paragraph(String.valueOf(listaClientes.get(i).getNombres()),f))).setHorizontalAlignment(Element.ALIGN_CENTER);

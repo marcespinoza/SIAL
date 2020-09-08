@@ -7,6 +7,7 @@ package Utils;
 
 import java.awt.Color;
 import java.awt.Component;
+import java.math.BigDecimal;
 import javax.swing.JLabel;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -31,6 +32,11 @@ private JLabel component;
             if(table.getValueAt(row, 15).toString().equals("1")){
                 setBackground(Color.green);
             }
+        }
+        if(row!=0){
+        if(new BigDecimal(table.getValueAt(row-1, 9).toString()).compareTo( new BigDecimal(table.getValueAt(row, 9).toString()))==1 && !table.getValueAt(row-1, 15).toString().equals("1")){
+                setBackground( new Color(242, 189, 151 ));
+        }
         }
          return component;
     }   

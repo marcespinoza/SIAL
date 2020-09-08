@@ -42,6 +42,8 @@ public class ActualizarCuotaSaldo extends javax.swing.JDialog {
 
         jLabel4.setText("Saldo actualizado");
 
+        saldoActualizado.setEnabled(false);
+
         actualizar.setText("Actualizar");
         actualizar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
