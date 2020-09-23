@@ -70,6 +70,7 @@ import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JTable;
 import javax.swing.RowFilter;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
@@ -114,6 +115,8 @@ public class ControladorCliente implements ActionListener, MouseListener, TableM
     private String nombres, apellidos;
     static Logger log = Logger.getLogger(ControladorCliente.class.getName());
     ArrayList<Integer> sucesion = new ArrayList<>();
+    JTable tablePrinter;
+    String tipoFiltro = "";
     
     public ControladorCliente(Clientes vistaCliente, Ventana ventana){
         this.vistaClientes=vistaCliente;
@@ -132,6 +135,7 @@ public class ControladorCliente implements ActionListener, MouseListener, TableM
         this.vistaClientes.comboNombre.addActionListener(this);
         this.vistaClientes.mostrarTodos.addActionListener(this);
         this.vistaClientes.imprimirClientes.addActionListener(this);
+        this.vistaClientes.imprimirClientesOrdenados.addActionListener(this);
         this.vistaClientes.tablaCliente.getModel().addTableModelListener(this);
         this.vistaClientes.buscarTodos.addKeyListener(new KeyAdapter() {
             @Override
@@ -159,6 +163,13 @@ public class ControladorCliente implements ActionListener, MouseListener, TableM
             public void keyReleased(KeyEvent e){
               String query=vistaClientes.buscarParcela.getText().toLowerCase();
               filtroParcela(query);
+            }
+         });
+        this.vistaClientes.buscarTipoCuota.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyReleased(KeyEvent e){
+              String query=vistaClientes.buscarTipoCuota.getText().toLowerCase();
+              filtroTipoCuota(query);
             }
          });
         this.vistaClientes.bolsa_cemento.addKeyListener(new KeyAdapter() {
@@ -225,6 +236,10 @@ public class ControladorCliente implements ActionListener, MouseListener, TableM
             int dias =  Integer.parseInt(vistaClientes.comboDias.getSelectedItem().toString());
             listaClientes = cd.clientesPorPropietarios(apellidos, nombres, dias);
             GenerarLista.generarResumenPdf(listaClientes, dias);
+        // vistaClientes.comboNombre.setSelectedIndex(0);                      
+        }
+        if(e.getSource()==vistaClientes.imprimirClientesOrdenados){
+            GenerarLista.generarResumenPdfporTipo(tablePrinter);
         // vistaClientes.comboNombre.setSelectedIndex(0);                      
         }
         //-----------Boton mostrar todos los clientes----//
@@ -643,14 +658,25 @@ public class ControladorCliente implements ActionListener, MouseListener, TableM
          TableRowSorter<DefaultTableModel> tr = new TableRowSorter<> (table);
          vistaClientes.tablaCliente.setRowSorter(tr);
          tr.setRowFilter(RowFilter.regexFilter("(?i)" + query,18));
+         tablePrinter = vistaClientes.tablaCliente;
     }
     private void filtroManzana(String query){
          DefaultTableModel table = (DefaultTableModel) vistaClientes.tablaCliente.getModel();
          TableRowSorter<DefaultTableModel> tr = new TableRowSorter<> (table);
          vistaClientes.tablaCliente.setRowSorter(tr);
          tr.setRowFilter(RowFilter.regexFilter("(?i)" + query,17));
+         tablePrinter = vistaClientes.tablaCliente;
     }
 
+    private void filtroTipoCuota(String query){
+         DefaultTableModel table = (DefaultTableModel) vistaClientes.tablaCliente.getModel();
+         TableRowSorter<DefaultTableModel> tr = new TableRowSorter<> (table);
+         vistaClientes.tablaCliente.setRowSorter(tr);
+         tr.setRowFilter(RowFilter.regexFilter("(?i)" + query,19));
+         tablePrinter = vistaClientes.tablaCliente;
+         String tipoCliente = vistaClientes.tablaCliente.getModel().getValueAt(vistaClientes.tablaCliente.convertRowIndexToModel(0), 19).toString();
+         System.out.println(tipoCliente);
+    }
     @Override
     public void tableChanged(TableModelEvent e) {
         int row = vistaClientes.tablaCliente.getSelectedRow();

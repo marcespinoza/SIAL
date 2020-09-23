@@ -191,12 +191,14 @@ public class AltaRecibo extends javax.swing.JDialog {
         jLabel8.setFont(new java.awt.Font("Dialog", 0, 10)); // NOI18N
         jLabel8.setText("Importe");
 
+        importe.setEditable(false);
         importe.setMinimumSize(new java.awt.Dimension(12, 22));
         importe.setPreferredSize(new java.awt.Dimension(12, 22));
 
         jLabel9.setFont(new java.awt.Font("Dialog", 0, 10)); // NOI18N
         jLabel9.setText("Total pagado a la fecha");
 
+        total_pagado.setEditable(false);
         total_pagado.setMinimumSize(new java.awt.Dimension(12, 22));
         total_pagado.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {

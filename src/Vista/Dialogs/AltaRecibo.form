@@ -446,6 +446,7 @@
         </Component>
         <Component class="javax.swing.JTextField" name="importe">
           <Properties>
+            <Property name="editable" type="boolean" value="false"/>
             <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
               <Dimension value="[12, 22]"/>
             </Property>
@@ -467,6 +468,7 @@
         </Component>
         <Component class="javax.swing.JTextField" name="total_pagado">
           <Properties>
+            <Property name="editable" type="boolean" value="false"/>
             <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
               <Dimension value="[12, 22]"/>
             </Property>

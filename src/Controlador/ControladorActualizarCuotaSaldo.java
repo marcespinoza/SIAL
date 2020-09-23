@@ -72,9 +72,13 @@ public class ControladorActualizarCuotaSaldo implements ActionListener{
          nuevoSaldo();
          }
         });
-        acs.cuotaActualizada.addKeyListener(new DoubleJTextField(acs.cuotaActualizada));
+        //-------Controlo que solo ingrese numeros y punto------//
+       acs.cuotaActualizada.addKeyListener(new DoubleJTextField(acs.cuotaActualizada));
+       if(Ventana.labelTipoUsuario.getText().equals("operador")){
+         acs.cuotaActualizada.setEnabled(false);
+       }
        calcularValores();   
-
+       
        }
     
     private boolean isNumber(char ch){

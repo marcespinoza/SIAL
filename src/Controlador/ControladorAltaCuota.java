@@ -140,7 +140,8 @@ public class ControladorAltaCuota implements ActionListener, KeyListener{
                  }
                  ac.gastos.setText(gasto.toString());
             }else{
-                ac.gastos.setText("");
+                BigDecimal gasto = new BigDecimal(ac.cuota_total.getText()).subtract((new BigDecimal(ac.cuota_total.getText())).divide(new BigDecimal(1.12),2, BigDecimal.ROUND_HALF_UP));
+                ac.gastos.setText(gasto.toString());
             }
             }else{
                 ac.gastos.setText("");
