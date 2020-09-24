@@ -146,7 +146,7 @@ public class GenerarLista {
         }
       }
     
-    public static void generarResumenPdfporTipo(JTable jt){
+    public static void generarResumenPdfporTipo(JTable jt, String tit){
             JFrame parentFrame = new JFrame(); 
             JFileChooser fileChooser = new JFileChooser();
             fileChooser.setDialogTitle("Guardar en..");  
@@ -159,7 +159,7 @@ public class GenerarLista {
             Document document= new Document(PageSize.A4);
             DateFormat dateFormat2 = new SimpleDateFormat("dd-MM-yyyy");
             java.util.Date date = new java.util.Date();
-            Font f=new Font(Font.FontFamily.TIMES_ROMAN,8.0f,0,null);
+            Font f=new Font(Font.FontFamily.TIMES_ROMAN,9.0f,0,null);
         try {
             PdfWriter.getInstance(document, new FileOutputStream(new File(fileToSave.getAbsolutePath())));
             document.open();       
@@ -174,7 +174,7 @@ public class GenerarLista {
             ph.add(ph1);
             ph.add(ph2);
             ph.setAlignment(Element.ALIGN_CENTER);
-            Paragraph total = new Paragraph("B° Doña Valentina - Total clientes: "+jt.getRowCount());
+            Paragraph total = new Paragraph("B° Doña Valentina - Total clientes: "+jt.getRowCount()+ " - "+tit);
             total.setAlignment(Element.ALIGN_CENTER);
             document.add(ph);
             document.add( Chunk.NEWLINE );

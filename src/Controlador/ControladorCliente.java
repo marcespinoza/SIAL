@@ -239,7 +239,7 @@ public class ControladorCliente implements ActionListener, MouseListener, TableM
         // vistaClientes.comboNombre.setSelectedIndex(0);                      
         }
         if(e.getSource()==vistaClientes.imprimirClientesOrdenados){
-            GenerarLista.generarResumenPdfporTipo(tablePrinter);
+            GenerarLista.generarResumenPdfporTipo(tablePrinter, tipoFiltro);
         // vistaClientes.comboNombre.setSelectedIndex(0);                      
         }
         //-----------Boton mostrar todos los clientes----//
@@ -659,6 +659,7 @@ public class ControladorCliente implements ActionListener, MouseListener, TableM
          vistaClientes.tablaCliente.setRowSorter(tr);
          tr.setRowFilter(RowFilter.regexFilter("(?i)" + query,18));
          tablePrinter = vistaClientes.tablaCliente;
+         tipoFiltro = "Pc. "+query;
     }
     private void filtroManzana(String query){
          DefaultTableModel table = (DefaultTableModel) vistaClientes.tablaCliente.getModel();
@@ -666,6 +667,7 @@ public class ControladorCliente implements ActionListener, MouseListener, TableM
          vistaClientes.tablaCliente.setRowSorter(tr);
          tr.setRowFilter(RowFilter.regexFilter("(?i)" + query,17));
          tablePrinter = vistaClientes.tablaCliente;
+         tipoFiltro = "Mz. "+query;
     }
 
     private void filtroTipoCuota(String query){
@@ -674,8 +676,7 @@ public class ControladorCliente implements ActionListener, MouseListener, TableM
          vistaClientes.tablaCliente.setRowSorter(tr);
          tr.setRowFilter(RowFilter.regexFilter("(?i)" + query,19));
          tablePrinter = vistaClientes.tablaCliente;
-         String tipoCliente = vistaClientes.tablaCliente.getModel().getValueAt(vistaClientes.tablaCliente.convertRowIndexToModel(0), 19).toString();
-         System.out.println(tipoCliente);
+         tipoFiltro = vistaClientes.tablaCliente.getModel().getValueAt(vistaClientes.tablaCliente.convertRowIndexToModel(0), 19).toString();
     }
     @Override
     public void tableChanged(TableModelEvent e) {
