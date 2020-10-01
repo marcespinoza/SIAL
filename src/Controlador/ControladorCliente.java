@@ -665,7 +665,7 @@ public class ControladorCliente implements ActionListener, MouseListener, TableM
          DefaultTableModel table = (DefaultTableModel) vistaClientes.tablaCliente.getModel();
          TableRowSorter<DefaultTableModel> tr = new TableRowSorter<> (table);
          vistaClientes.tablaCliente.setRowSorter(tr);
-         tr.setRowFilter(RowFilter.regexFilter("(?i)" + query,17));
+         tr.setRowFilter(RowFilter.regexFilter("(^|\\s)" + query +"(\\s|$)" ,17));
          tablePrinter = vistaClientes.tablaCliente;
          tipoFiltro = "Mz. "+query;
     }
