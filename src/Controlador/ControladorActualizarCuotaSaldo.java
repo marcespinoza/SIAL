@@ -52,6 +52,7 @@ public class ControladorActualizarCuotaSaldo implements ActionListener{
     CuotaDAO cd = new CuotaDAO();
     BigDecimal cdc, precio_bc, nueva_cuota, gastos, cuota_pura, nuevo_saldo, cemento_saldo, cantidad_bc, cuota_anterior;
     int cant_cuotas;
+    static org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(ControladorDetalleCuota.class.getName());
 
     public ControladorActualizarCuotaSaldo(Ventana ventana, int id_control) {
         this.ventana=ventana;
@@ -171,6 +172,7 @@ public class ControladorActualizarCuotaSaldo implements ActionListener{
         acd.actualizarCemento(String.valueOf(id_control), new java.sql.Date(date.getTime()), cuota_anterior , nueva_cuota);
         
         if (filas_insertadas==1) {
+           log.info(Ventana.nombreUsuario.getText() + " - Actualiza cuota");
            acs.dispose();
            filas_insertadas=0;
          } 

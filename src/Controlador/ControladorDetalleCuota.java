@@ -10,6 +10,7 @@ import Clases.ActualizacionEmpleado;
 import Clases.Cuota;
 import Clases.FichaDeControl;
 import Clases.LimitadorCaracteres;
+import static Controlador.ControladorAltaCuota.log;
 import Modelo.ActualizacionCementoDAO;
 import Modelo.ActualizacionEmpleadoDAO;
 import Modelo.CuotaDAO;
@@ -107,6 +108,7 @@ public class ControladorDetalleCuota implements ActionListener, TableModelListen
     List<Cuota> detalleCuota = new ArrayList();
     int baja_logica;
     static org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(ControladorDetalleCuota.class.getName());  
+    
     ControladorCliente cc;
     
     public ControladorDetalleCuota() {
@@ -352,6 +354,8 @@ public class ControladorDetalleCuota implements ActionListener, TableModelListen
               if (reply == JOptionPane.YES_OPTION) {
                   cd.eliminarCuota(nro_cuota, id_control);
                   md.eliminarMinuta(id_recibo);
+                 log.info(Ventana.nombreUsuario.getText() + " - Elimina cuota");
+
                   llenarTabla(id_control);
                } 
             }

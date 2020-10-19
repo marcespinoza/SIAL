@@ -654,20 +654,28 @@ public class ControladorCliente implements ActionListener, MouseListener, TableM
     }
     
      private void filtroParcela(String query){
-         DefaultTableModel table = (DefaultTableModel) vistaClientes.tablaCliente.getModel();
-         TableRowSorter<DefaultTableModel> tr = new TableRowSorter<> (table);
-         vistaClientes.tablaCliente.setRowSorter(tr);
-         tr.setRowFilter(RowFilter.regexFilter("(?i)" + query,18));
-         tablePrinter = vistaClientes.tablaCliente;
-         tipoFiltro = "Pc. "+query;
+        DefaultTableModel table = (DefaultTableModel) vistaClientes.tablaCliente.getModel();
+        TableRowSorter<DefaultTableModel> tr = new TableRowSorter<> (table);
+        if(!query.isEmpty()){
+          vistaClientes.tablaCliente.setRowSorter(tr);
+          tr.setRowFilter(RowFilter.regexFilter("(^|\\s)" + query +"(\\s|$)",18));
+          tablePrinter = vistaClientes.tablaCliente;
+          tipoFiltro = "Pc. "+query;   
+        }else{
+          vistaClientes.tablaCliente.setRowSorter(null);
+        }
     }
     private void filtroManzana(String query){
          DefaultTableModel table = (DefaultTableModel) vistaClientes.tablaCliente.getModel();
          TableRowSorter<DefaultTableModel> tr = new TableRowSorter<> (table);
+        if(!query.isEmpty()){
          vistaClientes.tablaCliente.setRowSorter(tr);
          tr.setRowFilter(RowFilter.regexFilter("(^|\\s)" + query +"(\\s|$)" ,17));
          tablePrinter = vistaClientes.tablaCliente;
          tipoFiltro = "Mz. "+query;
+        }else{
+         vistaClientes.tablaCliente.setRowSorter(null);
+        }
     }
 
     private void filtroTipoCuota(String query){
