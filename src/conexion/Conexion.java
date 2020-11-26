@@ -18,7 +18,7 @@ public class Conexion {
     public String db = "miprimercasa";
     public String url = "jdbc:mysql://localhost:3306/miprimercasa?zeroDateTimeBehavior=convertToNull&useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=" + TimeZone.getDefault().getID();;
     public String user = "root";
-    public String root = "MiPrimerCasa";        
+    public String root = "";        
     public DataSource dataSource;       
     static org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(Conexion.class.getName());  
     

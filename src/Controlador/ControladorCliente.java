@@ -8,6 +8,7 @@ package Controlador;
 import Modelo.ActualizacionCementoDAO;
 import Clases.ClientesPorCriterio;
 import Clases.GenerarLista;
+import Clases.Lote;
 import Clases.Propietario;
 import Clases.Referencia;
 import static Controlador.ControladorDetalleCuota.IMG;
@@ -23,6 +24,7 @@ import Vista.Dialogs.Cumpleaños;
 import Vista.Frame.Ventana;
 import Vista.Panels.Clientes;
 import Vista.Panels.DetalleCuota;
+import Vista.Panels.Lotes;
 import com.itextpdf.text.Chunk;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
@@ -96,10 +98,10 @@ public class ControladorCliente implements ActionListener, MouseListener, TableM
     Cumpleaños dialogCumpleaños;
     ClienteDAO cd = new ClienteDAO();
     ReferenciaDAO rd = new ReferenciaDAO();
+    LoteDAO ld = new LoteDAO();
     FichaControlDAO fd = new FichaControlDAO();
     PropietarioDAO pd = new PropietarioDAO();
     ActualizacionCementoDAO acd = new ActualizacionCementoDAO();
-    LoteDAO ld = new LoteDAO();
     private ArrayList<String[]> cumpleaños = new ArrayList<String[]>();
     public ArrayList<Object> datosCliente = new ArrayList<>();
     Ventana ventana;
@@ -112,7 +114,7 @@ public class ControladorCliente implements ActionListener, MouseListener, TableM
     private List<Object> referencia = new ArrayList<>();
     File configFile = new File("config.properties");
     public static final DefaultTableCellRenderer DEFAULT_RENDERER = new DefaultTableCellRenderer();
-    private String nombres, apellidos;
+    private String nombres, apellidos, lote;
     static Logger log = Logger.getLogger(ControladorCliente.class.getName());
     ArrayList<Integer> sucesion = new ArrayList<>();
     JTable tablePrinter;
@@ -132,6 +134,7 @@ public class ControladorCliente implements ActionListener, MouseListener, TableM
         this.vistaClientes.cambiarPropietario.addActionListener(this);
         this.vistaClientes.comboApellido.addActionListener(this);
         this.vistaClientes.comboDias.addActionListener(this);
+        this.vistaClientes.comboLote.addActionListener(this);
         this.vistaClientes.comboNombre.addActionListener(this);
         this.vistaClientes.mostrarTodos.addActionListener(this);
         this.vistaClientes.imprimirClientes.addActionListener(this);
@@ -234,7 +237,7 @@ public class ControladorCliente implements ActionListener, MouseListener, TableM
         if(e.getSource()==vistaClientes.imprimirClientes){
             List<ClientesPorCriterio> listaClientes;
             int dias =  Integer.parseInt(vistaClientes.comboDias.getSelectedItem().toString());
-            listaClientes = cd.clientesPorPropietarios(apellidos, nombres, dias);
+            listaClientes = cd.clientesPorPropietarios(apellidos, nombres, dias, lote);
             GenerarLista.generarResumenPdf(listaClientes, dias);
         // vistaClientes.comboNombre.setSelectedIndex(0);                      
         }
@@ -265,9 +268,22 @@ public class ControladorCliente implements ActionListener, MouseListener, TableM
          if(e.getSource()==vistaClientes.comboNombre){
            if(vistaClientes.comboNombre.getItemCount()!=0){
             if(!vistaClientes.comboNombre.getSelectedItem().equals("Seleccione")){ 
-                nombres = vistaClientes.comboNombre.getSelectedItem().toString();                
+                nombres = vistaClientes.comboNombre.getSelectedItem().toString();   
+                llenarComboLote(nombres, apellidos);
+            }else{
+                vistaClientes.comboLote.setSelectedIndex(0);
             }
-            llenarTabla();
+           // llenarTabla();
+            }
+        }
+          //----------Eventos sobre combo lote-------//
+         if(e.getSource()==vistaClientes.comboLote){
+           if(vistaClientes.comboLote.getItemCount()!=0){
+            if(!vistaClientes.comboLote.getSelectedItem().equals("Seleccione")){ 
+                lote = vistaClientes.comboLote.getSelectedItem().toString(); 
+                llenarTabla();
+            }
+            
             }
         }
          //-------Evento sobre combo dias--------//
@@ -443,7 +459,19 @@ public class ControladorCliente implements ActionListener, MouseListener, TableM
                vistaClientes.comboNombre.addItem(propietarios.get(i).getNombres());
             }
             vistaClientes.comboNombre.setSelectedItem(nombres);
-            llenarTabla();
+           // llenarTabla();
+     }
+      
+        public void llenarComboLote(String nombre, String apellidos){
+            List<Lote>lotes = null;        
+            lotes = ld.obtenerLotes(apellidos, nombre);
+            vistaClientes.comboLote.removeAllItems();
+            vistaClientes.comboLote.addItem("Seleccione");
+            for(int i=0; i< lotes.size();i++) {
+               vistaClientes.comboLote.addItem(lotes.get(i).getBarrio());
+            }
+            vistaClientes.comboLote.setSelectedIndex(1);
+          //  llenarTabla();
      }
     
      public void llenarTabla(){         
@@ -452,7 +480,7 @@ public class ControladorCliente implements ActionListener, MouseListener, TableM
             listaClientes = cd.clientesPorLotes();}
         else{
            int dias =  Integer.parseInt(vistaClientes.comboDias.getSelectedItem().toString());
-           listaClientes = cd.clientesPorPropietarios(apellidos, nombres, dias);
+           listaClientes = cd.clientesPorPropietarios(apellidos, nombres, dias, lote);
         }         
         DefaultTableModel model = (DefaultTableModel) vistaClientes.tablaCliente.getModel();
         model.setRowCount(0);
@@ -706,7 +734,7 @@ public class ControladorCliente implements ActionListener, MouseListener, TableM
             fileToSave = fileChooser.getSelectedFile();
             }
             List<ClientesPorCriterio> listaClientes;
-            listaClientes = cd.clientesPorPropietarios(apellidos, nombres, 0);
+            listaClientes = cd.clientesPorPropietarios(apellidos, nombres, 0, lote);
             Document document= new Document(PageSize.A4);
             DateFormat dateFormat2 = new SimpleDateFormat("dd-MM-yyyy");
             java.util.Date date = new java.util.Date();

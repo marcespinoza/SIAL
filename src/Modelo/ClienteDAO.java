@@ -246,7 +246,7 @@ public class ClienteDAO {
      return rs;
  }
  
-   public List<ClientesPorCriterio> clientesPorPropietarios(String apellido, String nombre, int dias){
+   public List<ClientesPorCriterio> clientesPorPropietarios(String apellido, String nombre, int dias, String lote){
      ResultSet rs;
      Connection connection = null;
      PreparedStatement preparedStmt = null;
@@ -258,10 +258,11 @@ public class ClienteDAO {
               + "      (SELECT lc.Fecha FROM linea_control_lote lc WHERE lc.id_control=f.Id_control ORDER BY lc.Fecha DESC LIMIT 1 ) as ultimaCuota,"
               + "      " + "      (Select SUM(lc.haber) from linea_control_lote lc where lc.id_control=f.id_control)as total, "
               + "      (Select fecha from linea_control_lote lc where lc.id_control=f.id_control and lc.nro_cuota=0)as suscripcion, "
-              + "      f.bandera  from ((cliente c INNER join cliente_tiene_lote cl on c.dni=cl.cliente_dni) INNER join ficha_control_lote f on cl.id_control=f.id_control) INNER join lote l on f.lote_barrio=l.barrio AND l.manzana=f.lote_manzana AND l.parcela=f.lote_parcela where l.propietario_Apellidos=? and l.propietario_Nombres=? and cl.baja=0 order by c.apellidos, c.nombres"; 
+              + "      f.bandera  from ((cliente c INNER join cliente_tiene_lote cl on c.dni=cl.cliente_dni) INNER join ficha_control_lote f on cl.id_control=f.id_control and f.lote_barrio=?) INNER join lote l on f.lote_barrio=l.barrio AND l.manzana=f.lote_manzana AND l.parcela=f.lote_parcela where l.propietario_Apellidos=? and l.propietario_Nombres=? and cl.baja=0 order by c.apellidos, c.nombres"; 
       preparedStmt = connection.prepareStatement(listar);
-      preparedStmt.setString(1, apellido);
-      preparedStmt.setString(2, nombre);
+      preparedStmt.setString(1, lote);
+      preparedStmt.setString(2, apellido);
+      preparedStmt.setString(3, nombre);
       rs = preparedStmt.executeQuery();
       while (rs.next()) {
         ClientesPorCriterio cpp = new ClientesPorCriterio();
