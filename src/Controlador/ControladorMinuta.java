@@ -325,7 +325,7 @@ public class ControladorMinuta implements MouseListener, ActionListener {
                           case "Efectivo":efectivo = efectivo.add(listaMinutas.get(i).getRendido());break;
                       }
                   }                 
-                  conta ++;
+                  conta ++;}
               
             //------Linea Totales------//
             PdfPTable tableTotales = new PdfPTable(9);            
@@ -453,8 +453,8 @@ public class ControladorMinuta implements MouseListener, ActionListener {
              nesting.addCell(cell);
              document.add(nesting); 
              document.close();
-          
-        }
+            
+        
          }catch (DocumentException ex) {
             Logger.getLogger(DetalleCuota.class.getName()).log(Level.SEVERE, null, ex);
         } catch (FileNotFoundException ex) {
@@ -491,8 +491,8 @@ public class ControladorMinuta implements MouseListener, ActionListener {
         BigDecimal total=new BigDecimal(0);
         for (int i = 0; i < vistaMinuta.tablaMinuta.getRowCount(); i++) {
          //----Las minutas que estan dadas de baja no las sumo----//   
-          if(Integer.parseInt(vistaMinuta.tablaMinuta.getValueAt(i, 10).toString())==0){   
-            total=total.add(new BigDecimal(vistaMinuta.tablaMinuta.getValueAt(i, 4).toString()));
+          if(Integer.parseInt(vistaMinuta.tablaMinuta.getValueAt(i, 11).toString())==0){   
+            total=total.add(new BigDecimal(vistaMinuta.tablaMinuta.getValueAt(i, 5).toString()));
           }
         }
         vistaMinuta.totalCobrado.setText("$ " + String.valueOf(total));
@@ -501,8 +501,8 @@ public class ControladorMinuta implements MouseListener, ActionListener {
           BigDecimal total=new BigDecimal(0);
         for (int i = 0; i < vistaMinuta.tablaMinuta.getRowCount(); i++) {
            //----Las minutas que estan dadas de baja no las sumo----//     
-           if(Integer.parseInt(vistaMinuta.tablaMinuta.getValueAt(i, 10).toString())==0 ){ 
-            total=total.add(new BigDecimal(vistaMinuta.tablaMinuta.getValueAt(i, 6).toString()));
+           if(Integer.parseInt(vistaMinuta.tablaMinuta.getValueAt(i, 11).toString())==0 ){ 
+            total=total.add(new BigDecimal(vistaMinuta.tablaMinuta.getValueAt(i, 7).toString()));
            }
         }
         vistaMinuta.totalRendido.setText("$ " + String.valueOf(total));
