@@ -146,7 +146,8 @@ public class ControladorPropiedades implements ActionListener{
                 else{
                    propiedades = new Object[] {barrio, manzana, parcela, observaciones, "Vendido"};  
                 }
-                model.addRow(propiedades);}
+                model.addRow(propiedades);
+              }
             }
         } 
         catch (Exception e) {

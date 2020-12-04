@@ -112,6 +112,8 @@ public class ControladorMinuta implements MouseListener, ActionListener {
     
     public void llenarTabla(List<Minuta> minutas){
         listaMinutas = minutas;
+        lista_barrios.clear();
+        vistaMinuta.combo_barrios.removeAll();
         DefaultTableModel model = (DefaultTableModel) vistaMinuta.tablaMinuta.getModel();
         model.setRowCount(0);
         if(!minutas.isEmpty()){
@@ -120,8 +122,10 @@ public class ControladorMinuta implements MouseListener, ActionListener {
                 String apellidos = listaMinutas.get(i).getApellidos();
                 String nombres = listaMinutas.get(i).getNombres();
                 String mzpc = String.valueOf(listaMinutas.get(i).getManzana()) +" - "+ String.valueOf(listaMinutas.get(i).getParcela());
-                String barrio = listaMinutas.get(i).getBarrio();                
-                lista_barrios.add(barrio);
+                String barrio = listaMinutas.get(i).getBarrio();   
+                if(!barrio.equals("")){
+                  lista_barrios.add(barrio);
+                }
                 BigDecimal cobrado = listaMinutas.get(i).getCobrado();
                 BigDecimal gastos = listaMinutas.get(i).getGastos();
                 BigDecimal rendido = listaMinutas.get(i).getRendido();
