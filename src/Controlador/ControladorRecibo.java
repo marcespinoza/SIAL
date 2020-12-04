@@ -477,10 +477,10 @@ public class ControladorRecibo implements ActionListener{
               Integer.parseInt(dc.tablaDetallePago.getModel().getValueAt(row, 0).toString()), 
               dc.tablaDetallePago.getModel().getValueAt(row, 14).toString(), 
               categoria.toString(), 
-              id_recibo);
+              id_recibo, barrio);
               //-----------Tipo de pago 0 es derecho de posesion---------------//
             }else if(tipoPago==0){
-              md.altaMinuta(new java.sql.Date(date.getTime()), apellido_comprador, nombre_comprador, manzana, parcela, cobrado, gastos_administrativos, rendido, Integer.parseInt(dc.tablaDchoPosesion.getModel().getValueAt(row, 0).toString()), dc.tablaDetallePago.getModel().getValueAt(row, 13).toString()+" Dcho. posesión", "Cta. derecho posesión",id_recibo);
+              md.altaMinuta(new java.sql.Date(date.getTime()), apellido_comprador, nombre_comprador, manzana, parcela, cobrado, gastos_administrativos, rendido, Integer.parseInt(dc.tablaDchoPosesion.getModel().getValueAt(row, 0).toString()), dc.tablaDetallePago.getModel().getValueAt(row, 13).toString()+" Dcho. posesión", "Cta. derecho posesión",id_recibo, barrio);
             }
             //----------Incremento el numero de recibo asociado a ese propietario---------//
             pd.editarNroRecibo(apellido_propietario, nombre_propietario, cuit_propietario, Integer.parseInt(ar.nro_recibo.getText())+1);

@@ -43,8 +43,10 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Properties;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFileChooser;
@@ -71,6 +73,7 @@ public class ControladorMinuta implements MouseListener, ActionListener {
     File configFile = new File("config.properties");
     public static final String IMG = "/Imagenes/logo_reporte.png";
     File pathMinuta;
+    Set<String> lista_barrios = new HashSet<>();
     static org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(ControladorCliente.class.getName());
 
     public ControladorMinuta(MinutaVista vistaMinuta) {
@@ -79,7 +82,7 @@ public class ControladorMinuta implements MouseListener, ActionListener {
         this.vistaMinuta.generarMinuta.addActionListener(this);
         this.vistaMinuta.guardar_en.addActionListener(this);
         this.vistaMinuta.buscar.addActionListener(this);
-        
+        this.vistaMinuta.combo_barrios.addActionListener(this);
         vistaMinuta.totalCobrado.setText("0");
         vistaMinuta.totalRendido.setText("0");
         cargarPathMinuta();
@@ -117,6 +120,8 @@ public class ControladorMinuta implements MouseListener, ActionListener {
                 String apellidos = listaMinutas.get(i).getApellidos();
                 String nombres = listaMinutas.get(i).getNombres();
                 String mzpc = String.valueOf(listaMinutas.get(i).getManzana()) +" - "+ String.valueOf(listaMinutas.get(i).getParcela());
+                String barrio = listaMinutas.get(i).getBarrio();                
+                lista_barrios.add(barrio);
                 BigDecimal cobrado = listaMinutas.get(i).getCobrado();
                 BigDecimal gastos = listaMinutas.get(i).getGastos();
                 BigDecimal rendido = listaMinutas.get(i).getRendido();
@@ -124,9 +129,12 @@ public class ControladorMinuta implements MouseListener, ActionListener {
                 int nro_cuota = listaMinutas.get(i).getNroCuota();
                 String observaciones = listaMinutas.get(i).getObservaciones();
                 int baja = listaMinutas.get(i).getBaja();
-                minuta = new Object[] {fecha_minuta,apellidos, nombres, mzpc, cobrado, gastos, rendido, nro_recibo, nro_cuota, observaciones, baja};
+                minuta = new Object[] {fecha_minuta,apellidos, nombres, mzpc, barrio, cobrado, gastos, rendido, nro_recibo, nro_cuota, observaciones, baja};
                 model.addRow(minuta);   
             } 
+            for (String barrio: lista_barrios) {   
+                vistaMinuta.combo_barrios.addItem(barrio);
+            }
         } 
             totalCobrado();
             totalRendido();        
@@ -156,7 +164,12 @@ public class ControladorMinuta implements MouseListener, ActionListener {
                   if(listaMinutas.isEmpty()){
                        JOptionPane.showMessageDialog(null, "Selecciona una minuta", "Atención", JOptionPane.INFORMATION_MESSAGE, null);
                   }else{
-                      new GenerarPdfMinuta().execute();
+                      String barrio = vistaMinuta.combo_barrios.getSelectedItem().toString();
+                      if(!barrio.equals("Seleccione")){
+                        new GenerarPdfMinuta().execute();
+                      } else{
+                           JOptionPane.showMessageDialog(null, "Seleccione un barrio", "Atención", JOptionPane.INFORMATION_MESSAGE, null);
+                      }
                 }}else{
                  JOptionPane.showMessageDialog(null, "Debe seleccionar ubicación donde guardar la minuta", "Atención", JOptionPane.INFORMATION_MESSAGE, null);
                 }                
@@ -206,8 +219,9 @@ public class ControladorMinuta implements MouseListener, ActionListener {
       DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
       DateFormat dateFormat2 =  new SimpleDateFormat("dd-MM-yyyy_HH-mm-ss");
       java.util.Date date = new java.util.Date();
+      String barrio = vistaMinuta.combo_barrios.getSelectedItem().toString();
         try {
-            pathMinuta = new File(vistaMinuta.path.getText(), "Minuta - "+dateFormat2.format(date)+".pdf");
+            pathMinuta = new File(vistaMinuta.path.getText(), "Minuta - "+barrio+" "+dateFormat2.format(date)+".pdf");
             PdfWriter.getInstance(document, new FileOutputStream(pathMinuta));
             document.open();
             Image image = Image.getInstance(getClass().getResource(IMG)); 
@@ -217,7 +231,7 @@ public class ControladorMinuta implements MouseListener, ActionListener {
             Font f3=new Font(Font.FontFamily.TIMES_ROMAN,10.0f,0,null); 
             f3.setColor(130, 130, 130);
             document.add(new Chunk(image, 0, -55f));
-            Paragraph titulo = new Paragraph("Minuta general");  
+            Paragraph titulo = new Paragraph("Minuta general - "+barrio);  
             Paragraph fecha = new Paragraph(dateFormat.format(date), f3);
             fecha.setAlignment(Element.ALIGN_RIGHT);
             titulo.setAlignment(Element.ALIGN_CENTER);
@@ -274,7 +288,8 @@ public class ControladorMinuta implements MouseListener, ActionListener {
               BigDecimal t_debito = BigDecimal.ZERO;
               BigDecimal t_credito = BigDecimal.ZERO;
               BigDecimal efectivo = BigDecimal.ZERO;
-              for (int i = 0; i < listaMinutas.size(); i++) {                 
+              for (int i = 0; i < listaMinutas.size(); i++) {
+                  if(listaMinutas.get(i).getBarrio().equals(barrio)){
                   PdfPTable table2 = new PdfPTable(9);            
                   table2.setTotalWidth(new float[]{ 1,2,4,2,2,2,2,2,3});
                   table2.setWidthPercentage(100);
@@ -297,7 +312,7 @@ public class ControladorMinuta implements MouseListener, ActionListener {
                   nrocuota.setHorizontalAlignment(Element.ALIGN_CENTER);
                   table2.addCell(nrocuota);
                   table2.addCell(new PdfPCell(new Paragraph(listaMinutas.get(i).getObservaciones(),f)));
-                  document.add(table2);
+                  document.add(table2);}
                   //-------Controlo que el cliente no este dado de baja------//
                   if(listaMinutas.get(i).getBaja()!=1){
                      acumulador_cobrado = acumulador_cobrado.add(listaMinutas.get(i).getCobrado());
@@ -311,7 +326,7 @@ public class ControladorMinuta implements MouseListener, ActionListener {
                       }
                   }                 
                   conta ++;
-              }
+              
             //------Linea Totales------//
             PdfPTable tableTotales = new PdfPTable(9);            
             tableTotales.setTotalWidth(new float[]{ 1,2,4,2,2,2,2,2,3});
@@ -410,11 +425,11 @@ public class ControladorMinuta implements MouseListener, ActionListener {
             tablaBilletes2.addCell(billetes1);
             tablaBilletes2.addCell(billetes2);
             tablaBilletes2.addCell(billetes3);            
-            for (int i = 1; i < 11; i++) {
+            for (int j = 1; j < 11; j++) {
                 //---Agrego celdas vacias----//                
                 PdfPCell empty1 = new PdfPCell(new Paragraph("\n", f));
                 PdfPCell empty2 = null;
-                switch (i) {
+                switch (j) {
                 case 1:  empty2 = new PdfPCell(new Paragraph("1000", f));  break;
                 case 2:  empty2 = new PdfPCell(new Paragraph("500", f));  break;
                 case 3:  empty2 = new PdfPCell(new Paragraph("200", f));  break;
@@ -437,8 +452,10 @@ public class ControladorMinuta implements MouseListener, ActionListener {
              cell.setBorder(PdfPCell.NO_BORDER);
              nesting.addCell(cell);
              document.add(nesting); 
-            document.close();
-            }catch (DocumentException ex) {
+             document.close();
+          
+        }
+         }catch (DocumentException ex) {
             Logger.getLogger(DetalleCuota.class.getName()).log(Level.SEVERE, null, ex);
         } catch (FileNotFoundException ex) {
             Logger.getLogger(DetalleCuota.class.getName()).log(Level.SEVERE, null, ex);
@@ -446,6 +463,7 @@ public class ControladorMinuta implements MouseListener, ActionListener {
         } catch (IOException ex) {
             Logger.getLogger(DetalleCuota.class.getName()).log(Level.SEVERE, null, ex);
         }
+      
     }  
         
     public class MinutasPorFecha extends javax.swing.SwingWorker<Void, Void>{

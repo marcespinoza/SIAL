@@ -67,6 +67,7 @@ public class MinutaVista extends javax.swing.JPanel {
         jLabel4 = new javax.swing.JLabel();
         jScrollPane3 = new javax.swing.JScrollPane();
         tablaFechaMinuta = new javax.swing.JTable();
+        combo_barrios = new javax.swing.JComboBox<>();
 
         setPreferredSize(new java.awt.Dimension(1112, 479));
 
@@ -80,11 +81,11 @@ public class MinutaVista extends javax.swing.JPanel {
 
             },
             new String [] {
-                "Fecha", "Apellido/s", "Nombre/s", "Mz. Pc.", "Cobrado", "Gastos Admin.", "Rendido", "Nro. recibo", "Nro. cuota", "Observaciones", "baja"
+                "Fecha", "Apellido/s", "Nombre/s", "Mz. Pc.", "Barrio", "Cobrado", "Gastos Admin.", "Rendido", "Nro. recibo", "Nro. cuota", "Observaciones", "baja"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false, false, false, false, false, false
+                false, false, false, false, false, false, false, false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -102,13 +103,16 @@ public class MinutaVista extends javax.swing.JPanel {
             tablaMinuta.getColumnModel().getColumn(2).setPreferredWidth(100);
             tablaMinuta.getColumnModel().getColumn(2).setMaxWidth(100);
             tablaMinuta.getColumnModel().getColumn(3).setPreferredWidth(1);
-            tablaMinuta.getColumnModel().getColumn(4).setPreferredWidth(1);
+            tablaMinuta.getColumnModel().getColumn(4).setMinWidth(100);
+            tablaMinuta.getColumnModel().getColumn(4).setPreferredWidth(100);
+            tablaMinuta.getColumnModel().getColumn(4).setMaxWidth(120);
             tablaMinuta.getColumnModel().getColumn(5).setPreferredWidth(1);
             tablaMinuta.getColumnModel().getColumn(6).setPreferredWidth(1);
             tablaMinuta.getColumnModel().getColumn(7).setPreferredWidth(1);
             tablaMinuta.getColumnModel().getColumn(8).setPreferredWidth(1);
             tablaMinuta.getColumnModel().getColumn(9).setPreferredWidth(1);
             tablaMinuta.getColumnModel().getColumn(10).setPreferredWidth(1);
+            tablaMinuta.getColumnModel().getColumn(11).setPreferredWidth(1);
         }
 
         generarMinuta.setText("Generar minuta");
@@ -209,6 +213,8 @@ public class MinutaVista extends javax.swing.JPanel {
         });
         jScrollPane3.setViewportView(tablaFechaMinuta);
 
+        combo_barrios.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Seleccione" }));
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -221,24 +227,27 @@ public class MinutaVista extends javax.swing.JPanel {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane1)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(guardar_en)
+                                .addComponent(jLabel3)
+                                .addGap(18, 18, 18)
+                                .addComponent(totalCobrado, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(guardar_en)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(path, javax.swing.GroupLayout.PREFERRED_SIZE, 475, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(jLabel4)
+                                        .addGap(24, 24, 24)
+                                        .addComponent(totalRendido, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addGap(341, 341, 341)))
+                                .addComponent(generarMinuta)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(path, javax.swing.GroupLayout.PREFERRED_SIZE, 475, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel4)
-                                .addGap(24, 24, 24)
-                                .addComponent(totalRendido, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addGap(341, 341, 341)))
-                        .addComponent(generarMinuta)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 29, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel3)
-                        .addGap(18, 18, 18)
-                        .addComponent(totalCobrado, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE)))
-                .addGap(119, 119, 119))
+                                .addComponent(combo_barrios, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(0, 23, Short.MAX_VALUE)))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -257,7 +266,8 @@ public class MinutaVista extends javax.swing.JPanel {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(generarMinuta)
                             .addComponent(guardar_en)
-                            .addComponent(path, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(path, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(combo_barrios, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
                         .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
@@ -273,6 +283,7 @@ public class MinutaVista extends javax.swing.JPanel {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     public javax.swing.JButton actualizarButton;
     public javax.swing.JButton buscar;
+    public javax.swing.JComboBox<String> combo_barrios;
     public javax.swing.JButton generarMinuta;
     public javax.swing.JButton guardar_en;
     private javax.swing.JLabel jLabel1;
