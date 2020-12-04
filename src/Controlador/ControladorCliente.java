@@ -280,9 +280,10 @@ public class ControladorCliente implements ActionListener, MouseListener, TableM
          if(e.getSource()==vistaClientes.comboLote){
            if(vistaClientes.comboLote.getItemCount()!=0){
             if(!vistaClientes.comboLote.getSelectedItem().equals("Seleccione")){ 
-                lote = vistaClientes.comboLote.getSelectedItem().toString(); 
+                lote = vistaClientes.comboLote.getSelectedItem().toString();
+            } 
                 llenarTabla();
-            }
+            
             
             }
         }
