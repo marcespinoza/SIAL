@@ -175,7 +175,7 @@ public class LoteDAO {
           Connection connection = null;
      try {
           connection = conexion.dataSource.getConnection();  
-          String sql = "SELECT barrio, manzana, parcela, observacion, vendido, propietario_cuit from lote where propietario_apellidos =? AND propietario_nombres =? order by barrio "; 
+          String sql = "SELECT barrio, manzana, parcela, observacion, vendido, propietario_cuit from lote where propietario_apellidos =? AND propietario_nombres =? group by barrio "; 
           PreparedStatement preparedStatement = connection.prepareStatement(sql);
           preparedStatement.setString(1, apellidos);
           preparedStatement.setString(2, nombres);
