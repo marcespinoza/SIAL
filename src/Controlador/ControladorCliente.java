@@ -464,7 +464,7 @@ public class ControladorCliente implements ActionListener, MouseListener, TableM
       
         public void llenarComboLote(String nombre, String apellidos){
             List<Lote>lotes = null;        
-            lotes = ld.obtenerLotes(apellidos, nombre);
+            lotes = ld.obtenerLotesPorGrupo(apellidos, nombre);
             vistaClientes.comboLote.removeAllItems();
             vistaClientes.comboLote.addItem("Seleccione");
             for(int i=0; i< lotes.size();i++) {

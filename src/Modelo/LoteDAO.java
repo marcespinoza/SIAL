@@ -168,8 +168,41 @@ public class LoteDAO {
          System.out.println(e.getMessage());
      }
  }
+    
+    public List<Lote> obtenerLotes(String apellidos, String nombres){
+          ResultSet rs = null;
+          List<Lote> lotes = new ArrayList<>();
+          Connection connection = null;
+     try {
+          connection = conexion.dataSource.getConnection();  
+          String sql = "SELECT barrio, manzana, parcela, observacion, vendido, propietario_cuit from lote where propietario_apellidos =? AND propietario_nombres =? order by barrio "; 
+          PreparedStatement preparedStatement = connection.prepareStatement(sql);
+          preparedStatement.setString(1, apellidos);
+          preparedStatement.setString(2, nombres);
+         rs = preparedStatement.executeQuery();
+          while (rs.next()) {
+                Lote l = new Lote();
+                l.setBarrio(rs.getString(1));
+                l.setManzana(rs.getInt(2));
+                l.setParcela(rs.getInt(3));
+                l.setObservaciones(rs.getString(4));
+                l.setVendido(rs.getInt(5));
+                l.setPropietario_cuit(rs.getString(6));
+                lotes.add(l);
+            } 
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }finally{
+              try {
+                  connection.close();
+              } catch (SQLException ex) {
+                  Logger.getLogger(PropietarioDAO.class.getName()).log(Level.SEVERE, null, ex);
+              }
+        }
+     return lotes;
+     } 
       
-   public List<Lote> obtenerLotes(String apellidos, String nombres){
+   public List<Lote> obtenerLotesPorGrupo(String apellidos, String nombres){
           ResultSet rs = null;
           List<Lote> lotes = new ArrayList<>();
           Connection connection = null;

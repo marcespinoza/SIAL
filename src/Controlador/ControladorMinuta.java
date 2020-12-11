@@ -316,7 +316,7 @@ public class ControladorMinuta implements MouseListener, ActionListener {
                   nrocuota.setHorizontalAlignment(Element.ALIGN_CENTER);
                   table2.addCell(nrocuota);
                   table2.addCell(new PdfPCell(new Paragraph(listaMinutas.get(i).getObservaciones(),f)));
-                  document.add(table2);}
+                  document.add(table2);
                   //-------Controlo que el cliente no este dado de baja------//
                   if(listaMinutas.get(i).getBaja()!=1){
                      acumulador_cobrado = acumulador_cobrado.add(listaMinutas.get(i).getCobrado());
@@ -329,7 +329,7 @@ public class ControladorMinuta implements MouseListener, ActionListener {
                           case "Efectivo":efectivo = efectivo.add(listaMinutas.get(i).getRendido());break;
                       }
                   }                 
-                  conta ++;}
+                  conta ++;}}
               
             //------Linea Totales------//
             PdfPTable tableTotales = new PdfPTable(9);            
