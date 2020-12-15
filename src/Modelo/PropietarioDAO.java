@@ -173,10 +173,10 @@ public class PropietarioDAO {
           Connection connection = null;
      try {
           connection = conexion.dataSource.getConnection();         
-          String listar = "SELECT DISTINCT propietario_nombres from lote where propietario_apellidos='"+apellido+"'"; 
+          String listar = "SELECT distinct propietario_nombres from lote where propietario_apellidos='"+apellido+"'"; 
           Statement st = connection.createStatement();
           rs = st.executeQuery(listar);
-          if (rs.next()){
+          while (rs.next()){
               propietario = new Propietario();
               propietario.setNombres(rs.getString(1));
               propietarios.add(propietario);
@@ -226,7 +226,7 @@ public class PropietarioDAO {
           List<Propietario> propietarios = new ArrayList<>();
           try {
             con = conexion.dataSource.getConnection();         
-           String listar = "SELECT apellidos from propietario"; 
+           String listar = "SELECT distinct apellidos from propietario"; 
            Statement st = con.createStatement();
            rs = st.executeQuery(listar);          
            while (rs.next()) {

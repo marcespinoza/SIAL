@@ -74,6 +74,7 @@ public class ControladorMinuta implements MouseListener, ActionListener {
     public static final String IMG = "/Imagenes/logo_reporte.png";
     File pathMinuta;
     Set<String> lista_barrios = new HashSet<>();
+    String barrioSeleccionado="";
     static org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(ControladorCliente.class.getName());
 
     public ControladorMinuta(MinutaVista vistaMinuta) {
@@ -122,7 +123,7 @@ public class ControladorMinuta implements MouseListener, ActionListener {
                 String apellidos = listaMinutas.get(i).getApellidos();
                 String nombres = listaMinutas.get(i).getNombres();
                 String mzpc = String.valueOf(listaMinutas.get(i).getManzana()) +" - "+ String.valueOf(listaMinutas.get(i).getParcela());
-                String barrio = listaMinutas.get(i).getBarrio();   
+                String barrio = (listaMinutas.get(i).getBarrio()).replaceAll("\\s+$", "");   
                 if(!barrio.equals("")){
                   lista_barrios.add(barrio);
                 }
@@ -223,7 +224,7 @@ public class ControladorMinuta implements MouseListener, ActionListener {
       DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
       DateFormat dateFormat2 =  new SimpleDateFormat("dd-MM-yyyy_HH-mm-ss");
       java.util.Date date = new java.util.Date();
-      String barrio = vistaMinuta.combo_barrios.getSelectedItem().toString();
+      String barrio = (                                                                                                                       vistaMinuta.combo_barrios.getSelectedItem().toString()).replaceAll("\\s+$", "");
         try {
             pathMinuta = new File(vistaMinuta.path.getText(), "Minuta - "+barrio+" "+dateFormat2.format(date)+".pdf");
             PdfWriter.getInstance(document, new FileOutputStream(pathMinuta));
@@ -293,7 +294,8 @@ public class ControladorMinuta implements MouseListener, ActionListener {
               BigDecimal t_credito = BigDecimal.ZERO;
               BigDecimal efectivo = BigDecimal.ZERO;
               for (int i = 0; i < listaMinutas.size(); i++) {
-                  if(listaMinutas.get(i).getBarrio().equals(barrio)){
+                  barrioSeleccionado = (listaMinutas.get(i).getBarrio()).replaceAll("\\s+$", "");
+                  if(barrioSeleccionado.equals(barrio)){
                   PdfPTable table2 = new PdfPTable(9);            
                   table2.setTotalWidth(new float[]{ 1,2,4,2,2,2,2,2,3});
                   table2.setWidthPercentage(100);
