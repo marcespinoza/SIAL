@@ -255,7 +255,7 @@ public class ControladorRecibo implements ActionListener{
         try {
             //----Escribo en el log------//
             log.info(Ventana.nombreUsuario.getText() + " - Genera recibo "+ar.nro_recibo.getText());
-            pathRecibo = new File(dc.path.getText(), "Recibo-"+ar.nro_recibo.getText()+".pdf");
+            pathRecibo = new File(dc.path.getText(), "Recibo-"+barrio+"-"+ar.nro_recibo.getText()+".pdf");
             PdfWriter.getInstance(document, new FileOutputStream(pathRecibo));
             document.open();
             for (int i = 1; i < 3; i++) { 

@@ -30,6 +30,17 @@ public class Cuota {
     int id_recibo;
     String tipo_pago;
     String actualizacionCuota;
+    int indice;
+
+    public int getIndice() {
+        return indice;
+    }
+
+    public void setIndice(int indice) {
+        this.indice = indice;
+    }
+    
+    
 
     public Cuota() {
     }

@@ -60,6 +60,9 @@ public class ControladorAsignacionPropiedad implements ActionListener, KeyListen
         vistaAsignarPropiedad.tipo_actualizacion.add(vistaAsignarPropiedad.empPublico);  
         vistaAsignarPropiedad.tipo_actualizacion.add(vistaAsignarPropiedad.cuota_fija);
         vistaAsignarPropiedad.tipo_actualizacion.add(vistaAsignarPropiedad.cuota_fija_vble);
+        //--------Button group del indice corrector inflacionario----//
+        vistaAsignarPropiedad.indice_corrector.add(vistaAsignarPropiedad.indice_no);
+        vistaAsignarPropiedad.indice_corrector.add(vistaAsignarPropiedad.indice_si);
         vistaAsignarPropiedad.aceptarBtn.addActionListener(this);
         vistaAsignarPropiedad.cancelarBtn.addActionListener(this);
         vistaAsignarPropiedad.bolsa_cemento.addKeyListener(this);
@@ -108,6 +111,19 @@ public class ControladorAsignacionPropiedad implements ActionListener, KeyListen
                 }
              }
         });     
+    vistaAsignarPropiedad.empPublico.addItemListener(new ItemListener() { 
+    @Override
+     public void itemStateChanged(ItemEvent event) {
+        int state = event.getStateChange();
+        if (state == ItemEvent.SELECTED) {
+            vistaAsignarPropiedad.indice_no.setEnabled(true);
+            vistaAsignarPropiedad.indice_si.setEnabled(true);
+        } else if (state == ItemEvent.DESELECTED) {
+            vistaAsignarPropiedad.indice_no.setEnabled(false);
+            vistaAsignarPropiedad.indice_si.setEnabled(false);
+        }
+        }
+        });
         llenarComboApellidos(vistaAsignarPropiedad.tipo_propiedad.getSelectedItem().toString());
         vistaAsignarPropiedad.setVisible(true);       
     }
@@ -300,15 +316,19 @@ public class ControladorAsignacionPropiedad implements ActionListener, KeyListen
         @Override
         protected Void doInBackground() throws Exception { 
            byte flag_cemento = 1; 
+           byte flag_indice = 1;
            if(vistaAsignarPropiedad.empPublico.isSelected()){
                flag_cemento = 0;
            }else if(vistaAsignarPropiedad.cuota_fija.isSelected()){
                flag_cemento = 2;
            }else if(vistaAsignarPropiedad.cuota_fija_vble.isSelected()){
                flag_cemento = 3;
-           } 
+           }
+           if(vistaAsignarPropiedad.indice_no.isSelected()){
+               flag_indice = 0;
+           }
            BigDecimal gastos =new BigDecimal(vistaAsignarPropiedad.cuota_total.getText()).subtract((new BigDecimal(vistaAsignarPropiedad.cuota_total.getText())).divide(new BigDecimal(1.1),2, BigDecimal.ROUND_HALF_UP));
-           id_control = fichaControlDAO.altaFichaControl(vistaAsignarPropiedad.tipo_propiedad.getSelectedItem().toString(), vistaAsignarPropiedad.dimension.getText(), Integer.parseInt(vistaAsignarPropiedad.cantidad_cuotas.getText()),  new BigDecimal(vistaAsignarPropiedad.cuota_total.getText()).subtract(gastos), gastos, flag_cemento ,new BigDecimal(vistaAsignarPropiedad.bolsa_cemento.getText()), new java.sql.Date(fecha_suscripcion),String.valueOf(vistaAsignarPropiedad.barrio.getSelectedItem()),Integer.parseInt((String)vistaAsignarPropiedad.manzana.getSelectedItem()), Integer.parseInt((String)vistaAsignarPropiedad.parcela.getSelectedItem()), new java.sql.Date(fecha_suscripcion));
+           id_control = fichaControlDAO.altaFichaControl(vistaAsignarPropiedad.tipo_propiedad.getSelectedItem().toString(), vistaAsignarPropiedad.dimension.getText(), Integer.parseInt(vistaAsignarPropiedad.cantidad_cuotas.getText()),  new BigDecimal(vistaAsignarPropiedad.cuota_total.getText()).subtract(gastos), gastos, flag_cemento ,new BigDecimal(vistaAsignarPropiedad.bolsa_cemento.getText()), new java.sql.Date(fecha_suscripcion),String.valueOf(vistaAsignarPropiedad.barrio.getSelectedItem()),Integer.parseInt((String)vistaAsignarPropiedad.manzana.getSelectedItem()), Integer.parseInt((String)vistaAsignarPropiedad.parcela.getSelectedItem()), new java.sql.Date(fecha_suscripcion), flag_indice);
            return null;
         }
 

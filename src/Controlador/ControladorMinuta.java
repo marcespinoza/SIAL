@@ -94,7 +94,6 @@ public class ControladorMinuta implements MouseListener, ActionListener {
         DefaultTableModel model = (DefaultTableModel) vistaMinuta.tablaMinuta.getModel();
         model.setRowCount(0);
     }
-
     
     public void cargarPathMinuta() {
         try {
@@ -123,7 +122,7 @@ public class ControladorMinuta implements MouseListener, ActionListener {
                 String apellidos = listaMinutas.get(i).getApellidos();
                 String nombres = listaMinutas.get(i).getNombres();
                 String mzpc = String.valueOf(listaMinutas.get(i).getManzana()) +" - "+ String.valueOf(listaMinutas.get(i).getParcela());
-                String barrio = (listaMinutas.get(i).getBarrio()).replaceAll("\\s+$", "");   
+                String barrio = (listaMinutas.get(i).getBarrio().toLowerCase()).replaceAll("\\s+$", "");   
                 if(!barrio.equals("")){
                   lista_barrios.add(barrio);
                 }
@@ -169,7 +168,7 @@ public class ControladorMinuta implements MouseListener, ActionListener {
                   if(listaMinutas.isEmpty()){
                        JOptionPane.showMessageDialog(null, "Selecciona una minuta", "Atención", JOptionPane.INFORMATION_MESSAGE, null);
                   }else{
-                      String barrio = vistaMinuta.combo_barrios.getSelectedItem().toString();
+                      String barrio = vistaMinuta.combo_barrios.getSelectedItem().toString().toLowerCase();
                       if(!barrio.equals("Seleccione")){
                         new GenerarPdfMinuta().execute();
                       } else{
@@ -224,9 +223,9 @@ public class ControladorMinuta implements MouseListener, ActionListener {
       DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
       DateFormat dateFormat2 =  new SimpleDateFormat("dd-MM-yyyy_HH-mm-ss");
       java.util.Date date = new java.util.Date();
-      String barrio = (                                                                                                                       vistaMinuta.combo_barrios.getSelectedItem().toString()).replaceAll("\\s+$", "");
+      String barrio = (vistaMinuta.combo_barrios.getSelectedItem().toString()).replaceAll("\\s+$", "");
         try {
-            pathMinuta = new File(vistaMinuta.path.getText(), "Minuta - "+barrio+" "+dateFormat2.format(date)+".pdf");
+            pathMinuta = new File(vistaMinuta.path.getText(), "Minuta - "+barrio.toUpperCase()+" "+dateFormat2.format(date)+".pdf");
             PdfWriter.getInstance(document, new FileOutputStream(pathMinuta));
             document.open();
             Image image = Image.getInstance(getClass().getResource(IMG)); 
@@ -236,7 +235,7 @@ public class ControladorMinuta implements MouseListener, ActionListener {
             Font f3=new Font(Font.FontFamily.TIMES_ROMAN,10.0f,0,null); 
             f3.setColor(130, 130, 130);
             document.add(new Chunk(image, 0, -55f));
-            Paragraph titulo = new Paragraph("Minuta general - "+barrio);  
+            Paragraph titulo = new Paragraph("Minuta general - "+barrio.toUpperCase());  
             Paragraph fecha = new Paragraph(dateFormat.format(date), f3);
             fecha.setAlignment(Element.ALIGN_RIGHT);
             titulo.setAlignment(Element.ALIGN_CENTER);
@@ -294,7 +293,7 @@ public class ControladorMinuta implements MouseListener, ActionListener {
               BigDecimal t_credito = BigDecimal.ZERO;
               BigDecimal efectivo = BigDecimal.ZERO;
               for (int i = 0; i < listaMinutas.size(); i++) {
-                  barrioSeleccionado = (listaMinutas.get(i).getBarrio()).replaceAll("\\s+$", "");
+                  barrioSeleccionado = (listaMinutas.get(i).getBarrio().toLowerCase()).replaceAll("\\s+$", "");
                   if(barrioSeleccionado.equals(barrio)){
                   PdfPTable table2 = new PdfPTable(9);            
                   table2.setTotalWidth(new float[]{ 1,2,4,2,2,2,2,2,3});

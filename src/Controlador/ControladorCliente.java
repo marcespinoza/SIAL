@@ -484,7 +484,7 @@ public class ControladorCliente implements ActionListener, MouseListener, TableM
         }         
         DefaultTableModel model = (DefaultTableModel) vistaClientes.tablaCliente.getModel();
         model.setRowCount(0);
-        SimpleDateFormat sdf=new SimpleDateFormat("dd-MM-YYYY");
+        SimpleDateFormat sdf=new SimpleDateFormat("dd-MM-yyyy");
         JLabel icono;
         String fch_actualizacion = "";
         String actualizar_cemento = "";

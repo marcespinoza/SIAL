@@ -30,6 +30,7 @@ public class AsignarPropiedad extends javax.swing.JDialog {
     private void initComponents() {
 
         tipo_actualizacion = new javax.swing.ButtonGroup();
+        indice_corrector = new javax.swing.ButtonGroup();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
@@ -61,50 +62,128 @@ public class AsignarPropiedad extends javax.swing.JDialog {
         mensaje_error = new javax.swing.JLabel();
         cuota_fija = new javax.swing.JRadioButton();
         cuota_fija_vble = new javax.swing.JRadioButton();
+        indice_si = new javax.swing.JRadioButton();
+        indice_no = new javax.swing.JRadioButton();
+        jLabel16 = new javax.swing.JLabel();
+        jSeparator1 = new javax.swing.JSeparator();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Asignar propiedad");
+        setMaximumSize(new java.awt.Dimension(600, 800));
+        setPreferredSize(new java.awt.Dimension(450, 500));
+        getContentPane().setLayout(null);
 
         jLabel1.setText("Barrio/Torre");
+        getContentPane().add(jLabel1);
+        jLabel1.setBounds(74, 122, 58, 14);
 
         jLabel2.setText("Manzana/Piso");
+        getContentPane().add(jLabel2);
+        jLabel2.setBounds(66, 148, 66, 14);
 
         jLabel3.setText("Parcela/Dpto");
+        getContentPane().add(jLabel3);
+        jLabel3.setBounds(70, 174, 62, 14);
 
         jLabel4.setText("Cantidad cuotas");
+        getContentPane().add(jLabel4);
+        jLabel4.setBounds(54, 226, 78, 14);
 
         jLabel5.setText("Bolsa de cemento");
+        getContentPane().add(jLabel5);
+        jLabel5.setBounds(48, 356, 84, 14);
+        getContentPane().add(dimension);
+        dimension.setBounds(142, 197, 230, 20);
+
+        cuota_total.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cuota_totalActionPerformed(evt);
+            }
+        });
+        getContentPane().add(cuota_total);
+        cuota_total.setBounds(142, 249, 230, 20);
 
         aceptarBtn.setText("Aceptar");
+        getContentPane().add(aceptarBtn);
+        aceptarBtn.setBounds(170, 420, 71, 23);
 
         cancelarBtn.setText("Cancelar");
+        getContentPane().add(cancelarBtn);
+        cancelarBtn.setBounds(250, 420, 75, 23);
 
         jLabel8.setText("Dimensión");
+        getContentPane().add(jLabel8);
+        jLabel8.setBounds(84, 200, 48, 14);
 
         jLabel9.setText("Tipo propiedad");
+        getContentPane().add(jLabel9);
+        jLabel9.setBounds(59, 44, 71, 14);
 
         tipo_propiedad.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Terreno", "Departamento" }));
+        getContentPane().add(tipo_propiedad);
+        tipo_propiedad.setBounds(142, 41, 230, 20);
+        getContentPane().add(cantidad_cuotas);
+        cantidad_cuotas.setBounds(142, 223, 230, 20);
 
         jLabel10.setText("Cuota total $");
+        getContentPane().add(jLabel10);
+        jLabel10.setBounds(69, 252, 63, 14);
+        getContentPane().add(bolsa_cemento);
+        bolsa_cemento.setBounds(142, 353, 115, 20);
 
         jLabel13.setText("$");
+        getContentPane().add(jLabel13);
+        jLabel13.setBounds(134, 356, 6, 14);
+
+        getContentPane().add(barrio);
+        barrio.setBounds(142, 119, 230, 20);
+
+        getContentPane().add(manzana);
+        manzana.setBounds(142, 145, 230, 20);
+
+        getContentPane().add(parcela);
+        parcela.setBounds(142, 171, 230, 20);
+
+        getContentPane().add(apellido_propietario);
+        apellido_propietario.setBounds(142, 67, 230, 20);
 
         jLabel11.setText("Apellido Propietario");
+        getContentPane().add(jLabel11);
+        jLabel11.setBounds(38, 70, 92, 14);
+
+        getContentPane().add(nombre_propietario);
+        nombre_propietario.setBounds(142, 93, 230, 20);
 
         jLabel12.setText("Nombre Propietario");
+        getContentPane().add(jLabel12);
+        jLabel12.setBounds(40, 96, 92, 14);
+        getContentPane().add(fch_suscripción);
+        fch_suscripción.setBounds(142, 383, 139, 20);
 
         jLabel14.setText("Fecha suscripción");
+        getContentPane().add(jLabel14);
+        jLabel14.setBounds(48, 383, 84, 14);
 
         bolsaCemento.setText("Bolsa cemento");
+        getContentPane().add(bolsaCemento);
+        bolsaCemento.setBounds(240, 280, 95, 23);
 
         empPublico.setText("Emp. público");
+        getContentPane().add(empPublico);
+        empPublico.setBounds(140, 280, 85, 20);
 
         jLabel15.setText("Tipo actualización");
+        getContentPane().add(jLabel15);
+        jLabel15.setBounds(50, 280, 84, 20);
 
         mensaje_error.setForeground(new java.awt.Color(255, 0, 0));
         mensaje_error.setPreferredSize(new java.awt.Dimension(0, 17));
+        getContentPane().add(mensaje_error);
+        mensaje_error.setBounds(0, 427, 231, 17);
 
         cuota_fija.setText("C. fija");
+        getContentPane().add(cuota_fija);
+        cuota_fija.setBounds(140, 300, 55, 23);
 
         cuota_fija_vble.setText("C. fija (Variable)");
         cuota_fija_vble.addActionListener(new java.awt.event.ActionListener() {
@@ -112,144 +191,30 @@ public class AsignarPropiedad extends javax.swing.JDialog {
                 cuota_fija_vbleActionPerformed(evt);
             }
         });
+        getContentPane().add(cuota_fija_vble);
+        cuota_fija_vble.setBounds(240, 300, 103, 23);
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(164, Short.MAX_VALUE)
-                .addComponent(aceptarBtn)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(cancelarBtn)
-                .addGap(95, 95, 95))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(mensaje_error, javax.swing.GroupLayout.PREFERRED_SIZE, 231, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(42, 42, 42))
-            .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addGroup(layout.createSequentialGroup()
-                                    .addGap(38, 38, 38)
-                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                        .addComponent(jLabel11)
-                                        .addComponent(jLabel9)))
-                                .addGroup(layout.createSequentialGroup()
-                                    .addGap(36, 36, 36)
-                                    .addComponent(jLabel5)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                    .addComponent(jLabel13))
-                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                    .addContainerGap()
-                                    .addComponent(jLabel14)))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addContainerGap()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel12, javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(jLabel8, javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(jLabel4, javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(jLabel15, javax.swing.GroupLayout.Alignment.TRAILING))))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(jLabel10)
-                        .addGap(20, 20, 20)))
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(fch_suscripción, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(129, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(cuota_total, javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(cantidad_cuotas, javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(dimension, javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(parcela, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(manzana, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(barrio, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(bolsa_cemento, javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(tipo_propiedad, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(apellido_propietario, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(nombre_propietario, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(empPublico)
-                                    .addComponent(cuota_fija))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(cuota_fija_vble)
-                                    .addComponent(bolsaCemento))))
-                        .addGap(42, 42, 42))))
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(41, 41, 41)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(tipo_propiedad, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel9))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(apellido_propietario, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel11))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(nombre_propietario, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel12))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(barrio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel1))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(manzana, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel2))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(parcela, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel3))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(dimension, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel8))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(cantidad_cuotas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel4))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(cuota_total, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel10))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 7, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(bolsaCemento)
-                    .addComponent(empPublico)
-                    .addComponent(jLabel15))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(cuota_fija)
-                    .addComponent(cuota_fija_vble))
-                .addGap(7, 7, 7)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(bolsa_cemento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel13)
-                    .addComponent(jLabel5))
-                .addGap(5, 5, 5)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(fch_suscripción, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel14))
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(aceptarBtn)
-                    .addComponent(cancelarBtn))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(mensaje_error, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(9, 9, 9))
-        );
+        indice_si.setSelected(true);
+        indice_si.setText("Si");
+        indice_si.setEnabled(false);
+        indice_si.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                indice_siActionPerformed(evt);
+            }
+        });
+        getContentPane().add(indice_si);
+        indice_si.setBounds(140, 320, 33, 23);
+
+        indice_no.setText("No");
+        indice_no.setEnabled(false);
+        getContentPane().add(indice_no);
+        indice_no.setBounds(180, 320, 39, 23);
+
+        jLabel16.setText("Aplicar indice corrector");
+        getContentPane().add(jLabel16);
+        jLabel16.setBounds(23, 321, 109, 20);
+        getContentPane().add(jSeparator1);
+        jSeparator1.setBounds(229, 323, 137, 2);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -257,6 +222,14 @@ public class AsignarPropiedad extends javax.swing.JDialog {
     private void cuota_fija_vbleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cuota_fija_vbleActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_cuota_fija_vbleActionPerformed
+
+    private void indice_siActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_indice_siActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_indice_siActionPerformed
+
+    private void cuota_totalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cuota_totalActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cuota_totalActionPerformed
 
     /**
      * @param args the command line arguments
@@ -314,6 +287,9 @@ public class AsignarPropiedad extends javax.swing.JDialog {
     public javax.swing.JTextField dimension;
     public javax.swing.JRadioButton empPublico;
     public com.toedter.calendar.JDateChooser fch_suscripción;
+    public javax.swing.ButtonGroup indice_corrector;
+    public javax.swing.JRadioButton indice_no;
+    public javax.swing.JRadioButton indice_si;
     private javax.swing.JLabel jLabel1;
     public javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -321,12 +297,14 @@ public class AsignarPropiedad extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel15;
+    private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
+    private javax.swing.JSeparator jSeparator1;
     public javax.swing.JComboBox<String> manzana;
     public javax.swing.JLabel mensaje_error;
     public javax.swing.JComboBox<String> nombre_propietario;

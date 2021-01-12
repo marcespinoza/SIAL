@@ -266,6 +266,7 @@ public class ControladorDetalleCuota implements ActionListener, TableModelListen
    public void llenarTabla(int idControl){
         detalleCuota.clear();
         detalleCuota = cd.listaDetalleCuota(idControl);
+        dc.texto_indice_corrector.setVisible(false);
         DefaultTableModel model = (DefaultTableModel) dc.tablaDetallePago.getModel();
         model.setRowCount(0);
         SimpleDateFormat input = new SimpleDateFormat("dd-MM-YYYY");
@@ -289,6 +290,9 @@ public class ControladorDetalleCuota implements ActionListener, TableModelListen
                 String actCuota = detalleCuota.get(i).getActualizacionCuota();
                 detallePago= new Object[] {nro_cuota, fecha, detalle, cuota_pura, gastos_admin, debe, haber, saldo, cemento_debe, cemento_haber,cemento_saldo, observaciones, nro_recibo, id_recibo, tipo_pago, actCuota};                    
                 model.addRow(detallePago); 
+            }
+            if(detalleCuota.get(0).getIndice()==0){
+               dc.texto_indice_corrector.setVisible(true);
             }
             CardLayout cl = (CardLayout)(Ventana.panelPrincipal.getLayout());
             Ventana.panelPrincipal.add(dc, "Detalle_pago");

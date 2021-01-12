@@ -75,7 +75,7 @@ public class CuotaDAO {
           List<Cuota> cuotas = new ArrayList<>();
      try {
           connection = conexion.dataSource.getConnection();
-          String listar = "SELECT nro_cuota, fecha, detalle, cuota_pura, gastos_administrativos, debe, haber, saldo, cemento_debe, cemento_haber, cemento_saldo, observaciones, nro_recibo, id_recibo, tipo_pago, actualizacion_cuota from linea_control_lote where id_Control = '"+idControl+"' order by nro_cuota, cemento_saldo DESC" ; 
+          String listar = "SELECT l.nro_cuota, l.fecha, l.detalle, l.cuota_pura, l.gastos_administrativos, l.debe, l.haber, l.saldo, l.cemento_debe, l.cemento_haber, l.cemento_saldo, l.observaciones, l.nro_recibo, l.id_recibo, l.tipo_pago, l.actualizacion_cuota, f.indice_corrector from linea_control_lote l inner join ficha_control_lote f on f.id_control=l.id_control where l.id_Control = '"+idControl+"' order by l.nro_cuota, l.cemento_saldo DESC" ; 
           Statement st = connection.createStatement();
           rs = st.executeQuery(listar);
           while (rs.next()) {
@@ -96,6 +96,7 @@ public class CuotaDAO {
                 c.setId_recibo(rs.getInt(14));
                 c.setTipo_pago(rs.getString(15));
                 c.setActualizacionCuota(rs.getString(16));
+                c.setIndice(rs.getInt(17));
                 cuotas.add(c);
             }  
         } catch (Exception e) {
