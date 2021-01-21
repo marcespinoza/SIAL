@@ -310,6 +310,7 @@ public class PropietarioDAO {
          System.out.println(e.getMessage());
      }
      }
+     
      public int agregarPropietarios(String apellidos, String nombres, String cuit, String nroRecibo){
           int filasAfectadas=0;
      try {
@@ -323,4 +324,29 @@ public class PropietarioDAO {
      return filasAfectadas;
      }
     
+     public float obtenerGastoXPropietario(int id_control){
+       ResultSet rs = null;
+       Connection connection = null;
+       float porcentaje = 0;
+     try {
+          connection = conexion.dataSource.getConnection();
+          String listar = "SELECT p.porcentaje_gasto FROM lote as l INNER JOIN propietario as p ON l.id_propietario=p.id_propietario,\n" +
+                " ficha_control_lote AS f\n" +
+                "where f.Id_control='"+id_control+"' AND l.barrio=f.lote_barrio AND l.manzana=f.lote_manzana AND l.parcela=f.lote_parcela";
+          Statement st = connection.createStatement();
+          rs = st.executeQuery(listar);
+          while (rs.next()) {
+                porcentaje = (rs.getFloat(1));
+           } 
+        } catch (Exception e) {
+            System.out.println(e.getMessage().toString());
+        }finally{
+              try {
+                  connection.close();
+              } catch (SQLException ex) {
+                  Logger.getLogger(PropietarioDAO.class.getName()).log(Level.SEVERE, null, ex);
+              }
+        }
+       return porcentaje;
+    }
 }

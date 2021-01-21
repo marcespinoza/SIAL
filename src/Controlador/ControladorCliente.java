@@ -303,6 +303,10 @@ public class ControladorCliente implements ActionListener, MouseListener, TableM
                     new ControladorAltaCliente((Ventana) SwingUtilities.getWindowAncestor(vistaClientes), Integer.parseInt(vistaClientes.tablaCliente.getModel().getValueAt(row, 11).toString()),  Integer.parseInt(vistaClientes.tablaCliente.getModel().getValueAt(row, 2).toString()), true);
                     llenarTabla();}
                   if(seleccion==1){
+                      System.out.println((Ventana) SwingUtilities.getWindowAncestor(vistaClientes));
+                      System.out.println(Integer.parseInt(vistaClientes.tablaCliente.getModel().getValueAt(row, 2).toString()));
+//                      System.out.println(Integer.parseInt(vistaClientes.tablaCliente.getModel().getValueAt(row, 11).toString()));
+
                      new ControladorPanelClientes((Ventana) SwingUtilities.getWindowAncestor(vistaClientes), Integer.parseInt(vistaClientes.tablaCliente.getModel().getValueAt(row, 2).toString()), Integer.parseInt(vistaClientes.tablaCliente.getModel().getValueAt(row, 11).toString()));
                      llenarTabla();}
                   if(seleccion==-1){

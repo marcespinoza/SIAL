@@ -12,6 +12,7 @@ import Modelo.DchoPosesionDAO;
 import Modelo.FichaControlDAO;
 import Clases.LimitadorCaracteres;
 import static Controlador.ControladorLogin.log;
+import Modelo.PropietarioDAO;
 import Vista.Dialogs.AltaCuota;
 import Vista.Dialogs.Progress;
 import Vista.Frame.Ventana;
@@ -49,11 +50,13 @@ public class ControladorAltaCuota implements ActionListener, KeyListener{
     CuotaDAO cd = new CuotaDAO();
     FichaControlDAO fc = new FichaControlDAO();
     DchoPosesionDAO dp = new DchoPosesionDAO();
+    PropietarioDAO pd = new PropietarioDAO();
     AltaCuota ac;
     int id_control, nro_cuota;
     int row_count;
     BigDecimal cuota_total, gastos;
     private int filas_insertadas=0;
+    float porcentaje;
     static org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(ControladorAltaCuota.class.getName());
     public ControladorAltaCuota(Frame parent, int id_control, int row_count, int nro_cuota) {
         this.parent = parent;
@@ -129,6 +132,7 @@ public class ControladorAltaCuota implements ActionListener, KeyListener{
     
     public void nuevoGasto(){
         if(!ac.cuota_total.getText().equals("")){
+            //si es distinto de vacion esta ingresando un porcentaje de gasto diferente
             if(!ac.porcentaje_gastos.getText().equals("")){
                 BigDecimal gasto;
                 BigDecimal cuota_total = new BigDecimal(ac.cuota_total.getText());
@@ -140,7 +144,8 @@ public class ControladorAltaCuota implements ActionListener, KeyListener{
                  }
                  ac.gastos.setText(gasto.toString());
             }else{
-                BigDecimal gasto = new BigDecimal(ac.cuota_total.getText()).subtract((new BigDecimal(ac.cuota_total.getText())).divide(new BigDecimal(1.12),2, BigDecimal.ROUND_HALF_UP));
+                BigDecimal gasto = (new BigDecimal(ac.cuota_total.getText()).multiply(BigDecimal.valueOf(porcentaje)).divide(new BigDecimal(100),2, BigDecimal.ROUND_HALF_UP));
+                System.out.println(gasto.toString()+" "+(new BigDecimal(ac.cuota_total.getText()).multiply(BigDecimal.valueOf(porcentaje)).divide(new BigDecimal(100),2, BigDecimal.ROUND_HALF_UP)));
                 ac.gastos.setText(gasto.toString());
             }
             }else{
@@ -151,13 +156,13 @@ public class ControladorAltaCuota implements ActionListener, KeyListener{
    public void rellenarCampos(){
         List<FichaDeControl> listaFc;
         List<Cuota>listaC;
-        FichaControlDAO fcd = new FichaControlDAO();
-        listaFc = fcd.obtenerFichaControl(id_control);
+        listaFc = fc.obtenerFichaControl(id_control);
+        porcentaje = pd.obtenerGastoXPropietario(id_control);
         cuota_total = listaFc.get(listaFc.size()-1).getCuotaPura().add(listaFc.get(listaFc.size()-1).getGastos());
         gastos = listaFc.get(0).getGastos();
         ac.cuota_total.setText(cuota_total.toString());  
         nuevoGasto();
-        ac.gastos.setText(String.valueOf(gastos));
+        //ac.gastos.setText(String.valueOf(gastos));
         //------Calculo el nro de cuota--------//
         int cuota = 0;
         int indice = 0;
