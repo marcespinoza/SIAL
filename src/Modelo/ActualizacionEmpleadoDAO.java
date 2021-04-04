@@ -61,7 +61,7 @@ public class ActualizacionEmpleadoDAO {
         return actualizaciones;   
     }
     
-    public void altaActualizacion(int id_control, Date fecha, byte porcentaje, BigDecimal valor_anterior, BigDecimal valor_actualizado) throws SQLException{
+    public void altaActualizacion(int id_control, Date fecha, BigDecimal porcentaje, BigDecimal valor_anterior, BigDecimal valor_actualizado) throws SQLException{
          PreparedStatement stmt = null;
          Connection con = null;
         try {
@@ -70,7 +70,7 @@ public class ActualizacionEmpleadoDAO {
             stmt = con.prepareStatement(insertar);
             stmt.setInt(1, id_control);
             stmt.setDate(2, fecha);
-            stmt.setByte(3, porcentaje);
+            stmt.setBigDecimal(3, porcentaje);
             stmt.setBigDecimal(4, valor_anterior);
             stmt.setBigDecimal(5, valor_actualizado);
             stmt.executeUpdate();

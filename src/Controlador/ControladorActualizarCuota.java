@@ -104,10 +104,15 @@ public class ControladorActualizarCuota implements ActionListener{
             Date date = new Date();
             BigDecimal valorActualizado = new BigDecimal(ac.valor_actualizado.getText());
             BigDecimal gastos =valorActualizado.subtract((valorActualizado).divide(new BigDecimal(1.1),2, BigDecimal.ROUND_HALF_UP));
-            BigDecimal cuotaPura = valorActualizado.subtract(gastos);     
+            BigDecimal cuotaPura = valorActualizado.subtract(gastos);   
+            System.out.println(ac.porcentaje.getText());
             fc.actualizarValorCuota(gastos, cuotaPura, new java.sql.Timestamp(fechaActual), id_control);
-            ad.altaActualizacion(id_control, new java.sql.Date(date.getTime()), Byte.parseByte(ac.porcentaje.getText()), new BigDecimal(ac.valor_actual.getText()), valorActualizado);
+            ad.altaActualizacion(id_control, 
+                    new java.sql.Date(date.getTime()), 
+                    new BigDecimal(ac.porcentaje.getText()), 
+                    new BigDecimal(ac.valor_actual.getText()), valorActualizado);
            return null;
+           
        }
 
        @Override

@@ -5,6 +5,7 @@
  */
 package Modelo;
 
+import Clases.DerechoDePosesion;
 import conexion.Conexion;
 import java.math.BigDecimal;
 import java.sql.Connection;
@@ -13,6 +14,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -28,13 +31,25 @@ public class DchoPosesionDAO {
         conexion = new Conexion();
     }
     
-    public ResultSet listarCuenta(int id_control){
+    public ResultSet listarCuenta(int id_control) throws SQLException{
+        Connection con = null;
+        List<DerechoDePosesion> dp = new ArrayList<>();
         ResultSet rs = null;
      try {
-          Connection con = conexion.dataSource.getConnection();
-          String listar = "SELECT fecha, monto,gastos,cemento_debe, cemento_haber, cemento_saldo, detalle from derecho_posesion where id_control='"+id_control+"'"; 
+          con = conexion.dataSource.getConnection();
+          String listar = "SELECT fecha, monto, gastos, cemento_debe, cemento_haber, cemento_saldo, detalle, id_cta from derecho_posesion where id_control='"+id_control+"'"; 
           Statement st = con.createStatement();
           rs = st.executeQuery(listar);
+          while (rs.next()) {
+                DerechoDePosesion d = new DerechoDePosesion();
+                d.setFecha(rs.getDate(1));
+                d.setMonto(rs.getBigDecimal(2));
+                d.setGastos(rs.getBigDecimal(3));
+                d.setCemento_debe(rs.getBigDecimal(4));
+                d.setCemento_haber(rs.getBigDecimal(5));
+                d.setCemento_saldo(rs.getBigDecimal(6));
+                dp.add(d);
+          }
         } catch (Exception e) {
         }
      return rs;
@@ -59,5 +74,27 @@ public class DchoPosesionDAO {
             Logger.getLogger(DchoPosesionDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
 }
+    
+     public void actualizarNroRecibo(int nro_recibo, int id_recibo, BigDecimal saldo_cemento, int id_control){
+        Connection con = null;
+      try {
+        con = conexion.dataSource.getConnection();
+        PreparedStatement ps = con.prepareStatement("UPDATE derecho_posesion SET nro_recibo = ?, id_recibo=? WHERE cemento_saldo = ? AND id_control = ?");
+        ps.setInt(1, nro_recibo);
+        ps.setInt(2, id_recibo);
+        ps.setBigDecimal(3,saldo_cemento);
+        ps.setInt(4,id_control);
+        ps.executeUpdate();
+        ps.close();
+      } catch (SQLException ex) {
+        Logger.getLogger(CuotaDAO.class.getName()).log(Level.SEVERE, null, ex);
+      }finally{
+            try {
+                con.close();
+            } catch (SQLException ex) {
+                Logger.getLogger(CuotaDAO.class.getName()).log(Level.SEVERE, null, ex);
+            }
+      }
+  }
     
 }

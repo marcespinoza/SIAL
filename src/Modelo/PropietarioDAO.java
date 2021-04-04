@@ -279,13 +279,14 @@ public class PropietarioDAO {
           ResultSet rs = null;
            try {
               connection = conexion.dataSource.getConnection();  
-              String listar = "SELECT cuit, nro_recibo from propietario where apellidos='"+apellidos+"' and nombres = '"+nombres+"'"; 
+              String listar = "SELECT cuit, nro_recibo,id_propietario from propietario where apellidos='"+apellidos+"' and nombres = '"+nombres+"'"; 
               Statement st = connection.createStatement();
               rs = st.executeQuery(listar);
               while (rs.next()) {
                 Propietario p = new Propietario();
                 p.setCuit(rs.getString(1));
                 p.setNro_recibo(rs.getInt(2));
+                p.setIdPropietario(rs.getInt(3));
                 propietarios.add(p);
             } 
          } catch (Exception e) {

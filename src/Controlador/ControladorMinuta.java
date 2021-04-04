@@ -113,7 +113,7 @@ public class ControladorMinuta implements MouseListener, ActionListener {
     public void llenarTabla(List<Minuta> minutas){
         listaMinutas = minutas;
         lista_barrios.clear();
-        vistaMinuta.combo_barrios.removeAll();
+        vistaMinuta.combo_barrios.removeAllItems();
         DefaultTableModel model = (DefaultTableModel) vistaMinuta.tablaMinuta.getModel();
         model.setRowCount(0);
         if(!minutas.isEmpty()){

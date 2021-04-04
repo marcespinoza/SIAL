@@ -162,7 +162,7 @@ public class ControladorAltaCliente implements ActionListener, KeyListener{
         @Override
         protected Void doInBackground() throws Exception {
             Date fecha =df.parse(ac.fecha_nac.getText());
-            alta = cd.altaCliente(Integer.parseInt(ac.documento.getText()), ac.apellidos.getText(), ac.nombres.getText(),new java.sql.Date(fecha.getTime()), ac.barrio.getText(), ac.calle.getText(), ac.numero.getText(), ac.telefono1.getText(), ac.telefono2.getText(), ac.trabajo.getText());     
+            alta = cd.altaCliente(Integer.parseInt(ac.documento.getText()), ac.apellidos.getText(), ac.nombres.getText(),new java.sql.Date(fecha.getTime()), ac.barrio.getText(), ac.calle.getText(), ac.numero.getText(), ac.telefono1.getText(), ac.telefono2.getText(), ac.trabajo.getText(), ac.cuil.getText());     
             return null;
         }
 

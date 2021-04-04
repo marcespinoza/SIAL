@@ -145,7 +145,6 @@ public class ControladorAltaCuota implements ActionListener, KeyListener{
                  ac.gastos.setText(gasto.toString());
             }else{
                 BigDecimal gasto = (new BigDecimal(ac.cuota_total.getText()).multiply(BigDecimal.valueOf(porcentaje)).divide(new BigDecimal(100),2, BigDecimal.ROUND_HALF_UP));
-                System.out.println(gasto.toString()+" "+(new BigDecimal(ac.cuota_total.getText()).multiply(BigDecimal.valueOf(porcentaje)).divide(new BigDecimal(100),2, BigDecimal.ROUND_HALF_UP)));
                 ac.gastos.setText(gasto.toString());
             }
             }else{
@@ -209,6 +208,7 @@ public class ControladorAltaCuota implements ActionListener, KeyListener{
     
     public void altaPago(){
       List<FichaDeControl> listafc = new ArrayList<>();  
+      //Si agrega cuota de derecho de posesion
       if(ac.chk_dcho_posesion.isSelected()){ 
             if(validarCampos()){
               Date date = new Date();     
@@ -219,7 +219,14 @@ public class ControladorAltaCuota implements ActionListener, KeyListener{
                     BigDecimal bolsa_cemento = listafc.get(listafc.size()-1).getBolsaCemento();
                     BigDecimal cemento_saldo = new BigDecimal(dpd.getString(6));
                     BigDecimal cant_bolsa = new BigDecimal(ac.cuota_total.getText()).divide(bolsa_cemento, 2, RoundingMode.DOWN);
-                    dp.altaDchoPosesion(new java.sql.Date(date.getTime()), new BigDecimal(ac.cuota_total.getText()),new BigDecimal(ac.gastos.getText()),new BigDecimal(0),cant_bolsa, cemento_saldo.subtract(cant_bolsa),ac.detallePago.getText(), id_control);
+                    dp.altaDchoPosesion(new java.sql.Date(date.getTime()), 
+                                        new BigDecimal(ac.cuota_total.getText()).subtract(new BigDecimal(ac.gastos.getText())),
+                                        new BigDecimal(ac.gastos.getText()),
+                                        new BigDecimal(0),
+                                        cant_bolsa, 
+                                        cemento_saldo.subtract(cant_bolsa),
+                                        ac.detallePago.getText(), 
+                                        id_control);
                 } catch (SQLException ex) {
                     Logger.getLogger(ControladorAltaCuota.class.getName()).log(Level.SEVERE, null, ex);
                 }
@@ -284,7 +291,7 @@ public class ControladorAltaCuota implements ActionListener, KeyListener{
            if (filas_insertadas==1) {
                ac.dispose();
                filas_insertadas=0;
-               log.info(Ventana.nombreUsuario.getText() + " - Alta pago");
+               log.info(Ventana.nombreUsuario.getText() + " - Alta pago -" + "Id control: "+id_control + " Nro cuota: "+ ac.nro_cuota.getText() );
            }else{
                ac.aviso.setVisible(true);
                ac.aviso.setText("No se puedo cargar el pago");

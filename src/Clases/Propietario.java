@@ -15,12 +15,22 @@ String nombres;
 String apellidos;
 int nro_recibo;
 String cuit;
+int idPropietario;
 
 
     public Propietario() {
     }
+
+    public int getIdPropeietario() {
+        return idPropietario;
+    }
+
+    public void setIdPropietario(int idPropeietario) {
+        this.idPropietario = idPropeietario;
+    }
     
 
+    
     public String getNombres() {
         return nombres;
     }

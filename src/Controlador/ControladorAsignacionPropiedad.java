@@ -7,6 +7,7 @@ package Controlador;
 
 import Clases.Lote;
 import Clases.Propietario;
+import static Controlador.ControladorAltaCliente.log;
 import Modelo.ClienteDAO;
 import Modelo.CuotaDAO;
 import Modelo.DchoPosesionDAO;
@@ -15,6 +16,7 @@ import Modelo.FichaControlDAO;
 import Modelo.LoteDAO;
 import Modelo.PropietarioDAO;
 import Vista.Dialogs.AsignarPropiedad;
+import Vista.Frame.Ventana;
 import java.awt.Color;
 import java.awt.Frame;
 import java.awt.event.ActionEvent;
@@ -50,6 +52,7 @@ public class ControladorAsignacionPropiedad implements ActionListener, KeyListen
     CuotaDAO cuotaDao = new CuotaDAO();
     ClienteDAO cd = new ClienteDAO();
     ControladorCliente cc = new ControladorCliente();
+    static org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(ControladorAltaCuota.class.getName());
     int dni;
 
     public ControladorAsignacionPropiedad(Frame parent, int dni) {
@@ -334,6 +337,7 @@ public class ControladorAsignacionPropiedad implements ActionListener, KeyListen
 
        @Override
        public void done() { 
+           log.info(Ventana.nombreUsuario.getText()+" - Asigna propiedad - id control: "+id_control);
            BigDecimal saldo = new BigDecimal(vistaAsignarPropiedad.cantidad_cuotas.getText()).multiply(new BigDecimal(vistaAsignarPropiedad.cuota_total.getText()));
            switch(vistaAsignarPropiedad.tipo_propiedad.getSelectedItem().toString()){
                case "Terreno":cuotaDao.altaCuotaLote(new java.sql.Timestamp(fecha_suscripcion), 0,"Saldo Inicio", new BigDecimal(0),new BigDecimal(0), saldo , new BigDecimal(0), saldo, saldo.divide(new BigDecimal(vistaAsignarPropiedad.bolsa_cemento.getText()),2, BigDecimal.ROUND_HALF_UP), new BigDecimal(0), saldo.divide(new BigDecimal(vistaAsignarPropiedad.bolsa_cemento.getText()),2, BigDecimal.ROUND_HALF_UP), "", "", id_control, 0); break;

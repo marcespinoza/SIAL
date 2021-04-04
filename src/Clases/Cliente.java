@@ -23,6 +23,15 @@ public class Cliente {
     String telefono1;
     String telefono2;
     String trabajo;
+    String cuil;
+
+    public String getCuil() {
+        return cuil;
+    }
+
+    public void setCuil(String cuil) {
+        this.cuil = cuil;
+    }
     
     public Cliente(){
     }

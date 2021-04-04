@@ -109,7 +109,7 @@ public class ClienteDAO {
      List<Cliente> cliente = new ArrayList<>();
      try {
           connection = conexion.dataSource.getConnection();
-          String listar = "SELECT c.Apellidos, c.Nombres,c.barrio, c.calle, c.numero FROM cliente c LEFT JOIN cliente_tiene_lote f ON c.Dni = f.cliente_Dni where f.id_control = '"+id_control+"'"; 
+          String listar = "SELECT c.Apellidos, c.Nombres,c.barrio, c.calle, c.numero, c.cuil FROM cliente c LEFT JOIN cliente_tiene_lote f ON c.Dni = f.cliente_Dni where f.id_control = '"+id_control+"'"; 
           Statement st = connection.createStatement();
           rs = st.executeQuery(listar);
           while(rs.next()){
@@ -119,6 +119,7 @@ public class ClienteDAO {
               c.setBarrio(rs.getString(3));
               c.setCalle(rs.getString(4));
               c.setNumero(rs.getInt(5));
+              c.setCuil(rs.getString(6));
               cliente.add(c);
           }
         } catch (Exception e) {
@@ -168,13 +169,13 @@ public class ClienteDAO {
         }
     }
  
-    public int altaCliente(int dni, String apellidos, String nombres, Date fecha_nacimiento, String barrio, String calle, String numero, String telefono1, String telefono2, String trabajo) throws SQLException{
+    public int altaCliente(int dni, String apellidos, String nombres, Date fecha_nacimiento, String barrio, String calle, String numero, String telefono1, String telefono2, String trabajo, String cuil) throws SQLException{
        int filasAfectadas=0;
        PreparedStatement ps = null;
        Connection con = null;
        try {
          con = conexion.dataSource.getConnection();
-         String insertar = "Insert into cliente(dni, apellidos, nombres, fecha_nacimiento, barrio, calle, numero, telefono1, telefono2, trabajo) values ('"+dni+"','"+apellidos+"','"+nombres+"','"+fecha_nacimiento+"','"+barrio+"','"+calle+"','"+numero+"','"+telefono1+"','"+telefono2+"','"+trabajo+"')";
+         String insertar = "Insert into cliente(dni, apellidos, nombres, fecha_nacimiento, barrio, calle, numero, telefono1, telefono2, trabajo, cuil) values ('"+dni+"','"+apellidos+"','"+nombres+"','"+fecha_nacimiento+"','"+barrio+"','"+calle+"','"+numero+"','"+telefono1+"','"+telefono2+"','"+trabajo+"', '"+cuil+"')";
          ps = con.prepareStatement(insertar);
          filasAfectadas = ps.executeUpdate();         
        } catch (SQLException e) { 

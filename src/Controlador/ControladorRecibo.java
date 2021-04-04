@@ -12,6 +12,8 @@ import Modelo.CuotaDAO;
 import Modelo.FichaControlDAO;
 import Clases.LimitadorCaracteres;
 import Clases.Lote;
+import static Controlador.ControladorAltaCliente.log;
+import Modelo.DchoPosesionDAO;
 import Modelo.LoteDAO;
 import Modelo.MinutaDAO;
 import Utils.LimitLinesDocumentListener;
@@ -71,13 +73,14 @@ public class ControladorRecibo implements ActionListener{
     LoteDAO ld = new LoteDAO();
     ClienteDAO cd = new ClienteDAO();
     CuotaDAO cuod = new CuotaDAO();
+    DchoPosesionDAO dpd = new DchoPosesionDAO();
     ReciboDAO rd = new ReciboDAO();
     PropietarioDAO pd = new PropietarioDAO();
     FichaControlDAO fcd = new FichaControlDAO();
     ControladorDetalleCuota cdc;
     DetalleCuota dc;
     String apellido_propietario, nombre_propietario, cuit_propietario;
-    String nombre_comprador, apellido_comprador, domicilio_comprador;
+    String nombre_comprador, apellido_comprador, domicilio_comprador, cuil_comprador;
     String dimension, barrio;
     int cant_cuotas, manzana, parcela, row;
     BigDecimal cobrado, cuota_total, gastos_administrativos, saldo_cemento;
@@ -209,6 +212,7 @@ public class ControladorRecibo implements ActionListener{
             apellido_comprador = cliente.get(i).getApellidos();
             nombre_comprador = cliente.get(i).getNombres();
             domicilio_comprador = cliente.get(i).getBarrio() +" - "+ cliente.get(i).getCalle() +" "+String.valueOf(cliente.get(i).getNumero());
+            cuil_comprador = cliente.get(i).getCuil();
             ar.apellido_comprador.setText(apellido_comprador);
             ar.nombre_comprador.setText(nombre_comprador);
             ar.domicilio_comprador.setText(domicilio_comprador);
@@ -254,7 +258,7 @@ public class ControladorRecibo implements ActionListener{
             java.util.Date date = new java.util.Date();
         try {
             //----Escribo en el log------//
-            log.info(Ventana.nombreUsuario.getText() + " - Genera recibo "+ar.nro_recibo.getText());
+            log.info(Ventana.nombreUsuario.getText() + " - Genera recibo "+ar.nro_recibo.getText()+ " "+nombre_comprador+" "+apellido_comprador);
             pathRecibo = new File(dc.path.getText(), "Recibo-"+barrio+"-"+ar.nro_recibo.getText()+".pdf");
             PdfWriter.getInstance(document, new FileOutputStream(pathRecibo));
             document.open();
@@ -299,7 +303,7 @@ public class ControladorRecibo implements ActionListener{
             PdfPTable table2 = new PdfPTable(1);
             table2.setWidthPercentage(100);
             PdfPCell cell4 = new PdfPCell(new Paragraph("Propietario: " + ar.apellido_propietario.getText() + " " + ar.nombre_propietario.getText()+"                                     "+"CUIT: "+ar.cuit_propietario.getText(),f));
-            PdfPCell cell5 = new PdfPCell(new Paragraph("Nombre comprador: " + apellido_comprador +" "+ nombre_comprador,f));
+            PdfPCell cell5 = new PdfPCell(new Paragraph("Nombre comprador: " + apellido_comprador +" "+ nombre_comprador+"                    "+"Cuil: "+cuil_comprador,f));
             PdfPCell cell6 = new PdfPCell(new Paragraph("Domicilio: " + domicilio_comprador,f));
             cell4.disableBorderSide(2);
             cell5.disableBorderSide(1);
@@ -423,7 +427,7 @@ public class ControladorRecibo implements ActionListener{
     public void actionPerformed(ActionEvent e) {
         if(e.getSource() == ar.aceptar){
             if(validarCampos()){              
-                new GenerarMinuta().execute();             
+              new GenerarMinuta().execute();             
             }else{
               JOptionPane.showMessageDialog(null, "Rellene todos los campos", "Atención", JOptionPane.INFORMATION_MESSAGE, null);
             }
@@ -473,19 +477,46 @@ public class ControladorRecibo implements ActionListener{
             Ventana.cm.llenarTablaFecha();
             //------Tipo de pago 1 es cuota---------//
             if(tipoPago==1){
-              md.altaMinuta(new java.sql.Date(date.getTime()), apellido_comprador, nombre_comprador, manzana, parcela, cobrado, gastos_administrativos, rendido, 
-              Integer.parseInt(dc.tablaDetallePago.getModel().getValueAt(row, 0).toString()), 
-              dc.tablaDetallePago.getModel().getValueAt(row, 14).toString(), 
-              categoria.toString(), 
-              id_recibo, barrio);
+              log.info(Ventana.nombreUsuario.getText() + " - Genera recibo: " +id_recibo);
+              //-----------Agrego nro de recibo a la cuota-----------//
+              cuod.actualizarNroRecibo(Integer.parseInt(ar.nro_recibo.getText()), id_recibo, saldo_cemento, id_control);
+              md.altaMinuta(new java.sql.Date(date.getTime()),
+                            apellido_comprador, 
+                            nombre_comprador,
+                            manzana, 
+                            parcela,
+                            cobrado, 
+                            gastos_administrativos,
+                            rendido, 
+                            Integer.parseInt(dc.tablaDetallePago.getModel().getValueAt(row, 0).toString()), 
+                            dc.tablaDetallePago.getModel().getValueAt(row, 14).toString(), 
+                            categoria.toString(), 
+                            id_recibo,
+                            barrio);
               //-----------Tipo de pago 0 es derecho de posesion---------------//
             }else if(tipoPago==0){
-              md.altaMinuta(new java.sql.Date(date.getTime()), apellido_comprador, nombre_comprador, manzana, parcela, cobrado, gastos_administrativos, rendido, Integer.parseInt(dc.tablaDchoPosesion.getModel().getValueAt(row, 0).toString()), dc.tablaDetallePago.getModel().getValueAt(row, 13).toString()+" Dcho. posesión", "Cta. derecho posesión",id_recibo, barrio);
+                //-----------Agrego nro de recibo a la cuota de derecho de posesion-----------//
+            dpd.actualizarNroRecibo(Integer.parseInt(ar.nro_recibo.getText()), id_recibo, saldo_cemento, id_control);
+              md.altaMinuta(new java.sql.Date(date.getTime()),
+                            apellido_comprador,
+                            nombre_comprador, 
+                            manzana, 
+                            parcela, 
+                            cobrado, 
+                            gastos_administrativos, 
+                            rendido, 
+                            Integer.parseInt(dc.tablaDchoPosesion.getModel().getValueAt(row, 0).toString()),
+                            dc.tablaDetallePago.getModel().getValueAt(row, 13).toString()+" Dcho. posesión", 
+                            "Cta. derecho posesión",
+                            id_recibo,
+                            barrio);
             }
             //----------Incremento el numero de recibo asociado a ese propietario---------//
-            pd.editarNroRecibo(apellido_propietario, nombre_propietario, cuit_propietario, Integer.parseInt(ar.nro_recibo.getText())+1);
-            //-----------Agrego nro de recibo a la cuota-----------//
-            cuod.actualizarNroRecibo(Integer.parseInt(ar.nro_recibo.getText()), id_recibo, saldo_cemento, id_control);
+            pd.editarNroRecibo(apellido_propietario, 
+                               nombre_propietario, 
+                               cuit_propietario, 
+                               Integer.parseInt(ar.nro_recibo.getText())+1);
+            
             ar.dispose();         
             cdc.llenarTablaDchoPosesion(id_control);
             cdc.llenarTabla(id_control);
