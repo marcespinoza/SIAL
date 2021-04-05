@@ -114,7 +114,13 @@ public class FichaControlDAO {
           }
         } catch (Exception e) {
             System.out.println(e.getMessage());
-        }
+        } finally{
+         try {
+                  connection.close();
+              } catch (SQLException ex) {
+                  Logger.getLogger(PropietarioDAO.class.getName()).log(Level.SEVERE, null, ex);
+              }
+     }
      return listaFichaControl;
  }
     
@@ -180,6 +186,7 @@ public class FichaControlDAO {
                      ps.close();
                      con.close();
                  } catch (SQLException ex) {
+                     System.out.println(ex.getMessage());
                      Logger.getLogger(FichaControlDAO.class.getName()).log(Level.SEVERE, null, ex);
                  }            
         }

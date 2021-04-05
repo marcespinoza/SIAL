@@ -31,7 +31,7 @@ public class DchoPosesionDAO {
         conexion = new Conexion();
     }
     
-    public ResultSet listarCuenta(int id_control) throws SQLException{
+    public List<DerechoDePosesion> listarCuenta(int id_control){
         Connection con = null;
         List<DerechoDePosesion> dp = new ArrayList<>();
         ResultSet rs = null;
@@ -48,11 +48,20 @@ public class DchoPosesionDAO {
                 d.setCemento_debe(rs.getBigDecimal(4));
                 d.setCemento_haber(rs.getBigDecimal(5));
                 d.setCemento_saldo(rs.getBigDecimal(6));
+                d.setDetalle(rs.getString(7));
+                d.setId_cta(rs.getInt(8));
                 dp.add(d);
           }
-        } catch (Exception e) {
-        }
-     return rs;
+        } catch (SQLException e) {
+            System.out.println(e.getMessage()+" listarCuenta de derecho de posesion");
+        }finally{
+         try {
+                  con.close();
+              } catch (SQLException ex) {
+                  Logger.getLogger(PropietarioDAO.class.getName()).log(Level.SEVERE, null, ex);
+              }
+     }
+         return dp;
     }
     
     public void altaDchoPosesion(Date date, BigDecimal monto, BigDecimal gastos, BigDecimal cementoDebe, BigDecimal cementoHaber, BigDecimal cementoSaldo, String detalle, int id_control){

@@ -6,6 +6,7 @@
 package Controlador;
 
 import Clases.Cuota;
+import Clases.DerechoDePosesion;
 import Clases.FichaDeControl;
 import Modelo.CuotaDAO;
 import Modelo.DchoPosesionDAO;
@@ -123,7 +124,11 @@ public class ControladorAltaCuota implements ActionListener, KeyListener{
             @Override
             public void keyPressed(KeyEvent e){
               if(e.getKeyCode()==KeyEvent.VK_ENTER){
-                   altaPago();
+                  try {
+                      altaPago();
+                  } catch (SQLException ex) {
+                      Logger.getLogger(ControladorAltaCuota.class.getName()).log(Level.SEVERE, null, ex);
+                  }
                }
             }
         });
@@ -206,30 +211,27 @@ public class ControladorAltaCuota implements ActionListener, KeyListener{
             }
     }
     
-    public void altaPago(){
+    public void altaPago() throws SQLException{
       List<FichaDeControl> listafc = new ArrayList<>();  
+      List<DerechoDePosesion>listadp = new ArrayList<>();
       //Si agrega cuota de derecho de posesion
       if(ac.chk_dcho_posesion.isSelected()){ 
             if(validarCampos()){
               Date date = new Date();     
               listafc = fc.obtenerFichaControl(id_control);
-              ResultSet dpd = dp.listarCuenta(id_control);
-                try {
-                    dpd.last();
-                    BigDecimal bolsa_cemento = listafc.get(listafc.size()-1).getBolsaCemento();
-                    BigDecimal cemento_saldo = new BigDecimal(dpd.getString(6));
-                    BigDecimal cant_bolsa = new BigDecimal(ac.cuota_total.getText()).divide(bolsa_cemento, 2, RoundingMode.DOWN);
-                    dp.altaDchoPosesion(new java.sql.Date(date.getTime()), 
-                                        new BigDecimal(ac.cuota_total.getText()).subtract(new BigDecimal(ac.gastos.getText())),
-                                        new BigDecimal(ac.gastos.getText()),
-                                        new BigDecimal(0),
-                                        cant_bolsa, 
-                                        cemento_saldo.subtract(cant_bolsa),
-                                        ac.detallePago.getText(), 
-                                        id_control);
-                } catch (SQLException ex) {
-                    Logger.getLogger(ControladorAltaCuota.class.getName()).log(Level.SEVERE, null, ex);
-                }
+              listadp = dp.listarCuenta(id_control);
+              // dpd.last();
+              BigDecimal bolsa_cemento = listafc.get(listafc.size()-1).getBolsaCemento();
+              BigDecimal cemento_saldo = listadp.get(listadp.size()-1).getCemento_saldo();
+              BigDecimal cant_bolsa = new BigDecimal(ac.cuota_total.getText()).divide(bolsa_cemento, 2, RoundingMode.DOWN);
+              dp.altaDchoPosesion(new java.sql.Date(date.getTime()),
+                      new BigDecimal(ac.cuota_total.getText()).subtract(new BigDecimal(ac.gastos.getText())),
+                      new BigDecimal(ac.gastos.getText()),
+                      new BigDecimal(0),
+                      cant_bolsa,
+                      cemento_saldo.subtract(cant_bolsa),
+                      ac.detallePago.getText(),
+                      id_control);
             ac.dispose();
             }
              //--------Es cuota comun----------/     
@@ -341,7 +343,11 @@ public class ControladorAltaCuota implements ActionListener, KeyListener{
     public void keyPressed(KeyEvent e) {
         if(e.getKeyCode()==KeyEvent.VK_ENTER){ 
          if(e.getSource()==ac.nro_cuota){
-           altaPago();
+             try {
+                 altaPago();
+             } catch (SQLException ex) {
+                 Logger.getLogger(ControladorAltaCuota.class.getName()).log(Level.SEVERE, null, ex);
+             }
          }
         }
     }

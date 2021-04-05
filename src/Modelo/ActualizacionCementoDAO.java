@@ -81,6 +81,7 @@ public class ActualizacionCementoDAO {
                  if(stmt!=null){
                      stmt.close();
                  }} catch (SQLException ex) {
+                 System.out.println(ex.getMessage());
                  Logger.getLogger(ActualizacionCementoDAO.class.getName()).log(Level.SEVERE, null, ex);
              }
         }

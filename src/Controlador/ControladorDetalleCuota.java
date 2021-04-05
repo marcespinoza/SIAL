@@ -8,6 +8,7 @@ package Controlador;
 import Clases.ActualizacionCemento;
 import Clases.ActualizacionEmpleado;
 import Clases.Cuota;
+import Clases.DerechoDePosesion;
 import Clases.FichaDeControl;
 import Clases.LimitadorCaracteres;
 import static Controlador.ControladorAltaCuota.log;
@@ -104,7 +105,7 @@ public class ControladorDetalleCuota implements ActionListener, TableModelListen
     Boolean posesion = false;
     String tipoAct;
     public static final String IMG = "src/Imagenes/logo_reporte.png";
-    ResultSet derechoPosesion;
+    List<DerechoDePosesion> listaDerechoPosesion = new ArrayList<>();
     List<Cuota> detalleCuota = new ArrayList();
     int baja_logica;
     static org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(ControladorDetalleCuota.class.getName());  
@@ -114,7 +115,7 @@ public class ControladorDetalleCuota implements ActionListener, TableModelListen
     public ControladorDetalleCuota() {
     }
     
-    public ControladorDetalleCuota(ArrayList arrayList, int nro_cuotas, String apellido, String nombre, String telefono, String barrio, String calle,int numero,int id_control, int baja_logica, String tipoAct, ControladorCliente cc) {
+    public ControladorDetalleCuota(ArrayList arrayList, int nro_cuotas, String apellido, String nombre, String telefono, String barrio, String calle,int numero,int id_control, int baja_logica, String tipoAct, ControladorCliente cc) throws SQLException {
         this.cc = cc;
         this.apellido=apellido;
         this.nombre=nombre;
@@ -241,23 +242,24 @@ public class ControladorDetalleCuota implements ActionListener, TableModelListen
     
    public void llenarTablaDchoPosesion(int id_control){
         int num_cuota=0;
-        derechoPosesion = dp.listarCuenta(id_control);
+        listaDerechoPosesion = dp.listarCuenta(id_control);
         DefaultTableModel model = (DefaultTableModel) dc.tablaDchoPosesion.getModel();
         model.setRowCount(0);
         try {
-            while(derechoPosesion.next()){
-                String fecha = derechoPosesion.getString(1);
-                String monto = derechoPosesion.getString(2);
-                String gastos = derechoPosesion.getString(3); 
-                String cemento_debe = derechoPosesion.getString(4); 
-                String cemento_haber = derechoPosesion.getString(5); 
-                String cemento_saldo = derechoPosesion.getString(6); 
-                String detalle = derechoPosesion.getString(7); 
+            for(int i = 0; i < listaDerechoPosesion.size()-1; i++){
+                Date fecha = listaDerechoPosesion.get(i).getFecha();
+                BigDecimal monto = listaDerechoPosesion.get(i).getMonto();
+                BigDecimal gastos = listaDerechoPosesion.get(i).getGastos(); 
+                BigDecimal cemento_debe = listaDerechoPosesion.get(i).getCemento_debe();
+                BigDecimal cemento_haber = listaDerechoPosesion.get(i).getCemento_haber(); 
+                BigDecimal cemento_saldo = listaDerechoPosesion.get(i).getCemento_saldo(); 
+                String detalle = listaDerechoPosesion.get(i).getDetalle();
+                int id_cuenta = listaDerechoPosesion.get(i).getId_cta();
                 dchoPosesion= new Object[] {num_cuota,fecha, monto,gastos,cemento_debe, cemento_haber, cemento_saldo, detalle};                    
                 model.addRow(dchoPosesion); 
                 num_cuota ++;
             }
-            derechoPosesion.beforeFirst();
+            //derechoPosesion.beforeFirst();
         }catch(Exception e){
         System.out.println(e.getMessage().toString());
         } 
@@ -548,17 +550,17 @@ public class ControladorDetalleCuota implements ActionListener, TableModelListen
             table2.addCell(monto);
             document.add(table2); 
             int i = 1;
-            while(derechoPosesion.next()){
+            for(int j = 0;j < listaDerechoPosesion.size()-1; j++){
                   PdfPTable table3 = new PdfPTable(3);            
                   table3.setTotalWidth(new float[]{ 1,1,2});
                   table3.setWidthPercentage(100);
                   table3.addCell(new PdfPCell(new Paragraph(String.valueOf(i),f))).setHorizontalAlignment(Element.ALIGN_CENTER);
-                  table3.addCell(new PdfPCell(new Paragraph(derechoPosesion.getString(1),f))).setHorizontalAlignment(Element.ALIGN_CENTER);
-                  table3.addCell(new PdfPCell(new Paragraph(derechoPosesion.getString(2),f))).setHorizontalAlignment(Element.ALIGN_CENTER);
+                  table3.addCell(new PdfPCell(new Paragraph(listaDerechoPosesion.get(j).getFecha().toString(),f))).setHorizontalAlignment(Element.ALIGN_CENTER);
+                  table3.addCell(new PdfPCell(new Paragraph(listaDerechoPosesion.get(j).getMonto().toString(),f))).setHorizontalAlignment(Element.ALIGN_CENTER);
                   document.add(table3);
                   i++;
               }
-            derechoPosesion.beforeFirst();
+            //derechoPosesion.beforeFirst();
             }
             document.close();
             return nya;
@@ -567,8 +569,6 @@ public class ControladorDetalleCuota implements ActionListener, TableModelListen
             Logger.getLogger(DetalleCuota.class.getName()).log(Level.SEVERE, null, ex.getMessage());
         } catch (IOException ex) {
             JOptionPane.showMessageDialog(null, "No se pudo generar. Compruebe que no tiene abierto actualmente el archivo"+ex.getMessage());
-            Logger.getLogger(ControladorDetalleCuota.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (SQLException ex) {
             Logger.getLogger(ControladorDetalleCuota.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;

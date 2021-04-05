@@ -53,6 +53,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.sql.Array;
+import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
@@ -185,8 +186,13 @@ public class ControladorCliente implements ActionListener, MouseListener, TableM
                   if(!new BigDecimal(bolsaCemento).equals(BigDecimal.ZERO)){  
                     int i = vistaClientes.tablaCliente.getSelectedRow();
                     BigDecimal nuevo_bolsa_cemento = new BigDecimal(vistaClientes.bolsa_cemento.getText());
-                    fd.actualizarBolsaCemento( nuevo_bolsa_cemento, new java.sql.Date(date.getTime()), vistaClientes.tablaCliente.getModel().getValueAt(i, 11).toString());
-                    acd.actualizarCemento(vistaClientes.tablaCliente.getModel().getValueAt(i, 11).toString(), new java.sql.Date(date.getTime()), new BigDecimal(vistaClientes.tablaCliente.getModel().getValueAt(i, 14).toString()), nuevo_bolsa_cemento);
+                    fd.actualizarBolsaCemento( nuevo_bolsa_cemento, 
+                                               new java.sql.Date(date.getTime()),
+                                               vistaClientes.tablaCliente.getModel().getValueAt(vistaClientes.tablaCliente.convertRowIndexToModel(i), 11).toString());
+                    acd.actualizarCemento(vistaClientes.tablaCliente.getModel().getValueAt(i, 11).toString(), 
+                                          new java.sql.Date(date.getTime()), 
+                                          new BigDecimal(vistaClientes.tablaCliente.getModel().getValueAt(i, 14).toString()),
+                                          nuevo_bolsa_cemento);
                     llenarTabla();
                     vistaClientes.tablaCliente.getSelectionModel().clearSelection();
                     vistaClientes.fch_actualizacion.setText("");
@@ -380,7 +386,22 @@ public class ControladorCliente implements ActionListener, MouseListener, TableM
            if(row != -1){
                if(vistaClientes.tablaCliente.getModel().getValueAt(vistaClientes.tablaCliente.convertRowIndexToModel(row), 11) != null){
                    String tipo_actualizacion = vistaClientes.tablaCliente.getModel().getValueAt(vistaClientes.tablaCliente.convertRowIndexToModel(row), 19).toString();
-                   new ControladorDetalleCuota(datosCliente, Integer.parseInt(vistaClientes.tablaCliente.getModel().getValueAt(vistaClientes.tablaCliente.convertRowIndexToModel(row), 12).toString()), vistaClientes.tablaCliente.getModel().getValueAt(vistaClientes.tablaCliente.convertRowIndexToModel(row), 0).toString(),vistaClientes.tablaCliente.getModel().getValueAt(vistaClientes.tablaCliente.convertRowIndexToModel(row), 1).toString(), vistaClientes.tablaCliente.getModel().getValueAt(vistaClientes.tablaCliente.convertRowIndexToModel(row), 3).toString(), vistaClientes.tablaCliente.getModel().getValueAt(vistaClientes.tablaCliente.convertRowIndexToModel(row), 5).toString(), vistaClientes.tablaCliente.getModel().getValueAt(vistaClientes.tablaCliente.convertRowIndexToModel(row), 6).toString(), Integer.parseInt(vistaClientes.tablaCliente.getModel().getValueAt(vistaClientes.tablaCliente.convertRowIndexToModel(row), 7).toString()),  Integer.parseInt(vistaClientes.tablaCliente.getModel().getValueAt(vistaClientes.tablaCliente.convertRowIndexToModel(row), 11).toString()),Integer.parseInt(vistaClientes.tablaCliente.getModel().getValueAt(vistaClientes.tablaCliente.convertRowIndexToModel(row), 10).toString()), tipo_actualizacion, this);
+                   try {
+                       new ControladorDetalleCuota(datosCliente,
+                               Integer.parseInt(vistaClientes.tablaCliente.getModel().getValueAt(vistaClientes.tablaCliente.convertRowIndexToModel(row), 12).toString()),
+                               vistaClientes.tablaCliente.getModel().getValueAt(vistaClientes.tablaCliente.convertRowIndexToModel(row), 0).toString(),
+                               vistaClientes.tablaCliente.getModel().getValueAt(vistaClientes.tablaCliente.convertRowIndexToModel(row), 1).toString(),
+                               vistaClientes.tablaCliente.getModel().getValueAt(vistaClientes.tablaCliente.convertRowIndexToModel(row), 3).toString(),
+                               vistaClientes.tablaCliente.getModel().getValueAt(vistaClientes.tablaCliente.convertRowIndexToModel(row), 5).toString(),
+                               vistaClientes.tablaCliente.getModel().getValueAt(vistaClientes.tablaCliente.convertRowIndexToModel(row), 6).toString(),
+                               Integer.parseInt(vistaClientes.tablaCliente.getModel().getValueAt(vistaClientes.tablaCliente.convertRowIndexToModel(row), 7).toString()),
+                               Integer.parseInt(vistaClientes.tablaCliente.getModel().getValueAt(vistaClientes.tablaCliente.convertRowIndexToModel(row), 11).toString()),
+                               Integer.parseInt(vistaClientes.tablaCliente.getModel().getValueAt(vistaClientes.tablaCliente.convertRowIndexToModel(row), 10).toString()),
+                               tipo_actualizacion,
+                               this);
+                   } catch (SQLException ex) {
+                       java.util.logging.Logger.getLogger(ControladorCliente.class.getName()).log(Level.SEVERE, null, ex);
+                   }
                }else{
                   JOptionPane.showMessageDialog(null, "Debe asignar una propiedad para ver los detalles", "Atención", JOptionPane.INFORMATION_MESSAGE, null); 
                }
