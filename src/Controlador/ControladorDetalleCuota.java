@@ -246,7 +246,7 @@ public class ControladorDetalleCuota implements ActionListener, TableModelListen
         DefaultTableModel model = (DefaultTableModel) dc.tablaDchoPosesion.getModel();
         model.setRowCount(0);
         try {
-            for(int i = 0; i < listaDerechoPosesion.size()-1; i++){
+            for(int i = 0; i < listaDerechoPosesion.size(); i++){
                 Date fecha = listaDerechoPosesion.get(i).getFecha();
                 BigDecimal monto = listaDerechoPosesion.get(i).getMonto();
                 BigDecimal gastos = listaDerechoPosesion.get(i).getGastos(); 
@@ -254,8 +254,9 @@ public class ControladorDetalleCuota implements ActionListener, TableModelListen
                 BigDecimal cemento_haber = listaDerechoPosesion.get(i).getCemento_haber(); 
                 BigDecimal cemento_saldo = listaDerechoPosesion.get(i).getCemento_saldo(); 
                 String detalle = listaDerechoPosesion.get(i).getDetalle();
+                int nro_recibo = listaDerechoPosesion.get(i).getNro_recibo();
                 int id_cuenta = listaDerechoPosesion.get(i).getId_cta();
-                dchoPosesion= new Object[] {num_cuota,fecha, monto,gastos,cemento_debe, cemento_haber, cemento_saldo, detalle};                    
+                dchoPosesion= new Object[] {num_cuota,fecha, monto,gastos,cemento_debe, cemento_haber, cemento_saldo, nro_recibo, detalle};                    
                 model.addRow(dchoPosesion); 
                 num_cuota ++;
             }
@@ -400,7 +401,7 @@ public class ControladorDetalleCuota implements ActionListener, TableModelListen
                 JOptionPane.showMessageDialog(null, "Fila no válida", "Atención", JOptionPane.INFORMATION_MESSAGE, null);
                 break;
                 default:
-                 new ControladorRecibo(this,(Frame) SwingUtilities.getWindowAncestor(dc), id_control, dc , new BigDecimal(dc.tablaDetallePago.getModel().getValueAt(row, 10).toString()),row, 0);  
+                 new ControladorRecibo(this,(Frame) SwingUtilities.getWindowAncestor(dc), id_control, dc , new BigDecimal(dc.tablaDetallePago.getModel().getValueAt(row, 6).toString()),row, 0);  
                 }
                }
               }else{

@@ -37,7 +37,7 @@ public class DchoPosesionDAO {
         ResultSet rs = null;
      try {
           con = conexion.dataSource.getConnection();
-          String listar = "SELECT fecha, monto, gastos, cemento_debe, cemento_haber, cemento_saldo, detalle, id_cta from derecho_posesion where id_control='"+id_control+"'"; 
+          String listar = "SELECT fecha, monto, gastos, cemento_debe, cemento_haber, cemento_saldo, detalle, id_cta, nro_recibo from derecho_posesion where id_control='"+id_control+"'"; 
           Statement st = con.createStatement();
           rs = st.executeQuery(listar);
           while (rs.next()) {
@@ -50,6 +50,7 @@ public class DchoPosesionDAO {
                 d.setCemento_saldo(rs.getBigDecimal(6));
                 d.setDetalle(rs.getString(7));
                 d.setId_cta(rs.getInt(8));
+                d.setNro_recibo(rs.getInt(9));
                 dp.add(d);
           }
         } catch (SQLException e) {

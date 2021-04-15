@@ -23,6 +23,16 @@ BigDecimal cemento_debe;
 BigDecimal cemento_haber;
 BigDecimal cemento_saldo;
 String detalle;
+int nro_recibo;
+
+    public int getNro_recibo() {
+        return nro_recibo;
+    }
+
+    public void setNro_recibo(int nro_recibo) {
+        this.nro_recibo = nro_recibo;
+    }
+
 
 
     public DerechoDePosesion() {

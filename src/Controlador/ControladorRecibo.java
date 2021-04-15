@@ -377,6 +377,10 @@ public class ControladorRecibo implements ActionListener{
             PdfPTable tableclausula = new PdfPTable(1);
             tableclausula.setWidthPercentage(100);
             PdfPCell cell_clausula = new PdfPCell(new Paragraph("RECUERDE QUE PARA LA POSESIÓN DEL TERRENO ES EL 10% DEL VALOR ESTIPULADO EN LA CLAUSULA 2DA DE SU CONTRATO ",font_clausula));
+            //Si es barrio san andres elimino texto de derecho de posesion
+            if(barrio.toLowerCase().equals("san andres")){
+               cell_clausula = new PdfPCell(new Paragraph("",font_clausula));
+            }
             tableclausula.addCell(cell_clausula);
             document.add(tableclausula); 
             document.add(new Paragraph("Son pesos: "+ar.son_pesos.getText(),f)); 
@@ -495,9 +499,12 @@ public class ControladorRecibo implements ActionListener{
                             barrio);
               //-----------Tipo de pago 0 es derecho de posesion---------------//
             }else if(tipoPago==0){
-                //-----------Agrego nro de recibo a la cuota de derecho de posesion-----------//
-            dpd.actualizarNroRecibo(Integer.parseInt(ar.nro_recibo.getText()), id_recibo, saldo_cemento, id_control);
-              md.altaMinuta(new java.sql.Date(date.getTime()),
+              //-----------Agrego nro de recibo a la cuota de derecho de posesion-----------//
+            dpd.actualizarNroRecibo(Integer.parseInt(ar.nro_recibo.getText()),
+                                    id_recibo, 
+                                    saldo_cemento,
+                                    id_control);
+            md.altaMinuta(new java.sql.Date(date.getTime()),
                             apellido_comprador,
                             nombre_comprador, 
                             manzana, 
