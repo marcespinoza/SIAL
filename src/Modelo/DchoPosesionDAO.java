@@ -68,8 +68,8 @@ public class DchoPosesionDAO {
     public void altaDchoPosesion(Date date, BigDecimal monto, BigDecimal gastos, BigDecimal cementoDebe, BigDecimal cementoHaber, BigDecimal cementoSaldo, String detalle, int id_control){
         try {
             Connection con = conexion.dataSource.getConnection();
-            String query = " insert into derecho_posesion (fecha, monto,gastos,cemento_debe, cemento_haber, cemento_saldo, detalle, id_control)"
-                    + " values (?, ?, ?, ?, ?, ?, ?, ?)";
+            String query = " insert into derecho_posesion (fecha, monto, gastos,cemento_debe, cemento_haber, cemento_saldo, detalle, id_control, timestamp)"
+                    + " values (?, ?, ?, ?, ?, ?, ?, ?, ?)";
             PreparedStatement preparedStmt = con.prepareStatement(query);
             preparedStmt.setDate(1, date);
             preparedStmt.setBigDecimal(2, monto);
@@ -79,6 +79,7 @@ public class DchoPosesionDAO {
             preparedStmt.setBigDecimal(6, cementoSaldo);
             preparedStmt.setString(7, detalle);
             preparedStmt.setInt(8, id_control);
+            preparedStmt.setTimestamp(9, new java.sql.Timestamp(new java.util.Date().getTime()));
             preparedStmt.execute();
         } catch (SQLException ex) {
             Logger.getLogger(DchoPosesionDAO.class.getName()).log(Level.SEVERE, null, ex);
@@ -87,20 +88,23 @@ public class DchoPosesionDAO {
     
      public void actualizarNroRecibo(int nro_recibo, int id_recibo, BigDecimal saldo_cemento, int id_control){
         Connection con = null;
+        PreparedStatement ps = null;
       try {
         con = conexion.dataSource.getConnection();
-        PreparedStatement ps = con.prepareStatement("UPDATE derecho_posesion SET nro_recibo = ?, id_recibo=? WHERE cemento_saldo = ? AND id_control = ?");
+        ps = con.prepareStatement("UPDATE derecho_posesion SET nro_recibo = ?, id_recibo=? WHERE cemento_saldo = ? AND id_control = ?");
         ps.setInt(1, nro_recibo);
         ps.setInt(2, id_recibo);
         ps.setBigDecimal(3,saldo_cemento);
         ps.setInt(4,id_control);
         ps.executeUpdate();
-        ps.close();
       } catch (SQLException ex) {
         Logger.getLogger(CuotaDAO.class.getName()).log(Level.SEVERE, null, ex);
       }finally{
             try {
                 con.close();
+            if(ps!=null){
+               ps.close();
+            }
             } catch (SQLException ex) {
                 Logger.getLogger(CuotaDAO.class.getName()).log(Level.SEVERE, null, ex);
             }

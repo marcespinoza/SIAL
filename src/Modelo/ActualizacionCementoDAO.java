@@ -65,12 +65,13 @@ public class ActualizacionCementoDAO {
          Connection con = null;
         try {
             con = conexion.dataSource.getConnection();
-            String insertar = "insert into actualizacion_cemento (id_control, fecha, precio_anterior, precio_actualizado) values (?,?,?,?)";
+            String insertar = "insert into actualizacion_cemento (id_control, fecha, precio_anterior, precio_actualizado, timestamp) values (?,?,?,?,?)";
             stmt = con.prepareStatement(insertar);
             stmt.setString(1, id_control);
             stmt.setDate(2, fecha);
             stmt.setBigDecimal(3, precio_anterior);
             stmt.setBigDecimal(4, precio_actualizado);
+            stmt.setTimestamp(5, new java.sql.Timestamp(new java.util.Date().getTime()));
             stmt.executeUpdate();
         } catch (SQLException ex) {
             Logger.getLogger(ClienteDAO.class.getName()).log(Level.SEVERE, null, ex);

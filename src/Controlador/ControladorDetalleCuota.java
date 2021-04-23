@@ -396,13 +396,15 @@ public class ControladorDetalleCuota implements ActionListener, TableModelListen
                }                                     
              }else if(posesion){
                  int row = dc.tablaDchoPosesion.getSelectedRow();
-                  switch(row){
-                case 0:
+                 int nro_recibo = Integer.parseInt(dc.tablaDchoPosesion.getModel().getValueAt(row, 7).toString());
+
+                if(row==0){
                 JOptionPane.showMessageDialog(null, "Fila no válida", "Atención", JOptionPane.INFORMATION_MESSAGE, null);
-                break;
-                default:
-                 new ControladorRecibo(this,(Frame) SwingUtilities.getWindowAncestor(dc), id_control, dc , new BigDecimal(dc.tablaDetallePago.getModel().getValueAt(row, 6).toString()),row, 0);  
-                }
+                }else if(nro_recibo!=0){
+                 JOptionPane.showMessageDialog(null, "Cuota con recibo ya generado", "Advertencia", JOptionPane.WARNING_MESSAGE, null);
+                }else{
+                 new ControladorRecibo(this,(Frame) SwingUtilities.getWindowAncestor(dc), id_control, dc , new BigDecimal(dc.tablaDchoPosesion.getModel().getValueAt(row, 6).toString()),row, 0);  
+                 }
                }
               }else{
                JOptionPane.showMessageDialog(null, "Seleccione un pago", "Atención", JOptionPane.INFORMATION_MESSAGE, null);

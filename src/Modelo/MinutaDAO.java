@@ -14,6 +14,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -33,10 +34,11 @@ public class MinutaDAO {
     
     public int altaMinuta(Date fecha, String apellidos, String nombres, int manzana, int parcela, BigDecimal cobrado, BigDecimal gastos, BigDecimal rendido, int nro_cuota, String observaciones, String categoria, int id_recibo, String barrio){
     int filasAfectadas=0;
+    Timestamp timestamp = new java.sql.Timestamp(new java.util.Date().getTime());
     Connection con = null;
      try {
          con = conexion.dataSource.getConnection();
-         String insertar = "Insert into minuta(fecha_minuta, apellidos, nombres, manzana, parcela, cobrado, gastos, rendido, nro_cuota, observaciones, categoria, id_Recibo, barrio) values ('"+fecha+"','"+apellidos+"','"+nombres+"','"+manzana+"','"+parcela+"','"+cobrado+"','"+gastos+"','"+rendido+"','"+nro_cuota+"','"+observaciones+"','"+categoria+"','"+id_recibo+"','"+barrio+"') ";
+         String insertar = "Insert into minuta(fecha_minuta, apellidos, nombres, manzana, parcela, cobrado, gastos, rendido, nro_cuota, observaciones, categoria, id_Recibo, barrio, timestamp) values ('"+fecha+"','"+apellidos+"','"+nombres+"','"+manzana+"','"+parcela+"','"+cobrado+"','"+gastos+"','"+rendido+"','"+nro_cuota+"','"+observaciones+"','"+categoria+"','"+id_recibo+"','"+barrio+"','"+timestamp+"') ";
          PreparedStatement ps = con.prepareStatement(insertar);
          filasAfectadas = ps.executeUpdate();         
      } catch (Exception e) { 

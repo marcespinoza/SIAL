@@ -34,9 +34,10 @@ public class FichaControlDAO {
     
     public int altaFichaControl(String tipo_compra, String dimension, int cantidad_cuotas, BigDecimal cuota_pura, BigDecimal gastos, byte bandera_cemento, BigDecimal bolsa_cemento, Date fch_actualizacion, String barrio, int manzana, int parcela, Date fch_suscripcion, byte bandera_indice){
          int id_control = 1;
+         Timestamp timestamp = new java.sql.Timestamp(new java.util.Date().getTime());
      try {
           Connection con = conexion.dataSource.getConnection();
-          String insertar = "Insert into ficha_control_lote(tipo_compra, dimension, cantidad_cuotas, cuota_pura, gastos, bandera_cemento, bolsa_cemento, fecha_actualizacion, lote_barrio, lote_manzana, lote_parcela, bandera, indice_corrector) values ('"+tipo_compra+"','"+dimension+"','"+cantidad_cuotas+"','"+cuota_pura+"','"+gastos+"', '"+bandera_cemento+"','"+bolsa_cemento+"', '"+fch_actualizacion+"','"+barrio+"','"+manzana+"','"+parcela+"', '"+fch_suscripcion+"', '"+bandera_indice+"')";
+          String insertar = "Insert into ficha_control_lote(tipo_compra, dimension, cantidad_cuotas, cuota_pura, gastos, bandera_cemento, bolsa_cemento, fecha_actualizacion, lote_barrio, lote_manzana, lote_parcela, bandera, indice_corrector, timestamp) values ('"+tipo_compra+"','"+dimension+"','"+cantidad_cuotas+"','"+cuota_pura+"','"+gastos+"', '"+bandera_cemento+"','"+bolsa_cemento+"', '"+fch_actualizacion+"','"+barrio+"','"+manzana+"','"+parcela+"', '"+fch_suscripcion+"', '"+bandera_indice+"', '"+timestamp+"')";
           PreparedStatement ps = con.prepareStatement(insertar, Statement.RETURN_GENERATED_KEYS);
           ps.executeUpdate();  
           ResultSet rs = ps.getGeneratedKeys();  

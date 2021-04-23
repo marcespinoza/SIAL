@@ -14,6 +14,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -117,7 +118,7 @@ public class CuotaDAO {
         PreparedStatement ps = null;
      try {
          connection = conexion.dataSource.getConnection();
-         String insertar = "Insert into linea_control_lote (fecha, nro_cuota, detalle, cuota_pura, gastos_administrativos, debe, haber, saldo, cemento_debe, cemento_haber, cemento_saldo, observaciones, tipo_pago, id_Control, actualizacion_cuota) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ";
+         String insertar = "Insert into linea_control_lote (fecha, nro_cuota, detalle, cuota_pura, gastos_administrativos, debe, haber, saldo, cemento_debe, cemento_haber, cemento_saldo, observaciones, tipo_pago, id_Control, actualizacion_cuota, timestamp) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ";
          ps = connection.prepareStatement(insertar);
          ps.setTimestamp(1, fecha_pago);
          ps.setInt(2, nro_cuota);
@@ -134,6 +135,7 @@ public class CuotaDAO {
          ps.setString(13, tipo_pago);
          ps.setInt(14, id_control);
          ps.setInt(15, act_saldo);
+         ps.setTimestamp(16, new java.sql.Timestamp(new java.util.Date().getTime()));
          filasAfectadas = ps.executeUpdate();         
      } catch (SQLException e) {  
            System.out.println(e.getMessage());

@@ -66,13 +66,14 @@ public class ActualizacionEmpleadoDAO {
          Connection con = null;
         try {
             con = conexion.dataSource.getConnection();
-            String insertar = "insert into actualizacion_empleado (id_control, fecha, porcentaje, saldo_anterior, saldo_nuevo) values (?,?,?,?,?)";
+            String insertar = "insert into actualizacion_empleado (id_control, fecha, porcentaje, saldo_anterior, saldo_nuevo, timestamp) values (?,?,?,?,?,?)";
             stmt = con.prepareStatement(insertar);
             stmt.setInt(1, id_control);
             stmt.setDate(2, fecha);
             stmt.setBigDecimal(3, porcentaje);
             stmt.setBigDecimal(4, valor_anterior);
             stmt.setBigDecimal(5, valor_actualizado);
+            stmt.setTimestamp(6, new java.sql.Timestamp(new java.util.Date().getTime()));
             stmt.executeUpdate();
         } catch (SQLException ex) {
             Logger.getLogger(ClienteDAO.class.getName()).log(Level.SEVERE, null, ex);
