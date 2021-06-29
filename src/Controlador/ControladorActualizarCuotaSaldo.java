@@ -129,7 +129,7 @@ public class ControladorActualizarCuotaSaldo implements ActionListener{
         }
 //        int cant_cuotas = 180-(listaC.size()-1);
         cant_cuotas = listaFichaControl.get(0).getCantidadCuotas()-(listaC.size()-1);
-        cantidad_bc = cemento_saldo.divide(new BigDecimal(cant_cuotas),2, BigDecimal.ROUND_HALF_UP);
+        cantidad_bc = cemento_saldo.divide(new BigDecimal(cant_cuotas),2, RoundingMode.DOWN);
         nueva_cuota = cantidad_bc.multiply(precio_bc);
         gastos = nueva_cuota.subtract((nueva_cuota).divide(new BigDecimal(1.12),2, BigDecimal.ROUND_HALF_UP));
         cuota_pura = nueva_cuota.subtract(gastos);

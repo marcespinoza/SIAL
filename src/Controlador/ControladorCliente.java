@@ -191,7 +191,7 @@ public class ControladorCliente implements ActionListener, MouseListener, TableM
                                                vistaClientes.tablaCliente.getModel().getValueAt(vistaClientes.tablaCliente.convertRowIndexToModel(i), 11).toString());
                     acd.actualizarCemento(vistaClientes.tablaCliente.getModel().getValueAt(i, 11).toString(), 
                                           new java.sql.Date(date.getTime()), 
-                                          new BigDecimal(vistaClientes.tablaCliente.getModel().getValueAt(i, 14).toString()),
+                                          new BigDecimal(vistaClientes.tablaCliente.getModel().getValueAt(vistaClientes.tablaCliente.convertRowIndexToModel(i), 14).toString()),
                                           nuevo_bolsa_cemento);
                     llenarTabla();
                     vistaClientes.tablaCliente.getSelectionModel().clearSelection();
