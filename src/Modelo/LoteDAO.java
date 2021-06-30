@@ -114,7 +114,7 @@ public class LoteDAO {
           rs = st.executeQuery(listar);
           while (rs.next()) {
                 Lote l = new Lote();
-                l.setManzana(rs.getInt(1));
+                l.setManzana(rs.getString(1));
                 lotes.add(l);
             }  
         } catch (Exception e) {
@@ -140,7 +140,7 @@ public class LoteDAO {
           rs = st.executeQuery(listar);
           while (rs.next()) {
                 Lote l = new Lote();
-                l.setParcela(rs.getInt(1));
+                l.setParcela(rs.getString(1));
                 lotes.add(l);
             }  
         } catch (Exception e) {
@@ -183,8 +183,8 @@ public class LoteDAO {
           while (rs.next()) {
                 Lote l = new Lote();
                 l.setBarrio(rs.getString(1));
-                l.setManzana(rs.getInt(2));
-                l.setParcela(rs.getInt(3));
+                l.setManzana(rs.getString(2));
+                l.setParcela(rs.getString(3));
                 l.setObservaciones(rs.getString(4));
                 l.setVendido(rs.getInt(5));
                 l.setPropietario_cuit(rs.getString(6));
@@ -216,8 +216,8 @@ public class LoteDAO {
           while (rs.next()) {
                 Lote l = new Lote();
                 l.setBarrio(rs.getString(1));
-                l.setManzana(rs.getInt(2));
-                l.setParcela(rs.getInt(3));
+                l.setManzana(rs.getString(2));
+                l.setParcela(rs.getString(3));
                 l.setObservaciones(rs.getString(4));
                 l.setVendido(rs.getInt(5));
                 l.setPropietario_cuit(rs.getString(6));
@@ -251,7 +251,7 @@ public class LoteDAO {
            stmt.setString(8, idPropietario);
            stmt.executeUpdate();
        } catch (SQLException ex) {
-           System.out.println(ex.getMessage().toString());
+           System.out.println(ex.getMessage().toString()+" Alta lote");
        }finally{
             try {
                 connection.close();

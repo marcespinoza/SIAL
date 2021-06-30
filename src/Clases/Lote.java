@@ -12,8 +12,8 @@ package Clases;
 public class Lote {
     
 String barrio;
-int manzana;
-int parcela;
+String manzana;
+String parcela;
 int vendido;
 String apellidoPropietario;
 String nombrePropietario;
@@ -21,7 +21,7 @@ int nroRecibo;
 String observaciones;
 String propietario_cuit;  
 
-    public Lote(String barrio, int manzana, int parcela) {
+    public Lote(String barrio, String manzana, String parcela) {
         this.barrio = barrio;
         this.manzana = manzana;
         this.parcela = parcela;
@@ -88,19 +88,19 @@ String propietario_cuit;
         this.barrio = barrio;
     }
 
-    public int getManzana() {
+    public String getManzana() {
         return manzana;
     }
 
-    public void setManzana(int manzana) {
+    public void setManzana(String manzana) {
         this.manzana = manzana;
     }
 
-    public int getParcela() {
+    public String getParcela() {
         return parcela;
     }
 
-    public void setParcela(int parcela) {
+    public void setParcela(String parcela) {
         this.parcela = parcela;
     }
 

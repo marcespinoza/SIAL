@@ -32,7 +32,7 @@ public class FichaControlDAO {
         conexion = new Conexion();
     }
     
-    public int altaFichaControl(String tipo_compra, String dimension, int cantidad_cuotas, BigDecimal cuota_pura, BigDecimal gastos, byte bandera_cemento, BigDecimal bolsa_cemento, Date fch_actualizacion, String barrio, int manzana, int parcela, Date fch_suscripcion, byte bandera_indice){
+    public int altaFichaControl(String tipo_compra, String dimension, int cantidad_cuotas, BigDecimal cuota_pura, BigDecimal gastos, byte bandera_cemento, BigDecimal bolsa_cemento, Date fch_actualizacion, String barrio, String manzana, String parcela, Date fch_suscripcion, byte bandera_indice){
          int id_control = 1;
          Timestamp timestamp = new java.sql.Timestamp(new java.util.Date().getTime());
      try {

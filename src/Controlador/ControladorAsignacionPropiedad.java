@@ -331,7 +331,19 @@ public class ControladorAsignacionPropiedad implements ActionListener, KeyListen
                flag_indice = 0;
            }
            BigDecimal gastos =new BigDecimal(vistaAsignarPropiedad.cuota_total.getText()).subtract((new BigDecimal(vistaAsignarPropiedad.cuota_total.getText())).divide(new BigDecimal(1.1),2, BigDecimal.ROUND_HALF_UP));
-           id_control = fichaControlDAO.altaFichaControl(vistaAsignarPropiedad.tipo_propiedad.getSelectedItem().toString(), vistaAsignarPropiedad.dimension.getText(), Integer.parseInt(vistaAsignarPropiedad.cantidad_cuotas.getText()),  new BigDecimal(vistaAsignarPropiedad.cuota_total.getText()).subtract(gastos), gastos, flag_cemento ,new BigDecimal(vistaAsignarPropiedad.bolsa_cemento.getText()), new java.sql.Date(fecha_suscripcion),String.valueOf(vistaAsignarPropiedad.barrio.getSelectedItem()),Integer.parseInt((String)vistaAsignarPropiedad.manzana.getSelectedItem()), Integer.parseInt((String)vistaAsignarPropiedad.parcela.getSelectedItem()), new java.sql.Date(fecha_suscripcion), flag_indice);
+           id_control = fichaControlDAO.altaFichaControl(vistaAsignarPropiedad.tipo_propiedad.getSelectedItem().toString(),
+                   vistaAsignarPropiedad.dimension.getText(), 
+                   Integer.parseInt(vistaAsignarPropiedad.cantidad_cuotas.getText()),  
+                   new BigDecimal(vistaAsignarPropiedad.cuota_total.getText()).subtract(gastos), 
+                   gastos, 
+                   flag_cemento, 
+                   new BigDecimal(vistaAsignarPropiedad.bolsa_cemento.getText()), 
+                   new java.sql.Date(fecha_suscripcion),
+                   String.valueOf(vistaAsignarPropiedad.barrio.getSelectedItem()),
+                   (String)vistaAsignarPropiedad.manzana.getSelectedItem(), 
+                   (String)vistaAsignarPropiedad.parcela.getSelectedItem(), 
+                   new java.sql.Date(fecha_suscripcion), 
+                   flag_indice);
            return null;
         }
 

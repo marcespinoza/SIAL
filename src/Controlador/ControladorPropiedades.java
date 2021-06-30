@@ -138,8 +138,8 @@ public class ControladorPropiedades implements ActionListener{
             if(lotes!=null){
                 for (int i = 0; i < lotes.size(); i++) {
                      String barrio = lotes.get(i).getBarrio();
-                     int manzana = lotes.get(i).getManzana();
-                     int parcela = lotes.get(i).getParcela();
+                     String manzana = lotes.get(i).getManzana();
+                     String parcela = lotes.get(i).getParcela();
                      String observaciones = lotes.get(i).getObservaciones();                
                                
                 if(lotes.get(i).getVendido()==0){
@@ -200,7 +200,7 @@ public class ControladorPropiedades implements ActionListener{
             if(!vista.propiedades.comboApellido.getSelectedItem().equals("Seleccione")){  
                if(!vista.propiedades.comboNombres.getSelectedItem().equals("Seleccione")){  
                 switch(vista.propiedades.comboPropiedad.getSelectedItem().toString()){   
-                        case "Terreno": ld.agregarLote(vista.propiedades.barrio.getText(), vista.propiedades.mz.getText(), vista.propiedades.pc.getText(), vista.propiedades.comboApellido.getSelectedItem().toString(), vista.propiedades.comboNombres.getSelectedItem().toString(), vista.propiedades.cuit.getText(),vista.propiedades.nroRecibo.getText(), String.valueOf(idPropietario)); break;
+                        case "Terreno": ld.agregarLote(vista.propiedades.barrio.getText().toString(), vista.propiedades.mz.getText().toString(), vista.propiedades.pc.getText().toString(), vista.propiedades.comboApellido.getSelectedItem().toString(), vista.propiedades.comboNombres.getSelectedItem().toString(), vista.propiedades.cuit.getText(),vista.propiedades.nroRecibo.getText(), String.valueOf(idPropietario)); break;
                         case "Departamento":dd.agregarDepartamento(vista.propiedades.barrio.getText(), vista.propiedades.mz.getText(), vista.propiedades.pc.getText(), vista.propiedades.comboApellido.getSelectedItem().toString(), vista.propiedades.comboNombres.getSelectedItem().toString(), vista.propiedades.cuit.getText(),vista.propiedades.nroRecibo.getText()); break;    
                 }
              }
