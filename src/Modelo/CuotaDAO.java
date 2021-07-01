@@ -6,6 +6,8 @@
 package Modelo;
 
 import Clases.Cuota;
+import Controlador.ControladorRecibo;
+import Vista.Frame.Ventana;
 import conexion.Conexion;
 import java.math.BigDecimal;
 import java.sql.Connection;
@@ -27,6 +29,8 @@ import java.util.logging.Logger;
 public class CuotaDAO {
     
     Conexion conexion;
+    static org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(ControladorRecibo.class.getName());
+
 
     public CuotaDAO() {
         conexion = new Conexion();
@@ -139,6 +143,7 @@ public class CuotaDAO {
          filasAfectadas = ps.executeUpdate();         
      } catch (SQLException e) {  
            System.out.println(e.getMessage());
+           log.info(Ventana.nombreUsuario.getText() + " - Error alta cuota: "+e.getMessage());
      }finally{
         try {
             connection.close();

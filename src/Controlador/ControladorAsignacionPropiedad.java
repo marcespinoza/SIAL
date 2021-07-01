@@ -7,7 +7,6 @@ package Controlador;
 
 import Clases.Lote;
 import Clases.Propietario;
-import static Controlador.ControladorAltaCliente.log;
 import Modelo.ClienteDAO;
 import Modelo.CuotaDAO;
 import Modelo.DchoPosesionDAO;
@@ -109,7 +108,7 @@ public class ControladorAsignacionPropiedad implements ActionListener, KeyListen
             public void itemStateChanged(ItemEvent e) {
                 if (e.getStateChange() == ItemEvent.SELECTED) {
                   if(vistaAsignarPropiedad.manzana.getSelectedItem() != null){
-                cargarParcelas(vistaAsignarPropiedad.barrio.getSelectedItem().toString(), Integer.parseInt(vistaAsignarPropiedad.manzana.getSelectedItem().toString()));
+                   cargarParcelas(vistaAsignarPropiedad.barrio.getSelectedItem().toString(), vistaAsignarPropiedad.manzana.getSelectedItem().toString());
                   }
                 }
              }
@@ -207,7 +206,7 @@ public class ControladorAsignacionPropiedad implements ActionListener, KeyListen
         } catch (Exception e) {
         }
     }
-    public void cargarParcelas(String barrio, int manzana){
+    public void cargarParcelas(String barrio, String manzana){
         List<Lote>lotes=null;
         lotes = ld.parcelasPorManzana(barrio, manzana);
         vistaAsignarPropiedad.parcela.removeAllItems();

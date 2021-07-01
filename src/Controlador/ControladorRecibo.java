@@ -12,7 +12,6 @@ import Modelo.CuotaDAO;
 import Modelo.FichaControlDAO;
 import Clases.LimitadorCaracteres;
 import Clases.Lote;
-import static Controlador.ControladorAltaCliente.log;
 import Modelo.DchoPosesionDAO;
 import Modelo.LoteDAO;
 import Modelo.MinutaDAO;
@@ -470,7 +469,8 @@ public class ControladorRecibo implements ActionListener{
             //-----Devuelve id del recibo creado-----//
             id_recibo = rd.altaRecibo(Integer.parseInt(ar.nro_recibo.getText()), apellido_propietario, nombre_propietario); 
             if(id_recibo!=0){
-                generarRecibo();
+                log.info(Ventana.nombreUsuario.getText() + " - Genera recibo: " +id_recibo);
+                generarRecibo();                
             }else{
                 JOptionPane.showMessageDialog(null, "Error al generar recibo", "Atención", JOptionPane.ERROR_MESSAGE, null); 
             }            

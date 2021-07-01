@@ -129,7 +129,7 @@ public class LoteDAO {
      return lotes;
    }
       
-    public List<Lote> parcelasPorManzana(String barrio, int manzana){
+    public List<Lote> parcelasPorManzana(String barrio, String manzana){
        ResultSet rs = null;
        Connection connection = null;
        List<Lote> lotes = new ArrayList<>();
