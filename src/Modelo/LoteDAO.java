@@ -155,14 +155,14 @@ public class LoteDAO {
      return lotes;
  }
       
-    public void eliminarLote(String barrio, int manzana, int parcela){
+    public void eliminarLote(String barrio, String manzana, String parcela){
      try {
          Connection con = conexion.dataSource.getConnection();
          String eliminar = "delete from lote where barrio = ? and manzana = ? and parcela = ?";
          PreparedStatement ps = con.prepareStatement(eliminar);
          ps.setString(1, barrio);
-         ps.setInt(2, manzana);
-         ps.setInt(3, parcela);
+         ps.setString(2, manzana);
+         ps.setString(3, parcela);
          ps.executeUpdate();
      } catch (Exception e) {
          System.out.println(e.getMessage());
@@ -262,19 +262,19 @@ public class LoteDAO {
         }
 } 
     
-     public int editarLote(String backup_barrio, int backup_manzana, int backup_parcela, String barrio,int manzana, int parcela, String observaciones){
+     public int editarLote(String backup_barrio, String backup_manzana, String backup_parcela, String barrio,String manzana, String parcela, String observaciones){
          int flag = 0;
         try {
             Connection con = conexion.dataSource.getConnection();
             String query = "UPDATE lote SET barrio = ?, manzana = ?, parcela = ?, observacion = ? where barrio = ? and manzana =? and parcela=?";
             PreparedStatement preparedStmt = con.prepareStatement(query);
             preparedStmt.setString(1, barrio);
-            preparedStmt.setInt(2, manzana);
-            preparedStmt.setInt(3, parcela);
+            preparedStmt.setString(2, manzana);
+            preparedStmt.setString(3, parcela);
             preparedStmt.setString(4, observaciones);
             preparedStmt.setString(5, backup_barrio);
-            preparedStmt.setInt(6, backup_manzana);
-            preparedStmt.setInt(7, backup_parcela);
+            preparedStmt.setString(6, backup_manzana);
+            preparedStmt.setString(7, backup_parcela);
             flag = preparedStmt.executeUpdate();      
             preparedStmt.close();
             con.close();

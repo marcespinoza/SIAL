@@ -16,7 +16,7 @@ import org.apache.commons.dbcp.BasicDataSource;
 public class Conexion {
     
     public String db = "miprimercasa";
-    public String url = "jdbc:mysql://localhost:3306/miprimercasa?zeroDateTimeBehavior=convertToNull&useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=" + TimeZone.getDefault().getID();;
+    public String url = "jdbc:mysql://localhost:3306/miprimercasatest?zeroDateTimeBehavior=convertToNull&useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=" + TimeZone.getDefault().getID();;
     public String user = "root";
     public String root = "MiPrimerCasa";        
     public DataSource dataSource;       

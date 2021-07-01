@@ -43,8 +43,8 @@ public class ControladorPropiedades implements ActionListener{
     LoteDAO ld = new LoteDAO();
     DepartamentoDAO dd = new DepartamentoDAO();
     private Object [] propiedades;
-    String apellidos, nombres, cuit, propiedad, barrio, observaciones;
-    int mz, pc, idPropietario;
+    String apellidos, nombres, cuit, propiedad, barrio, mz, pc, observaciones;
+    int  idPropietario;
 
     public ControladorPropiedades(Configuracion vistaConfiguracion) {
         this.vista=vistaConfiguracion;
@@ -91,8 +91,8 @@ public class ControladorPropiedades implements ActionListener{
            vista.propiedades.pc.setText(vista.propiedades.tablaPropiedades.getModel().getValueAt(row,2).toString());
            vista.propiedades.observaciones.setText(vista.propiedades.tablaPropiedades.getModel().getValueAt(row,3).toString());
            barrio = vista.propiedades.tablaPropiedades.getModel().getValueAt(row,0).toString();
-           mz = Integer.parseInt(vista.propiedades.tablaPropiedades.getModel().getValueAt(row,1).toString());
-           pc = Integer.parseInt(vista.propiedades.tablaPropiedades.getModel().getValueAt(row,2).toString());
+           mz = vista.propiedades.tablaPropiedades.getModel().getValueAt(row,1).toString();
+           pc = vista.propiedades.tablaPropiedades.getModel().getValueAt(row,2).toString();
            observaciones = vista.propiedades.tablaPropiedades.getModel().getValueAt(row,3).toString();
          }
          });
@@ -121,7 +121,8 @@ public class ControladorPropiedades implements ActionListener{
                 vista.propiedades.comboNombres.addItem(propietarios.get(i).getNombres());
             }   
       }
- 
+
+    
     public void llenarTabla(){
       List<Lote>lotes = null;
       List<Propietario>propietarios = null;
@@ -186,8 +187,9 @@ public class ControladorPropiedades implements ActionListener{
         if(e.getSource()==vista.propiedades.guardar){
             int flag = 0;
           if(validarCampos()){
-            flag = ld.editarLote(barrio, mz, pc, vista.propiedades.barrio.getText(), Integer.parseInt(vista.propiedades.mz.getText()), Integer.parseInt(vista.propiedades.pc.getText()), vista.propiedades.observaciones.getText());
+            flag = ld.editarLote(barrio, mz, pc, vista.propiedades.barrio.getText(), vista.propiedades.mz.getText(), vista.propiedades.pc.getText(), vista.propiedades.observaciones.getText());
             if(flag>0){
+             limpiarCampos();
              llenarTabla();}
             else{
              JOptionPane.showMessageDialog(null, "Error al guardar cambios. Revise los campos", "Atención", JOptionPane.INFORMATION_MESSAGE, null); 
@@ -215,7 +217,10 @@ public class ControladorPropiedades implements ActionListener{
                int reply = JOptionPane.showConfirmDialog(null, "Eliminar a "+vista.propiedades.tablaPropiedades.getModel().getValueAt(row, 0)+" "+vista.propiedades.tablaPropiedades.getModel().getValueAt(row, 1)+" "+vista.propiedades.tablaPropiedades.getModel().getValueAt(row, 2)+"?",
                "Advertencia",JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, icon);
               if (reply == JOptionPane.YES_OPTION) {
-               ld.eliminarLote(vista.propiedades.tablaPropiedades.getModel().getValueAt(row, 0).toString(), Integer.parseInt(vista.propiedades.tablaPropiedades.getModel().getValueAt(row, 1).toString()), Integer.parseInt(vista.propiedades.tablaPropiedades.getModel().getValueAt(row, 2).toString()));
+               ld.eliminarLote(vista.propiedades.tablaPropiedades.getModel().getValueAt(row, 0).toString(),
+                               vista.propiedades.tablaPropiedades.getModel().getValueAt(row, 1).toString(),
+                               vista.propiedades.tablaPropiedades.getModel().getValueAt(row, 2).toString());
+               limpiarCampos();                 
                llenarTabla();}
             }else{
               JOptionPane.showMessageDialog(null, "Seleccione una propiedad", "Atención", JOptionPane.INFORMATION_MESSAGE, null);
@@ -251,6 +256,9 @@ public class ControladorPropiedades implements ActionListener{
        ((DefaultTableModel)vista.propiedades.tablaPropiedades.getModel()).setNumRows(0);
        vista.propiedades.cuit.setText("");
        vista.propiedades.nroRecibo.setText("");
+       vista.propiedades.barrio.setText("");
+       vista.propiedades.mz.setText(""); 
+       vista.propiedades.pc.setText("");
     }
     
     //------Habilita los edittext-------//

@@ -469,8 +469,11 @@ public class ControladorRecibo implements ActionListener{
             progress.setVisible(true); 
             //-----Devuelve id del recibo creado-----//
             id_recibo = rd.altaRecibo(Integer.parseInt(ar.nro_recibo.getText()), apellido_propietario, nombre_propietario); 
-            generarRecibo();
-               
+            if(id_recibo!=0){
+                generarRecibo();
+            }else{
+                JOptionPane.showMessageDialog(null, "Error al generar recibo", "Atención", JOptionPane.ERROR_MESSAGE, null); 
+            }            
             return null;
        }
 
@@ -481,7 +484,7 @@ public class ControladorRecibo implements ActionListener{
             Ventana.cm.llenarTablaFecha();
             //------Tipo de pago 1 es cuota---------//
             if(tipoPago==1){
-              log.info(Ventana.nombreUsuario.getText() + " - Genera recibo: " +id_recibo);
+              log.info(Ventana.nombreUsuario.getText() + " - Genera minuta: " +id_recibo);
               //-----------Agrego nro de recibo a la cuota-----------//
               cuod.actualizarNroRecibo(Integer.parseInt(ar.nro_recibo.getText()), id_recibo, saldo_cemento, id_control);
               md.altaMinuta(new java.sql.Date(date.getTime()),
