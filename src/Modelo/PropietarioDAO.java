@@ -223,11 +223,12 @@ public class PropietarioDAO {
        public List<Propietario> obtenerApellidos(){
           ResultSet rs = null;
           Connection con = null; 
+          Statement st = null;
           List<Propietario> propietarios = new ArrayList<>();
           try {
-            con = conexion.dataSource.getConnection();         
+           con = conexion.dataSource.getConnection();         
            String listar = "SELECT distinct apellidos from propietario"; 
-           Statement st = con.createStatement();
+           st = con.createStatement();
            rs = st.executeQuery(listar);          
            while (rs.next()) {
                 Propietario p = new Propietario();
@@ -237,6 +238,11 @@ public class PropietarioDAO {
          } catch (Exception e) {
             System.out.println(e.getMessage());
          }finally{
+              try {
+                  st.close();
+              } catch (SQLException ex) {
+                  Logger.getLogger(PropietarioDAO.class.getName()).log(Level.SEVERE, null, ex);
+              }
               try {
                   con.close();
               } catch (SQLException ex) {
@@ -249,11 +255,12 @@ public class PropietarioDAO {
        public List<Propietario> obtenerNombres(String apellidos){
           ResultSet rs = null;
           Connection connection = null;
+          Statement st = null;
           List<Propietario> propietarios = new ArrayList<>();
          try {
           connection = conexion.dataSource.getConnection();         
           String listar = "SELECT nombres, cuit from propietario where apellidos='"+apellidos+"'"; 
-          Statement st = connection.createStatement();
+          st = connection.createStatement();
           rs = st.executeQuery(listar);
             while (rs.next()) {
                 Propietario p = new Propietario();
@@ -264,6 +271,11 @@ public class PropietarioDAO {
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }finally{
+              try {
+                  st.close();
+              } catch (SQLException ex) {
+                  Logger.getLogger(PropietarioDAO.class.getName()).log(Level.SEVERE, null, ex);
+              }
               try {
                   connection.close();
               } catch (SQLException ex) {

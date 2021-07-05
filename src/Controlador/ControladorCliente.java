@@ -21,10 +21,11 @@ import Utils.RendererActualizacion;
 import Utils.RendererAviso;
 import Utils.RendererTablaCliente;
 import Vista.Dialogs.Cumpleaños;
+import Vista.Dialogs.Progress;
+import Vista.Dialogs.ProgressDialog;
 import Vista.Frame.Ventana;
 import Vista.Panels.Clientes;
 import Vista.Panels.DetalleCuota;
-import Vista.Panels.Lotes;
 import com.itextpdf.text.Chunk;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
@@ -52,13 +53,11 @@ import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.sql.Array;
 import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.time.LocalDate;
-import static java.time.LocalDate.now;
 import java.time.LocalDateTime;
 import java.time.Period;
 import java.time.ZoneId;
@@ -75,8 +74,8 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.RowFilter;
-import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
+import javax.swing.SwingWorker;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -84,9 +83,7 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableRowSorter;
 import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
-import org.joda.time.Days;
 import org.joda.time.Months;
-import org.joda.time.Years;
 
 /**
  *
@@ -439,7 +436,10 @@ public class ControladorCliente implements ActionListener, MouseListener, TableM
                  "Advertencia",JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null);
                   if (reply == JOptionPane.YES_OPTION) {  
                     fd.bajaPropietario(Integer.parseInt(vistaClientes.tablaCliente.getModel().getValueAt(vistaClientes.tablaCliente.convertRowIndexToModel(row), 2).toString()), Integer.parseInt(vistaClientes.tablaCliente.getModel().getValueAt(vistaClientes.tablaCliente.convertRowIndexToModel(row), 11).toString()));
-                    ld.editarPropiedad(0, vistaClientes.tablaCliente.getModel().getValueAt(vistaClientes.tablaCliente.convertRowIndexToModel(row), 16).toString(), Integer.parseInt(vistaClientes.tablaCliente.getModel().getValueAt(vistaClientes.tablaCliente.convertRowIndexToModel(row), 17).toString()), Integer.parseInt(vistaClientes.tablaCliente.getModel().getValueAt(vistaClientes.tablaCliente.convertRowIndexToModel(row), 18).toString()));
+                    ld.editarPropiedad(0, 
+                            vistaClientes.tablaCliente.getModel().getValueAt(vistaClientes.tablaCliente.convertRowIndexToModel(row), 16).toString(), 
+                            vistaClientes.tablaCliente.getModel().getValueAt(vistaClientes.tablaCliente.convertRowIndexToModel(row), 17).toString(), 
+                            vistaClientes.tablaCliente.getModel().getValueAt(vistaClientes.tablaCliente.convertRowIndexToModel(row), 18).toString());
                     llenarTabla();
                   }
                    }else{
@@ -499,14 +499,29 @@ public class ControladorCliente implements ActionListener, MouseListener, TableM
           //  llenarTabla();
      }
     
-     public void llenarTabla(){         
-        List<ClientesPorCriterio> listaClientes;        
+      public void llenarTabla(){     
+          new AnswerWorker().execute();  
+      }
+      
+      class AnswerWorker extends SwingWorker<Void, Void>   {
+            
+        List<ClientesPorCriterio> listaClientes;
+        ProgressDialog pd = new ProgressDialog();
+            
+        protected Void doInBackground() throws Exception{
+        
+        pd.setVisible(true);
         if(apellidos.equals("")){
             listaClientes = cd.clientesPorLotes();}
         else{
            int dias =  Integer.parseInt(vistaClientes.comboDias.getSelectedItem().toString());
            listaClientes = cd.clientesPorPropietarios(apellidos, nombres, dias, lote);
-        }         
+        }  
+            return null;
+        }
+        protected void done(){
+        
+        pd.dispose();
         DefaultTableModel model = (DefaultTableModel) vistaClientes.tablaCliente.getModel();
         model.setRowCount(0);
         SimpleDateFormat sdf=new SimpleDateFormat("dd-MM-yyyy");
@@ -519,8 +534,6 @@ public class ControladorCliente implements ActionListener, MouseListener, TableM
         DateTime current_date = new DateTime();
         DateTime joda_suscription_time, joda_actualizacion_time;
         Date fechaActualizacion, fechaSuscripcion, bandera;
-        Period age, banderaAge;
-        int years, banderaInt;
         LocalDate fecha_actual = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
         vistaClientes.nroClientes.setText(String.valueOf(listaClientes.size()));
         try {
@@ -535,7 +548,6 @@ public class ControladorCliente implements ActionListener, MouseListener, TableM
                    String apellidos = listaClientes.get(i).getApellidos();
                    String nombres = listaClientes.get(i).getNombres();
                    Instant fchSuscripcion, banderaInstant;
-                   LocalDate fecha_suscripcion, bandera_;
                    Date fecha_nacimiento = listaClientes.get(i).getFecha_nacimiento();
                     //------Controlo dia y mes para saber si es el cumpleaños--------//
                    Instant instant = Instant.ofEpochMilli(fecha_nacimiento.getTime());
@@ -558,13 +570,11 @@ public class ControladorCliente implements ActionListener, MouseListener, TableM
                    if(listaClientes.get(i).getFecha_actualizacion()!=null && listaClientes.get(i).getBandera_cemento()==1){
                       bandera = listaClientes.get(i).getBandera();
                       banderaInstant = Instant.ofEpochMilli(bandera.getTime());
-                      bandera_ = LocalDateTime.ofInstant(banderaInstant, ZoneId.systemDefault()).toLocalDate();
                       fechaActualizacion = listaClientes.get(i).getFecha_actualizacion();
                       fechaSuscripcion = listaClientes.get(i).getFecha_suscripcion();
                       joda_suscription_time = new DateTime(bandera);
                       joda_actualizacion_time = new DateTime(fechaActualizacion);
                       fchSuscripcion = Instant.ofEpochMilli(fechaSuscripcion.getTime());
-                      fecha_suscripcion = LocalDateTime.ofInstant(fchSuscripcion, ZoneId.systemDefault()).toLocalDate();
                       fch_actualizacion = sdf.format(fechaActualizacion);
                       //----Controlo si ya paso 6, 18,30 meses de la ultima fecha de actualizacion de la bolsa de cemento----//
                       int difMeses = (Months.monthsBetween(joda_actualizacion_time, current_date)).getMonths();
@@ -604,7 +614,9 @@ public class ControladorCliente implements ActionListener, MouseListener, TableM
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
+       }
     }
+   
     
     public void cargarSucesion(){
       for(int n = 6; n < 300; n= n+12 )  {

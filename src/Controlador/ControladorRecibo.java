@@ -80,8 +80,8 @@ public class ControladorRecibo implements ActionListener{
     DetalleCuota dc;
     String apellido_propietario, nombre_propietario, cuit_propietario;
     String nombre_comprador, apellido_comprador, domicilio_comprador, cuil_comprador;
-    String dimension, barrio;
-    int cant_cuotas, manzana, parcela, row;
+    String dimension, barrio, manzana, parcela;
+    int cant_cuotas, row;
     BigDecimal cobrado, cuota_total, gastos_administrativos, saldo_cemento;
     int id_control;    
     public static final String IMG = "/Imagenes/logo_reporte.png";
@@ -464,30 +464,29 @@ public class ControladorRecibo implements ActionListener{
        final Progress progress = new Progress(ar, false);
 
         @Override
-        protected Void doInBackground() throws Exception {     
+        protected Void doInBackground() throws Exception {   
+            ar.dispose();
             progress.setVisible(true); 
             //-----Devuelve id del recibo creado-----//
             id_recibo = rd.altaRecibo(Integer.parseInt(ar.nro_recibo.getText()), apellido_propietario, nombre_propietario); 
             if(id_recibo!=0){
                 log.info(Ventana.nombreUsuario.getText() + " - Genera recibo: " +id_recibo);
-                generarRecibo();                
-            }else{
-                JOptionPane.showMessageDialog(null, "Error al generar recibo", "Atención", JOptionPane.ERROR_MESSAGE, null); 
             }            
             return null;
        }
 
        @Override
-       public void done() {             
+       public void done() {   
+           if(id_recibo!=0){
             Date date = new Date();
             BigDecimal rendido = cobrado.subtract(gastos_administrativos);
-            Ventana.cm.llenarTablaFecha();
             //------Tipo de pago 1 es cuota---------//
             if(tipoPago==1){
               log.info(Ventana.nombreUsuario.getText() + " - Genera minuta: " +id_recibo);
               //-----------Agrego nro de recibo a la cuota-----------//
-              cuod.actualizarNroRecibo(Integer.parseInt(ar.nro_recibo.getText()), id_recibo, saldo_cemento, id_control);
-              md.altaMinuta(new java.sql.Date(date.getTime()),
+              int i = cuod.actualizarNroRecibo(Integer.parseInt(ar.nro_recibo.getText()), id_recibo, saldo_cemento, id_control);
+              if(i>0){
+              int j = md.altaMinuta(new java.sql.Date(date.getTime()),
                             apellido_comprador, 
                             nombre_comprador,
                             manzana, 
@@ -500,6 +499,12 @@ public class ControladorRecibo implements ActionListener{
                             categoria.toString(), 
                             id_recibo,
                             barrio);
+              if(j==0){
+                JOptionPane.showMessageDialog(null, "Error al generar minuta", "Atención", JOptionPane.ERROR_MESSAGE, null); 
+              }else{
+                generarRecibo();
+              }
+            }
               //-----------Tipo de pago 0 es derecho de posesion---------------//
             }else if(tipoPago==0){
               //-----------Agrego nro de recibo a la cuota de derecho de posesion-----------//
@@ -527,9 +532,13 @@ public class ControladorRecibo implements ActionListener{
                                cuit_propietario, 
                                Integer.parseInt(ar.nro_recibo.getText())+1);
             
-            ar.dispose();         
+            generarRecibo();
             cdc.llenarTablaDchoPosesion(id_control);
             cdc.llenarTabla(id_control);
+            Ventana.cm.llenarTablaFecha();
+           }else{
+               JOptionPane.showMessageDialog(null, "Error al generar recibo", "Atención", JOptionPane.ERROR_MESSAGE, null); 
+           }
             progress.setVisible(false);
          }    
         }

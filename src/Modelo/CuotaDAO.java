@@ -29,8 +29,7 @@ import java.util.logging.Logger;
 public class CuotaDAO {
     
     Conexion conexion;
-    static org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(ControladorRecibo.class.getName());
-
+    static org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(CuotaDAO.class.getName());
 
     public CuotaDAO() {
         conexion = new Conexion();
@@ -282,26 +281,33 @@ public class CuotaDAO {
       return filas;
   }
   
-  public void actualizarNroRecibo(int nro_recibo, int id_recibo, BigDecimal saldo_cemento, int id_control){
+  public int actualizarNroRecibo(int nro_recibo, int id_recibo, BigDecimal saldo_cemento, int id_control){
         Connection con = null;
+        PreparedStatement ps = null;
+        int i = 0;
       try {
         con = conexion.dataSource.getConnection();
-        PreparedStatement ps = con.prepareStatement("UPDATE linea_control_lote SET Nro_recibo = ?, id_recibo=? WHERE cemento_saldo = ? AND id_control = ?");
+        ps = con.prepareStatement("UPDATE linea_control_lote SET Nro_recibo = ?, id_recibo=? WHERE cemento_saldo = ? AND id_control = ?");
         ps.setInt(1, nro_recibo);
         ps.setInt(2, id_recibo);
         ps.setBigDecimal(3,saldo_cemento);
         ps.setInt(4,id_control);
-        ps.executeUpdate();
-        ps.close();
+        i = ps.executeUpdate();        
       } catch (SQLException ex) {
-        Logger.getLogger(CuotaDAO.class.getName()).log(Level.SEVERE, null, ex);
+        log.info(Ventana.nombreUsuario.getText() + " - Error al actualizar nro recibo: "+ex.getMessage());
       }finally{
+          try{
+              ps.close();
+          }catch (SQLException ex){
+              Logger.getLogger(CuotaDAO.class.getName()).log(Level.SEVERE, null, ex);
+          }
             try {
                 con.close();
             } catch (SQLException ex) {
                 Logger.getLogger(CuotaDAO.class.getName()).log(Level.SEVERE, null, ex);
             }
       }
+      return i;
   }
   
   public void eliminarCuota(int nro_cuota, int id_control){

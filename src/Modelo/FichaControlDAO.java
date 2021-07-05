@@ -106,8 +106,8 @@ public class FichaControlDAO {
               fc.setGastos(rs.getBigDecimal(4));
               fc.setBolsaCemento(rs.getBigDecimal(5));
               fc.setBarrio(rs.getString(6));
-              fc.setManzana(rs.getInt(7));
-              fc.setParcela(rs.getInt(8));
+              fc.setManzana(rs.getString(7));
+              fc.setParcela(rs.getString(8));
               fc.setBandera(rs.getTimestamp(9));
               fc.setApellido(rs.getString(10));
               fc.setNombre(rs.getString(11));

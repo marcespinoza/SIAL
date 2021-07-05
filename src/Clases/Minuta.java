@@ -17,8 +17,8 @@ public class Minuta {
     Date fechaMinuta;
     String Apellidos;
     String Nombres;
-    int manzana;
-    int parcela;
+    String manzana;
+    String parcela;
     String barrio;
     BigDecimal cobrado;
     BigDecimal gastos;
@@ -40,7 +40,7 @@ public class Minuta {
     public Minuta() {
     }
 
-    public Minuta(Date fechaMinuta, String Apellidos, String Nombres, int manzana, int parcela, BigDecimal cobrado, BigDecimal gastos, BigDecimal rendido, int nroCuota, String observaciones, String categoria, int baja, String barrio) {
+    public Minuta(Date fechaMinuta, String Apellidos, String Nombres, String manzana,String parcela, BigDecimal cobrado, BigDecimal gastos, BigDecimal rendido, int nroCuota, String observaciones, String categoria, int baja, String barrio) {
         this.fechaMinuta = fechaMinuta;
         this.Apellidos = Apellidos;
         this.Nombres = Nombres;
@@ -80,19 +80,19 @@ public class Minuta {
         this.Nombres = Nombres;
     }
 
-    public int getManzana() {
+    public String getManzana() {
         return manzana;
     }
 
-    public void setManzana(int manzana) {
+    public void setManzana(String manzana) {
         this.manzana = manzana;
     }
 
-    public int getParcela() {
+    public String getParcela() {
         return parcela;
     }
 
-    public void setParcela(int parcela) {
+    public void setParcela(String parcela) {
         this.parcela = parcela;
     }
 

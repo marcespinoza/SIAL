@@ -30,15 +30,15 @@ public class LoteDAO {
         conexion = new Conexion();
     }
     
-    public void editarPropiedad(int vendido, String barrio,int manzana, int parcela){
+    public void editarPropiedad(int vendido, String barrio,String manzana, String parcela){
         try {
             Connection con = conexion.dataSource.getConnection();
             String query = "UPDATE lote SET vendido = ? where barrio = ? and manzana =? and parcela=?";
             PreparedStatement preparedStmt = con.prepareStatement(query);
             preparedStmt.setInt   (1, vendido);
             preparedStmt.setString(2, barrio);
-            preparedStmt.setInt(3, manzana);
-            preparedStmt.setInt(4, parcela);
+            preparedStmt.setString(3, manzana);
+            preparedStmt.setString(4, parcela);
             preparedStmt.executeUpdate();      
             preparedStmt.close();
             con.close();
@@ -206,13 +206,14 @@ public class LoteDAO {
           ResultSet rs = null;
           List<Lote> lotes = new ArrayList<>();
           Connection connection = null;
+          PreparedStatement ps = null;
      try {
           connection = conexion.dataSource.getConnection();  
           String sql = "SELECT barrio, manzana, parcela, observacion, vendido, propietario_cuit from lote where propietario_apellidos =? AND propietario_nombres =? group by barrio "; 
-          PreparedStatement preparedStatement = connection.prepareStatement(sql);
-          preparedStatement.setString(1, apellidos);
-          preparedStatement.setString(2, nombres);
-         rs = preparedStatement.executeQuery();
+          ps = connection.prepareStatement(sql);
+          ps.setString(1, apellidos);
+          ps.setString(2, nombres);
+          rs = ps.executeQuery();
           while (rs.next()) {
                 Lote l = new Lote();
                 l.setBarrio(rs.getString(1));
@@ -226,6 +227,11 @@ public class LoteDAO {
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }finally{
+              try {
+                  ps.close();
+              } catch (SQLException ex) {
+                  Logger.getLogger(PropietarioDAO.class.getName()).log(Level.SEVERE, null, ex);
+              }
               try {
                   connection.close();
               } catch (SQLException ex) {

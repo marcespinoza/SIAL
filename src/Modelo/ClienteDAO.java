@@ -38,11 +38,12 @@ public class ClienteDAO {
  public List<ClientesPorCriterio> clientesPorLotes(){
      ResultSet rs = null;
      Connection connection = null;
+     Statement st = null;
      List<ClientesPorCriterio> clientesPorLotes = new ArrayList<>();
      try {
           connection = conexion.dataSource.getConnection();
           String listar = "SELECT c.Dni, c.Apellidos, c.Nombres,c.fecha_nacimiento, c.barrio, c.calle, c.numero, c.Telefono1, c.telefono2, c.trabajo, h.baja, f.Id_control, f.cantidad_cuotas, f.gastos, f.bolsa_cemento, f.fecha_actualizacion, f.lote_Barrio, f.lote_Manzana, f.lote_Parcela,f.bandera_cemento, f.cuota_pura, IF(COUNT(lc.Nro_cuota)=0,0, COUNT(lc.Nro_cuota)) as cuotas, IFNULL((SELECT lc.Fecha FROM linea_control_lote lc WHERE lc.id_control=f.Id_control ORDER BY lc.Fecha DESC LIMIT 1 ), 0000-00-00) as ultimaCuota, SUM(lc.Haber) as total, (Select fecha from linea_control_lote lc where lc.id_control=f.id_control and lc.nro_cuota=0)as suscripcion, f.bandera   from ((cliente c LEFT JOIN cliente_tiene_lote h ON c.Dni = h.cliente_Dni) left join ficha_control_lote f on f.Id_control=h.Id_control) LEFT JOIN linea_control_lote lc ON lc.id_control=f.Id_control GROUP BY f.Id_control, c.dni, ifnull(f.Id_control, c.Dni) order by c.apellidos"; 
-          Statement st = connection.createStatement();
+          st = connection.createStatement();
           rs = st.executeQuery(listar);
           while (rs.next()) {
             ClientesPorCriterio cpp = new ClientesPorCriterio();
@@ -78,6 +79,16 @@ public class ClienteDAO {
         } catch (SQLException ex) {
           System.out.println(ex.getMessage());
         }finally{
+              try{
+                  rs.close();
+              }catch(SQLException ex){
+                  Logger.getLogger(PropietarioDAO.class.getName()).log(Level.SEVERE, null, ex);
+              }
+              try{
+                  st.close();
+              }catch(SQLException ex){
+                  Logger.getLogger(PropietarioDAO.class.getName()).log(Level.SEVERE, null, ex);
+              }
               try {
                   connection.close();
               } catch (SQLException ex) {
@@ -250,7 +261,7 @@ public class ClienteDAO {
    public List<ClientesPorCriterio> clientesPorPropietarios(String apellido, String nombre, int dias, String lote){
      ResultSet rs;
      Connection connection = null;
-     PreparedStatement preparedStmt = null;
+     PreparedStatement ps = null;
      List<ClientesPorCriterio> clientesPorPropietario = new ArrayList<>();
      try {
       connection = conexion.dataSource.getConnection();
@@ -260,11 +271,11 @@ public class ClienteDAO {
               + "      " + "      (Select SUM(lc.haber) from linea_control_lote lc where lc.id_control=f.id_control)as total, "
               + "      (Select fecha from linea_control_lote lc where lc.id_control=f.id_control and lc.nro_cuota=0)as suscripcion, "
               + "      f.bandera  from ((cliente c INNER join cliente_tiene_lote cl on c.dni=cl.cliente_dni) INNER join ficha_control_lote f on cl.id_control=f.id_control and f.lote_barrio=?) INNER join lote l on f.lote_barrio=l.barrio AND l.manzana=f.lote_manzana AND l.parcela=f.lote_parcela where l.propietario_Apellidos=? and l.propietario_Nombres=? and cl.baja=0 order by c.apellidos, c.nombres"; 
-      preparedStmt = connection.prepareStatement(listar);
-      preparedStmt.setString(1, lote);
-      preparedStmt.setString(2, apellido);
-      preparedStmt.setString(3, nombre);
-      rs = preparedStmt.executeQuery();
+      ps = connection.prepareStatement(listar);
+      ps.setString(1, lote);
+      ps.setString(2, apellido);
+      ps.setString(3, nombre);
+      rs = ps.executeQuery();
       while (rs.next()) {
         ClientesPorCriterio cpp = new ClientesPorCriterio();
         cpp.setDni(rs.getInt(1));
@@ -307,6 +318,11 @@ public class ClienteDAO {
     } catch (SQLException ex) {
       System.out.println(ex.getMessage());
     }finally{
+       try {
+          ps.close();
+      } catch (SQLException ex) {
+          Logger.getLogger(PropietarioDAO.class.getName()).log(Level.SEVERE, null, ex);
+      }
       try {
           connection.close();
       } catch (SQLException ex) {

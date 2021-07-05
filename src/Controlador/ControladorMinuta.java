@@ -121,7 +121,7 @@ public class ControladorMinuta implements MouseListener, ActionListener {
                 Date fecha_minuta = listaMinutas.get(i).getFechaMinuta();
                 String apellidos = listaMinutas.get(i).getApellidos();
                 String nombres = listaMinutas.get(i).getNombres();
-                String mzpc = String.valueOf(listaMinutas.get(i).getManzana()) +" - "+ String.valueOf(listaMinutas.get(i).getParcela());
+                String mzpc = listaMinutas.get(i).getManzana() +" - "+ listaMinutas.get(i).getParcela();
                 String barrio = (listaMinutas.get(i).getBarrio().toLowerCase()).replaceAll("\\s+$", "");   
                 if(!barrio.equals("")){
                   lista_barrios.add(barrio);

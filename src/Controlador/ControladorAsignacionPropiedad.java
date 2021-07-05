@@ -358,7 +358,11 @@ public class ControladorAsignacionPropiedad implements ActionListener, KeyListen
            dp.altaDchoPosesion(new java.sql.Date(fecha_suscripcion), new BigDecimal(0),new BigDecimal(0), saldo_dcho_posesion , new BigDecimal(0),saldo_dcho_posesion.divide(new BigDecimal(vistaAsignarPropiedad.bolsa_cemento.getText()), 2, RoundingMode.DOWN), "Saldo Inicio", id_control);
            
            switch(vistaAsignarPropiedad.tipo_propiedad.getSelectedItem().toString()){
-               case "Terreno":ld.editarPropiedad(1, vistaAsignarPropiedad.barrio.getSelectedItem().toString(), Integer.parseInt(vistaAsignarPropiedad.manzana.getSelectedItem().toString()), Integer.parseInt(vistaAsignarPropiedad.parcela.getSelectedItem().toString())); {
+               case "Terreno":ld.editarPropiedad(1, 
+                       vistaAsignarPropiedad.barrio.getSelectedItem().toString(), 
+                       vistaAsignarPropiedad.manzana.getSelectedItem().toString(), 
+                       vistaAsignarPropiedad.parcela.getSelectedItem().toString()); 
+               {
                 try {
                     cd.altaClientesXLotes(dni, id_control);
                 } catch (SQLException ex) {

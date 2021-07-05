@@ -22,8 +22,8 @@ public class FichaDeControl {
     int cantidadCuotas;
     BigDecimal cuotaPura;
     String barrio; 
-    int manzana;
-    int parcela;
+    String manzana;
+    String parcela;
     String nombre;
     String apellido;
 
@@ -89,19 +89,19 @@ public class FichaDeControl {
         this.barrio = barrio;
     }
 
-    public int getManzana() {
+    public String getManzana() {
         return manzana;
     }
 
-    public void setManzana(int manzana) {
+    public void setManzana(String manzana) {
         this.manzana = manzana;
     }
 
-    public int getParcela() {
+    public String getParcela() {
         return parcela;
     }
 
-    public void setParcela(int parcela) {
+    public void setParcela(String parcela) {
         this.parcela = parcela;
     }    
 

@@ -6,6 +6,8 @@
 package Modelo;
 
 import Clases.Minuta;
+import static Modelo.CuotaDAO.log;
+import Vista.Frame.Ventana;
 import conexion.Conexion;
 import java.math.BigDecimal;
 import java.sql.Connection;
@@ -27,23 +29,31 @@ import java.util.logging.Logger;
 public class MinutaDAO {
     
     Conexion conexion;
+    static org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(MinutaDAO.class.getName());
+
 
     public MinutaDAO() {
         conexion = new Conexion();
     }
     
-    public int altaMinuta(Date fecha, String apellidos, String nombres, int manzana, int parcela, BigDecimal cobrado, BigDecimal gastos, BigDecimal rendido, int nro_cuota, String observaciones, String categoria, int id_recibo, String barrio){
+    public int altaMinuta(Date fecha, String apellidos, String nombres, String manzana, String parcela, BigDecimal cobrado, BigDecimal gastos, BigDecimal rendido, int nro_cuota, String observaciones, String categoria, int id_recibo, String barrio){
     int filasAfectadas=0;
     Timestamp timestamp = new java.sql.Timestamp(new java.util.Date().getTime());
     Connection con = null;
+    PreparedStatement ps = null;
      try {
          con = conexion.dataSource.getConnection();
          String insertar = "Insert into minuta(fecha_minuta, apellidos, nombres, manzana, parcela, cobrado, gastos, rendido, nro_cuota, observaciones, categoria, id_Recibo, barrio, timestamp) values ('"+fecha+"','"+apellidos+"','"+nombres+"','"+manzana+"','"+parcela+"','"+cobrado+"','"+gastos+"','"+rendido+"','"+nro_cuota+"','"+observaciones+"','"+categoria+"','"+id_recibo+"','"+barrio+"','"+timestamp+"') ";
-         PreparedStatement ps = con.prepareStatement(insertar);
+         ps = con.prepareStatement(insertar);
          filasAfectadas = ps.executeUpdate();         
      } catch (Exception e) { 
          System.out.println(e.getMessage());
      }finally{
+         try{
+             ps.close();
+         }catch(SQLException ex){
+             Logger.getLogger(PropietarioDAO.class.getName()).log(Level.SEVERE, null, ex);
+         }
          try {
             con.close();
          } catch (SQLException ex) {
@@ -95,12 +105,13 @@ public class MinutaDAO {
     
     public List obtenerFecha(){
      ResultSet rs = null;
+     Statement st = null;
      List<Minuta> minutas = new ArrayList<Minuta>();
      Connection con = null;
      try {
           con = conexion.dataSource.getConnection();
           String listar = "SELECT DISTINCT fecha_minuta FROM Minuta order by fecha_minuta DESC";
-          Statement st = con.createStatement();
+          st = con.createStatement();
           rs = st.executeQuery(listar);
           while(rs.next()){              
                Minuta minuta = new Minuta();
@@ -111,8 +122,25 @@ public class MinutaDAO {
             System.out.println(e.getMessage());
         }finally{
          try {
+             if(rs!=null){
+                 rs.close();
+             }
+         } catch(SQLException ex){
+             log.info(Ventana.nombreUsuario.getText() + " - Error obtener fechas minuta: "+ex.getMessage());
+             Logger.getLogger(MinutaDAO.class.getName()).log(Level.SEVERE, null, ex);
+         }  
+          try {
+             if(rs!=null){
+                 st.close();
+             }
+         } catch(SQLException ex){
+             log.info(Ventana.nombreUsuario.getText() + " - Error obtener fechas minuta: "+ex.getMessage());
+             Logger.getLogger(MinutaDAO.class.getName()).log(Level.SEVERE, null, ex);
+         }
+         try {
              con.close();
          } catch (SQLException ex) {
+             log.info(Ventana.nombreUsuario.getText() + " - Error obtener fechas minuta: "+ex.getMessage());
              Logger.getLogger(MinutaDAO.class.getName()).log(Level.SEVERE, null, ex);
          }
         }
@@ -133,8 +161,8 @@ public class MinutaDAO {
                 m.setFechaMinuta(rs.getDate(1));
                 m.setApellidos(rs.getString(2));
                 m.setNombres(rs.getString(3));
-                m.setManzana(rs.getInt(4));
-                m.setParcela(rs.getInt(5));
+                m.setManzana(rs.getString(4));
+                m.setParcela(rs.getString(5));
                 m.setCobrado(rs.getBigDecimal(6));
                 m.setGastos(rs.getBigDecimal(7));
                 m.setRendido(rs.getBigDecimal(8));
@@ -188,8 +216,8 @@ public class MinutaDAO {
                 m.setFechaMinuta(rs.getDate(1));
                 m.setApellidos(rs.getString(2));
                 m.setNombres(rs.getString(3));
-                m.setManzana(rs.getInt(4));
-                m.setParcela(rs.getInt(5));
+                m.setManzana(rs.getString(4));
+                m.setParcela(rs.getString(5));
                 m.setCobrado(rs.getBigDecimal(6));
                 m.setGastos(rs.getBigDecimal(7));
                 m.setRendido(rs.getBigDecimal(8));
