@@ -241,12 +241,14 @@ public class LoteDAO {
      return lotes;
      }  
 
-    public void agregarLote(String barrio, String manzana, String parcela, String propietario_apellidos, String propietario_nombres, String propietario_cuit, String propietario_nro_recibo, String idPropietario){
+    public int agregarLote(String barrio, String manzana, String parcela, String propietario_apellidos, String propietario_nombres, String propietario_cuit, String propietario_nro_recibo, String idPropietario){
         Connection connection = null;
+        PreparedStatement stmt = null;
+        int i = 0;
         try {
            connection = conexion.dataSource.getConnection();
            String query="INSERT INTO lote (barrio, manzana, parcela, propietario_apellidos, propietario_nombres, propietario_cuit, propietario_nro_recibo, id_propietario)VALUES(?,?,?,?,?,?,?,?)  ON DUPLICATE KEY UPDATE barrio = VALUES(barrio), manzana = VALUES(manzana), parcela = VALUES(parcela),  propietario_apellidos=VALUES(propietario_apellidos), propietario_nombres = VALUES(propietario_nombres), propietario_cuit = VALUES(propietario_cuit), propietario_nro_recibo = VALUES(propietario_nro_recibo), id_propietario = VALUES(id_propietario)";
-           PreparedStatement stmt = connection.prepareStatement(query);
+           stmt = connection.prepareStatement(query);
            stmt.setString(1, barrio);
            stmt.setString(2, manzana);
            stmt.setString(3, parcela);
@@ -255,10 +257,16 @@ public class LoteDAO {
            stmt.setString(6, propietario_cuit);
            stmt.setString(7, propietario_nro_recibo);
            stmt.setString(8, idPropietario);
-           stmt.executeUpdate();
+           i = stmt.executeUpdate();
        } catch (SQLException ex) {
            System.out.println(ex.getMessage().toString()+" Alta lote");
        }finally{
+            try {
+                stmt.close();
+            } catch (SQLException ex) {
+                 System.out.println(ex.getMessage().toString());
+                Logger.getLogger(LoteDAO.class.getName()).log(Level.SEVERE, null, ex);
+            }
             try {
                 connection.close();
             } catch (SQLException ex) {
@@ -266,7 +274,8 @@ public class LoteDAO {
                 Logger.getLogger(LoteDAO.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-} 
+        return i;
+    } 
     
      public int editarLote(String backup_barrio, String backup_manzana, String backup_parcela, String barrio,String manzana, String parcela, String observaciones){
          int flag = 0;
@@ -307,5 +316,43 @@ public class LoteDAO {
             Logger.getLogger(CuotaDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
   }
+   
+   public List<Lote> propietariosPorBarrios(String barrio){
+          ResultSet rs = null;
+          Connection connection = null;
+          Statement st = null;
+          List<Lote> lotes = new ArrayList<>();
+          try {
+          connection = conexion.dataSource.getConnection();
+          String listar = "SELECT DISTINCT propietario_apellidos, propietario_nombres from lote where barrio='"+barrio+"' "; 
+          st = connection.createStatement();
+          rs = st.executeQuery(listar);
+          while (rs.next()) {
+                Lote l = new Lote();
+                l.setApellidoPropietario(rs.getString(1));
+                l.setNombrePropietario(rs.getString(2));
+                lotes.add(l);
+           }  
+        } catch (Exception e) {
+            System.out.println(e.getMessage().toString());
+        }finally{
+              try {
+                  rs.close();
+              } catch (SQLException ex) {
+                  Logger.getLogger(PropietarioDAO.class.getName()).log(Level.SEVERE, null, ex);
+              }
+              try {
+                  st.close();
+              } catch (SQLException ex) {
+                  Logger.getLogger(PropietarioDAO.class.getName()).log(Level.SEVERE, null, ex);
+              }
+              try {
+                  connection.close();
+              } catch (SQLException ex) {
+                  Logger.getLogger(PropietarioDAO.class.getName()).log(Level.SEVERE, null, ex);
+              }
+        }
+     return lotes;
+ }    
     
 }

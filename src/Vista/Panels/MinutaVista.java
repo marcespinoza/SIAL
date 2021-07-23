@@ -68,6 +68,7 @@ public class MinutaVista extends javax.swing.JPanel {
         jScrollPane3 = new javax.swing.JScrollPane();
         tablaFechaMinuta = new javax.swing.JTable();
         combo_barrios = new javax.swing.JComboBox<>();
+        combo_propietarios = new javax.swing.JComboBox<>();
 
         setPreferredSize(new java.awt.Dimension(1112, 479));
 
@@ -215,6 +216,8 @@ public class MinutaVista extends javax.swing.JPanel {
 
         combo_barrios.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Seleccione" }));
 
+        combo_propietarios.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Seleccione" }));
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -245,8 +248,10 @@ public class MinutaVista extends javax.swing.JPanel {
                                         .addGap(341, 341, 341)))
                                 .addComponent(generarMinuta)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(combo_barrios, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(0, 23, Short.MAX_VALUE)))
+                                .addComponent(combo_barrios, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(combo_propietarios, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(0, 26, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -267,13 +272,14 @@ public class MinutaVista extends javax.swing.JPanel {
                             .addComponent(generarMinuta)
                             .addComponent(guardar_en)
                             .addComponent(path, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(combo_barrios, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(combo_barrios, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(combo_propietarios, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
                         .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 311, Short.MAX_VALUE)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 316, Short.MAX_VALUE)
                     .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
@@ -284,6 +290,7 @@ public class MinutaVista extends javax.swing.JPanel {
     public javax.swing.JButton actualizarButton;
     public javax.swing.JButton buscar;
     public javax.swing.JComboBox<String> combo_barrios;
+    public javax.swing.JComboBox<String> combo_propietarios;
     public javax.swing.JButton generarMinuta;
     public javax.swing.JButton guardar_en;
     private javax.swing.JLabel jLabel1;

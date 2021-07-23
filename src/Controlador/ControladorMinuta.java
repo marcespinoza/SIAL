@@ -5,7 +5,9 @@
  */
 package Controlador;
 
+import Clases.Lote;
 import Clases.Minuta;
+import Modelo.LoteDAO;
 import Modelo.MinutaDAO;
 import Vista.Dialogs.ProgressDialog;
 import Vista.Panels.DetalleCuota;
@@ -26,12 +28,10 @@ import com.itextpdf.text.pdf.PdfWriter;
 import java.awt.Desktop;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -51,7 +51,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
-import javax.swing.JTextField;
 import javax.swing.SwingWorker;
 import javax.swing.table.DefaultTableModel;
 
@@ -59,9 +58,10 @@ import javax.swing.table.DefaultTableModel;
  *
  * @author Marcelo Espinoza
  */
-public class ControladorMinuta implements MouseListener, ActionListener {
+public class ControladorMinuta implements MouseListener, ActionListener, ItemListener {
     
     MinutaDAO md = new MinutaDAO();
+    LoteDAO ld = new LoteDAO();
     MinutaVista vistaMinuta;
     private Object [] minuta;
     private Object [] fechaMinuta;
@@ -74,7 +74,8 @@ public class ControladorMinuta implements MouseListener, ActionListener {
     public static final String IMG = "/Imagenes/logo_reporte.png";
     File pathMinuta;
     Set<String> lista_barrios = new HashSet<>();
-    String barrioSeleccionado="";
+    Set<String> lista_propietarios = new HashSet<>();
+    String barrio="";
     static org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(ControladorCliente.class.getName());
 
     public ControladorMinuta(MinutaVista vistaMinuta) {
@@ -84,6 +85,7 @@ public class ControladorMinuta implements MouseListener, ActionListener {
         this.vistaMinuta.guardar_en.addActionListener(this);
         this.vistaMinuta.buscar.addActionListener(this);
         this.vistaMinuta.combo_barrios.addActionListener(this);
+        this.vistaMinuta.combo_barrios.addItemListener(this);
         vistaMinuta.totalCobrado.setText("0");
         vistaMinuta.totalRendido.setText("0");
         cargarPathMinuta();
@@ -113,7 +115,9 @@ public class ControladorMinuta implements MouseListener, ActionListener {
     public void llenarTabla(List<Minuta> minutas){
         listaMinutas = minutas;
         lista_barrios.clear();
+        lista_propietarios.clear();
         vistaMinuta.combo_barrios.removeAllItems();
+        vistaMinuta.combo_propietarios.removeAllItems();
         DefaultTableModel model = (DefaultTableModel) vistaMinuta.tablaMinuta.getModel();
         model.setRowCount(0);
         if(!minutas.isEmpty()){
@@ -214,18 +218,32 @@ public class ControladorMinuta implements MouseListener, ActionListener {
             if(e.getSource()== vistaMinuta.actualizarButton){
                 llenarTablaFecha();
             }
+            
+            if(e.getSource()==vistaMinuta.combo_barrios){
+               llenarComboPropietarios();
+            }
     }
 
-    
+    public void llenarComboPropietarios(){
+     if(vistaMinuta.combo_barrios.getSelectedItem()!=null){ 
+                 String barrio =  vistaMinuta.combo_barrios.getSelectedItem().toString();
+                 List<Lote> listaPropietarios = ld.propietariosPorBarrios(barrio);
+                     vistaMinuta.combo_propietarios.removeAllItems();
+                     for (Lote propietario: listaPropietarios) {   
+                      vistaMinuta.combo_propietarios.addItem(propietario.getApellidoPropietario()+" "+propietario.getNombrePropietario());
+                     }
+                 
+               }}
     
     public void generarPdf(){
       Document document= new Document(PageSize.A4);
       DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
       DateFormat dateFormat2 =  new SimpleDateFormat("dd-MM-yyyy_HH-mm-ss");
       java.util.Date date = new java.util.Date();
-      String barrio = (vistaMinuta.combo_barrios.getSelectedItem().toString()).replaceAll("\\s+$", "");
+      String barrioSeleccionado = (vistaMinuta.combo_barrios.getSelectedItem().toString()).replaceAll("\\s+$", "");
+      String propietarioSeleccionado = vistaMinuta.combo_propietarios.getSelectedItem().toString();
         try {
-            pathMinuta = new File(vistaMinuta.path.getText(), "Minuta - "+barrio.toUpperCase()+" "+dateFormat2.format(date)+".pdf");
+            pathMinuta = new File(vistaMinuta.path.getText(), "Minuta - "+barrioSeleccionado.toUpperCase()+" "+dateFormat2.format(date)+".pdf");
             PdfWriter.getInstance(document, new FileOutputStream(pathMinuta));
             document.open();
             Image image = Image.getInstance(getClass().getResource(IMG)); 
@@ -235,7 +253,7 @@ public class ControladorMinuta implements MouseListener, ActionListener {
             Font f3=new Font(Font.FontFamily.TIMES_ROMAN,10.0f,0,null); 
             f3.setColor(130, 130, 130);
             document.add(new Chunk(image, 0, -55f));
-            Paragraph titulo = new Paragraph("Minuta general - "+barrio.toUpperCase());  
+            Paragraph titulo = new Paragraph("Minuta general - "+barrioSeleccionado.toUpperCase());  
             Paragraph fecha = new Paragraph(dateFormat.format(date), f3);
             fecha.setAlignment(Element.ALIGN_RIGHT);
             titulo.setAlignment(Element.ALIGN_CENTER);
@@ -293,8 +311,9 @@ public class ControladorMinuta implements MouseListener, ActionListener {
               BigDecimal t_credito = BigDecimal.ZERO;
               BigDecimal efectivo = BigDecimal.ZERO;
               for (int i = 0; i < listaMinutas.size(); i++) {
-                  barrioSeleccionado = (listaMinutas.get(i).getBarrio().toLowerCase()).replaceAll("\\s+$", "");
-                  if(barrioSeleccionado.equals(barrio)){
+                  String propietario = listaMinutas.get(i).getApellidoP()+" "+listaMinutas.get(i).getNombreP();
+                  barrio = (listaMinutas.get(i).getBarrio().toLowerCase()).replaceAll("\\s+$", "");
+                  if(barrio.equals(barrioSeleccionado) && propietario.equals(propietarioSeleccionado)){
                   PdfPTable table2 = new PdfPTable(9);            
                   table2.setTotalWidth(new float[]{ 1,2,4,2,2,2,2,2,3});
                   table2.setWidthPercentage(100);
@@ -470,6 +489,13 @@ public class ControladorMinuta implements MouseListener, ActionListener {
         }
       
     }  
+
+    @Override
+    public void itemStateChanged(ItemEvent e) {
+        if (e.getStateChange() == ItemEvent.SELECTED) {
+             llenarComboPropietarios();
+         }
+    }
         
     public class MinutasPorFecha extends javax.swing.SwingWorker<Void, Void>{
          

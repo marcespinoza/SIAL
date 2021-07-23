@@ -148,13 +148,14 @@ public class MinutaDAO {
  }
     
     public List<Minuta> minutasPorFecha(String fecha){
-       ResultSet rs;
+       ResultSet rs = null;
        Connection connection = null;
+       Statement st = null;
        List<Minuta> minutas = new ArrayList<>();
      try {
           connection = conexion.dataSource.getConnection();
-          String listar = "SELECT m.fecha_minuta, m.apellidos, m.nombres, m.manzana, m.parcela, m.cobrado, m.gastos, m.rendido, m.nro_cuota, m.observaciones, m.baja, r.nro_recibo, m.barrio from (minuta m INNER JOIN recibo r ON m.id_recibo=r.idRecibo) where m.fecha_minuta = '"+fecha+"'";
-          Statement st = connection.createStatement();
+          String listar = "SELECT m.fecha_minuta, m.apellidos, m.nombres, m.manzana, m.parcela, m.cobrado, m.gastos, m.rendido, m.nro_cuota, m.observaciones, m.baja, r.nro_recibo, m.barrio, r.apellido_propietario, r.nombre_propietario from (minuta m INNER JOIN recibo r ON m.id_recibo=r.idRecibo) where m.fecha_minuta = '"+fecha+"'";
+          st = connection.createStatement();
           rs = st.executeQuery(listar);
           while (rs.next()) {
                 Minuta m = new Minuta();
@@ -171,11 +172,23 @@ public class MinutaDAO {
                 m.setBaja(rs.getInt(11));
                 m.setNroRecibo(rs.getInt(12));
                 m.setBarrio(rs.getString(13));
+                m.setApellidoP(rs.getString(14));
+                m.setNombreP(rs.getString(15));
                 minutas.add(m);
           }
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }finally{
+         try {
+             rs.close();
+         } catch (SQLException ex) {
+             Logger.getLogger(MinutaDAO.class.getName()).log(Level.SEVERE, null, ex);
+         }
+         try {
+             st.close();
+         } catch (SQLException ex) {
+             Logger.getLogger(MinutaDAO.class.getName()).log(Level.SEVERE, null, ex);
+         }
          try {
              connection.close();
          } catch (SQLException ex) {
@@ -207,7 +220,7 @@ public class MinutaDAO {
      try {
           connection = conexion.dataSource.getConnection();
           PreparedStatement statement =
-          connection.prepareStatement("SELECT m.fecha_minuta, m.apellidos, m.nombres, m.manzana, m.parcela, m.cobrado, m.gastos, m.rendido, m.nro_cuota, m.observaciones, m.baja, r.nro_recibo, m.barrio from minuta m INNER JOIN recibo r ON m.id_recibo=r.idRecibo WHERE fecha_minuta between ? and ? ORDER BY r.nro_recibo");
+          connection.prepareStatement("SELECT m.fecha_minuta, m.apellidos, m.nombres, m.manzana, m.parcela, m.cobrado, m.gastos, m.rendido, m.nro_cuota, m.observaciones, m.baja, r.nro_recibo, m.barrio, r.apellido_propietario, r.nombre_propietario from minuta m INNER JOIN recibo r ON m.id_recibo=r.idRecibo WHERE fecha_minuta between ? and ? ORDER BY r.nro_recibo");
           statement.setDate(1, desde);
           statement.setDate(2, hasta);
           rs = statement.executeQuery();
@@ -226,6 +239,8 @@ public class MinutaDAO {
                 m.setBaja(rs.getInt(11));
                 m.setNroRecibo(rs.getInt(12));
                 m.setBarrio(rs.getString(13));
+                m.setApellidoP(rs.getString(14));
+                m.setNombreP(rs.getString(15));
                 minutas.add(m);
           }
         } catch (Exception e) {

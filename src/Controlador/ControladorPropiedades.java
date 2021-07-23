@@ -198,16 +198,21 @@ public class ControladorPropiedades implements ActionListener{
         } 
         //------Boton agregar propiedades------------//
         if(e.getSource()==vista.propiedades.agregar){
-            if(validarCampos()){
+          if(validarCampos()){
             if(!vista.propiedades.comboApellido.getSelectedItem().equals("Seleccione")){  
-               if(!vista.propiedades.comboNombres.getSelectedItem().equals("Seleccione")){  
+               if(!vista.propiedades.comboNombres.getSelectedItem().equals("Seleccione")){ 
+                int i = 0;   
                 switch(vista.propiedades.comboPropiedad.getSelectedItem().toString()){   
-                        case "Terreno": ld.agregarLote(vista.propiedades.barrio.getText().toString(), vista.propiedades.mz.getText().toString(), vista.propiedades.pc.getText().toString(), vista.propiedades.comboApellido.getSelectedItem().toString(), vista.propiedades.comboNombres.getSelectedItem().toString(), vista.propiedades.cuit.getText(),vista.propiedades.nroRecibo.getText(), String.valueOf(idPropietario)); break;
+                        case "Terreno": i = ld.agregarLote(vista.propiedades.barrio.getText().toString(), vista.propiedades.mz.getText().toString(), vista.propiedades.pc.getText().toString(), vista.propiedades.comboApellido.getSelectedItem().toString(), vista.propiedades.comboNombres.getSelectedItem().toString(), vista.propiedades.cuit.getText(),vista.propiedades.nroRecibo.getText(), String.valueOf(idPropietario)); break;
                         case "Departamento":dd.agregarDepartamento(vista.propiedades.barrio.getText(), vista.propiedades.mz.getText(), vista.propiedades.pc.getText(), vista.propiedades.comboApellido.getSelectedItem().toString(), vista.propiedades.comboNombres.getSelectedItem().toString(), vista.propiedades.cuit.getText(),vista.propiedades.nroRecibo.getText()); break;    
+                }
+                if(i==0){
+                 JOptionPane.showMessageDialog(null, "Lote duplicado", "Atención", JOptionPane.INFORMATION_MESSAGE, null);
                 }
              }
             }
-            llenarTabla();}
+            llenarTabla();
+           }
         }
         //------Boton eliminar propiedades--------------//
         if(e.getSource()==vista.propiedades.eliminar){

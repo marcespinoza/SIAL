@@ -28,6 +28,24 @@ public class Minuta {
     String categoria;
     int baja;
     int nroRecibo;
+    String apellidoP;
+    String nombreP;
+
+    public String getApellidoP() {
+        return apellidoP;
+    }
+
+    public void setApellidoP(String apellidoP) {
+        this.apellidoP = apellidoP;
+    }
+
+    public String getNombreP() {
+        return nombreP;
+    }
+
+    public void setNombreP(String nombreP) {
+        this.nombreP = nombreP;
+    }
 
     public int getNroRecibo() {
         return nroRecibo;
