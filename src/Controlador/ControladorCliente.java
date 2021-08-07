@@ -115,7 +115,7 @@ public class ControladorCliente implements ActionListener, MouseListener, TableM
     private String nombres, apellidos, lote;
     static Logger log = Logger.getLogger(ControladorCliente.class.getName());
     ArrayList<Integer> sucesion = new ArrayList<>();
-    JTable tablePrinter;
+    JTable tablePrinter = null;
     String tipoFiltro = "";
     
     public ControladorCliente(Clientes vistaCliente, Ventana ventana){
@@ -245,7 +245,11 @@ public class ControladorCliente implements ActionListener, MouseListener, TableM
         // vistaClientes.comboNombre.setSelectedIndex(0);                      
         }
         if(e.getSource()==vistaClientes.imprimirClientesOrdenados){
-            GenerarLista.generarResumenPdfporTipo(tablePrinter, tipoFiltro);
+            if(tablePrinter==null){
+                tablePrinter = vistaClientes.tablaCliente;
+            }
+            String barrio = vistaClientes.comboLote.getSelectedItem().toString();
+            GenerarLista.generarResumenPdfporTipo(tablePrinter, tipoFiltro, barrio);
         // vistaClientes.comboNombre.setSelectedIndex(0);                      
         }
         //-----------Boton mostrar todos los clientes----//

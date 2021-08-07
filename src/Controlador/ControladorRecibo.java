@@ -498,7 +498,8 @@ public class ControladorRecibo implements ActionListener{
                             dc.tablaDetallePago.getModel().getValueAt(row, 14).toString(), 
                             categoria.toString(), 
                             id_recibo,
-                            barrio);
+                            barrio,
+                            id_control);
               if(j==0){
                 JOptionPane.showMessageDialog(null, "Error al generar minuta", "Atención", JOptionPane.ERROR_MESSAGE, null); 
               }else{
@@ -524,7 +525,8 @@ public class ControladorRecibo implements ActionListener{
                             dc.tablaDetallePago.getModel().getValueAt(row, 13).toString()+" Dcho. posesión", 
                             "Cta. derecho posesión",
                             id_recibo,
-                            barrio);
+                            barrio,
+                            id_control);
             }
             //----------Incremento el numero de recibo asociado a ese propietario---------//
             pd.editarNroRecibo(apellido_propietario, 

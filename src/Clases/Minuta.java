@@ -30,6 +30,17 @@ public class Minuta {
     int nroRecibo;
     String apellidoP;
     String nombreP;
+    int planCuotas;
+
+    public int getPlanCuotas() {
+        return planCuotas;
+    }
+
+    public void setPlanCuotas(int planCuotas) {
+        this.planCuotas = planCuotas;
+    }
+
+   
 
     public String getApellidoP() {
         return apellidoP;

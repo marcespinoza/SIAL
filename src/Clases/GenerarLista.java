@@ -146,7 +146,7 @@ public class GenerarLista {
         }
       }
     
-    public static void generarResumenPdfporTipo(JTable jt, String tit){
+    public static void generarResumenPdfporTipo(JTable jt, String tit, String barrio){
             JFrame parentFrame = new JFrame(); 
             JFileChooser fileChooser = new JFileChooser();
             fileChooser.setDialogTitle("Guardar en..");  
@@ -174,7 +174,7 @@ public class GenerarLista {
             ph.add(ph1);
             ph.add(ph2);
             ph.setAlignment(Element.ALIGN_CENTER);
-            Paragraph total = new Paragraph("B° Doña Valentina - Total clientes: "+jt.getRowCount()+ " - "+tit);
+            Paragraph total = new Paragraph("B° "+barrio+" - Total clientes: "+jt.getRowCount()+ " - "+tit);
             total.setAlignment(Element.ALIGN_CENTER);
             document.add(ph);
             document.add( Chunk.NEWLINE );
