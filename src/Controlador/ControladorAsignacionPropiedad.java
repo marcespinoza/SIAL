@@ -30,6 +30,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.BorderFactory;
@@ -127,7 +128,10 @@ public class ControladorAsignacionPropiedad implements ActionListener, KeyListen
         }
         });
         llenarComboApellidos(vistaAsignarPropiedad.tipo_propiedad.getSelectedItem().toString());
-        vistaAsignarPropiedad.setVisible(true);       
+        vistaAsignarPropiedad.pack();
+        vistaAsignarPropiedad.setVisible(true);   
+        vistaAsignarPropiedad.aviso_error.setText("");
+        
     }
 
     @Override
@@ -310,13 +314,13 @@ public class ControladorAsignacionPropiedad implements ActionListener, KeyListen
     public void keyReleased(KeyEvent e) {
     }
      
-    public class SwingWorker extends javax.swing.SwingWorker<Void, Void>{
+    public class SwingWorker extends javax.swing.SwingWorker<Integer, Integer>{
          
          int id_control;
          long fecha_suscripcion = vistaAsignarPropiedad.fch_suscripción.getDate().getTime();
 
         @Override
-        protected Void doInBackground() throws Exception { 
+        protected Integer doInBackground() throws Exception { 
            byte flag_cemento = 1; 
            byte flag_indice = 1;
            if(vistaAsignarPropiedad.empPublico.isSelected()){
@@ -343,12 +347,21 @@ public class ControladorAsignacionPropiedad implements ActionListener, KeyListen
                    (String)vistaAsignarPropiedad.parcela.getSelectedItem(), 
                    new java.sql.Date(fecha_suscripcion), 
                    flag_indice);
-           return null;
+           return id_control;
         }
 
        @Override
        public void done() { 
-           log.info(Ventana.nombreUsuario.getText()+" - Asigna propiedad - id control: "+id_control);
+           int idControl = 0;
+             try {
+                 idControl = get();
+             } catch (InterruptedException ex) {
+                 Logger.getLogger(ControladorAsignacionPropiedad.class.getName()).log(Level.SEVERE, null, ex);
+             } catch (ExecutionException ex) {
+                 Logger.getLogger(ControladorAsignacionPropiedad.class.getName()).log(Level.SEVERE, null, ex);
+             }
+           if(idControl!=0){  
+           log.info(Ventana.nombreUsuario.getText()+" - Asigna propiedad - id control: "+id_control + "Mz:"+vistaAsignarPropiedad.manzana.getSelectedItem()+" Pc:"+vistaAsignarPropiedad.parcela.getSelectedItem());
            BigDecimal saldo = new BigDecimal(vistaAsignarPropiedad.cantidad_cuotas.getText()).multiply(new BigDecimal(vistaAsignarPropiedad.cuota_total.getText()));
            switch(vistaAsignarPropiedad.tipo_propiedad.getSelectedItem().toString()){
                case "Terreno":cuotaDao.altaCuotaLote(new java.sql.Timestamp(fecha_suscripcion), 0,"Saldo Inicio", new BigDecimal(0),new BigDecimal(0), saldo , new BigDecimal(0), saldo, saldo.divide(new BigDecimal(vistaAsignarPropiedad.bolsa_cemento.getText()),2, BigDecimal.ROUND_HALF_UP), new BigDecimal(0), saldo.divide(new BigDecimal(vistaAsignarPropiedad.bolsa_cemento.getText()),2, BigDecimal.ROUND_HALF_UP), "", "", id_control, 0); break;
@@ -373,6 +386,9 @@ public class ControladorAsignacionPropiedad implements ActionListener, KeyListen
                case "Departamento":dd.editarDepartamento(vistaAsignarPropiedad.barrio.getSelectedItem().toString(), Integer.parseInt(vistaAsignarPropiedad.manzana.getSelectedItem().toString()), Integer.parseInt(vistaAsignarPropiedad.parcela.getSelectedItem().toString()));cd.altaClientesXDpto(dni, id_control); break;
            }           
            vistaAsignarPropiedad.dispose();
+           }else{
+               vistaAsignarPropiedad.aviso_error.setText("Error, revise los datos.");
+           }
        }
     
 }

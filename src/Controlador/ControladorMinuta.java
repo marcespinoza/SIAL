@@ -271,18 +271,18 @@ public class ControladorMinuta implements MouseListener, ActionListener, ItemLis
             document.add(subtitulo);
             document.add( Chunk.NEWLINE );
             PdfPTable table = new PdfPTable(10);            
-            table.setTotalWidth(new float[]{1,2,4,2,2,2,2,2,3,(float)0.5});
+            table.setTotalWidth(new float[]{1,(float)1.2,4,(float)1.2,2,2,2,1,2,1});
             table.setWidthPercentage(100);
             PdfPCell orden = new PdfPCell(new Paragraph("ORD",f2));
-            PdfPCell rbo_nro = new PdfPCell(new Paragraph("Rbo. Nro",f));
+            PdfPCell rbo_nro = new PdfPCell(new Paragraph("Recibo",f));
             PdfPCell apynom = new PdfPCell(new Paragraph("Apellido y nombre",f));
             PdfPCell mzpc = new PdfPCell(new Paragraph("Mz./Pc.",f));
             PdfPCell cobrado = new PdfPCell(new Paragraph("Cobrado",f));
             PdfPCell gastos = new PdfPCell(new Paragraph("Gastos. Adm.",f));
             PdfPCell rendido = new PdfPCell(new Paragraph("Rendido",f));
             PdfPCell nro_cuota = new PdfPCell(new Paragraph("Cuota",f));
-            PdfPCell observaciones = new PdfPCell(new Paragraph("Observaciones",f)); 
-            PdfPCell cuotas = new PdfPCell(new Paragraph("Cuotas",f));
+            PdfPCell observaciones = new PdfPCell(new Paragraph("Obs.",f)); 
+            PdfPCell cuotas = new PdfPCell(new Paragraph("Cemento",f));
             orden.setHorizontalAlignment(Element.ALIGN_CENTER);
             rbo_nro.setHorizontalAlignment(Element.ALIGN_CENTER);
             apynom.setHorizontalAlignment(Element.ALIGN_CENTER);
@@ -318,7 +318,7 @@ public class ControladorMinuta implements MouseListener, ActionListener, ItemLis
                   barrio = (listaMinutas.get(i).getBarrio().toLowerCase()).replaceAll("\\s+$", "");
                   if(barrio.equals(barrioSeleccionado) && propietario.equals(propietarioSeleccionado)){
                   PdfPTable table2 = new PdfPTable(10);            
-                  table2.setTotalWidth(new float[]{ 1,2,4,2,2,2,2,2,3,(float)0.5});
+                  table2.setTotalWidth(new float[]{ 1,(float)1.2,4,(float)1.2,2,2,2,1,2,1});
                   table2.setWidthPercentage(100);
                   PdfPCell nro_orden = new PdfPCell(new Paragraph(String.valueOf(conta),f));
                   nro_orden.setHorizontalAlignment(Element.ALIGN_CENTER);
@@ -332,13 +332,14 @@ public class ControladorMinuta implements MouseListener, ActionListener, ItemLis
                   PdfPCell mz_pc = new PdfPCell(new Paragraph(String.valueOf(listaMinutas.get(i).getManzana())+"/"+String.valueOf(listaMinutas.get(i).getParcela()),f));
                   mz_pc.setHorizontalAlignment(Element.ALIGN_CENTER);
                   table2.addCell(mz_pc);
-                  table2.addCell(new PdfPCell(new Paragraph("$ "+String.valueOf(listaMinutas.get(i).getCobrado()),f)));
-                  table2.addCell(new PdfPCell(new Paragraph("$ "+String.valueOf(listaMinutas.get(i).getGastos()),f)));
-                  table2.addCell(new PdfPCell(new Paragraph("$ "+String.valueOf(listaMinutas.get(i).getRendido()),f)));
+                  table2.addCell(new PdfPCell(new Paragraph("$ "+String.valueOf(listaMinutas.get(i).getCobrado()),f))).setHorizontalAlignment(Element.ALIGN_CENTER);
+                  table2.addCell(new PdfPCell(new Paragraph("$ "+String.valueOf(listaMinutas.get(i).getGastos()),f))).setHorizontalAlignment(Element.ALIGN_CENTER);
+                  table2.addCell(new PdfPCell(new Paragraph("$ "+String.valueOf(listaMinutas.get(i).getRendido()),f))).setHorizontalAlignment(Element.ALIGN_CENTER);
                   PdfPCell nrocuota = new PdfPCell(new Paragraph(String.valueOf(listaMinutas.get(i).getNroCuota()+"/"+String.valueOf(listaMinutas.get(i).getPlanCuotas())),f));
                   nrocuota.setHorizontalAlignment(Element.ALIGN_CENTER);
                   table2.addCell(nrocuota);
-                  table2.addCell(new PdfPCell(new Paragraph(listaMinutas.get(i).getObservaciones(),f)));
+                  table2.addCell(new PdfPCell(new Paragraph(listaMinutas.get(i).getObservaciones(),f))).setHorizontalAlignment(Element.ALIGN_CENTER);
+                  table2.addCell(new PdfPCell(new Paragraph("",f))).setHorizontalAlignment(Element.ALIGN_CENTER);
                   document.add(table2);
                   //-------Controlo que el cliente no este dado de baja------//
                   if(listaMinutas.get(i).getBaja()!=1){
@@ -356,12 +357,15 @@ public class ControladorMinuta implements MouseListener, ActionListener, ItemLis
               
             //------Linea Totales------//
             PdfPTable tableTotales = new PdfPTable(10);            
-            tableTotales.setTotalWidth(new float[]{ 1,2,4,2,2,2,2,2,3,(float)0.5});
+            tableTotales.setTotalWidth(new float[]{  1,(float)1.2,4,(float)1.2,2,2,2,(float)1.1,2,1});
             tableTotales.setWidthPercentage(100);  
             Font ftotal=new Font(Font.FontFamily.TIMES_ROMAN,9.0f,0,null); 
             PdfPCell cellcobrado = new PdfPCell(new Paragraph("$ "+String.format ("%.2f",acumulador_cobrado), ftotal));
             PdfPCell cellgastos = new PdfPCell(new Paragraph("$ "+String.format ("%.2f",acumulador_gastos), ftotal));
             PdfPCell cellrendido = new PdfPCell(new Paragraph("$ "+String.format ("%.2f",acumulador_rendido), ftotal));
+            cellcobrado.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cellgastos.setHorizontalAlignment(Element.ALIGN_CENTER);
+            cellrendido.setHorizontalAlignment(Element.ALIGN_CENTER);
             PdfPCell cellEmpty = new PdfPCell(new Paragraph("",f));
             cellEmpty.setUseVariableBorders(true);
             cellEmpty.setBorderColorBottom(BaseColor.WHITE);
@@ -374,6 +378,7 @@ public class ControladorMinuta implements MouseListener, ActionListener, ItemLis
             tableTotales.addCell(cellcobrado);
             tableTotales.addCell(cellgastos);
             tableTotales.addCell(cellrendido);
+            tableTotales.addCell(cellEmpty);
             tableTotales.addCell(cellEmpty);
             tableTotales.addCell(cellEmpty);
             document.add(tableTotales);
