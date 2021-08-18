@@ -146,7 +146,7 @@ public class GenerarLista {
         }
       }
     
-    public static void generarResumenPdfporTipo(JTable jt, String tit, String barrio){
+    public static void generarResumenPdfporTipo(JTable jt, String tit, String barrio, boolean filtroManzana, boolean filtroParcela){
             JFrame parentFrame = new JFrame(); 
             JFileChooser fileChooser = new JFileChooser();
             fileChooser.setDialogTitle("Guardar en..");  
@@ -188,7 +188,14 @@ public class GenerarLista {
             PdfPCell orden = new PdfPCell(new Paragraph("ORD",f));
             PdfPCell nro_cuota = new PdfPCell(new Paragraph("Apellido",f));
             PdfPCell fecha_pago = new PdfPCell(new Paragraph("Nombre/s",f));
-            PdfPCell lote = new PdfPCell(new Paragraph("Mz - Pc",f));
+            PdfPCell lote;
+            if(filtroManzana){
+                lote = new PdfPCell(new Paragraph("Pc",f));
+            }else if(filtroParcela){
+                lote = new PdfPCell(new Paragraph("Mz",f));
+            }else{
+                lote = new PdfPCell(new Paragraph("Mz - Pc",f));
+            }
             PdfPCell telefono = new PdfPCell(new Paragraph("Tel.",f));
             PdfPCell valorCuota = new PdfPCell(new Paragraph("Cuota",f));
             PdfPCell cemento_saldo = new PdfPCell(new Paragraph("Cuotas",f));
@@ -223,7 +230,13 @@ public class GenerarLista {
                   table2.addCell(new PdfPCell(new Paragraph(String.valueOf(cont),f))).setHorizontalAlignment(Element.ALIGN_CENTER);
                   table2.addCell(new PdfPCell(new Paragraph(jt.getValueAt(i, 0).toString(),f))).setHorizontalAlignment(Element.ALIGN_CENTER);
                   table2.addCell(new PdfPCell(new Paragraph(jt.getValueAt(i, 1).toString(),f))).setHorizontalAlignment(Element.ALIGN_CENTER);
-                  table2.addCell(new PdfPCell(new Paragraph(jt.getValueAt(i, 17).toString()+" - "+jt.getValueAt(i, 18).toString(),f))).setHorizontalAlignment(Element.ALIGN_CENTER);
+                  if(filtroManzana){
+                    table2.addCell(new PdfPCell(new Paragraph(jt.getValueAt(i, 18).toString(),f))).setHorizontalAlignment(Element.ALIGN_CENTER);
+                  }else if(filtroParcela){
+                    table2.addCell(new PdfPCell(new Paragraph(jt.getValueAt(i, 17).toString(),f))).setHorizontalAlignment(Element.ALIGN_CENTER);
+                  }else{
+                    table2.addCell(new PdfPCell(new Paragraph(String.valueOf(jt.getValueAt(i, 17).toString()+" - "+jt.getValueAt(i, 18).toString()),f))).setHorizontalAlignment(Element.ALIGN_CENTER);
+                  }
                   table2.addCell(new PdfPCell(new Paragraph(String.valueOf(jt.getValueAt(i, 3).toString()+" / "+jt.getValueAt(i, 4).toString()),f))).setHorizontalAlignment(Element.ALIGN_CENTER);
                   table2.addCell(new PdfPCell(new Paragraph(String.valueOf("$ "+new BigDecimal(jt.getValueAt(i, 13).toString()).add(new BigDecimal(jt.getValueAt(i, 22).toString()))),f))).setHorizontalAlignment(Element.ALIGN_CENTER);
                   table2.addCell(new PdfPCell(new Paragraph(jt.getValueAt(i, 24).toString(),f))).setHorizontalAlignment(Element.ALIGN_CENTER);

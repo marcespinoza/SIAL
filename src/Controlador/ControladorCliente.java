@@ -62,6 +62,7 @@ import java.time.LocalDateTime;
 import java.time.Period;
 import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.Properties;
@@ -74,6 +75,8 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.RowFilter;
+import javax.swing.RowSorter;
+import javax.swing.SortOrder;
 import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
 import javax.swing.event.TableModelEvent;
@@ -117,6 +120,8 @@ public class ControladorCliente implements ActionListener, MouseListener, TableM
     ArrayList<Integer> sucesion = new ArrayList<>();
     JTable tablePrinter = null;
     String tipoFiltro = "";
+    boolean filtroManzana = false;
+    boolean filtroParcela = false;
     
     public ControladorCliente(Clientes vistaCliente, Ventana ventana){
         this.vistaClientes=vistaCliente;
@@ -249,7 +254,7 @@ public class ControladorCliente implements ActionListener, MouseListener, TableM
                 tablePrinter = vistaClientes.tablaCliente;
             }
             String barrio = vistaClientes.comboLote.getSelectedItem().toString();
-            GenerarLista.generarResumenPdfporTipo(tablePrinter, tipoFiltro, barrio);
+            GenerarLista.generarResumenPdfporTipo(tablePrinter, tipoFiltro, barrio, filtroManzana, filtroParcela);
         // vistaClientes.comboNombre.setSelectedIndex(0);                      
         }
         //-----------Boton mostrar todos los clientes----//
@@ -598,8 +603,8 @@ public class ControladorCliente implements ActionListener, MouseListener, TableM
                         actualizar_cemento = "0";
                      } 
                     String barrio_prop = listaClientes.get(i).getBarrio();
-                    String manzana_prop = listaClientes.get(i).getManzana();
-                    String parcela_prop = listaClientes.get(i).getParcela();
+                    Integer manzana_prop = Integer.parseInt(listaClientes.get(i).getManzana());
+                    Integer parcela_prop = Integer.parseInt(listaClientes.get(i).getParcela());
                     switch(listaClientes.get(i).getBandera_cemento()){
                         case 0: tipoActualizacion = "Emp. Público"; break;
                         case 2: tipoActualizacion = "C. Fija"; break;
@@ -729,19 +734,26 @@ public class ControladorCliente implements ActionListener, MouseListener, TableM
           vistaClientes.tablaCliente.setRowSorter(tr);
           tr.setRowFilter(RowFilter.regexFilter("(^|\\s)" + query +"(\\s|$)",18));
           tablePrinter = vistaClientes.tablaCliente;
-          tipoFiltro = "Pc. "+query;   
+          vistaClientes.tablaCliente.getRowSorter().toggleSortOrder(17);
+          tipoFiltro = "Pc. "+query; 
+          filtroParcela = true;
         }else{
           vistaClientes.tablaCliente.setRowSorter(null);
         }
     }
     private void filtroManzana(String query){
          DefaultTableModel table = (DefaultTableModel) vistaClientes.tablaCliente.getModel();
+         
          TableRowSorter<DefaultTableModel> tr = new TableRowSorter<> (table);
-        if(!query.isEmpty()){
-         vistaClientes.tablaCliente.setRowSorter(tr);
+         if(!query.isEmpty()){
+        
          tr.setRowFilter(RowFilter.regexFilter("(^|\\s)" + query +"(\\s|$)" ,17));
+         vistaClientes.tablaCliente.setRowSorter(tr);
+         vistaClientes.tablaCliente.setModel(table);
+         vistaClientes.tablaCliente.getRowSorter().toggleSortOrder(18);
          tablePrinter = vistaClientes.tablaCliente;
          tipoFiltro = "Mz. "+query;
+         filtroManzana = true;
         }else{
          vistaClientes.tablaCliente.setRowSorter(null);
         }
@@ -809,7 +821,7 @@ public class ControladorCliente implements ActionListener, MouseListener, TableM
             PdfPCell nro_cuota = new PdfPCell(new Paragraph("Apellido",f));
             PdfPCell fecha_pago = new PdfPCell(new Paragraph("Nombre/s",f));
             PdfPCell monto_cuota = new PdfPCell(new Paragraph("Barrio",f));
-            PdfPCell saldo = new PdfPCell(new Paragraph("Mz - Pc",f));
+            PdfPCell saldo = new PdfPCell(new Paragraph("Mz - Pc",f));            
             PdfPCell cemento_saldo = new PdfPCell(new Paragraph("Total cuotas",f));
             PdfPCell ultima_cuota = new PdfPCell(new Paragraph("Ultima cuota",f));
             PdfPCell total_cuotas = new PdfPCell(new Paragraph("Total $",f));
