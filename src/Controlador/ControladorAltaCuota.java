@@ -12,7 +12,6 @@ import Modelo.CuotaDAO;
 import Modelo.DchoPosesionDAO;
 import Modelo.FichaControlDAO;
 import Clases.LimitadorCaracteres;
-import static Controlador.ControladorLogin.log;
 import Modelo.PropietarioDAO;
 import Vista.Dialogs.AltaCuota;
 import Vista.Dialogs.Progress;
@@ -58,7 +57,7 @@ public class ControladorAltaCuota implements ActionListener, KeyListener{
     BigDecimal cuota_total, gastos;
     private int filas_insertadas=0;
     float porcentaje;
-    static org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(ControladorAltaCuota.class.getName());
+    static org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger("registro");
     public ControladorAltaCuota(Frame parent, int id_control, int row_count, int nro_cuota) {
         this.parent = parent;
         this.id_control=id_control;

@@ -42,10 +42,10 @@ public class ControladorLogin implements ActionListener, KeyListener{
    Ventana frame;
    UsuarioDAO ud = new UsuarioDAO();
    FileWriter writer;
-   static org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(Conexion.class.getName());  
    
-    Logger extAppLogger= Logger.getLogger("errorAppender"); 
-    public ControladorLogin() {        
+   static org.apache.log4j.Logger registroLogger= org.apache.log4j.Logger.getLogger("registro"); 
+   static org.apache.log4j.Logger errorLogger= org.apache.log4j.Logger.getLogger("error");
+   public ControladorLogin() {        
         login = new Login( true);  
         login.addWindowListener(new WindowAdapter() {
 
@@ -53,8 +53,7 @@ public class ControladorLogin implements ActionListener, KeyListener{
             public void windowClosed(WindowEvent e) {
                 super.windowClosed(e); //To change body of generated methods, choose Tools | Templates.
                 login.dispose();
-            }
-            
+            }            
         });
         login.usuario.addKeyListener(this);
         login.usuario.setDocument(new LimitadorCaracteres(15));
@@ -95,35 +94,20 @@ public class ControladorLogin implements ActionListener, KeyListener{
                   login.aviso.setText("* Ingrese todos los campos");
               }else{
                 usuario = ud.validarUsuario(login.usuario.getText(), contraseña, login.tipo_operador.getSelection().getActionCommand());
-                    try {
                         if (usuario!=null){
                             frame = new Ventana();
-                            log.info(usuario.getNombres()+" "+usuario.getApellidos()+ " - Inicio sesión");
+                            registroLogger.info(usuario.getNombres()+" "+usuario.getApellidos()+ " - Inicio sesión");
                             frame.labelUsuario.setText(usuario.getUsuario());
                             frame.labelTipoUsuario.setText(usuario.getTipoUsuario());
                             frame.nombreUsuario.setText(usuario.getNombres());
                             frame.apellidoUsuario.setText(usuario.getApellidos());    
-                            //--------Escribo en el archivo de log quien inició sesion, dia y hora---------//
-                            File file = new File("log.txt");
-                            if(!file.exists()){
-                            file.createNewFile();}
-                            FileWriter writer = new FileWriter(file, true);
-                            BufferedWriter bw = new BufferedWriter( writer );
-                            DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
-                            Calendar cal = Calendar.getInstance();
-                            bw.write(usuario.getNombres()+" "+usuario.getApellidos()+" - "+login.tipo_operador.getSelection().getActionCommand()+" - "+dateFormat.format(cal.getTime()));
-                            bw.newLine();
-                            bw.close();
                             //-------Oculto ventana login y muestro el frame----------//
                             login.dispose();   
                             frame.setVisible(true);
                         }else{
                             login.aviso.setText("* Usuario y/o contraseña incorrectos");              
                         }  
-                     } catch (IOException ex) {
-                        Logger.getLogger(ControladorLogin.class.getName()).log(Level.SEVERE, null, ex);
-                    } 
-              }
+                     }
             }
             if(e.getSource() == login.cancelar){
                 login.dispose();

@@ -95,7 +95,8 @@ public class ControladorRecibo implements ActionListener{
     String monotributo=""; 
     String exento="";
     File pathRecibo;
-    static org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(ControladorRecibo.class.getName());
+    static org.apache.log4j.Logger registroLogger= org.apache.log4j.Logger.getLogger("registro"); 
+    static org.apache.log4j.Logger errorLogger= org.apache.log4j.Logger.getLogger("error");
 
     public ControladorRecibo(ControladorDetalleCuota cdc, Frame parent, int id_control, DetalleCuota dc, BigDecimal saldo_cemento, int row, int tipoPago) {
         ar = new AltaRecibo(parent, true);
@@ -257,7 +258,7 @@ public class ControladorRecibo implements ActionListener{
             java.util.Date date = new java.util.Date();
         try {
             //----Escribo en el log------//
-            log.info(Ventana.nombreUsuario.getText() + " - Genera recibo "+ar.nro_recibo.getText()+ " "+nombre_comprador+" "+apellido_comprador);
+            registroLogger.info(Ventana.nombreUsuario.getText() + " - Genera recibo nro "+ar.nro_recibo.getText()+ " "+nombre_comprador+" "+apellido_comprador);
             pathRecibo = new File(dc.path.getText(), "Recibo-"+barrio+"-"+ar.nro_recibo.getText()+".pdf");
             PdfWriter.getInstance(document, new FileOutputStream(pathRecibo));
             document.open();
@@ -414,13 +415,13 @@ public class ControladorRecibo implements ActionListener{
             document.close();
         }catch (DocumentException ex) {
             Logger.getLogger(DetalleCuota.class.getName()).log(Level.SEVERE, null, ex);
-            log.error(ex);
+            errorLogger.info(ex);
         } catch (FileNotFoundException ex) {
             Logger.getLogger(DetalleCuota.class.getName()).log(Level.SEVERE, null, ex);
-            log.error(ex);
+            errorLogger.info(ex);
         } catch (IOException ex) {
             Logger.getLogger(DetalleCuota.class.getName()).log(Level.SEVERE, null, ex);
-            log.error(ex);
+            errorLogger.info(ex);
         }finally{
             abrirPdf();
         }
@@ -469,8 +470,8 @@ public class ControladorRecibo implements ActionListener{
             progress.setVisible(true); 
             //-----Devuelve id del recibo creado-----//
             id_recibo = rd.altaRecibo(Integer.parseInt(ar.nro_recibo.getText()), apellido_propietario, nombre_propietario); 
-            if(id_recibo!=0){
-                log.info(Ventana.nombreUsuario.getText() + " - Genera recibo: " +id_recibo);
+            if(id_recibo>=0){
+                registroLogger.info(Ventana.nombreUsuario.getText() + " - Genera recibo con id: " +id_recibo);
             }            
             return null;
        }
@@ -482,7 +483,7 @@ public class ControladorRecibo implements ActionListener{
             BigDecimal rendido = cobrado.subtract(gastos_administrativos);
             //------Tipo de pago 1 es cuota---------//
             if(tipoPago==1){
-              log.info(Ventana.nombreUsuario.getText() + " - Genera minuta: " +id_recibo);
+              registroLogger.info(Ventana.nombreUsuario.getText() + " - Genera minuta: " +id_recibo);
               //-----------Agrego nro de recibo a la cuota-----------//
               int i = cuod.actualizarNroRecibo(Integer.parseInt(ar.nro_recibo.getText()), id_recibo, saldo_cemento, id_control);
               if(i>0){
@@ -538,7 +539,7 @@ public class ControladorRecibo implements ActionListener{
             cdc.llenarTablaDchoPosesion(id_control);
             cdc.llenarTabla(id_control);
             Ventana.cm.llenarTablaFecha();
-           }else{
+           }else {
                JOptionPane.showMessageDialog(null, "Error al generar recibo", "Atención", JOptionPane.ERROR_MESSAGE, null); 
            }
             progress.setVisible(false);

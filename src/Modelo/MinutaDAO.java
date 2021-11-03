@@ -43,8 +43,23 @@ public class MinutaDAO {
     PreparedStatement ps = null;
      try {
          con = conexion.dataSource.getConnection();
-         String insertar = "Insert into minuta(fecha_minuta, apellidos, nombres, manzana, parcela, cobrado, gastos, rendido, nro_cuota, observaciones, categoria, id_Recibo, barrio, timestamp, id_control) values ('"+fecha+"','"+apellidos+"','"+nombres+"','"+manzana+"','"+parcela+"','"+cobrado+"','"+gastos+"','"+rendido+"','"+nro_cuota+"','"+observaciones+"','"+categoria+"','"+id_recibo+"','"+barrio+"','"+timestamp+"','"+id_control+"') ";
+         String insertar = "Insert into minuta(fecha_minuta, apellidos, nombres, manzana, parcela, cobrado, gastos, rendido, nro_cuota, observaciones, categoria, id_Recibo, barrio, timestamp, id_control) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) ";
          ps = con.prepareStatement(insertar);
+         ps.setDate(1, fecha);
+         ps.setString(2, apellidos);
+         ps.setString(3, nombres);
+         ps.setString(4, manzana);
+         ps.setString(5, parcela);
+         ps.setBigDecimal(6, cobrado);
+         ps.setBigDecimal(7, gastos);
+         ps.setBigDecimal(8, rendido);
+         ps.setInt(9, nro_cuota);
+         ps.setString(10, observaciones);
+         ps.setString(11, categoria);
+         ps.setInt(12, id_recibo);
+         ps.setString(13, barrio);
+         ps.setTimestamp(14, timestamp);
+         ps.setInt(15, id_control);
          filasAfectadas = ps.executeUpdate();         
      } catch (Exception e) { 
          System.out.println(e.getMessage());

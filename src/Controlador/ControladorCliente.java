@@ -17,6 +17,7 @@ import Modelo.FichaControlDAO;
 import Modelo.LoteDAO;
 import Modelo.PropietarioDAO;
 import Modelo.ReferenciaDAO;
+import Utils.IsInteger;
 import Utils.RendererActualizacion;
 import Utils.RendererAviso;
 import Utils.RendererTablaCliente;
@@ -122,6 +123,8 @@ public class ControladorCliente implements ActionListener, MouseListener, TableM
     String tipoFiltro = "";
     boolean filtroManzana = false;
     boolean filtroParcela = false;
+//    Integer manzana_prop = 0;
+//    Integer parcela_prop = 0;
     
     public ControladorCliente(Clientes vistaCliente, Ventana ventana){
         this.vistaClientes=vistaCliente;
@@ -395,14 +398,14 @@ public class ControladorCliente implements ActionListener, MouseListener, TableM
                    try {
                        new ControladorDetalleCuota(datosCliente,
                                Integer.parseInt(vistaClientes.tablaCliente.getModel().getValueAt(vistaClientes.tablaCliente.convertRowIndexToModel(row), 12).toString()),
-                               vistaClientes.tablaCliente.getModel().getValueAt(vistaClientes.tablaCliente.convertRowIndexToModel(row), 0).toString(),
-                               vistaClientes.tablaCliente.getModel().getValueAt(vistaClientes.tablaCliente.convertRowIndexToModel(row), 1).toString(),
-                               vistaClientes.tablaCliente.getModel().getValueAt(vistaClientes.tablaCliente.convertRowIndexToModel(row), 3).toString(),
-                               vistaClientes.tablaCliente.getModel().getValueAt(vistaClientes.tablaCliente.convertRowIndexToModel(row), 5).toString(),
-                               vistaClientes.tablaCliente.getModel().getValueAt(vistaClientes.tablaCliente.convertRowIndexToModel(row), 6).toString(),
-                               Integer.parseInt(vistaClientes.tablaCliente.getModel().getValueAt(vistaClientes.tablaCliente.convertRowIndexToModel(row), 7).toString()),
-                               Integer.parseInt(vistaClientes.tablaCliente.getModel().getValueAt(vistaClientes.tablaCliente.convertRowIndexToModel(row), 11).toString()),
-                               Integer.parseInt(vistaClientes.tablaCliente.getModel().getValueAt(vistaClientes.tablaCliente.convertRowIndexToModel(row), 10).toString()),
+                               vistaClientes.tablaCliente.getModel().getValueAt(vistaClientes.tablaCliente.convertRowIndexToModel(row), 0).toString(), //apellido
+                               vistaClientes.tablaCliente.getModel().getValueAt(vistaClientes.tablaCliente.convertRowIndexToModel(row), 1).toString(),//nombre
+                               vistaClientes.tablaCliente.getModel().getValueAt(vistaClientes.tablaCliente.convertRowIndexToModel(row), 3).toString(),//telefono
+                               vistaClientes.tablaCliente.getModel().getValueAt(vistaClientes.tablaCliente.convertRowIndexToModel(row), 5).toString(),//barrio
+                               vistaClientes.tablaCliente.getModel().getValueAt(vistaClientes.tablaCliente.convertRowIndexToModel(row), 6).toString(),//calle
+                               Integer.parseInt(vistaClientes.tablaCliente.getModel().getValueAt(vistaClientes.tablaCliente.convertRowIndexToModel(row), 7).toString()),//numero
+                               Integer.parseInt(vistaClientes.tablaCliente.getModel().getValueAt(vistaClientes.tablaCliente.convertRowIndexToModel(row), 11).toString()),//idcontrol
+                               Integer.parseInt(vistaClientes.tablaCliente.getModel().getValueAt(vistaClientes.tablaCliente.convertRowIndexToModel(row), 10).toString()),//bajalogica
                                tipo_actualizacion,
                                this);
                    } catch (SQLException ex) {
@@ -603,8 +606,19 @@ public class ControladorCliente implements ActionListener, MouseListener, TableM
                         actualizar_cemento = "0";
                      } 
                     String barrio_prop = listaClientes.get(i).getBarrio();
-                    Integer manzana_prop = Integer.parseInt(listaClientes.get(i).getManzana());
-                    Integer parcela_prop = Integer.parseInt(listaClientes.get(i).getParcela());
+//                    if(listaClientes.get(i).getManzana()!=null){
+//                        if(IsInteger.isInteger(listaClientes.get(i).getManzana())){
+//                         Integer manzana_prop = listaClientes.get(i).getManzana()!=null?Integer.parseInt(listaClientes.get(i).getManzana()):0;
+//                         Integer parcela_prop = listaClientes.get(i).getManzana()!=null?Integer.parseInt(listaClientes.get(i).getParcela()):0;
+//                        };
+//                    }else{
+//                        Integer manzana_prop = listaClientes.get(i).getManzana()!=null?Integer.parseInt(listaClientes.get(i).getManzana()):0;
+//                        Integer parcela_prop = listaClientes.get(i).getManzana()!=null?Integer.parseInt(listaClientes.get(i).getParcela()):0;
+//                            
+//                    }
+                        String manzana_prop = listaClientes.get(i).getManzana();
+                        String parcela_prop = listaClientes.get(i).getParcela();
+                       
                     switch(listaClientes.get(i).getBandera_cemento()){
                         case 0: tipoActualizacion = "Emp. Público"; break;
                         case 2: tipoActualizacion = "C. Fija"; break;
@@ -731,10 +745,21 @@ public class ControladorCliente implements ActionListener, MouseListener, TableM
         DefaultTableModel table = (DefaultTableModel) vistaClientes.tablaCliente.getModel();
         TableRowSorter<DefaultTableModel> tr = new TableRowSorter<> (table);
         if(!query.isEmpty()){
+            if(!IsInteger.isInteger(query)){
+               tr.setRowFilter(RowFilter.regexFilter("(?i)" + query,18));  
+             }else{
+               tr.setRowFilter(RowFilter.regexFilter("(^|\\s)" + Integer.parseInt(query) +"(\\s|$)" ,18));
+             } 
           vistaClientes.tablaCliente.setRowSorter(tr);
-          tr.setRowFilter(RowFilter.regexFilter("(^|\\s)" + query +"(\\s|$)",18));
-          tablePrinter = vistaClientes.tablaCliente;
+          tr.setComparator(17, new Comparator<String>() {
+          @Override
+          public int compare(String o1, String o2)
+          {
+            return Integer.parseInt(o1) - Integer.parseInt(o2);
+          }
+          });
           vistaClientes.tablaCliente.getRowSorter().toggleSortOrder(17);
+          tablePrinter = vistaClientes.tablaCliente;
           tipoFiltro = "Pc. "+query; 
           filtroParcela = true;
         }else{
@@ -742,18 +767,27 @@ public class ControladorCliente implements ActionListener, MouseListener, TableM
         }
     }
     private void filtroManzana(String query){
-         DefaultTableModel table = (DefaultTableModel) vistaClientes.tablaCliente.getModel();
-         
+         DefaultTableModel table = (DefaultTableModel) vistaClientes.tablaCliente.getModel();         
          TableRowSorter<DefaultTableModel> tr = new TableRowSorter<> (table);
-         if(!query.isEmpty()){
-        
-         tr.setRowFilter(RowFilter.regexFilter("(^|\\s)" + query +"(\\s|$)" ,17));
-         vistaClientes.tablaCliente.setRowSorter(tr);
          vistaClientes.tablaCliente.setModel(table);
-         vistaClientes.tablaCliente.getRowSorter().toggleSortOrder(18);
-         tablePrinter = vistaClientes.tablaCliente;
-         tipoFiltro = "Mz. "+query;
-         filtroManzana = true;
+         if(!query.isEmpty()){
+             if(!IsInteger.isInteger(query)){
+               tr.setRowFilter(RowFilter.regexFilter("(?i)" + query,17));  
+             }else{
+               tr.setRowFilter(RowFilter.regexFilter("(^|\\s)" + Integer.parseInt(query) +"(\\s|$)" ,17));
+             }                
+         vistaClientes.tablaCliente.setRowSorter(tr);
+         tr.setComparator(18, new Comparator<String>() {
+        @Override
+        public int compare(String o1, String o2)
+        {
+            return Integer.parseInt(o1) - Integer.parseInt(o2);
+        }
+        });
+        vistaClientes.tablaCliente.getRowSorter().toggleSortOrder(18);
+        tablePrinter = vistaClientes.tablaCliente;
+        tipoFiltro = "Mz. "+query;
+        filtroManzana = true;
         }else{
          vistaClientes.tablaCliente.setRowSorter(null);
         }

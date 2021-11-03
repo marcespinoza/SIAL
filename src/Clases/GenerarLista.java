@@ -40,6 +40,9 @@ import javax.swing.table.DefaultTableModel;
  * @author Marceloi7
  */
 public class GenerarLista {
+    
+      static DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+      static java.util.Date date = new java.util.Date();
 
     public GenerarLista() {
     }
@@ -151,7 +154,7 @@ public class GenerarLista {
             JFileChooser fileChooser = new JFileChooser();
             fileChooser.setDialogTitle("Guardar en..");  
             File fileToSave = null;
-            fileChooser.setSelectedFile(new File("Lista_de_clientes.pdf"));
+            fileChooser.setSelectedFile(new File("Lista_de_clientes_"+dateFormat.format(date)+".pdf"));
             int userSelection = fileChooser.showSaveDialog(parentFrame); 
             if (userSelection == JFileChooser.APPROVE_OPTION) {
             fileToSave = fileChooser.getSelectedFile();

@@ -270,8 +270,8 @@ public class ControladorMinuta implements MouseListener, ActionListener, ItemLis
             subtitulo.setAlignment(Element.ALIGN_CENTER);
             document.add(subtitulo);
             document.add( Chunk.NEWLINE );
-            PdfPTable table = new PdfPTable(10);            
-            table.setTotalWidth(new float[]{1,(float)1.2,4,(float)1.2,2,2,2,1,2,1});
+            PdfPTable table = new PdfPTable(9);            
+            table.setTotalWidth(new float[]{1,(float)1.2,4,(float)1.2,2,2,2,1,2});
             table.setWidthPercentage(100);
             PdfPCell orden = new PdfPCell(new Paragraph("ORD",f2));
             PdfPCell rbo_nro = new PdfPCell(new Paragraph("Recibo",f));
@@ -282,7 +282,7 @@ public class ControladorMinuta implements MouseListener, ActionListener, ItemLis
             PdfPCell rendido = new PdfPCell(new Paragraph("Rendido",f));
             PdfPCell nro_cuota = new PdfPCell(new Paragraph("Cuota",f));
             PdfPCell observaciones = new PdfPCell(new Paragraph("Obs.",f)); 
-            PdfPCell cuotas = new PdfPCell(new Paragraph("Cemento",f));
+            //PdfPCell cuotas = new PdfPCell(new Paragraph("Cemento",f));
             orden.setHorizontalAlignment(Element.ALIGN_CENTER);
             rbo_nro.setHorizontalAlignment(Element.ALIGN_CENTER);
             apynom.setHorizontalAlignment(Element.ALIGN_CENTER);
@@ -292,7 +292,7 @@ public class ControladorMinuta implements MouseListener, ActionListener, ItemLis
             rendido.setHorizontalAlignment(Element.ALIGN_CENTER);
             nro_cuota.setHorizontalAlignment(Element.ALIGN_CENTER);
             observaciones.setHorizontalAlignment(Element.ALIGN_CENTER);
-            cuotas.setHorizontalAlignment(Element.ALIGN_CENTER);
+            //cuotas.setHorizontalAlignment(Element.ALIGN_CENTER);
             table.addCell(orden);            
             table.addCell(rbo_nro);
             table.addCell(apynom);
@@ -302,7 +302,7 @@ public class ControladorMinuta implements MouseListener, ActionListener, ItemLis
             table.addCell(rendido);
             table.addCell(nro_cuota);
             table.addCell(observaciones);
-            table.addCell(cuotas);
+            //table.addCell(cuotas);
             document.add(table);  
           //-------Itero-----------//
               int conta = 1;
@@ -317,8 +317,8 @@ public class ControladorMinuta implements MouseListener, ActionListener, ItemLis
                   String propietario = listaMinutas.get(i).getApellidoP()+" "+listaMinutas.get(i).getNombreP();
                   barrio = (listaMinutas.get(i).getBarrio().toLowerCase()).replaceAll("\\s+$", "");
                   if(barrio.equals(barrioSeleccionado) && propietario.equals(propietarioSeleccionado)){
-                  PdfPTable table2 = new PdfPTable(10);            
-                  table2.setTotalWidth(new float[]{ 1,(float)1.2,4,(float)1.2,2,2,2,1,2,1});
+                  PdfPTable table2 = new PdfPTable(9);            
+                  table2.setTotalWidth(new float[]{ 1,(float)1.2,4,(float)1.2,2,2,2,1,2});
                   table2.setWidthPercentage(100);
                   PdfPCell nro_orden = new PdfPCell(new Paragraph(String.valueOf(conta),f));
                   nro_orden.setHorizontalAlignment(Element.ALIGN_CENTER);
@@ -339,7 +339,7 @@ public class ControladorMinuta implements MouseListener, ActionListener, ItemLis
                   nrocuota.setHorizontalAlignment(Element.ALIGN_CENTER);
                   table2.addCell(nrocuota);
                   table2.addCell(new PdfPCell(new Paragraph(listaMinutas.get(i).getObservaciones(),f))).setHorizontalAlignment(Element.ALIGN_CENTER);
-                  table2.addCell(new PdfPCell(new Paragraph("",f))).setHorizontalAlignment(Element.ALIGN_CENTER);
+                  //table2.addCell(new PdfPCell(new Paragraph("",f))).setHorizontalAlignment(Element.ALIGN_CENTER);
                   document.add(table2);
                   //-------Controlo que el cliente no este dado de baja------//
                   if(listaMinutas.get(i).getBaja()!=1){
@@ -356,8 +356,8 @@ public class ControladorMinuta implements MouseListener, ActionListener, ItemLis
                   conta ++;}}
               
             //------Linea Totales------//
-            PdfPTable tableTotales = new PdfPTable(10);            
-            tableTotales.setTotalWidth(new float[]{  1,(float)1.2,4,(float)1.2,2,2,2,(float)1.1,2,1});
+            PdfPTable tableTotales = new PdfPTable(9);            
+            tableTotales.setTotalWidth(new float[]{  1,(float)1.2,4,(float)1.2,2,2,2,(float)1.1,2});
             tableTotales.setWidthPercentage(100);  
             Font ftotal=new Font(Font.FontFamily.TIMES_ROMAN,9.0f,0,null); 
             PdfPCell cellcobrado = new PdfPCell(new Paragraph("$ "+String.format ("%.2f",acumulador_cobrado), ftotal));

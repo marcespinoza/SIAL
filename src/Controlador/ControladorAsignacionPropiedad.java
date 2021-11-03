@@ -52,7 +52,7 @@ public class ControladorAsignacionPropiedad implements ActionListener, KeyListen
     CuotaDAO cuotaDao = new CuotaDAO();
     ClienteDAO cd = new ClienteDAO();
     ControladorCliente cc = new ControladorCliente();
-    static org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(ControladorAltaCuota.class.getName());
+    static org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger("registro");
     int dni;
 
     public ControladorAsignacionPropiedad(Frame parent, int dni) {

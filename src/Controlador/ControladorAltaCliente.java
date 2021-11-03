@@ -39,7 +39,7 @@ public class ControladorAltaCliente implements ActionListener, KeyListener{
     ReferenciaDAO rd = new ReferenciaDAO();
     private int id_control, dni=0;
     boolean bandera_=false;
-    static org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(ControladorAltaCuota.class.getName());
+    static org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger("registro");
     
     public ControladorAltaCliente(Ventana ventana, int id_control,int dni, boolean bandera_){
         ac = new AltaCliente(ventana, true);  
