@@ -33,6 +33,7 @@ public class Configuracion extends javax.swing.JDialog {
         usuario = new Vista.Panels.Usuario();
         propiedades = new Vista.Panels.Propiedades();
         propietarios = new Vista.Panels.Propietarios();
+        vendedores = new Vista.Panels.Vendedor();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Administrar usuarios");
@@ -40,6 +41,7 @@ public class Configuracion extends javax.swing.JDialog {
         pestañas.addTab("Usuarios", usuario);
         pestañas.addTab("Propiedades", propiedades);
         pestañas.addTab("Propietarios", propietarios);
+        pestañas.addTab("Vendedores", vendedores);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -54,7 +56,7 @@ public class Configuracion extends javax.swing.JDialog {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(pestañas, javax.swing.GroupLayout.DEFAULT_SIZE, 404, Short.MAX_VALUE)
+                .addComponent(pestañas, javax.swing.GroupLayout.PREFERRED_SIZE, 404, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -109,5 +111,6 @@ public class Configuracion extends javax.swing.JDialog {
     public Vista.Panels.Propiedades propiedades;
     public Vista.Panels.Propietarios propietarios;
     public Vista.Panels.Usuario usuario;
+    public Vista.Panels.Vendedor vendedores;
     // End of variables declaration//GEN-END:variables
 }
