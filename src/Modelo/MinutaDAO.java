@@ -236,9 +236,9 @@ public class MinutaDAO {
      try {
           connection = conexion.dataSource.getConnection();
           PreparedStatement statement =
-          connection.prepareStatement("(SELECT m.fecha_minuta, m.apellidos, m.nombres, m.manzana, m.parcela, m.cobrado, m.gastos, m.rendido, m.nro_cuota, m.observaciones, m.baja, r.nro_recibo, m.barrio, r.apellido_propietario, r.nombre_propietario, f.cantidad_cuotas from minuta m INNER JOIN recibo r ON m.id_recibo=r.idRecibo) INNER JOIN ficha_control_lote f on f.id_control = m.id_control  WHERE fecha_minuta between ? and ? ORDER BY r.nro_recibo");
-          statement.setDate(1, desde);
-          statement.setDate(2, hasta);
+
+          connection.prepareStatement("SELECT m.fecha_minuta, m.apellidos, m.nombres, m.manzana, m.parcela, m.cobrado, m.gastos, m.rendido, m.nro_cuota, m.observaciones, m.baja, r.nro_recibo, m.barrio, r.apellido_propietario, r.nombre_propietario, f.cantidad_cuotas from minuta m INNER JOIN recibo r ON m.id_recibo=r.idRecibo INNER JOIN ficha_control_lote f ON m.id_control = f.id_control where m.fecha_minuta between '"+desde+"' and '"+hasta+"' ");
+          
           rs = statement.executeQuery();
           while (rs.next()) {
                 Minuta m = new Minuta();

@@ -102,7 +102,8 @@ public class ControladorLogin implements ActionListener, KeyListener{
                             frame.nombreUsuario.setText(usuario.getNombres());
                             frame.apellidoUsuario.setText(usuario.getApellidos());    
                             //-------Oculto ventana login y muestro el frame----------//
-                            login.dispose();   
+                            login.dispose();  
+                            frame.desactivarBotones();
                             frame.setVisible(true);
                         }else{
                             login.aviso.setText("* Usuario y/o contraseña incorrectos");              

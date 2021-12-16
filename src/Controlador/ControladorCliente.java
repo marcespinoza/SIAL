@@ -213,11 +213,11 @@ public class ControladorCliente implements ActionListener, MouseListener, TableM
                 }
                }
             }
-            //-----Solo permite ingresar numeros en campo bolsa cemento----//
+            //-----Solo permite ingresar numeros y punto en campo bolsa cemento----//
             @Override
             public void keyTyped(KeyEvent e){
              char vchar = e.getKeyChar();
-             if(!(Character.isDigit(vchar))){
+             if(!(Character.isDigit(vchar)) && vchar != '.'){
               e.consume();
              }
             }

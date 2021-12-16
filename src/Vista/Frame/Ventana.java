@@ -64,7 +64,6 @@ public class Ventana extends javax.swing.JFrame implements ActionListener{
         this.setIconImage(icon.getImage());         
         cm = new ControladorMinuta(minuta);
         cr = new ControladorResumen(resumen);       
-        desactivarBotones();
         configuracion.addActionListener(this);
         registroEventos.addActionListener(this);
         about.addActionListener(this);
@@ -319,7 +318,7 @@ public class Ventana extends javax.swing.JFrame implements ActionListener{
         });
         info.add(registroEventos);
 
-        baseDeDatos.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_B, java.awt.event.InputEvent.CTRL_MASK));
+        baseDeDatos.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_B, java.awt.event.InputEvent.CTRL_DOWN_MASK));
         baseDeDatos.setText("Base de datos");
         info.add(baseDeDatos);
 
@@ -474,6 +473,7 @@ public class Ventana extends javax.swing.JFrame implements ActionListener{
         if(Ventana.labelTipoUsuario.getText().equals("operador")){
             clientes.eliminarBtn.setEnabled(false);
             registroEventos.setEnabled(false);
+            btnResumen.setEnabled(false);
         }
     }
 

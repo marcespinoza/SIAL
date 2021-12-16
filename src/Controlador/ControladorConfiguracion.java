@@ -21,6 +21,7 @@ public class ControladorConfiguracion {
         new ControladorPropietarios(configuracion);
         new ControladorUsuario(configuracion);
         new ControladorPropiedades(configuracion);
+        new ControladorVendedor(configuracion);
         desactivarBotones();
         configuracion.setVisible(true);        
     }

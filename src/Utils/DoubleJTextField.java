@@ -28,10 +28,9 @@ public class DoubleJTextField implements KeyListener{
     @Override
     public void keyTyped(KeyEvent e) {
          char ch = e.getKeyChar();
-
-                if (!isNumber(ch) && !isValidSignal(ch) && !validatePoint(ch)  && ch != '\b') {
-                    e.consume();
-                }
+         if (!isNumber(ch) && !isValidSignal(ch) && !validatePoint(ch)  && ch != '\b') {
+                e.consume();
+         }
     }
 
     @Override
