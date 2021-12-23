@@ -8,10 +8,18 @@ package Controlador;
 import Modelo.VendedorDAO;
 import Vista.Dialogs.Configuracion;
 import Vista.Panels.Vendedor;
+import java.awt.Point;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.List;
+import javax.security.auth.callback.ConfirmationCallback;
+import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
+import javax.swing.JPopupMenu;
 import javax.swing.JTable;
+import javax.swing.SwingUtilities;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
@@ -20,22 +28,53 @@ import javax.swing.table.DefaultTableModel;
  *
  * @author Ing. Marcelo Espinoza
  */
-public class ControladorVendedor {
+public class ControladorVendedor implements ActionListener{
     
     Configuracion vConfiguracion = null;
     VendedorDAO vd = new VendedorDAO();
     private Object [] oVendedores;
+    JPopupMenu popupMenu = new JPopupMenu();
+    JMenuItem menuEliminar = new JMenuItem("Eliminar");
+ 
+
 
     public ControladorVendedor(Configuracion vConfiguracion) {
         this.vConfiguracion= vConfiguracion;
+       // popupMenu.add(menuEliminar);
+       // menuEliminar.addActionListener(this);
+        vConfiguracion.vendedores.tablaVendedores.setComponentPopupMenu(popupMenu);
         vConfiguracion.vendedores.tablaVendedores.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent mouseEvent) {
                 JTable table =(JTable) mouseEvent.getSource();
                  if (mouseEvent.getClickCount() == 3 ) {
                      DefaultTableModel model = (DefaultTableModel) table.getModel();
-                    table.setModel(model);
-                      model.addRow(new Object[]{ "", "", ""});}
+                     table.setModel(model);
+                     model.addRow(new Object[]{ "", "", ""});}
+            }     
+
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                JTable table = (JTable) e.getSource();
+                Point point = e.getPoint();
+                int row = table.rowAtPoint(point);
+                String dni = table.getModel().getValueAt(row, 0).toString();
+                String nya = table.getModel().getValueAt(row, 1).toString()+" "+table.getModel().getValueAt(row, 2).toString();
+                final JPopupMenu popupMenu = new JPopupMenu();
+                JMenuItem deleteItem = new JMenuItem("Eliminar vendedor");
+                deleteItem.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int response = JOptionPane.showConfirmDialog(vConfiguracion, "Eliminar a "+nya, "",JOptionPane.YES_NO_OPTION);
+                if(response == JOptionPane.YES_OPTION){
+                    
+                }else{
+                }
+            }
+        });
+        popupMenu.add(deleteItem);
+        table.setComponentPopupMenu(popupMenu);
             }
             
         });
@@ -68,7 +107,7 @@ public class ControladorVendedor {
                     default:
                 }
             }
-        });
+        });      
         llenarTabla();
     }
     
@@ -84,5 +123,13 @@ public class ControladorVendedor {
              model.addRow(oVendedores);
           }
        }
+
+    @Override
+    public void actionPerformed(ActionEvent event) {
+        JMenuItem menu = (JMenuItem) event.getSource();
+        if (menu == menuEliminar) {
+            
+        }
+    }
     
 }
