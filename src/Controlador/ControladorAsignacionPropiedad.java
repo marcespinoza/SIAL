@@ -7,6 +7,7 @@ package Controlador;
 
 import Clases.Lote;
 import Clases.Propietario;
+import Clases.Vendedor;
 import Modelo.ClienteDAO;
 import Modelo.CuotaDAO;
 import Modelo.DchoPosesionDAO;
@@ -14,6 +15,7 @@ import Modelo.DepartamentoDAO;
 import Modelo.FichaControlDAO;
 import Modelo.LoteDAO;
 import Modelo.PropietarioDAO;
+import Modelo.VendedorDAO;
 import Vista.Dialogs.AsignarPropiedad;
 import Vista.Frame.Ventana;
 import java.awt.Color;
@@ -51,6 +53,7 @@ public class ControladorAsignacionPropiedad implements ActionListener, KeyListen
     FichaControlDAO fichaControlDAO = new FichaControlDAO();
     CuotaDAO cuotaDao = new CuotaDAO();
     ClienteDAO cd = new ClienteDAO();
+    VendedorDAO vd = new VendedorDAO();
     ControladorCliente cc = new ControladorCliente();
     static org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger("registro");
     int dni;
@@ -128,6 +131,7 @@ public class ControladorAsignacionPropiedad implements ActionListener, KeyListen
         }
         });
         llenarComboApellidos(vistaAsignarPropiedad.tipo_propiedad.getSelectedItem().toString());
+        cargarComboVendendores();
         vistaAsignarPropiedad.pack();
         vistaAsignarPropiedad.setVisible(true);   
         vistaAsignarPropiedad.aviso_error.setText("");
@@ -312,6 +316,13 @@ public class ControladorAsignacionPropiedad implements ActionListener, KeyListen
 
     @Override
     public void keyReleased(KeyEvent e) {
+    }
+
+    private void cargarComboVendendores() {
+        List<Vendedor> lVendedores = vd.obtenerVendedores();
+        for(int i =0; i< lVendedores.size(); i++){
+            vistaAsignarPropiedad.comboVendedor.addItem(lVendedores.get(i).getApellido()+" "+lVendedores.get(i).getNombre());
+        }
     }
      
     public class SwingWorker extends javax.swing.SwingWorker<Integer, Integer>{

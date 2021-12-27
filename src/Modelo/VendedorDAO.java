@@ -83,7 +83,7 @@ public class VendedorDAO {
           ResultSet rs = null;
           Vendedor vendedor = null;
           Connection connection = null;
-     try {
+          try {
           connection = conexion.dataSource.getConnection();         
           String listar = "SELECT * from vendedor"; 
           Statement st = connection.createStatement();
@@ -95,9 +95,9 @@ public class VendedorDAO {
               vendedor.setNombre(rs.getString(3));
               vendedores.add(vendedor);
           }
-        } catch (Exception e) {
+         } catch (Exception e) {
             System.out.println(e.getMessage());
-        }finally{
+         }finally{
          try {
              connection.close();
          } catch (SQLException ex) {

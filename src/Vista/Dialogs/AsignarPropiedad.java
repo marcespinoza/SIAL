@@ -67,6 +67,10 @@ public class AsignarPropiedad extends javax.swing.JDialog {
         jLabel16 = new javax.swing.JLabel();
         jSeparator1 = new javax.swing.JSeparator();
         aviso_error = new javax.swing.JLabel();
+        parcela1 = new javax.swing.JComboBox<>();
+        jLabel17 = new javax.swing.JLabel();
+        comboVendedor = new javax.swing.JComboBox<>();
+        jLabel18 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Asignar propiedad");
@@ -87,7 +91,7 @@ public class AsignarPropiedad extends javax.swing.JDialog {
         getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 220, -1, -1));
 
         jLabel5.setText("Bolsa de cemento");
-        getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(48, 356, -1, -1));
+        getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 430, -1, -1));
         getContentPane().add(dimension, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 190, 230, -1));
 
         cuota_total.addActionListener(new java.awt.event.ActionListener() {
@@ -98,13 +102,13 @@ public class AsignarPropiedad extends javax.swing.JDialog {
         getContentPane().add(cuota_total, new org.netbeans.lib.awtextra.AbsoluteConstraints(142, 249, 230, -1));
 
         aceptarBtn.setText("Aceptar");
-        getContentPane().add(aceptarBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 420, -1, -1));
+        getContentPane().add(aceptarBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 490, -1, -1));
 
         cancelarBtn.setText("Cancelar");
-        getContentPane().add(cancelarBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 420, -1, -1));
+        getContentPane().add(cancelarBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 490, -1, -1));
 
-        jLabel8.setText("Dimensión");
-        getContentPane().add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 190, -1, -1));
+        jLabel8.setText("Medio");
+        getContentPane().add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 310, -1, -1));
 
         jLabel9.setText("Tipo propiedad");
         getContentPane().add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 10, -1, -1));
@@ -115,16 +119,17 @@ public class AsignarPropiedad extends javax.swing.JDialog {
 
         jLabel10.setText("Cuota total $");
         getContentPane().add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(69, 252, -1, -1));
-        getContentPane().add(bolsa_cemento, new org.netbeans.lib.awtextra.AbsoluteConstraints(142, 353, 115, -1));
+        getContentPane().add(bolsa_cemento, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 430, 115, -1));
 
         jLabel13.setText("$");
-        getContentPane().add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(134, 356, -1, -1));
+        getContentPane().add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 430, -1, -1));
 
         getContentPane().add(barrio, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 100, 230, -1));
 
         getContentPane().add(manzana, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 130, 230, -1));
 
-        getContentPane().add(parcela, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 160, 230, -1));
+        parcela.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Volante", "Facebook", "Instagram", "Celular", "Cartel" }));
+        getContentPane().add(parcela, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 310, 230, -1));
 
         getContentPane().add(apellido_propietario, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 40, 230, -1));
 
@@ -135,26 +140,26 @@ public class AsignarPropiedad extends javax.swing.JDialog {
 
         jLabel12.setText("Nombre Propietario");
         getContentPane().add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 70, -1, -1));
-        getContentPane().add(fch_suscripción, new org.netbeans.lib.awtextra.AbsoluteConstraints(142, 383, 139, -1));
+        getContentPane().add(fch_suscripción, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 460, 139, -1));
 
         jLabel14.setText("Fecha suscripción");
-        getContentPane().add(jLabel14, new org.netbeans.lib.awtextra.AbsoluteConstraints(48, 383, -1, -1));
+        getContentPane().add(jLabel14, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 460, -1, -1));
 
         bolsaCemento.setText("Bolsa cemento");
-        getContentPane().add(bolsaCemento, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 280, -1, -1));
+        getContentPane().add(bolsaCemento, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 340, -1, -1));
 
         empPublico.setText("Emp. público");
-        getContentPane().add(empPublico, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 280, -1, 20));
+        getContentPane().add(empPublico, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 340, -1, 20));
 
         jLabel15.setText("Tipo actualización");
-        getContentPane().add(jLabel15, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 280, -1, 20));
+        getContentPane().add(jLabel15, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 340, -1, 20));
 
         mensaje_error.setForeground(new java.awt.Color(255, 0, 0));
         mensaje_error.setPreferredSize(new java.awt.Dimension(0, 17));
         getContentPane().add(mensaje_error, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 427, 231, -1));
 
         cuota_fija.setText("C. fija");
-        getContentPane().add(cuota_fija, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 300, -1, -1));
+        getContentPane().add(cuota_fija, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 360, -1, -1));
 
         cuota_fija_vble.setText("C. fija (Variable)");
         cuota_fija_vble.addActionListener(new java.awt.event.ActionListener() {
@@ -162,7 +167,7 @@ public class AsignarPropiedad extends javax.swing.JDialog {
                 cuota_fija_vbleActionPerformed(evt);
             }
         });
-        getContentPane().add(cuota_fija_vble, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 300, -1, -1));
+        getContentPane().add(cuota_fija_vble, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 360, -1, -1));
 
         indice_si.setSelected(true);
         indice_si.setText("Si");
@@ -172,19 +177,34 @@ public class AsignarPropiedad extends javax.swing.JDialog {
                 indice_siActionPerformed(evt);
             }
         });
-        getContentPane().add(indice_si, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 320, -1, -1));
+        getContentPane().add(indice_si, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 400, -1, -1));
 
         indice_no.setText("No");
         indice_no.setEnabled(false);
-        getContentPane().add(indice_no, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 320, -1, -1));
+        getContentPane().add(indice_no, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 400, -1, -1));
 
         jLabel16.setText("Aplicar indice corrector");
-        getContentPane().add(jLabel16, new org.netbeans.lib.awtextra.AbsoluteConstraints(23, 321, -1, 20));
-        getContentPane().add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(229, 323, 137, -1));
+        getContentPane().add(jLabel16, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 400, -1, 20));
+        getContentPane().add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 390, 137, 10));
 
         aviso_error.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         aviso_error.setForeground(new java.awt.Color(255, 51, 51));
         getContentPane().add(aviso_error, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 450, 200, -1));
+
+        getContentPane().add(parcela1, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 160, 230, -1));
+
+        jLabel17.setText("Dimensión");
+        getContentPane().add(jLabel17, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 190, -1, -1));
+
+        comboVendedor.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                comboVendedorActionPerformed(evt);
+            }
+        });
+        getContentPane().add(comboVendedor, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 280, 230, -1));
+
+        jLabel18.setText("Vendedor");
+        getContentPane().add(jLabel18, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 280, -1, -1));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -200,6 +220,10 @@ public class AsignarPropiedad extends javax.swing.JDialog {
     private void cuota_totalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cuota_totalActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_cuota_totalActionPerformed
+
+    private void comboVendedorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboVendedorActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_comboVendedorActionPerformed
 
     /**
      * @param args the command line arguments
@@ -252,6 +276,7 @@ public class AsignarPropiedad extends javax.swing.JDialog {
     public javax.swing.JTextField bolsa_cemento;
     public javax.swing.JButton cancelarBtn;
     public javax.swing.JTextField cantidad_cuotas;
+    public javax.swing.JComboBox<String> comboVendedor;
     public javax.swing.JRadioButton cuota_fija;
     public javax.swing.JRadioButton cuota_fija_vble;
     public javax.swing.JTextField cuota_total;
@@ -269,6 +294,8 @@ public class AsignarPropiedad extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel16;
+    private javax.swing.JLabel jLabel17;
+    private javax.swing.JLabel jLabel18;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -280,6 +307,7 @@ public class AsignarPropiedad extends javax.swing.JDialog {
     public javax.swing.JLabel mensaje_error;
     public javax.swing.JComboBox<String> nombre_propietario;
     public javax.swing.JComboBox<String> parcela;
+    public javax.swing.JComboBox<String> parcela1;
     public javax.swing.ButtonGroup tipo_actualizacion;
     public javax.swing.JComboBox<String> tipo_propiedad;
     // End of variables declaration//GEN-END:variables
