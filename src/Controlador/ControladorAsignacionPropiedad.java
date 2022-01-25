@@ -36,6 +36,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.BorderFactory;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.border.EtchedBorder;
 
 /**
@@ -128,13 +129,13 @@ public class ControladorAsignacionPropiedad implements ActionListener, KeyListen
             vistaAsignarPropiedad.indice_no.setEnabled(false);
             vistaAsignarPropiedad.indice_si.setEnabled(false);
         }
-        }
-        });
+      }
+      });
         llenarComboApellidos(vistaAsignarPropiedad.tipo_propiedad.getSelectedItem().toString());
         cargarComboVendendores();
         vistaAsignarPropiedad.pack();
         vistaAsignarPropiedad.setVisible(true);   
-        vistaAsignarPropiedad.aviso_error.setText("");
+        vistaAsignarPropiedad.mensaje_error.setText("");
         
     }
 
@@ -224,9 +225,10 @@ public class ControladorAsignacionPropiedad implements ActionListener, KeyListen
                   vistaAsignarPropiedad.parcela.addItem(String.valueOf(lotes.get(i).getParcela()));
              }
             }else{
-               vistaAsignarPropiedad.parcela.addItem("Sin propiedades");
+               vistaAsignarPropiedad.comboCanalVenta.addItem("Sin propiedades");
             }
         } catch (Exception e) {
+            System.out.println("Error al cargar parcelas: "+e.getMessage());
         }
     }
     
@@ -252,10 +254,10 @@ public class ControladorAsignacionPropiedad implements ActionListener, KeyListen
     }
     public void cargarNroDptos(String torre, int piso){
          ResultSet rs = dd.dptosPorpiso(torre, piso);
-        vistaAsignarPropiedad.parcela.removeAllItems();
+        vistaAsignarPropiedad.comboCanalVenta.removeAllItems();
         try {
             while(rs.next()){
-                vistaAsignarPropiedad.parcela.addItem(rs.getString(1));
+                vistaAsignarPropiedad.comboCanalVenta.addItem(rs.getString(1));
             }
         } catch (Exception e) {
         }
@@ -294,7 +296,7 @@ public class ControladorAsignacionPropiedad implements ActionListener, KeyListen
         }else{
          vistaAsignarPropiedad.fch_suscripción.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
         }
-        if(vistaAsignarPropiedad.parcela.getSelectedItem()==null || (!vistaAsignarPropiedad.bolsaCemento.isSelected() && !vistaAsignarPropiedad.empPublico.isSelected() && !vistaAsignarPropiedad.cuota_fija.isSelected() && !vistaAsignarPropiedad.cuota_fija_vble.isSelected())){
+        if(vistaAsignarPropiedad.comboCanalVenta.getSelectedItem()==null || (!vistaAsignarPropiedad.bolsaCemento.isSelected() && !vistaAsignarPropiedad.empPublico.isSelected() && !vistaAsignarPropiedad.cuota_fija.isSelected() && !vistaAsignarPropiedad.cuota_fija_vble.isSelected())){
          vistaAsignarPropiedad.mensaje_error.setText("Complete todos los campos");
          bandera=false;
         }else{
@@ -320,9 +322,11 @@ public class ControladorAsignacionPropiedad implements ActionListener, KeyListen
 
     private void cargarComboVendendores() {
         List<Vendedor> lVendedores = vd.obtenerVendedores();
+        Vendedor [] aVendedores = new Vendedor [lVendedores.size()];
         for(int i =0; i< lVendedores.size(); i++){
-            vistaAsignarPropiedad.comboVendedor.addItem(lVendedores.get(i).getApellido()+" "+lVendedores.get(i).getNombre());
+            aVendedores[i] = lVendedores.get(i);
         }
+        vistaAsignarPropiedad.comboVendedor.setModel(new DefaultComboBoxModel(aVendedores));
     }
      
     public class SwingWorker extends javax.swing.SwingWorker<Integer, Integer>{
@@ -357,7 +361,9 @@ public class ControladorAsignacionPropiedad implements ActionListener, KeyListen
                    (String)vistaAsignarPropiedad.manzana.getSelectedItem(), 
                    (String)vistaAsignarPropiedad.parcela.getSelectedItem(), 
                    new java.sql.Date(fecha_suscripcion), 
-                   flag_indice);
+                   flag_indice,
+                   ((Vendedor)vistaAsignarPropiedad.comboVendedor.getSelectedItem()).getDni(),
+                   vistaAsignarPropiedad.comboCanalVenta.getSelectedItem().toString());
            return id_control;
         }
 
@@ -372,7 +378,7 @@ public class ControladorAsignacionPropiedad implements ActionListener, KeyListen
                  Logger.getLogger(ControladorAsignacionPropiedad.class.getName()).log(Level.SEVERE, null, ex);
              }
            if(idControl!=0){  
-           log.info(Ventana.nombreUsuario.getText()+" - Asigna propiedad - id control: "+id_control + "Mz:"+vistaAsignarPropiedad.manzana.getSelectedItem()+" Pc:"+vistaAsignarPropiedad.parcela.getSelectedItem());
+           log.info(Ventana.nombreUsuario.getText()+" - Asigna propiedad - id control: "+id_control + "Mz:"+vistaAsignarPropiedad.manzana.getSelectedItem()+" Pc:"+vistaAsignarPropiedad.comboCanalVenta.getSelectedItem());
            BigDecimal saldo = new BigDecimal(vistaAsignarPropiedad.cantidad_cuotas.getText()).multiply(new BigDecimal(vistaAsignarPropiedad.cuota_total.getText()));
            switch(vistaAsignarPropiedad.tipo_propiedad.getSelectedItem().toString()){
                case "Terreno":cuotaDao.altaCuotaLote(new java.sql.Timestamp(fecha_suscripcion), 0,"Saldo Inicio", new BigDecimal(0),new BigDecimal(0), saldo , new BigDecimal(0), saldo, saldo.divide(new BigDecimal(vistaAsignarPropiedad.bolsa_cemento.getText()),2, BigDecimal.ROUND_HALF_UP), new BigDecimal(0), saldo.divide(new BigDecimal(vistaAsignarPropiedad.bolsa_cemento.getText()),2, BigDecimal.ROUND_HALF_UP), "", "", id_control, 0); break;
@@ -385,7 +391,7 @@ public class ControladorAsignacionPropiedad implements ActionListener, KeyListen
                case "Terreno":ld.editarPropiedad(1, 
                        vistaAsignarPropiedad.barrio.getSelectedItem().toString(), 
                        vistaAsignarPropiedad.manzana.getSelectedItem().toString(), 
-                       vistaAsignarPropiedad.parcela.getSelectedItem().toString()); 
+                       vistaAsignarPropiedad.comboCanalVenta.getSelectedItem().toString()); 
                {
                 try {
                     cd.altaClientesXLotes(dni, id_control);
@@ -394,11 +400,11 @@ public class ControladorAsignacionPropiedad implements ActionListener, KeyListen
                 }
             }
             break;
-               case "Departamento":dd.editarDepartamento(vistaAsignarPropiedad.barrio.getSelectedItem().toString(), Integer.parseInt(vistaAsignarPropiedad.manzana.getSelectedItem().toString()), Integer.parseInt(vistaAsignarPropiedad.parcela.getSelectedItem().toString()));cd.altaClientesXDpto(dni, id_control); break;
+               case "Departamento":dd.editarDepartamento(vistaAsignarPropiedad.barrio.getSelectedItem().toString(), Integer.parseInt(vistaAsignarPropiedad.manzana.getSelectedItem().toString()), Integer.parseInt(vistaAsignarPropiedad.comboCanalVenta.getSelectedItem().toString()));cd.altaClientesXDpto(dni, id_control); break;
            }           
            vistaAsignarPropiedad.dispose();
            }else{
-               vistaAsignarPropiedad.aviso_error.setText("Error, revise los datos.");
+               vistaAsignarPropiedad.mensaje_error.setText("Error, revise los datos.");
            }
        }
     

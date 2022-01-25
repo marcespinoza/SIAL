@@ -35,7 +35,8 @@ private JLabel component;
         }
         if(row!=0){
         if(new BigDecimal(table.getValueAt(row-1, 9).toString()).compareTo( new BigDecimal(table.getValueAt(row, 9).toString()))==1 && !table.getValueAt(row-1, 15).toString().equals("1")){
-                setBackground( new Color(242, 189, 151 ));
+            //Color rosa    
+            setBackground( new Color(242, 189, 151 ));
         }
         }
          return component;

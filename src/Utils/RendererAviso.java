@@ -35,6 +35,9 @@ public class RendererAviso extends DefaultTableCellRenderer{
                 jLabel.setBackground(Color.RED);
             }
         }
+        if(table.getValueAt(row, 11)==null){
+            jLabel.setBackground(Color.PINK);
+        }
         if(table.getValueAt(row, 21)!=null){
            //-----Si esta dado de baja no pongo el aviso de actualizacion de cuota---//
            if(!table.getValueAt(row, 10).toString().equals("1")){  

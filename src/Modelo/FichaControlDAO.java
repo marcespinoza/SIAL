@@ -32,13 +32,15 @@ public class FichaControlDAO {
         conexion = new Conexion();
     }
     
-    public int altaFichaControl(String tipo_compra, String dimension, int cantidad_cuotas, BigDecimal cuota_pura, BigDecimal gastos, byte bandera_cemento, BigDecimal bolsa_cemento, Date fch_actualizacion, String barrio, String manzana, String parcela, Date fch_suscripcion, byte bandera_indice){
+    public int altaFichaControl(String tipo_compra, String dimension, int cantidad_cuotas, BigDecimal cuota_pura, BigDecimal gastos, byte bandera_cemento, BigDecimal bolsa_cemento, Date fch_actualizacion, String barrio, String manzana, String parcela, Date fch_suscripcion, byte bandera_indice, int vendedor, String canal_venta){
          int id_control = 0;
          int rowAffected = 0;
          Timestamp timestamp = new java.sql.Timestamp(new java.util.Date().getTime());
      try {
           Connection con = conexion.dataSource.getConnection();
-          String insertar = "Insert into ficha_control_lote(tipo_compra, dimension, cantidad_cuotas, cuota_pura, gastos, bandera_cemento, bolsa_cemento, fecha_actualizacion, lote_barrio, lote_manzana, lote_parcela, bandera, indice_corrector, timestamp) values ('"+tipo_compra+"','"+dimension+"','"+cantidad_cuotas+"','"+cuota_pura+"','"+gastos+"', '"+bandera_cemento+"','"+bolsa_cemento+"', '"+fch_actualizacion+"','"+barrio+"','"+manzana+"','"+parcela+"', '"+fch_suscripcion+"', '"+bandera_indice+"', '"+timestamp+"')";
+          String insertar = "Insert into ficha_control_lote(tipo_compra, dimension, cantidad_cuotas, cuota_pura, gastos, bandera_cemento, bolsa_cemento, fecha_actualizacion, lote_barrio, lote_manzana, lote_parcela, bandera, indice_corrector, timestamp, vendedor, canal_venta)"
+                  + " values "
+                  + "('"+tipo_compra+"','"+dimension+"','"+cantidad_cuotas+"','"+cuota_pura+"','"+gastos+"', '"+bandera_cemento+"','"+bolsa_cemento+"', '"+fch_actualizacion+"','"+barrio+"','"+manzana+"','"+parcela+"', '"+fch_suscripcion+"', '"+bandera_indice+"', '"+timestamp+"','"+vendedor+"','"+canal_venta+"')";
           PreparedStatement ps = con.prepareStatement(insertar, Statement.RETURN_GENERATED_KEYS);
           rowAffected = ps.executeUpdate();  
           ResultSet rs = ps.getGeneratedKeys();  
