@@ -97,6 +97,8 @@ public class ControladorRecibo implements ActionListener{
     File pathRecibo;
     static org.apache.log4j.Logger registroLogger= org.apache.log4j.Logger.getLogger("registro"); 
     static org.apache.log4j.Logger errorLogger= org.apache.log4j.Logger.getLogger("error");
+    final Progress progress = new Progress(ar, false);
+
 
     public ControladorRecibo(ControladorDetalleCuota cdc, Frame parent, int id_control, DetalleCuota dc, BigDecimal saldo_cemento, int row, int tipoPago) {
         ar = new AltaRecibo(parent, true);
@@ -146,7 +148,7 @@ public class ControladorRecibo implements ActionListener{
         ar.domicilio_comprador.setDocument(new LimitadorCaracteres(75));
         ar.importe.setDocument(new LimitadorCaracteres(10));
         ar.total_pagado.setDocument(new LimitadorCaracteres(10));
-        ar.son_pesos.setDocument(new LimitadorCaracteres(50));
+        ar.son_pesos.setDocument(new LimitadorCaracteres(60));
         ar.cons_final.setSelected(true);
         ar.monotributo.addActionListener(new ActionListener() {
             @Override
@@ -416,12 +418,18 @@ public class ControladorRecibo implements ActionListener{
         }catch (DocumentException ex) {
             Logger.getLogger(DetalleCuota.class.getName()).log(Level.SEVERE, null, ex);
             errorLogger.info(ex);
+            hideProgress();
+            JOptionPane.showMessageDialog(null, ex.getMessage(), "Atención", JOptionPane.ERROR_MESSAGE, null);
         } catch (FileNotFoundException ex) {
             Logger.getLogger(DetalleCuota.class.getName()).log(Level.SEVERE, null, ex);
             errorLogger.info(ex);
+            hideProgress();
+            JOptionPane.showMessageDialog(null, ex.getMessage(), "Atención", JOptionPane.ERROR_MESSAGE, null);             
         } catch (IOException ex) {
             Logger.getLogger(DetalleCuota.class.getName()).log(Level.SEVERE, null, ex);
             errorLogger.info(ex);
+            hideProgress();
+            JOptionPane.showMessageDialog(null, ex.getMessage(), "Atención", JOptionPane.ERROR_MESSAGE, null);  
         }finally{
             abrirPdf();
         }
@@ -462,7 +470,6 @@ public class ControladorRecibo implements ActionListener{
        public class GenerarMinuta extends javax.swing.SwingWorker<Void, Void>{
          
        private int id_recibo=0;  
-       final Progress progress = new Progress(ar, false);
 
         @Override
         protected Void doInBackground() throws Exception {   
@@ -540,9 +547,9 @@ public class ControladorRecibo implements ActionListener{
             cdc.llenarTabla(id_control);
             Ventana.cm.llenarTablaFecha();
            }else {
-               JOptionPane.showMessageDialog(null, "Error al generar recibo", "Atención", JOptionPane.ERROR_MESSAGE, null); 
+              JOptionPane.showMessageDialog(null, "Error al generar recibo", "Atención", JOptionPane.ERROR_MESSAGE, null); 
            }
-            progress.setVisible(false);
+              hideProgress();
          }    
         }
        
@@ -572,5 +579,9 @@ public class ControladorRecibo implements ActionListener{
           }
           return bandera;
       }
+      
+      private void hideProgress(){
+        progress.setVisible(false); 
+      }
     
-}
+}   
