@@ -265,6 +265,12 @@ public class ControladorAsignacionPropiedad implements ActionListener, KeyListen
      
      public boolean validarCampos(){
         boolean bandera = true; 
+        if(vistaAsignarPropiedad.suscripcion.getText().isEmpty()){
+         vistaAsignarPropiedad.suscripcion.setBorder(BorderFactory.createLineBorder(Color.RED, 1));
+         bandera=false;
+        }else{
+         vistaAsignarPropiedad.suscripcion.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
+        }
         if(vistaAsignarPropiedad.cantidad_cuotas.getText().isEmpty()){
          vistaAsignarPropiedad.cantidad_cuotas.setBorder(BorderFactory.createLineBorder(Color.RED, 1));
          bandera=false;
@@ -363,7 +369,8 @@ public class ControladorAsignacionPropiedad implements ActionListener, KeyListen
                    new java.sql.Date(fecha_suscripcion), 
                    flag_indice,
                    ((Vendedor)vistaAsignarPropiedad.comboVendedor.getSelectedItem()).getDni(),
-                   vistaAsignarPropiedad.comboCanalVenta.getSelectedItem().toString());
+                   vistaAsignarPropiedad.comboCanalVenta.getSelectedItem().toString(),
+                   new BigDecimal(vistaAsignarPropiedad.cuota_total.getText()));
            return id_control;
         }
 
@@ -372,15 +379,13 @@ public class ControladorAsignacionPropiedad implements ActionListener, KeyListen
            int idControl = 0;
              try {
                  idControl = get();
-             } catch (InterruptedException ex) {
-                 Logger.getLogger(ControladorAsignacionPropiedad.class.getName()).log(Level.SEVERE, null, ex);
-             } catch (ExecutionException ex) {
+             } catch (InterruptedException | ExecutionException ex) {
                  Logger.getLogger(ControladorAsignacionPropiedad.class.getName()).log(Level.SEVERE, null, ex);
              }
            if(idControl!=0){  
-           log.info(Ventana.nombreUsuario.getText()+" - Asigna propiedad - id control: "+id_control + "Mz:"+vistaAsignarPropiedad.manzana.getSelectedItem()+" Pc:"+vistaAsignarPropiedad.comboCanalVenta.getSelectedItem());
-           BigDecimal saldo = new BigDecimal(vistaAsignarPropiedad.cantidad_cuotas.getText()).multiply(new BigDecimal(vistaAsignarPropiedad.cuota_total.getText()));
-           switch(vistaAsignarPropiedad.tipo_propiedad.getSelectedItem().toString()){
+             log.info(Ventana.nombreUsuario.getText()+" - Asigna propiedad - id control: "+id_control + "Mz:"+vistaAsignarPropiedad.manzana.getSelectedItem()+" Pc:"+vistaAsignarPropiedad.comboCanalVenta.getSelectedItem());
+             BigDecimal saldo = new BigDecimal(vistaAsignarPropiedad.cantidad_cuotas.getText()).multiply(new BigDecimal(vistaAsignarPropiedad.cuota_total.getText()));
+             switch(vistaAsignarPropiedad.tipo_propiedad.getSelectedItem().toString()){
                case "Terreno":cuotaDao.altaCuotaLote(new java.sql.Timestamp(fecha_suscripcion), 0,"Saldo Inicio", new BigDecimal(0),new BigDecimal(0), saldo , new BigDecimal(0), saldo, saldo.divide(new BigDecimal(vistaAsignarPropiedad.bolsa_cemento.getText()),2, BigDecimal.ROUND_HALF_UP), new BigDecimal(0), saldo.divide(new BigDecimal(vistaAsignarPropiedad.bolsa_cemento.getText()),2, BigDecimal.ROUND_HALF_UP), "", "", id_control, 0); break;
                case "Departamento":cuotaDao.altaCuotaDpto(new java.sql.Date(fecha_suscripcion), 0,"Saldo Inicio", new BigDecimal(0),new BigDecimal(0), saldo , new BigDecimal(0), saldo, saldo.divide(new BigDecimal(vistaAsignarPropiedad.bolsa_cemento.getText())), new BigDecimal(0), saldo.divide(new BigDecimal(vistaAsignarPropiedad.bolsa_cemento.getText())), "", "", id_control);  break;
            }
@@ -391,7 +396,7 @@ public class ControladorAsignacionPropiedad implements ActionListener, KeyListen
                case "Terreno":ld.editarPropiedad(1, 
                        vistaAsignarPropiedad.barrio.getSelectedItem().toString(), 
                        vistaAsignarPropiedad.manzana.getSelectedItem().toString(), 
-                       vistaAsignarPropiedad.comboCanalVenta.getSelectedItem().toString()); 
+                       vistaAsignarPropiedad.parcela.getSelectedItem().toString()); 
                {
                 try {
                     cd.altaClientesXLotes(dni, id_control);

@@ -39,10 +39,12 @@ public class LoteDAO {
             preparedStmt.setString(2, barrio);
             preparedStmt.setString(3, manzana);
             preparedStmt.setString(4, parcela);
-            preparedStmt.executeUpdate();      
+            int count = preparedStmt.executeUpdate();      
+            System.out.print("contador"+count);
             preparedStmt.close();
             con.close();
         } catch (SQLException ex) {
+            System.out.print("contadorerror"+ex.getMessage());
             Logger.getLogger(ClienteDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
  }
