@@ -115,7 +115,7 @@ public class CuotaDAO {
      return cuotas;
     }
     
-    public int altaCuotaLote(java.sql.Timestamp fecha_pago, int nro_cuota, String detalle, BigDecimal cuota_pura, BigDecimal gastos, BigDecimal debe, BigDecimal haber, BigDecimal saldo, BigDecimal cemento_debe, BigDecimal cemento_haber, BigDecimal cemento_saldo, String observaciones, String tipo_pago, int id_control, int act_saldo){
+    public int altaCuotaLote(java.sql.Timestamp fecha_pago, int nro_cuota, String detalle, BigDecimal cuota_pura, BigDecimal gastos, BigDecimal debe, BigDecimal haber, BigDecimal saldo, BigDecimal cemento_debe, BigDecimal cemento_haber, BigDecimal cemento_saldo, String observaciones, String tipo_pago, int id_control, int act_saldo, BigDecimal interes){
         int filasAfectadas=0;
         Connection connection = null;
         PreparedStatement ps = null;
@@ -129,7 +129,7 @@ public class CuotaDAO {
          ps.setBigDecimal(4, cuota_pura);
          ps.setBigDecimal(5, gastos);
          ps.setBigDecimal(6, debe);
-         ps.setBigDecimal(7, haber);
+         ps.setBigDecimal(7, haber.add(interes));
          ps.setBigDecimal(8, saldo);
          ps.setBigDecimal(9, cemento_debe);
          ps.setBigDecimal(10, cemento_haber);

@@ -242,16 +242,17 @@ public class ControladorAltaCuota implements ActionListener, KeyListener{
            cuotas = cd.listaDetalleCuotaXsaldo(id_control);               
            BigDecimal ultimo_saldo = cuotas.get(cuotas.size()-1).getSaldo();
            BigDecimal cuota_pura = new BigDecimal(ac.cuota_total.getText()).subtract(new BigDecimal(ac.gastos.getText()));
-           BigDecimal gastos = new BigDecimal(ac.gastos.getText());                   
+           BigDecimal gastos = new BigDecimal(ac.gastos.getText());     
+           BigDecimal interes = new BigDecimal(ac.interes_pesos.getText().isEmpty()?"0":ac.interes_pesos.getText());
            BigDecimal bolsa_cemento = listaFichaControl.get(0).getBolsaCemento();
            BigDecimal ultimo_saldo_bolsa_cemento = cuotas.get(cuotas.size()-1).getCemento_saldo();
-           calcularValores(ultimo_saldo, cuota_pura, gastos, bolsa_cemento, ultimo_saldo_bolsa_cemento);            
+           calcularValores(ultimo_saldo, cuota_pura, gastos, bolsa_cemento, ultimo_saldo_bolsa_cemento, interes);            
          }             
        }
     }
     
     
-    public void calcularValores(BigDecimal ultimo_saldo, BigDecimal cuota_pura, BigDecimal gastos, BigDecimal bolsa_cemento, BigDecimal saldo_bolsa_cemento){  
+    public void calcularValores(BigDecimal ultimo_saldo, BigDecimal cuota_pura, BigDecimal gastos, BigDecimal bolsa_cemento, BigDecimal saldo_bolsa_cemento, BigDecimal interes){  
            long fechaActual = Calendar.getInstance().getTimeInMillis();
            List<Cuota>listaC;
            String detalle = ac.detallePago.getText();
@@ -281,13 +282,13 @@ public class ControladorAltaCuota implements ActionListener, KeyListener{
                    cuota=listaC.get(indice).getNro_cuota();
                    indice = indice + 1;
                }
-                 filas_insertadas = cd.altaCuotaLote(new java.sql.Timestamp(fechaActual),listaC.get(indice).getNro_cuota()-1, detalle, cuota_pura, gastos, new BigDecimal(0), haber, saldo_actual, new BigDecimal(0), cemento_haber, cemento_saldo, observaciones, tipoPago, id_control, 0);  
+                 filas_insertadas = cd.altaCuotaLote(new java.sql.Timestamp(fechaActual),listaC.get(indice).getNro_cuota()-1, detalle, cuota_pura, gastos, new BigDecimal(0), haber, saldo_actual, new BigDecimal(0), cemento_haber, cemento_saldo, observaciones, tipoPago, id_control, 0, BigDecimal.ZERO);  
 
               }else{
-                 filas_insertadas = cd.altaCuotaLote(new java.sql.Timestamp(fechaActual),nro_cuota, detalle, cuota_pura, gastos, new BigDecimal(0), haber, saldo_actual, new BigDecimal(0), cemento_haber, cemento_saldo, observaciones, tipoPago, id_control, 0);                    
+                 filas_insertadas = cd.altaCuotaLote(new java.sql.Timestamp(fechaActual),nro_cuota, detalle, cuota_pura, gastos, new BigDecimal(0), haber, saldo_actual, new BigDecimal(0), cemento_haber, cemento_saldo, observaciones, tipoPago, id_control, 0, BigDecimal.ZERO);                    
               }
            }else{
-                filas_insertadas = cd.altaCuotaLote(new java.sql.Timestamp(fechaActual),Integer.parseInt(ac.nro_cuota.getText()), detalle, cuota_pura, gastos, new BigDecimal(0), haber, saldo_actual, new BigDecimal(0), cemento_haber, cemento_saldo, observaciones, tipoPago, id_control, 0);  
+                filas_insertadas = cd.altaCuotaLote(new java.sql.Timestamp(fechaActual),Integer.parseInt(ac.nro_cuota.getText()), detalle, cuota_pura, gastos, new BigDecimal(0), haber, saldo_actual, new BigDecimal(0), cemento_haber, cemento_saldo, observaciones, tipoPago, id_control, 0, interes);  
            }
            if (filas_insertadas==1) {
                ac.dispose();
@@ -358,9 +359,12 @@ public class ControladorAltaCuota implements ActionListener, KeyListener{
         if(!interes.equals("")){
           BigDecimal gasto_interes = (cuota_total.multiply(new BigDecimal(interes))).divide(new BigDecimal("100"));   
           BigDecimal nueva_cuota = gasto_interes.add(cuota_total);
-          ac.cuota_total.setText(nueva_cuota.toString());
+          ac.cuota_interes.setText(nueva_cuota.toString());
+          ac.interes_pesos.setText(gasto_interes.toString());
         }else {
           ac.cuota_total.setText(cuota_total.toString());   
+          ac.interes_pesos.setText("");
+          ac.cuota_interes.setText("");
         }
     }
     }     

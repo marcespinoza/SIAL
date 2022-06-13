@@ -81,7 +81,7 @@ public class ControladorRecibo implements ActionListener{
     String apellido_propietario, nombre_propietario, cuit_propietario;
     String nombre_comprador, apellido_comprador, domicilio_comprador, cuil_comprador;
     String dimension, barrio, manzana, parcela;
-    int cant_cuotas, row;
+    int cant_cuotas, row, bandera_cemento;
     BigDecimal cobrado, cuota_total, gastos_administrativos, saldo_cemento;
     int id_control;    
     public static final String IMG = "/Imagenes/logo_reporte.png";
@@ -231,17 +231,22 @@ public class ControladorRecibo implements ActionListener{
             barrio= listaFichaControl.get(0).getBarrio();
             manzana = listaFichaControl.get(0).getManzana();
             parcela = listaFichaControl.get(0).getParcela();
+            bandera_cemento = listaFichaControl.get(0).getBandera_cemento();
             //------Si es 1 es cuota-------//
             if(tipoPago==1){
              cuota_total = new BigDecimal(dc.tablaDetallePago.getModel().getValueAt(row, 3).toString());
              gastos_administrativos = new BigDecimal(dc.tablaDetallePago.getModel().getValueAt(row, 4).toString());
              cobrado = cuota_total.add(gastos_administrativos) ;
              ar.importe.setText(String.valueOf(cobrado));
-             ar.total_pagado.setText(String.valueOf(cobrado));            
-             ar.detalle.setText("Paga cuota: "+dc.tablaDetallePago.getModel().getValueAt(row, 0).toString()+"/"+cant_cuotas+ 
+             ar.total_pagado.setText(String.valueOf(cobrado));   
+             if(bandera_cemento==1){
+                 ar.detalle.setText("Paga cuota: "+dc.tablaDetallePago.getModel().getValueAt(row, 0).toString()+"/"+cant_cuotas+ 
                                 "\r\nSaldo cemento: "+dc.tablaDetallePago.getModel().getValueAt(row, 10).toString()+ " Bolsas" +
                                 "\r\nCemento por mes: "+dc.tablaDetallePago.getModel().getValueAt(row, 9).toString());
-            //-----Si es 0 es derecho de posesion-------//
+             }else{
+                 ar.detalle.setText("Paga cuota: "+dc.tablaDetallePago.getModel().getValueAt(row, 0).toString()+"/"+cant_cuotas);
+             }
+             //-----Si es 0 es derecho de posesion-------//
             }else if (tipoPago==0){
               ar.detalle.setText("Cta. derecho posesión "+    "\r\nDimension "+dimension +     "\r\n"+ barrio +" "+ " Mz. "+manzana +" Pc. "+ parcela+   "\r\n");
               cuota_total = new BigDecimal(dc.tablaDchoPosesion.getModel().getValueAt(row, 2).toString());

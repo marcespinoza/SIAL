@@ -129,7 +129,7 @@ public class FichaControlDAO {
          List<FichaDeControl> listaFichaControl = new ArrayList<>();
      try {
           connection = conexion.dataSource.getConnection();
-          String listar = "SELECT fc.dimension, fc.cantidad_cuotas, fc.cuota_pura, fc.gastos, fc.bolsa_cemento, fc.lote_barrio, fc.lote_manzana, fc.lote_parcela,  fc.bandera, c.apellidos, c.nombres FROM ficha_control_lote fc inner join cliente_tiene_lote cl on fc.id_control=cl.id_control inner join cliente c on c.dni=cl.cliente_dni where fc.id_control = '"+id_control+"'"; 
+          String listar = "SELECT fc.dimension, fc.cantidad_cuotas, fc.cuota_pura, fc.gastos, fc.bolsa_cemento, fc.lote_barrio, fc.lote_manzana, fc.lote_parcela,  fc.bandera, c.apellidos, c.nombres, fc.bandera_cemento FROM ficha_control_lote fc inner join cliente_tiene_lote cl on fc.id_control=cl.id_control inner join cliente c on c.dni=cl.cliente_dni where fc.id_control = '"+id_control+"'"; 
           Statement st = connection.createStatement();
           rs = st.executeQuery(listar);
           while(rs.next()){
@@ -145,6 +145,7 @@ public class FichaControlDAO {
               fc.setBandera(rs.getTimestamp(9));
               fc.setApellido(rs.getString(10));
               fc.setNombre(rs.getString(11));
+              fc.setBandera_cemento(rs.getInt(12));
               listaFichaControl.add(fc);
           }
         } catch (Exception e) {

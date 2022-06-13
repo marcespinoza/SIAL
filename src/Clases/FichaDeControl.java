@@ -26,6 +26,15 @@ public class FichaDeControl {
     String parcela;
     String nombre;
     String apellido;
+    int bandera_cemento;
+
+    public int getBandera_cemento() {
+        return bandera_cemento;
+    }
+
+    public void setBandera_cemento(int bandera_cemento) {
+        this.bandera_cemento = bandera_cemento;
+    }
 
     public String getApellido() {
         return apellido;
