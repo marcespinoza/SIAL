@@ -123,7 +123,7 @@ public class Cuota {
         return cemente_debe;
     }
 
-    public void setCemente_debe(BigDecimal cemente_debe) {
+    public void setCemento_debe(BigDecimal cemente_debe) {
         this.cemente_debe = cemente_debe;
     }
 

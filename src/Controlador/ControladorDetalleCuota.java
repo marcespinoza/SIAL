@@ -11,7 +11,6 @@ import Clases.Cuota;
 import Clases.DerechoDePosesion;
 import Clases.FichaDeControl;
 import Clases.LimitadorCaracteres;
-import static Controlador.ControladorAltaCuota.log;
 import Modelo.ActualizacionCementoDAO;
 import Modelo.ActualizacionEmpleadoDAO;
 import Modelo.CuotaDAO;
@@ -35,12 +34,14 @@ import com.itextpdf.text.Phrase;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
-import conexion.Conexion;
 import java.awt.CardLayout;
+import java.awt.Color;
 import java.awt.Desktop;
 import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
@@ -50,13 +51,10 @@ import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Properties;
 import java.util.concurrent.ExecutionException;
@@ -67,7 +65,6 @@ import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
-import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
 import javax.swing.event.TableModelEvent;
@@ -78,7 +75,7 @@ import javax.swing.table.DefaultTableModel;
  *
  * @author Marcelo
  */
-public class ControladorDetalleCuota implements ActionListener, TableModelListener{
+public class ControladorDetalleCuota implements ActionListener, TableModelListener, KeyListener{
 
        
     RendererTablaCuota r = new RendererTablaCuota();
@@ -150,6 +147,7 @@ public class ControladorDetalleCuota implements ActionListener, TableModelListen
              dc.tablaDchoPosesion.getSelectionModel().clearSelection();
           }
         });
+        dc.nota_cliente.addKeyListener(this);
         dc.guardar.addActionListener(this);
         dc.volverBtn.addActionListener(this);
         dc.agregarPagoBtn.addActionListener(this);
@@ -173,7 +171,26 @@ public class ControladorDetalleCuota implements ActionListener, TableModelListen
             llenarTablaActualizacionCemento(id_control);
         }
         cargarPathMinuta();
+        cargarNotaCliente();
         desactivarBotones();
+    }
+
+    @Override
+    public void keyTyped(KeyEvent e) {
+    }
+
+    @Override
+    public void keyPressed(KeyEvent e) {
+        String nota = dc.nota_cliente.getText().toString();
+        if (e.getKeyCode()==KeyEvent.VK_ENTER){
+            fcd.actualizarNota(nota, id_control);
+            dc.nota_cliente.transferFocus();
+            cargarNotaCliente();
+        }
+    }
+
+    @Override
+    public void keyReleased(KeyEvent e) {
     }
 
     
@@ -301,6 +318,19 @@ public class ControladorDetalleCuota implements ActionListener, TableModelListen
             Ventana.panelPrincipal.add(dc, "Detalle_pago");
             cl.show(Ventana.panelPrincipal, "Detalle_pago");
         } 
+   }
+   
+   public void cargarNotaCliente(){
+     String nota = fcd.obtenerNota(id_control);
+     if(!nota.isEmpty() || nota == null){
+         dc.nota_cliente.setForeground(Color.white);
+         dc.nota_cliente.setBackground(Color.red);
+         java.awt.Font font = new java.awt.Font("Arial",Font.BOLD, 14);
+         dc.nota_cliente.setFont(font);
+     }else{
+        dc.nota_cliente.setBackground(Color.white);
+     }
+     dc.nota_cliente.setText(nota);
    }
 
     @Override
@@ -594,9 +624,7 @@ public class ControladorDetalleCuota implements ActionListener, TableModelListen
            String nya = "";
             try {
                 nya = get();
-            } catch (InterruptedException ex) {
-                Logger.getLogger(ControladorDetalleCuota.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (ExecutionException ex) {
+            } catch (InterruptedException | ExecutionException ex) {
                 Logger.getLogger(ControladorDetalleCuota.class.getName()).log(Level.SEVERE, null, ex);
             }
            try {

@@ -97,10 +97,10 @@ public class ControladorLogin implements ActionListener, KeyListener{
                         if (usuario!=null){
                             frame = new Ventana();
                             registroLogger.info(usuario.getNombres()+" "+usuario.getApellidos()+ " - Inicio sesión");
-                            frame.labelUsuario.setText(usuario.getUsuario());
-                            frame.labelTipoUsuario.setText(usuario.getTipoUsuario());
-                            frame.nombreUsuario.setText(usuario.getNombres());
-                            frame.apellidoUsuario.setText(usuario.getApellidos());    
+                            Ventana.labelUsuario.setText(usuario.getUsuario());
+                            Ventana.labelTipoUsuario.setText(usuario.getTipoUsuario());
+                            Ventana.nombreUsuario.setText(usuario.getNombres());
+                            Ventana.apellidoUsuario.setText(usuario.getApellidos());    
                             //-------Oculto ventana login y muestro el frame----------//
                             login.dispose();  
                             frame.desactivarBotones();

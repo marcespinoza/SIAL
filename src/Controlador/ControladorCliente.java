@@ -117,7 +117,7 @@ public class ControladorCliente implements ActionListener, MouseListener, TableM
     File configFile = new File("config.properties");
     public static final DefaultTableCellRenderer DEFAULT_RENDERER = new DefaultTableCellRenderer();
     private String nombres, apellidos, lote;
-    static Logger log = Logger.getLogger(ControladorCliente.class.getName());
+    static org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger("registro");
     ArrayList<Integer> sucesion = new ArrayList<>();
     JTable tablePrinter = null;
     String tipoFiltro = "";
@@ -199,6 +199,7 @@ public class ControladorCliente implements ActionListener, MouseListener, TableM
                                           new BigDecimal(vistaClientes.tablaCliente.getModel().getValueAt(vistaClientes.tablaCliente.convertRowIndexToModel(i), 14).toString()),
                                           nuevo_bolsa_cemento);
                     llenarTabla();
+                    log.info(Ventana.apellidoUsuario.getText()+" "+Ventana.nombreUsuario.getText() + " Actualiza bolsa cemento a: " + nuevo_bolsa_cemento.toString());
                     vistaClientes.tablaCliente.getSelectionModel().clearSelection();
                     vistaClientes.fch_actualizacion.setText("");
                     vistaClientes.bolsa_cemento.setText("");

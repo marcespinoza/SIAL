@@ -54,7 +54,7 @@ public class CuotaDAO {
             c.setDebe(rs.getBigDecimal(6));
             c.setHaber(rs.getBigDecimal(7));
             c.setSaldo(rs.getBigDecimal(8));
-            c.setCemente_debe(rs.getBigDecimal(9));
+            c.setCemento_debe(rs.getBigDecimal(9));
             c.setCemento_haber(rs.getBigDecimal(10));
             c.setCemento_saldo(rs.getBigDecimal(11));
             c.setObservaciones(rs.getString(12));
@@ -92,7 +92,7 @@ public class CuotaDAO {
                 c.setDebe(rs.getBigDecimal(6));
                 c.setHaber(rs.getBigDecimal(7));
                 c.setSaldo(rs.getBigDecimal(8));
-                c.setCemente_debe(rs.getBigDecimal(9));
+                c.setCemento_debe(rs.getBigDecimal(9));
                 c.setCemento_haber(rs.getBigDecimal(10));
                 c.setCemento_saldo(rs.getBigDecimal(11));
                 c.setObservaciones(rs.getString(12));

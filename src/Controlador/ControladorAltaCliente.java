@@ -8,7 +8,6 @@ package Controlador;
 import Modelo.ClienteDAO;
 import Modelo.FichaControlDAO;
 import Clases.LimitadorCaracteres;
-import static Controlador.ControladorAltaCuota.log;
 import Modelo.ReferenciaDAO;
 import Vista.Dialogs.AltaCliente;
 import Vista.Frame.Ventana;

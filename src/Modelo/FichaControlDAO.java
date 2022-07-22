@@ -310,5 +310,53 @@ public class FichaControlDAO {
           }
         }
   }
+  
+   // ------Actualizo la nota de un cliente------//
+  public void actualizarNota(String nota,int id_control){
+      Connection con = null;
+        try {
+            con = conexion.dataSource.getConnection();
+            PreparedStatement ps = con.prepareStatement("UPDATE ficha_control_lote SET nota = ? WHERE id_control = ?");
+            ps.setString(1, nota);
+            ps.setInt(2, id_control);
+            ps.executeUpdate();
+            ps.close();
+            con.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(CuotaDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }finally{
+          try {
+              con.close();
+          } catch (SQLException ex) {
+              Logger.getLogger(CuotaDAO.class.getName()).log(Level.SEVERE, null, ex);
+          }
+        }
+  }
+  
+  //---------Baja logica de un cliente----------//
+  public String obtenerNota(int id_control){
+        ResultSet rs = null;
+        String nota= "";
+        Connection connection = null;
+        try {
+          connection = conexion.dataSource.getConnection();
+          String listar = "SELECT nota FROM ficha_control_lote WHERE id_control = '"+id_control+"'"; 
+          Statement st = connection.createStatement();
+          rs = st.executeQuery(listar);
+          while(rs.next()){
+              nota = rs.getString(1);
+          }
+        } catch (SQLException ex) {
+            Logger.getLogger(CuotaDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        finally{
+          try {
+              connection.close();
+          } catch (SQLException ex) {
+              Logger.getLogger(CuotaDAO.class.getName()).log(Level.SEVERE, null, ex);
+          }
+        }
+        return nota;
+  }
     
 }

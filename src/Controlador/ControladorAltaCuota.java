@@ -293,7 +293,7 @@ public class ControladorAltaCuota implements ActionListener, KeyListener{
            if (filas_insertadas==1) {
                ac.dispose();
                filas_insertadas=0;
-               log.info(Ventana.nombreUsuario.getText() + " - Alta pago -" + "Id control: "+id_control + " Nro cuota: "+ ac.nro_cuota.getText() );
+               log.info(Ventana.apellidoUsuario.getText()+ " " +Ventana.nombreUsuario.getText() + " - Alta pago -" + "Id control: "+id_control + " Nro cuota: "+ ac.nro_cuota.getText() );
            }else{
                ac.aviso.setVisible(true);
                ac.aviso.setText("No se puedo cargar el pago");

@@ -235,6 +235,7 @@ public class ControladorRecibo implements ActionListener{
             //------Si es 1 es cuota-------//
             if(tipoPago==1){
              cuota_total = new BigDecimal(dc.tablaDetallePago.getModel().getValueAt(row, 3).toString());
+             System.out.println(cuota_total);
              gastos_administrativos = new BigDecimal(dc.tablaDetallePago.getModel().getValueAt(row, 4).toString());
              cobrado = cuota_total.add(gastos_administrativos) ;
              ar.importe.setText(String.valueOf(cobrado));
@@ -265,7 +266,6 @@ public class ControladorRecibo implements ActionListener{
             java.util.Date date = new java.util.Date();
         try {
             //----Escribo en el log------//
-            registroLogger.info(Ventana.nombreUsuario.getText() + " - Genera recibo nro "+ar.nro_recibo.getText()+ " "+nombre_comprador+" "+apellido_comprador);
             pathRecibo = new File(dc.path.getText(), "Recibo-"+barrio+"-"+ar.nro_recibo.getText()+".pdf");
             PdfWriter.getInstance(document, new FileOutputStream(pathRecibo));
             document.open();
@@ -483,7 +483,7 @@ public class ControladorRecibo implements ActionListener{
             //-----Devuelve id del recibo creado-----//
             id_recibo = rd.altaRecibo(Integer.parseInt(ar.nro_recibo.getText()), apellido_propietario, nombre_propietario); 
             if(id_recibo>=0){
-                registroLogger.info(Ventana.nombreUsuario.getText() + " - Genera recibo con id: " +id_recibo);
+                registroLogger.info(Ventana.apellidoUsuario.getText()+" "+Ventana.nombreUsuario.getText()+"  - Genera recibo con id: " +id_recibo);
             }            
             return null;
        }

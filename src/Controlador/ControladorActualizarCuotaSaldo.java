@@ -167,7 +167,7 @@ public class ControladorActualizarCuotaSaldo implements ActionListener{
     public void actualizarSaldo(){
         long fechaActual = Calendar.getInstance().getTimeInMillis();
         Date date = new Date();
-        int filas_insertadas = cd.altaCuotaLote(new java.sql.Timestamp(fechaActual),cuota, "", BigDecimal.ZERO, BigDecimal.ZERO, new BigDecimal(0), nueva_cuota, nuevo_saldo, new BigDecimal(0), cantidad_bc, cemento_saldo, "ACTUALIZACION", "", id_control, 1);  
+        int filas_insertadas = cd.altaCuotaLote(new java.sql.Timestamp(fechaActual),cuota, "", BigDecimal.ZERO, BigDecimal.ZERO, new BigDecimal(0), nueva_cuota, nuevo_saldo, new BigDecimal(0), cantidad_bc, cemento_saldo, "ACTUALIZACION", "", id_control, 1, BigDecimal.ZERO);  
         fc.actualizarValorCuota(gastos, cuota_pura, new java.sql.Timestamp(fechaActual), id_control);         
         acd.actualizarCemento(String.valueOf(id_control), new java.sql.Date(date.getTime()), cuota_anterior , nueva_cuota);
         
